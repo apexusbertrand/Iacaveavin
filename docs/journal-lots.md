@@ -4,10 +4,22 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 0 Socle
 
-- Statut : non démarré
+- Statut : réalisé, en attente de recette (branche `lot-0-socle`)
 - Exigences : NAV-01, CMP-07, NFR-10 (test de contraste), NFR-14 (matrice), NFR-15 (CI)
+  - [x] NAV-01 tiroir à 9 entrées, Mes vins en accueil, entrées des lots suivants vers un écran « arrive avec le lot N » (décision T11)
+  - [x] CMP-07 jeu de 200 fiches fictives, 8 couleurs, millésimes 2005 à 2024, 3 propriétaires, 8 emplacements, chargement et effacement dans Paramètres (T12, T13)
+  - [x] NFR-10 thème clair et sombre générés depuis specs/design-tokens.json ; test de contraste sur 36 paires texte/fond, chips de vin et badges ; police à 200 % ; cibles de 48 dp
+  - [x] NFR-14 `scripts/matrice_exigences.py` (matrice, contrôle `--lot N`) et test des identifiants cités
+  - [x] NFR-15 CI GitHub Actions : contrat, règles, code généré à jour, format, analyse, tests, matrice, APK de contrôle ; APK signé et release à chaque tag `v*`
+  - [x] Socle : base drift alignée sur le dictionnaire (16 tables, test d'alignement), cadre de migrations (schéma v1 figé, NFR-05), référentiels initiaux (T14), écran liste en lecture, À propos avec la mention NFR-17
 - Points d'étape :
-- Mesures :
+  - 2026-10-21 fait : tout le périmètre du lot 0. En cours : rien. Bloquant : keystore et secrets GitHub à créer par Bertrand (app/README.md, Signature), puis tag `v0.1.0`. Prochaine étape : recette sur téléphone, puis lot 1.
+- Mesures (2026-10-21, environnement de développement, pas le téléphone) :
+  - chargement de la démo puis lecture des 200 fiches de la liste : 99 ms (SQLite en mémoire)
+  - 131 tests au vert, `flutter analyze` sans aucun message
+  - matrice : 5/5 exigences du lot 0 couvertes
+  - volumes de photos (docs/02) : non mesurables au lot 0, aucune photo n'est encore prise ; reporté au lot 2a
+  - fluidité de la liste et démarrage à froid : à mesurer sur le téléphone de Bertrand (`flutter test integration_test`, rapport `defilement_liste_demo`)
 - Recette Bertrand :
 
 ## Lot 1 Cave locale

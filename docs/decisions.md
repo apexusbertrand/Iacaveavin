@@ -27,6 +27,25 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T9 | Stockage des jobs dans les tables n8n ou Postgres, pas dans Google Sheets | latence, concurrence, bug de cache connu du nœud Sheets |
 | T10 | Quotas mensuels : 100 enrichissements, 120 relevés de prix | tenir dans l'offre gratuite de recherche web |
 
+## Décisions techniques proposées au lot 0 (2026-10-21), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T11 | NAV-01 livré au lot 0 : tiroir complet, les entrées des lots suivants ouvrent un écran « arrive avec le lot N » | docs/08 place NAV-01 au lot 0, docs/05 marque la section NAV [lot 1] ; choix de Bertrand le 2026-10-21. Proposition : annoter NAV-01 [lot 0] dans docs/05 |
+| T12 | Le jeu de démonstration vit dans une cave dédiée (cave_id fixe) et son effacement est physique | effacer la démo sans toucher aux vrais vins ; ce sont des données fictives, la règle de suppression logique vise les données de l'utilisateur |
+| T13 | Écran Paramètres réduit au jeu de démonstration au lot 0 ; base vide au premier lancement, l'état vide propose aussi de charger la démo | CMP-07 demande la démo « dans les Réglages », les réglages complets (PAR-05) sont au lot 1 ; choix de Bertrand le 2026-10-21 |
+| T14 | Référentiels provisoires saisis au lot 0 (47 pays, 83 régions, 21 sous-régions, 221 appellations, 153 cépages, 40 accords) ; `scripts/generer_referentiels.py --inao` régénère les appellations depuis le CSV de l'INAO | data.gouv.fr inaccessible depuis l'environnement de développement ; choix de Bertrand le 2026-10-21 |
+| T15 | Une appellation sans sous-région (Champagne, Alsace, Cahors...) est rattachée directement à sa région | le dictionnaire prévoit appellation → sous-région, mais beaucoup de régions n'ont pas de sous-région ; à confirmer avant FIC-02 (lot 1) |
+| T16 | Millésime stocké en texte (4 chiffres ou « NM »), dates métier en texte ISO, horodatages en texte ISO UTC, montants en décimal | l'ordre lexical de « 2005 »…« 2024 » suit l'ordre des années et « NM » se range à part ; fichiers de base lisibles |
+| T17 | Champs `calcule` non stockés au lot 0 : le stock est la somme des mouvements calculée à la lecture | règle 4 respectée sans cache ; un cache dénormalisé viendra si les mesures du lot 5 (5 000 fiches) l'exigent |
+| T18 | `favori` et `statut_enrichissement` nullables avec valeur par défaut, comme le dictionnaire (non obligatoires) | alignement strict vérifié par test ; proposition : les marquer `oblig: true` dans le dictionnaire |
+| T19 | Riverpod sans génération de code (providers écrits à la main) | moins de code généré pour un gain nul à ce stade ; CLAUDE.md cite « code généré drift et riverpod » |
+| T20 | Police système au lot 0, Inter (OFL) ajoutée quand ses fichiers seront fournis | repli prévu par specs/design-tokens.json ; pas d'accès au dépôt de la police depuis l'environnement de développement |
+| T21 | Code généré (drift, traductions, jetons de thème, listes du dictionnaire) commité ; la CI régénère et échoue en cas d'écart | `git clone` puis `flutter run` fonctionne sans étape préalable |
+| T22 | Une build release sans `android/key.properties` échoue au lieu de signer avec la clé de debug | un APK signé debug installé sur le téléphone bloquerait les mises à jour signées |
+| T23 | Flutter figé à 3.47.7 stable dans la CI | builds reproductibles ; montée de version par décision |
+| T24 | Dépôt GitHub réel : `apexusbertrand/Iacaveavin` (et non `IA-cave-a-vin` comme écrit dans D1 et PROMPT_DEMARRAGE.md) | dépôt créé par Bertrand sous ce nom |
+
 ## À compléter
 
 | Id | Sujet | Quand |
