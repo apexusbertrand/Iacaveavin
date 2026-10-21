@@ -383,6 +383,49 @@ class CellarRepository {
     );
   }
 
+  /// Lots en stock rangés dans [locationIds], triés par nom de vin.
+  Future<List<LocationLot>> lotsIn(Set<String> locationIds) async {
+    if (locationIds.isEmpty) return const [];
+    final ctx = await _context();
+    final stocks = await _lotStocks();
+    final lots =
+        await (_db.select(_db.stockLots)..where(
+              (l) => l.emplacementId.isIn(locationIds) & l.deletedAt.isNull(),
+            ))
+            .get();
+    final items = {for (final w in await wineItems()) w.id: w};
+    final out = <LocationLot>[];
+    for (final l in lots) {
+      final q = stocks[l.id] ?? 0;
+      final w = items[l.ficheId];
+      if (q <= 0 || w == null) continue;
+      out.add(
+        LocationLot(
+          lotId: l.id,
+          wineId: w.id,
+          wineName: w.displayName,
+          vintage: w.vintage,
+          colorCode: w.colorCode,
+          locationId: l.emplacementId!,
+          ownerName: ctx.owners[l.proprietaireId]?.nom ?? '',
+          bottles: q,
+          positions: l.positions,
+        ),
+      );
+    }
+    out.sort((a, b) => a.wineName.compareTo(b.wineName));
+    return out;
+  }
+
+  Stream<List<LocationLot>> watchLotsIn(Set<String> locationIds) async* {
+    yield await lotsIn(locationIds);
+    await for (final _ in _db.tableUpdates(
+      TableUpdateQuery.onAllTables(_listTables),
+    )) {
+      yield await lotsIn(locationIds);
+    }
+  }
+
   // ---------------------------------------------------------- Écritures
 
   /// Crée une fiche saisie à la main, avec son premier lot (FIC-01, PRX-01).

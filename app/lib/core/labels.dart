@@ -68,4 +68,31 @@ extension DomainLabels on AppLocalizations {
         MovementType.transferIn => mvtTransferIn,
         null => mvtEntry,
       };
+
+  /// Nom d'une liste du dictionnaire dans le Paramétrage (PAR-01).
+  String listName(String list) => switch (list) {
+    'type_vin' => listNameTypeVin,
+    'pays' => listNamePays,
+    'region' => listNameRegion,
+    'sous_region' => listNameSousRegion,
+    'appellation' => listNameAppellation,
+    'signe_qualite' => listNameSigneQualite,
+    'classement' => listNameClassement,
+    'certification' => listNameCertification,
+    'cepage' => listNameCepage,
+    'format' => listNameFormat,
+    'fournisseur' => listNameFournisseur,
+    'motif_mouvement' => listNameMotifMouvement,
+    'accord_mets' => listNameAccordMets,
+    'critique' => listNameCritique,
+    _ => list,
+  };
+
+  String locationTypeLabel(String type) => switch (type) {
+    'cave' => locTypeCave,
+    'meuble' => locTypeMeuble,
+    'casier' => locTypeCasier,
+    'clayette' => locTypeClayette,
+    _ => locTypeAutre,
+  };
 }

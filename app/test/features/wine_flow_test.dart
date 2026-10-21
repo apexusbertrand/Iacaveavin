@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/cellar_repository.dart';
+import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/reference_repository.dart';
 import 'package:iacaveavin/domain/wine_detail.dart';
 import 'package:iacaveavin/features/wine_list/wine_card.dart';
@@ -10,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../fakes.dart';
 
-Future<void> seedTwo(db, String cellar) async {
+Future<void> seedTwo(AppDatabase db, String cellar) async {
   final ref = ReferenceRepository(db);
   final owner = await ref.saveOwner(
     cellarId: cellar,

@@ -16,6 +16,7 @@ import '../../domain/app_settings.dart';
 import '../../domain/stock_rules.dart';
 import '../../domain/wine_list_item.dart';
 import '../../domain/wine_query.dart';
+import '../backup/backup_screen.dart';
 import 'list_filters_sheet.dart';
 import 'list_state.dart';
 import 'selection_actions.dart';
@@ -41,6 +42,21 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      final settings = ref.read(settingsProvider.notifier);
+      if (ref.read(settingsProvider).firstLaunch == null) {
+        await settings.update((s) => s.copyWith(firstLaunch: DateTime.now()));
+      }
+      if (mounted) await runAutoBackupIfDue(ref);
+    });
+  }
+
+  /// SAV-03 : rappel si aucun export externe depuis 30 jours.
+  bool _reminderDue(AppSettings s) {
+    final since = s.lastExternalBackup ?? s.firstLaunch;
+    return since != null &&
+        DateTime.now().difference(since) >= const Duration(days: 30);
   }
 
   @override
@@ -92,6 +108,16 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         floatingActionButton: selecting ? null : _fabs(l),
         body: Column(
           children: [
+            if (_reminderDue(settings) && !selecting)
+              MaterialBanner(
+                content: Text(l.externalBackupReminder),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.go('/sauvegarde'),
+                    child: Text(l.exportNow),
+                  ),
+                ],
+              ),
             _CriteriaBar(
               query: query,
               onSort: () => _openSort(query),

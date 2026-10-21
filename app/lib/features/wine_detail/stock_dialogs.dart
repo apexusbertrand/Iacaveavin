@@ -232,7 +232,6 @@ Future<void> adjustDialog(
       ),
     ),
   );
-  controller.dispose();
   if (result == null || !context.mounted) return;
   try {
     final action = await ref
@@ -688,7 +687,4 @@ Future<void> tastingDialog(
           .showSnackBar(SnackBar(content: Text(l.tastingSaved)));
     }
   }
-  score.dispose();
-  dish.dispose();
-  comment.dispose();
 }

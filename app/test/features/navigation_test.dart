@@ -75,7 +75,7 @@ void main() {
     await openDrawer(tester);
     await tester.tap(find.byKey(const ValueKey('drawer-settings')));
     await tester.pumpAndSettle();
-    expect(find.text('Jeu de démonstration'), findsOneWidget);
+    expect(find.text('Réglages'), findsOneWidget);
     await openDrawer(tester);
     await tester.tap(find.byKey(const ValueKey('drawer-myWines')));
     await tester.pumpAndSettle();

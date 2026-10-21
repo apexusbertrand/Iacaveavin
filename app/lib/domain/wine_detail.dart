@@ -233,3 +233,28 @@ class WineDetail {
   String label(String key, String? code) =>
       code == null ? '' : labels['$key:$code'] ?? code;
 }
+
+/// Lot rangé dans un emplacement (EMP-04, inventaire STK-04).
+class LocationLot {
+  const LocationLot({
+    required this.lotId,
+    required this.wineId,
+    required this.wineName,
+    required this.vintage,
+    required this.colorCode,
+    required this.locationId,
+    required this.ownerName,
+    required this.bottles,
+    this.positions,
+  });
+
+  final String lotId;
+  final String wineId;
+  final String wineName;
+  final String vintage;
+  final String colorCode;
+  final String locationId;
+  final String ownerName;
+  final int bottles;
+  final String? positions;
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/app.dart';
+import 'package:iacaveavin/data/backup_providers.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/referentiels/referentiel_loader.dart';
 import 'package:iacaveavin/data/providers.dart';
@@ -106,6 +107,7 @@ Future<FakeDemoRepository> pumpApp(
         sharedPreferencesProvider.overrideWithValue(sharedPrefs),
         databaseProvider.overrideWithValue(db),
         currentYearProvider.overrideWithValue(2026),
+        ...noFileSystem,
         bootstrapProvider.overrideWith((ref) async => 'cave-test'),
         wineListProvider.overrideWith(
           (ref) => wines ?? Stream.value(sampleWines),
@@ -151,6 +153,7 @@ Future<AppDatabase> pumpRealApp(
         databaseProvider.overrideWithValue(db),
         assetReaderProvider.overrideWithValue(readAssetFromDisk),
         currentYearProvider.overrideWithValue(2026),
+        ...noFileSystem,
       ],
       child: IaCaveAVinApp(initialLocation: location),
     ),
@@ -170,3 +173,9 @@ Future<void> settle(WidgetTester tester) async {
     if (i > 3 && !tester.binding.hasScheduledFrame) break;
   }
 }
+
+/// Pas de répertoire d'application en test : sauvegardes et photos vides.
+final noFileSystem = [
+  autoBackupsProvider.overrideWith((ref) async => const []),
+  photoSpaceProvider.overrideWith((ref) async => 0),
+];

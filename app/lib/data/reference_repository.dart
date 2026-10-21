@@ -67,6 +67,7 @@ class LocationView {
     required this.type,
     required this.depth,
     required this.bottles,
+    this.directBottles = 0,
     this.parentId,
     this.rows,
     this.cols,
@@ -88,6 +89,9 @@ class LocationView {
 
   /// Bouteilles rangées ici et dans les sous-emplacements.
   final int bottles;
+
+  /// Bouteilles rangées directement ici (étapes de l'inventaire STK-04).
+  final int directBottles;
 
   /// EMP-05 : taux de remplissage, null sans capacité.
   double? get fillRate =>
@@ -307,6 +311,7 @@ class ReferenceRepository {
             cols: r.colonnes,
             capacity: r.capacite ?? _gridCapacity(r.lignes, r.colonnes),
             bottles: total(r.id),
+            directBottles: direct[r.id] ?? 0,
           ),
         );
         visit(r.id, depth + 1);

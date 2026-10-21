@@ -557,5 +557,278 @@
         "type": "int"
       }
     }
-  }
+  },
+  "locationsEmpty": "Aucun emplacement.",
+  "locationsEmptyBody": "Créez la cave, puis ses meubles, casiers et clayettes (4 niveaux).",
+  "addLocation": "Ajouter un emplacement",
+  "addSubLocation": "Ajouter un sous-emplacement",
+  "editLocation": "Modifier l'emplacement",
+  "deleteLocation": "Supprimer l'emplacement",
+  "locationName": "Nom",
+  "locationType": "Type",
+  "locationRows": "Lignes (1 à 26)",
+  "locationCols": "Colonnes (1 à 50)",
+  "locationCapacity": "Capacité (bouteilles)",
+  "locTypeCave": "Cave",
+  "locTypeMeuble": "Meuble",
+  "locTypeCasier": "Casier",
+  "locTypeClayette": "Clayette",
+  "locTypeAutre": "Autre",
+  "locationFill": "{bottles} / {capacity} · {percent} %",
+  "@locationFill": {
+    "placeholders": {
+      "bottles": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "locationBottles": "{count, plural, =0{Vide} =1{1 bouteille} other{{count} bouteilles}}",
+  "@locationBottles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overCapacity": "Au-delà de la capacité",
+  "locationGrid": "Grille {rows} × {cols}",
+  "@locationGrid": {
+    "placeholders": {
+      "rows": {
+        "type": "int"
+      },
+      "cols": {
+        "type": "int"
+      }
+    }
+  },
+  "errorDepth": "4 niveaux au plus : cave, meuble, casier, clayette.",
+  "errorGrid": "Grille de 1 à 26 lignes et de 1 à 50 colonnes.",
+  "errorNotEmpty": "Cet emplacement contient des bouteilles ou des sous-emplacements.",
+  "errorInUse": "Valeur utilisée : suppression impossible.",
+  "errorDuplicate": "Cette valeur existe déjà.",
+  "errorCsv": "Fichier CSV invalide : rien n'a été importé.",
+  "locationWines": "Vins rangés ici",
+  "highlightedPositions": "Positions de ce vin : {positions}",
+  "@highlightedPositions": {
+    "placeholders": {
+      "positions": {
+        "type": "String"
+      }
+    }
+  },
+  "inventory": "Inventaire",
+  "inventoryTitle": "Inventaire : {location}",
+  "@inventoryTitle": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryConfirm": "Confirmer",
+  "inventoryCorrect": "Corriger",
+  "inventoryNext": "Emplacement suivant",
+  "inventoryFinish": "Terminer",
+  "inventoryReport": "Rapport d'inventaire",
+  "inventoryReportLine": "{wine} : {before} → {after}",
+  "@inventoryReportLine": {
+    "placeholders": {
+      "wine": {
+        "type": "String"
+      },
+      "before": {
+        "type": "int"
+      },
+      "after": {
+        "type": "int"
+      }
+    }
+  },
+  "inventoryNoGap": "Aucun écart : le stock est juste.",
+  "inventoryGaps": "{count, plural, =1{1 écart corrigé} other{{count} écarts corrigés}}",
+  "@inventoryGaps": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inventoryProgress": "{done} / {total} lots vérifiés",
+  "@inventoryProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "inventoryEmpty": "Aucun lot à vérifier ici.",
+  "close": "Fermer",
+  "settingsGeneral": "Réglages",
+  "settingsCurrency": "Devise",
+  "settingsTheme": "Thème",
+  "themeSystem": "Comme le téléphone",
+  "themeLight": "Clair",
+  "themeDark": "Sombre",
+  "settingsLanguage": "Langue",
+  "languageFrench": "Français",
+  "settingsDefaultOwner": "Propriétaire par défaut",
+  "settingsDefaultLocation": "Emplacement par défaut",
+  "settingsDefaultSort": "Tri par défaut",
+  "settingsDefaultSortSet": "Utiliser le tri actuel de la liste",
+  "settingsScale": "Échelle de mes notes",
+  "scale20": "Sur 20",
+  "scale100": "Sur 100",
+  "settingsCardPrice": "Prix affiché sur les cartes",
+  "cardPricePurchase": "Prix d'achat",
+  "cardPriceMarket": "Valeur marché",
+  "settingsNotifications": "Notifications",
+  "settingsNotificationsHint": "Apogée et fin d'enrichissement (lots 2a et 4).",
+  "settingsAutoPrices": "Rafraîchissement mensuel des prix",
+  "settingsAutoPricesHint": "Désactivé par défaut. Disponible au lot 2c.",
+  "settingsConnection": "Connexion au flux d'enrichissement",
+  "settingsConnectionHint": "Adresse et clé du flux n8n : lot 2c.",
+  "settingsPhotoSpace": "Espace occupé par les photos",
+  "photoSpaceValue": "{size}",
+  "@photoSpaceValue": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsReference": "Paramétrage",
+  "settingsOwners": "Propriétaires",
+  "settingsLists": "Listes de valeurs",
+  "settingsGardeRules": "Règles de garde",
+  "ownersEmpty": "Aucun propriétaire.",
+  "addOwner": "Ajouter un propriétaire",
+  "editOwner": "Modifier le propriétaire",
+  "ownerName": "Nom",
+  "ownerInitials": "Initiales (2 à 3 lettres)",
+  "ownerDefault": "Propriétaire par défaut",
+  "ownerBottles": "{count, plural, =0{Aucune bouteille} =1{1 bouteille} other{{count} bouteilles}}",
+  "@ownerBottles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultBadge": "par défaut",
+  "listCount": "{count, plural, =1{1 valeur} other{{count} valeurs}}",
+  "@listCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "listNameTypeVin": "Types de vin",
+  "listNamePays": "Pays",
+  "listNameRegion": "Régions",
+  "listNameSousRegion": "Sous-régions",
+  "listNameAppellation": "Appellations",
+  "listNameSigneQualite": "Signes de qualité",
+  "listNameClassement": "Classements",
+  "listNameCertification": "Certifications",
+  "listNameCepage": "Cépages",
+  "listNameFormat": "Formats",
+  "listNameFournisseur": "Fournisseurs",
+  "listNameMotifMouvement": "Motifs de mouvement",
+  "listNameAccordMets": "Accords mets et vins",
+  "listNameCritique": "Critiques",
+  "addValue": "Ajouter une valeur",
+  "renameValue": "Renommer",
+  "deactivateValue": "Désactiver",
+  "activateValue": "Réactiver",
+  "mergeValue": "Fusionner dans…",
+  "mergeTitle": "Fusionner « {from} » dans…",
+  "@mergeTitle": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "mergeDone": "Valeurs fusionnées, fiches re-pointées.",
+  "deleteValue": "Supprimer",
+  "inactive": "désactivée",
+  "valueLabel": "Libellé",
+  "exportCsv": "Exporter en CSV",
+  "importCsv": "Importer un CSV",
+  "importDone": "{created} créées, {updated} mises à jour",
+  "@importDone": {
+    "placeholders": {
+      "created": {
+        "type": "int"
+      },
+      "updated": {
+        "type": "int"
+      }
+    }
+  },
+  "gardeRulesPending": "Valeurs par défaut à valider",
+  "gardeRulesIntro": "Règles appliquées sur le téléphone quand aucune fenêtre n'est fournie par un critique ou le domaine. Décalages en années après le millésime.",
+  "gardeRuleLine": "Début +{start} · apogée +{peak} · fin +{end}",
+  "@gardeRuleLine": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "peak": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "gardeRuleDefault": "Règle par défaut",
+  "backupIntro": "La sauvegarde automatique d'Android ne suffit pas pour les photos : exportez régulièrement une archive vers Drive, un mail ou un PC.",
+  "backupExport": "Exporter une archive sans photos",
+  "backupExportHint": "Quelques Mo, à faire souvent.",
+  "backupExportFull": "Exporter une archive complète",
+  "backupExportFullHint": "Base et photos.",
+  "backupRestore": "Restaurer une archive",
+  "backupRestoreHint": "Remplace toute la cave par le contenu de l'archive.",
+  "backupRestoreTitle": "Restaurer cette archive ?",
+  "backupRestoreBody": "Archive du {date}, {wines} fiches. La cave actuelle sera entièrement remplacée.",
+  "@backupRestoreBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "wines": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "Archive restaurée.",
+  "backupShared": "Archive prête : choisissez où l'envoyer.",
+  "backupAuto": "Sauvegardes automatiques",
+  "backupAutoHint": "Une par semaine sur le téléphone, les 3 dernières conservées.",
+  "backupAutoNone": "Aucune sauvegarde automatique pour l'instant.",
+  "backupLastExternal": "Dernier export : {date}",
+  "@backupLastExternal": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "backupNeverExported": "Aucun export pour l'instant.",
+  "backupErrorArchive": "Ce fichier n'est pas une archive IA cave à vin.",
+  "backupErrorNewer": "Archive créée par une version plus récente de l'application : mettez l'application à jour.",
+  "backupErrorCorrupted": "Archive endommagée : la cave n'a pas été modifiée.",
+  "restoreFromAuto": "Restaurer"
 }

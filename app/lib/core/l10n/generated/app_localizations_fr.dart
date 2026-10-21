@@ -1027,4 +1027,467 @@ class AppLocalizationsFr extends AppLocalizations {
   String selectedCount(int count) {
     return '$count choisis';
   }
+
+  @override
+  String get locationsEmpty => 'Aucun emplacement.';
+
+  @override
+  String get locationsEmptyBody =>
+      'Créez la cave, puis ses meubles, casiers et clayettes (4 niveaux).';
+
+  @override
+  String get addLocation => 'Ajouter un emplacement';
+
+  @override
+  String get addSubLocation => 'Ajouter un sous-emplacement';
+
+  @override
+  String get editLocation => 'Modifier l\'emplacement';
+
+  @override
+  String get deleteLocation => 'Supprimer l\'emplacement';
+
+  @override
+  String get locationName => 'Nom';
+
+  @override
+  String get locationType => 'Type';
+
+  @override
+  String get locationRows => 'Lignes (1 à 26)';
+
+  @override
+  String get locationCols => 'Colonnes (1 à 50)';
+
+  @override
+  String get locationCapacity => 'Capacité (bouteilles)';
+
+  @override
+  String get locTypeCave => 'Cave';
+
+  @override
+  String get locTypeMeuble => 'Meuble';
+
+  @override
+  String get locTypeCasier => 'Casier';
+
+  @override
+  String get locTypeClayette => 'Clayette';
+
+  @override
+  String get locTypeAutre => 'Autre';
+
+  @override
+  String locationFill(int bottles, int capacity, int percent) {
+    return '$bottles / $capacity · $percent %';
+  }
+
+  @override
+  String locationBottles(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bouteilles',
+      one: '1 bouteille',
+      zero: 'Vide',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overCapacity => 'Au-delà de la capacité';
+
+  @override
+  String locationGrid(int rows, int cols) {
+    return 'Grille $rows × $cols';
+  }
+
+  @override
+  String get errorDepth =>
+      '4 niveaux au plus : cave, meuble, casier, clayette.';
+
+  @override
+  String get errorGrid => 'Grille de 1 à 26 lignes et de 1 à 50 colonnes.';
+
+  @override
+  String get errorNotEmpty =>
+      'Cet emplacement contient des bouteilles ou des sous-emplacements.';
+
+  @override
+  String get errorInUse => 'Valeur utilisée : suppression impossible.';
+
+  @override
+  String get errorDuplicate => 'Cette valeur existe déjà.';
+
+  @override
+  String get errorCsv => 'Fichier CSV invalide : rien n\'a été importé.';
+
+  @override
+  String get locationWines => 'Vins rangés ici';
+
+  @override
+  String highlightedPositions(String positions) {
+    return 'Positions de ce vin : $positions';
+  }
+
+  @override
+  String get inventory => 'Inventaire';
+
+  @override
+  String inventoryTitle(String location) {
+    return 'Inventaire : $location';
+  }
+
+  @override
+  String get inventoryConfirm => 'Confirmer';
+
+  @override
+  String get inventoryCorrect => 'Corriger';
+
+  @override
+  String get inventoryNext => 'Emplacement suivant';
+
+  @override
+  String get inventoryFinish => 'Terminer';
+
+  @override
+  String get inventoryReport => 'Rapport d\'inventaire';
+
+  @override
+  String inventoryReportLine(String wine, int before, int after) {
+    return '$wine : $before → $after';
+  }
+
+  @override
+  String get inventoryNoGap => 'Aucun écart : le stock est juste.';
+
+  @override
+  String inventoryGaps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count écarts corrigés',
+      one: '1 écart corrigé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inventoryProgress(int done, int total) {
+    return '$done / $total lots vérifiés';
+  }
+
+  @override
+  String get inventoryEmpty => 'Aucun lot à vérifier ici.';
+
+  @override
+  String get close => 'Fermer';
+
+  @override
+  String get settingsGeneral => 'Réglages';
+
+  @override
+  String get settingsCurrency => 'Devise';
+
+  @override
+  String get settingsTheme => 'Thème';
+
+  @override
+  String get themeSystem => 'Comme le téléphone';
+
+  @override
+  String get themeLight => 'Clair';
+
+  @override
+  String get themeDark => 'Sombre';
+
+  @override
+  String get settingsLanguage => 'Langue';
+
+  @override
+  String get languageFrench => 'Français';
+
+  @override
+  String get settingsDefaultOwner => 'Propriétaire par défaut';
+
+  @override
+  String get settingsDefaultLocation => 'Emplacement par défaut';
+
+  @override
+  String get settingsDefaultSort => 'Tri par défaut';
+
+  @override
+  String get settingsDefaultSortSet => 'Utiliser le tri actuel de la liste';
+
+  @override
+  String get settingsScale => 'Échelle de mes notes';
+
+  @override
+  String get scale20 => 'Sur 20';
+
+  @override
+  String get scale100 => 'Sur 100';
+
+  @override
+  String get settingsCardPrice => 'Prix affiché sur les cartes';
+
+  @override
+  String get cardPricePurchase => 'Prix d\'achat';
+
+  @override
+  String get cardPriceMarket => 'Valeur marché';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get settingsNotificationsHint =>
+      'Apogée et fin d\'enrichissement (lots 2a et 4).';
+
+  @override
+  String get settingsAutoPrices => 'Rafraîchissement mensuel des prix';
+
+  @override
+  String get settingsAutoPricesHint =>
+      'Désactivé par défaut. Disponible au lot 2c.';
+
+  @override
+  String get settingsConnection => 'Connexion au flux d\'enrichissement';
+
+  @override
+  String get settingsConnectionHint => 'Adresse et clé du flux n8n : lot 2c.';
+
+  @override
+  String get settingsPhotoSpace => 'Espace occupé par les photos';
+
+  @override
+  String photoSpaceValue(String size) {
+    return '$size';
+  }
+
+  @override
+  String get settingsReference => 'Paramétrage';
+
+  @override
+  String get settingsOwners => 'Propriétaires';
+
+  @override
+  String get settingsLists => 'Listes de valeurs';
+
+  @override
+  String get settingsGardeRules => 'Règles de garde';
+
+  @override
+  String get ownersEmpty => 'Aucun propriétaire.';
+
+  @override
+  String get addOwner => 'Ajouter un propriétaire';
+
+  @override
+  String get editOwner => 'Modifier le propriétaire';
+
+  @override
+  String get ownerName => 'Nom';
+
+  @override
+  String get ownerInitials => 'Initiales (2 à 3 lettres)';
+
+  @override
+  String get ownerDefault => 'Propriétaire par défaut';
+
+  @override
+  String ownerBottles(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bouteilles',
+      one: '1 bouteille',
+      zero: 'Aucune bouteille',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get defaultBadge => 'par défaut';
+
+  @override
+  String listCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count valeurs',
+      one: '1 valeur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listNameTypeVin => 'Types de vin';
+
+  @override
+  String get listNamePays => 'Pays';
+
+  @override
+  String get listNameRegion => 'Régions';
+
+  @override
+  String get listNameSousRegion => 'Sous-régions';
+
+  @override
+  String get listNameAppellation => 'Appellations';
+
+  @override
+  String get listNameSigneQualite => 'Signes de qualité';
+
+  @override
+  String get listNameClassement => 'Classements';
+
+  @override
+  String get listNameCertification => 'Certifications';
+
+  @override
+  String get listNameCepage => 'Cépages';
+
+  @override
+  String get listNameFormat => 'Formats';
+
+  @override
+  String get listNameFournisseur => 'Fournisseurs';
+
+  @override
+  String get listNameMotifMouvement => 'Motifs de mouvement';
+
+  @override
+  String get listNameAccordMets => 'Accords mets et vins';
+
+  @override
+  String get listNameCritique => 'Critiques';
+
+  @override
+  String get addValue => 'Ajouter une valeur';
+
+  @override
+  String get renameValue => 'Renommer';
+
+  @override
+  String get deactivateValue => 'Désactiver';
+
+  @override
+  String get activateValue => 'Réactiver';
+
+  @override
+  String get mergeValue => 'Fusionner dans…';
+
+  @override
+  String mergeTitle(String from) {
+    return 'Fusionner « $from » dans…';
+  }
+
+  @override
+  String get mergeDone => 'Valeurs fusionnées, fiches re-pointées.';
+
+  @override
+  String get deleteValue => 'Supprimer';
+
+  @override
+  String get inactive => 'désactivée';
+
+  @override
+  String get valueLabel => 'Libellé';
+
+  @override
+  String get exportCsv => 'Exporter en CSV';
+
+  @override
+  String get importCsv => 'Importer un CSV';
+
+  @override
+  String importDone(int created, int updated) {
+    return '$created créées, $updated mises à jour';
+  }
+
+  @override
+  String get gardeRulesPending => 'Valeurs par défaut à valider';
+
+  @override
+  String get gardeRulesIntro =>
+      'Règles appliquées sur le téléphone quand aucune fenêtre n\'est fournie par un critique ou le domaine. Décalages en années après le millésime.';
+
+  @override
+  String gardeRuleLine(int start, int peak, int end) {
+    return 'Début +$start · apogée +$peak · fin +$end';
+  }
+
+  @override
+  String get gardeRuleDefault => 'Règle par défaut';
+
+  @override
+  String get backupIntro =>
+      'La sauvegarde automatique d\'Android ne suffit pas pour les photos : exportez régulièrement une archive vers Drive, un mail ou un PC.';
+
+  @override
+  String get backupExport => 'Exporter une archive sans photos';
+
+  @override
+  String get backupExportHint => 'Quelques Mo, à faire souvent.';
+
+  @override
+  String get backupExportFull => 'Exporter une archive complète';
+
+  @override
+  String get backupExportFullHint => 'Base et photos.';
+
+  @override
+  String get backupRestore => 'Restaurer une archive';
+
+  @override
+  String get backupRestoreHint =>
+      'Remplace toute la cave par le contenu de l\'archive.';
+
+  @override
+  String get backupRestoreTitle => 'Restaurer cette archive ?';
+
+  @override
+  String backupRestoreBody(String date, int wines) {
+    return 'Archive du $date, $wines fiches. La cave actuelle sera entièrement remplacée.';
+  }
+
+  @override
+  String get backupRestored => 'Archive restaurée.';
+
+  @override
+  String get backupShared => 'Archive prête : choisissez où l\'envoyer.';
+
+  @override
+  String get backupAuto => 'Sauvegardes automatiques';
+
+  @override
+  String get backupAutoHint =>
+      'Une par semaine sur le téléphone, les 3 dernières conservées.';
+
+  @override
+  String get backupAutoNone => 'Aucune sauvegarde automatique pour l\'instant.';
+
+  @override
+  String backupLastExternal(String date) {
+    return 'Dernier export : $date';
+  }
+
+  @override
+  String get backupNeverExported => 'Aucun export pour l\'instant.';
+
+  @override
+  String get backupErrorArchive =>
+      'Ce fichier n\'est pas une archive IA cave à vin.';
+
+  @override
+  String get backupErrorNewer =>
+      'Archive créée par une version plus récente de l\'application : mettez l\'application à jour.';
+
+  @override
+  String get backupErrorCorrupted =>
+      'Archive endommagée : la cave n\'a pas été modifiée.';
+
+  @override
+  String get restoreFromAuto => 'Restaurer';
 }

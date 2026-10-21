@@ -21,6 +21,7 @@ class AppSettings {
     this.compactView = false,
     this.lastAutoBackup,
     this.lastExternalBackup,
+    this.firstLaunch,
   });
 
   /// Code ISO 4217.
@@ -46,6 +47,9 @@ class AppSettings {
   final DateTime? lastAutoBackup;
   final DateTime? lastExternalBackup;
 
+  /// Premier lancement, point de départ du rappel d'export (SAV-03).
+  final DateTime? firstLaunch;
+
   AppSettings copyWith({
     String? currency,
     AppThemeMode? themeMode,
@@ -60,6 +64,7 @@ class AppSettings {
     bool? compactView,
     DateTime? lastAutoBackup,
     DateTime? lastExternalBackup,
+    DateTime? firstLaunch,
   }) => AppSettings(
     currency: currency ?? this.currency,
     themeMode: themeMode ?? this.themeMode,
@@ -78,6 +83,7 @@ class AppSettings {
     compactView: compactView ?? this.compactView,
     lastAutoBackup: lastAutoBackup ?? this.lastAutoBackup,
     lastExternalBackup: lastExternalBackup ?? this.lastExternalBackup,
+    firstLaunch: firstLaunch ?? this.firstLaunch,
   );
 
   static Map<String, Object?> _query(WineQuery q) => {
@@ -109,6 +115,7 @@ class AppSettings {
     'compactView': compactView,
     'lastAutoBackup': lastAutoBackup?.toIso8601String(),
     'lastExternalBackup': lastExternalBackup?.toIso8601String(),
+    'firstLaunch': firstLaunch?.toIso8601String(),
   };
 
   static AppSettings fromJson(Map<String, Object?> json) => AppSettings(
@@ -130,5 +137,6 @@ class AppSettings {
     compactView: json['compactView'] == true,
     lastAutoBackup: DateTime.tryParse('${json['lastAutoBackup']}'),
     lastExternalBackup: DateTime.tryParse('${json['lastExternalBackup']}'),
+    firstLaunch: DateTime.tryParse('${json['firstLaunch']}'),
   );
 }
