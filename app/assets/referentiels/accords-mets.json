@@ -1,0 +1,166 @@
+{
+ "liste": "accord_mets",
+ "source": "liste provisoire saisie au lot 0",
+ "valeurs": [
+  {
+   "code": "viande-rouge-grillee",
+   "libelle": "Viande rouge grillée"
+  },
+  {
+   "code": "viande-rouge-en-sauce",
+   "libelle": "Viande rouge en sauce"
+  },
+  {
+   "code": "gibier-a-poil",
+   "libelle": "Gibier à poil"
+  },
+  {
+   "code": "gibier-a-plume",
+   "libelle": "Gibier à plume"
+  },
+  {
+   "code": "agneau",
+   "libelle": "Agneau"
+  },
+  {
+   "code": "porc",
+   "libelle": "Porc"
+  },
+  {
+   "code": "veau",
+   "libelle": "Veau"
+  },
+  {
+   "code": "volaille",
+   "libelle": "Volaille"
+  },
+  {
+   "code": "volaille-a-la-creme",
+   "libelle": "Volaille à la crème"
+  },
+  {
+   "code": "canard",
+   "libelle": "Canard"
+  },
+  {
+   "code": "charcuterie",
+   "libelle": "Charcuterie"
+  },
+  {
+   "code": "foie-gras",
+   "libelle": "Foie gras"
+  },
+  {
+   "code": "poisson-grille",
+   "libelle": "Poisson grillé"
+  },
+  {
+   "code": "poisson-en-sauce",
+   "libelle": "Poisson en sauce"
+  },
+  {
+   "code": "poisson-fume",
+   "libelle": "Poisson fumé"
+  },
+  {
+   "code": "fruits-de-mer",
+   "libelle": "Fruits de mer"
+  },
+  {
+   "code": "huitres",
+   "libelle": "Huîtres"
+  },
+  {
+   "code": "crustaces",
+   "libelle": "Crustacés"
+  },
+  {
+   "code": "sushis",
+   "libelle": "Sushis"
+  },
+  {
+   "code": "cuisine-asiatique",
+   "libelle": "Cuisine asiatique"
+  },
+  {
+   "code": "cuisine-epicee",
+   "libelle": "Cuisine épicée"
+  },
+  {
+   "code": "cuisine-mediterraneenne",
+   "libelle": "Cuisine méditerranéenne"
+  },
+  {
+   "code": "barbecue",
+   "libelle": "Barbecue"
+  },
+  {
+   "code": "pates-et-risotto",
+   "libelle": "Pâtes et risotto"
+  },
+  {
+   "code": "pizza",
+   "libelle": "Pizza"
+  },
+  {
+   "code": "champignons",
+   "libelle": "Champignons"
+  },
+  {
+   "code": "legumes",
+   "libelle": "Légumes"
+  },
+  {
+   "code": "salade",
+   "libelle": "Salade"
+  },
+  {
+   "code": "aperitif",
+   "libelle": "Apéritif"
+  },
+  {
+   "code": "fromage-a-pate-dure",
+   "libelle": "Fromage à pâte dure"
+  },
+  {
+   "code": "fromage-a-pate-molle",
+   "libelle": "Fromage à pâte molle"
+  },
+  {
+   "code": "fromage-de-chevre",
+   "libelle": "Fromage de chèvre"
+  },
+  {
+   "code": "fromage-a-pate-persillee",
+   "libelle": "Fromage à pâte persillée"
+  },
+  {
+   "code": "fromage-a-pate-lavee",
+   "libelle": "Fromage à pâte lavée"
+  },
+  {
+   "code": "dessert-aux-fruits",
+   "libelle": "Dessert aux fruits"
+  },
+  {
+   "code": "dessert-au-chocolat",
+   "libelle": "Dessert au chocolat"
+  },
+  {
+   "code": "tarte-aux-fruits",
+   "libelle": "Tarte aux fruits"
+  },
+  {
+   "code": "patisserie",
+   "libelle": "Pâtisserie"
+  },
+  {
+   "code": "fruits-secs",
+   "libelle": "Fruits secs"
+  },
+  {
+   "code": "cuisine-du-terroir",
+   "libelle": "Cuisine du terroir"
+  }
+ ]
+}

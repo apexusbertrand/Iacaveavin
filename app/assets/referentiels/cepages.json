@@ -1,0 +1,618 @@
+{
+ "liste": "cepage",
+ "source": "liste provisoire saisie au lot 0 (synonymes d'usage conservés), complétée à l'usage",
+ "valeurs": [
+  {
+   "code": "aglianico",
+   "libelle": "Aglianico"
+  },
+  {
+   "code": "albarino",
+   "libelle": "Albariño"
+  },
+  {
+   "code": "alicante-bouschet",
+   "libelle": "Alicante Bouschet"
+  },
+  {
+   "code": "aligote",
+   "libelle": "Aligoté"
+  },
+  {
+   "code": "altesse",
+   "libelle": "Altesse"
+  },
+  {
+   "code": "alvarinho",
+   "libelle": "Alvarinho"
+  },
+  {
+   "code": "aramon",
+   "libelle": "Aramon"
+  },
+  {
+   "code": "arinto",
+   "libelle": "Arinto"
+  },
+  {
+   "code": "arrufiac",
+   "libelle": "Arrufiac"
+  },
+  {
+   "code": "assyrtiko",
+   "libelle": "Assyrtiko"
+  },
+  {
+   "code": "auxerrois",
+   "libelle": "Auxerrois"
+  },
+  {
+   "code": "baco-blanc",
+   "libelle": "Baco blanc"
+  },
+  {
+   "code": "barbera",
+   "libelle": "Barbera"
+  },
+  {
+   "code": "baroque",
+   "libelle": "Baroque"
+  },
+  {
+   "code": "blaufrankisch",
+   "libelle": "Blaufränkisch"
+  },
+  {
+   "code": "bourboulenc",
+   "libelle": "Bourboulenc"
+  },
+  {
+   "code": "brachetto",
+   "libelle": "Brachetto"
+  },
+  {
+   "code": "braucol",
+   "libelle": "Braucol"
+  },
+  {
+   "code": "cabernet-dorsa",
+   "libelle": "Cabernet Dorsa"
+  },
+  {
+   "code": "cabernet-franc",
+   "libelle": "Cabernet franc"
+  },
+  {
+   "code": "cabernet-sauvignon",
+   "libelle": "Cabernet sauvignon"
+  },
+  {
+   "code": "caladoc",
+   "libelle": "Caladoc"
+  },
+  {
+   "code": "carignan",
+   "libelle": "Carignan"
+  },
+  {
+   "code": "carmenere",
+   "libelle": "Carmenère"
+  },
+  {
+   "code": "chambourcin",
+   "libelle": "Chambourcin"
+  },
+  {
+   "code": "chardonnay",
+   "libelle": "Chardonnay"
+  },
+  {
+   "code": "chardonnay-rose",
+   "libelle": "Chardonnay rose"
+  },
+  {
+   "code": "chasselas",
+   "libelle": "Chasselas"
+  },
+  {
+   "code": "chenin",
+   "libelle": "Chenin"
+  },
+  {
+   "code": "cinsault",
+   "libelle": "Cinsault"
+  },
+  {
+   "code": "clairette",
+   "libelle": "Clairette"
+  },
+  {
+   "code": "colombard",
+   "libelle": "Colombard"
+  },
+  {
+   "code": "colorino",
+   "libelle": "Colorino"
+  },
+  {
+   "code": "corvina",
+   "libelle": "Corvina"
+  },
+  {
+   "code": "cot",
+   "libelle": "Côt"
+  },
+  {
+   "code": "counoise",
+   "libelle": "Counoise"
+  },
+  {
+   "code": "courbu",
+   "libelle": "Courbu"
+  },
+  {
+   "code": "dolcetto",
+   "libelle": "Dolcetto"
+  },
+  {
+   "code": "duras",
+   "libelle": "Duras"
+  },
+  {
+   "code": "durif",
+   "libelle": "Durif"
+  },
+  {
+   "code": "egiodola",
+   "libelle": "Égiodola"
+  },
+  {
+   "code": "fer-servadou",
+   "libelle": "Fer servadou"
+  },
+  {
+   "code": "fiano",
+   "libelle": "Fiano"
+  },
+  {
+   "code": "folle-blanche",
+   "libelle": "Folle blanche"
+  },
+  {
+   "code": "furmint",
+   "libelle": "Furmint"
+  },
+  {
+   "code": "gamay",
+   "libelle": "Gamay"
+  },
+  {
+   "code": "garganega",
+   "libelle": "Garganega"
+  },
+  {
+   "code": "garnacha",
+   "libelle": "Garnacha"
+  },
+  {
+   "code": "gewurztraminer",
+   "libelle": "Gewurztraminer"
+  },
+  {
+   "code": "glera",
+   "libelle": "Glera"
+  },
+  {
+   "code": "godello",
+   "libelle": "Godello"
+  },
+  {
+   "code": "graciano",
+   "libelle": "Graciano"
+  },
+  {
+   "code": "greco",
+   "libelle": "Greco"
+  },
+  {
+   "code": "grenache",
+   "libelle": "Grenache"
+  },
+  {
+   "code": "grenache-blanc",
+   "libelle": "Grenache blanc"
+  },
+  {
+   "code": "grenache-gris",
+   "libelle": "Grenache gris"
+  },
+  {
+   "code": "grolleau",
+   "libelle": "Grolleau"
+  },
+  {
+   "code": "gros-manseng",
+   "libelle": "Gros manseng"
+  },
+  {
+   "code": "gros-plant",
+   "libelle": "Gros plant"
+  },
+  {
+   "code": "gruner-veltliner",
+   "libelle": "Grüner Veltliner"
+  },
+  {
+   "code": "harslevelu",
+   "libelle": "Harslevelü"
+  },
+  {
+   "code": "jacquere",
+   "libelle": "Jacquère"
+  },
+  {
+   "code": "kerner",
+   "libelle": "Kerner"
+  },
+  {
+   "code": "lagrein",
+   "libelle": "Lagrein"
+  },
+  {
+   "code": "lambrusco",
+   "libelle": "Lambrusco"
+  },
+  {
+   "code": "len-de-l-el",
+   "libelle": "Len de l'El"
+  },
+  {
+   "code": "listan",
+   "libelle": "Listán"
+  },
+  {
+   "code": "loin-de-l-il",
+   "libelle": "Loin de l'œil"
+  },
+  {
+   "code": "macabeu",
+   "libelle": "Macabeu"
+  },
+  {
+   "code": "malbec",
+   "libelle": "Malbec"
+  },
+  {
+   "code": "malvasia",
+   "libelle": "Malvasia"
+  },
+  {
+   "code": "marsanne",
+   "libelle": "Marsanne"
+  },
+  {
+   "code": "marselan",
+   "libelle": "Marselan"
+  },
+  {
+   "code": "mauzac",
+   "libelle": "Mauzac"
+  },
+  {
+   "code": "mazuelo",
+   "libelle": "Mazuelo"
+  },
+  {
+   "code": "melon-de-bourgogne",
+   "libelle": "Melon de Bourgogne"
+  },
+  {
+   "code": "mencia",
+   "libelle": "Mencía"
+  },
+  {
+   "code": "merlot",
+   "libelle": "Merlot"
+  },
+  {
+   "code": "meunier",
+   "libelle": "Meunier"
+  },
+  {
+   "code": "monastrell",
+   "libelle": "Monastrell"
+  },
+  {
+   "code": "mondeuse",
+   "libelle": "Mondeuse"
+  },
+  {
+   "code": "montepulciano",
+   "libelle": "Montepulciano"
+  },
+  {
+   "code": "moscatel",
+   "libelle": "Moscatel"
+  },
+  {
+   "code": "moscato",
+   "libelle": "Moscato"
+  },
+  {
+   "code": "mourvedre",
+   "libelle": "Mourvèdre"
+  },
+  {
+   "code": "muller-thurgau",
+   "libelle": "Müller-Thurgau"
+  },
+  {
+   "code": "muscadelle",
+   "libelle": "Muscadelle"
+  },
+  {
+   "code": "muscat-a-petits-grains",
+   "libelle": "Muscat à petits grains"
+  },
+  {
+   "code": "muscat-d-alexandrie",
+   "libelle": "Muscat d'Alexandrie"
+  },
+  {
+   "code": "muscat-ottonel",
+   "libelle": "Muscat ottonel"
+  },
+  {
+   "code": "nebbiolo",
+   "libelle": "Nebbiolo"
+  },
+  {
+   "code": "negrette",
+   "libelle": "Négrette"
+  },
+  {
+   "code": "nero-d-avola",
+   "libelle": "Nero d'Avola"
+  },
+  {
+   "code": "nielluccio",
+   "libelle": "Nielluccio"
+  },
+  {
+   "code": "noah",
+   "libelle": "Noah"
+  },
+  {
+   "code": "ondenc",
+   "libelle": "Ondenc"
+  },
+  {
+   "code": "palomino",
+   "libelle": "Palomino"
+  },
+  {
+   "code": "pedro-ximenez",
+   "libelle": "Pedro Ximénez"
+  },
+  {
+   "code": "petit-courbu",
+   "libelle": "Petit courbu"
+  },
+  {
+   "code": "petit-manseng",
+   "libelle": "Petit manseng"
+  },
+  {
+   "code": "petit-verdot",
+   "libelle": "Petit verdot"
+  },
+  {
+   "code": "petite-arvine",
+   "libelle": "Petite arvine"
+  },
+  {
+   "code": "picpoul",
+   "libelle": "Picpoul"
+  },
+  {
+   "code": "pineau-d-aunis",
+   "libelle": "Pineau d'Aunis"
+  },
+  {
+   "code": "pinot-blanc",
+   "libelle": "Pinot blanc"
+  },
+  {
+   "code": "pinot-gris",
+   "libelle": "Pinot gris"
+  },
+  {
+   "code": "pinot-meunier",
+   "libelle": "Pinot meunier"
+  },
+  {
+   "code": "pinot-noir",
+   "libelle": "Pinot noir"
+  },
+  {
+   "code": "pinotage",
+   "libelle": "Pinotage"
+  },
+  {
+   "code": "plantet",
+   "libelle": "Plantet"
+  },
+  {
+   "code": "poulsard",
+   "libelle": "Poulsard"
+  },
+  {
+   "code": "primitivo",
+   "libelle": "Primitivo"
+  },
+  {
+   "code": "prunelard",
+   "libelle": "Prunelard"
+  },
+  {
+   "code": "riesling",
+   "libelle": "Riesling"
+  },
+  {
+   "code": "rolle",
+   "libelle": "Rolle"
+  },
+  {
+   "code": "romorantin",
+   "libelle": "Romorantin"
+  },
+  {
+   "code": "roussanne",
+   "libelle": "Roussanne"
+  },
+  {
+   "code": "sacy",
+   "libelle": "Sacy"
+  },
+  {
+   "code": "sagrantino",
+   "libelle": "Sagrantino"
+  },
+  {
+   "code": "saint-laurent",
+   "libelle": "Saint-Laurent"
+  },
+  {
+   "code": "sangiovese",
+   "libelle": "Sangiovese"
+  },
+  {
+   "code": "saperavi",
+   "libelle": "Saperavi"
+  },
+  {
+   "code": "sauvignon-blanc",
+   "libelle": "Sauvignon blanc"
+  },
+  {
+   "code": "sauvignon-gris",
+   "libelle": "Sauvignon gris"
+  },
+  {
+   "code": "savagnin",
+   "libelle": "Savagnin"
+  },
+  {
+   "code": "schiava",
+   "libelle": "Schiava"
+  },
+  {
+   "code": "sciaccarellu",
+   "libelle": "Sciaccarellu"
+  },
+  {
+   "code": "semillon",
+   "libelle": "Sémillon"
+  },
+  {
+   "code": "silvaner",
+   "libelle": "Silvaner"
+  },
+  {
+   "code": "syrah",
+   "libelle": "Syrah"
+  },
+  {
+   "code": "tannat",
+   "libelle": "Tannat"
+  },
+  {
+   "code": "tempranillo",
+   "libelle": "Tempranillo"
+  },
+  {
+   "code": "terret",
+   "libelle": "Terret"
+  },
+  {
+   "code": "tibouren",
+   "libelle": "Tibouren"
+  },
+  {
+   "code": "tinta-roriz",
+   "libelle": "Tinta roriz"
+  },
+  {
+   "code": "tocai-friulano",
+   "libelle": "Tocai friulano"
+  },
+  {
+   "code": "touriga-franca",
+   "libelle": "Touriga franca"
+  },
+  {
+   "code": "touriga-nacional",
+   "libelle": "Touriga nacional"
+  },
+  {
+   "code": "trebbiano",
+   "libelle": "Trebbiano"
+  },
+  {
+   "code": "trincadeira",
+   "libelle": "Trincadeira"
+  },
+  {
+   "code": "trousseau",
+   "libelle": "Trousseau"
+  },
+  {
+   "code": "ugni-blanc",
+   "libelle": "Ugni blanc"
+  },
+  {
+   "code": "vaccarese",
+   "libelle": "Vaccarèse"
+  },
+  {
+   "code": "valdiguie",
+   "libelle": "Valdiguié"
+  },
+  {
+   "code": "verdejo",
+   "libelle": "Verdejo"
+  },
+  {
+   "code": "verdelho",
+   "libelle": "Verdelho"
+  },
+  {
+   "code": "vermentino",
+   "libelle": "Vermentino"
+  },
+  {
+   "code": "viognier",
+   "libelle": "Viognier"
+  },
+  {
+   "code": "welschriesling",
+   "libelle": "Welschriesling"
+  },
+  {
+   "code": "xarello",
+   "libelle": "Xarel·lo"
+  },
+  {
+   "code": "xinomavro",
+   "libelle": "Xinomavro"
+  },
+  {
+   "code": "zinfandel",
+   "libelle": "Zinfandel"
+  },
+  {
+   "code": "zweigelt",
+   "libelle": "Zweigelt"
+  }
+ ]
+}

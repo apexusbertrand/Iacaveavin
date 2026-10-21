@@ -1,0 +1,1112 @@
+{
+ "liste": "appellation",
+ "source": "liste provisoire saisie au lot 0 (principales appellations). À remplacer par les données ouvertes de l'INAO : scripts/generer_referentiels.py --inao",
+ "provisoire": true,
+ "valeurs": [
+  {
+   "code": "fr-alsace",
+   "libelle": "Alsace",
+   "parent_code": "fr-alsace"
+  },
+  {
+   "code": "fr-alsace-grand-cru",
+   "libelle": "Alsace Grand Cru",
+   "parent_code": "fr-alsace"
+  },
+  {
+   "code": "fr-cremant-d-alsace",
+   "libelle": "Crémant d'Alsace",
+   "parent_code": "fr-alsace"
+  },
+  {
+   "code": "fr-beaujolais",
+   "libelle": "Beaujolais",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-beaujolais-villages",
+   "libelle": "Beaujolais-Villages",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-brouilly",
+   "libelle": "Brouilly",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-cote-de-brouilly",
+   "libelle": "Côte de Brouilly",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-chenas",
+   "libelle": "Chénas",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-chiroubles",
+   "libelle": "Chiroubles",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-fleurie",
+   "libelle": "Fleurie",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-julienas",
+   "libelle": "Juliénas",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-morgon",
+   "libelle": "Morgon",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-moulin-a-vent",
+   "libelle": "Moulin-à-Vent",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-regnie",
+   "libelle": "Régnié",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-saint-amour",
+   "libelle": "Saint-Amour",
+   "parent_code": "fr-beaujolais"
+  },
+  {
+   "code": "fr-bordeaux",
+   "libelle": "Bordeaux",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bordeaux-superieur",
+   "libelle": "Bordeaux Supérieur",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-cremant-de-bordeaux",
+   "libelle": "Crémant de Bordeaux",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-medoc",
+   "libelle": "Médoc",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-haut-medoc",
+   "libelle": "Haut-Médoc",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-margaux",
+   "libelle": "Margaux",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-pauillac",
+   "libelle": "Pauillac",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-saint-julien",
+   "libelle": "Saint-Julien",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-saint-estephe",
+   "libelle": "Saint-Estèphe",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-listrac-medoc",
+   "libelle": "Listrac-Médoc",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-moulis-en-medoc",
+   "libelle": "Moulis-en-Médoc",
+   "parent_code": "fr-bordeaux--medoc"
+  },
+  {
+   "code": "fr-graves",
+   "libelle": "Graves",
+   "parent_code": "fr-bordeaux--graves"
+  },
+  {
+   "code": "fr-pessac-leognan",
+   "libelle": "Pessac-Léognan",
+   "parent_code": "fr-bordeaux--graves"
+  },
+  {
+   "code": "fr-sauternes",
+   "libelle": "Sauternes",
+   "parent_code": "fr-bordeaux--sauternais"
+  },
+  {
+   "code": "fr-barsac",
+   "libelle": "Barsac",
+   "parent_code": "fr-bordeaux--sauternais"
+  },
+  {
+   "code": "fr-saint-emilion",
+   "libelle": "Saint-Émilion",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-saint-emilion-grand-cru",
+   "libelle": "Saint-Émilion Grand Cru",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-pomerol",
+   "libelle": "Pomerol",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-lalande-de-pomerol",
+   "libelle": "Lalande-de-Pomerol",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-fronsac",
+   "libelle": "Fronsac",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-canon-fronsac",
+   "libelle": "Canon-Fronsac",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-montagne-saint-emilion",
+   "libelle": "Montagne-Saint-Émilion",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-lussac-saint-emilion",
+   "libelle": "Lussac-Saint-Émilion",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-puisseguin-saint-emilion",
+   "libelle": "Puisseguin-Saint-Émilion",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-saint-georges-saint-emilion",
+   "libelle": "Saint-Georges-Saint-Émilion",
+   "parent_code": "fr-bordeaux--libournais"
+  },
+  {
+   "code": "fr-entre-deux-mers",
+   "libelle": "Entre-deux-Mers",
+   "parent_code": "fr-bordeaux--entre-deux-mers"
+  },
+  {
+   "code": "fr-cotes-de-bordeaux",
+   "libelle": "Côtes de Bordeaux",
+   "parent_code": "fr-bordeaux--cotes-de-bordeaux"
+  },
+  {
+   "code": "fr-blaye-cotes-de-bordeaux",
+   "libelle": "Blaye Côtes de Bordeaux",
+   "parent_code": "fr-bordeaux--cotes-de-bordeaux"
+  },
+  {
+   "code": "fr-castillon-cotes-de-bordeaux",
+   "libelle": "Castillon Côtes de Bordeaux",
+   "parent_code": "fr-bordeaux--cotes-de-bordeaux"
+  },
+  {
+   "code": "fr-cadillac-cotes-de-bordeaux",
+   "libelle": "Cadillac Côtes de Bordeaux",
+   "parent_code": "fr-bordeaux--cotes-de-bordeaux"
+  },
+  {
+   "code": "fr-francs-cotes-de-bordeaux",
+   "libelle": "Francs Côtes de Bordeaux",
+   "parent_code": "fr-bordeaux--cotes-de-bordeaux"
+  },
+  {
+   "code": "fr-bourgogne",
+   "libelle": "Bourgogne",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-bourgogne-aligote",
+   "libelle": "Bourgogne Aligoté",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-coteaux-bourguignons",
+   "libelle": "Coteaux Bourguignons",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-cremant-de-bourgogne",
+   "libelle": "Crémant de Bourgogne",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-chablis",
+   "libelle": "Chablis",
+   "parent_code": "fr-bourgogne--chablis-et-grand-auxerrois"
+  },
+  {
+   "code": "fr-chablis-grand-cru",
+   "libelle": "Chablis Grand Cru",
+   "parent_code": "fr-bourgogne--chablis-et-grand-auxerrois"
+  },
+  {
+   "code": "fr-petit-chablis",
+   "libelle": "Petit Chablis",
+   "parent_code": "fr-bourgogne--chablis-et-grand-auxerrois"
+  },
+  {
+   "code": "fr-irancy",
+   "libelle": "Irancy",
+   "parent_code": "fr-bourgogne--chablis-et-grand-auxerrois"
+  },
+  {
+   "code": "fr-marsannay",
+   "libelle": "Marsannay",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-fixin",
+   "libelle": "Fixin",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-gevrey-chambertin",
+   "libelle": "Gevrey-Chambertin",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-chambertin",
+   "libelle": "Chambertin",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-morey-saint-denis",
+   "libelle": "Morey-Saint-Denis",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-chambolle-musigny",
+   "libelle": "Chambolle-Musigny",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-musigny",
+   "libelle": "Musigny",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-vougeot",
+   "libelle": "Vougeot",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-clos-de-vougeot",
+   "libelle": "Clos de Vougeot",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-echezeaux",
+   "libelle": "Échezeaux",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-vosne-romanee",
+   "libelle": "Vosne-Romanée",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-richebourg",
+   "libelle": "Richebourg",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-nuits-saint-georges",
+   "libelle": "Nuits-Saint-Georges",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-cote-de-nuits-villages",
+   "libelle": "Côte de Nuits-Villages",
+   "parent_code": "fr-bourgogne--cote-de-nuits"
+  },
+  {
+   "code": "fr-ladoix",
+   "libelle": "Ladoix",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-aloxe-corton",
+   "libelle": "Aloxe-Corton",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-corton",
+   "libelle": "Corton",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-corton-charlemagne",
+   "libelle": "Corton-Charlemagne",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-pernand-vergelesses",
+   "libelle": "Pernand-Vergelesses",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-savigny-les-beaune",
+   "libelle": "Savigny-lès-Beaune",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-chorey-les-beaune",
+   "libelle": "Chorey-lès-Beaune",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-beaune",
+   "libelle": "Beaune",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-pommard",
+   "libelle": "Pommard",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-volnay",
+   "libelle": "Volnay",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-monthelie",
+   "libelle": "Monthélie",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-auxey-duresses",
+   "libelle": "Auxey-Duresses",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-saint-romain",
+   "libelle": "Saint-Romain",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-meursault",
+   "libelle": "Meursault",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-puligny-montrachet",
+   "libelle": "Puligny-Montrachet",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-chassagne-montrachet",
+   "libelle": "Chassagne-Montrachet",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-montrachet",
+   "libelle": "Montrachet",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-saint-aubin",
+   "libelle": "Saint-Aubin",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-santenay",
+   "libelle": "Santenay",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-maranges",
+   "libelle": "Maranges",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-cote-de-beaune-villages",
+   "libelle": "Côte de Beaune-Villages",
+   "parent_code": "fr-bourgogne--cote-de-beaune"
+  },
+  {
+   "code": "fr-bouzeron",
+   "libelle": "Bouzeron",
+   "parent_code": "fr-bourgogne--cote-chalonnaise"
+  },
+  {
+   "code": "fr-rully",
+   "libelle": "Rully",
+   "parent_code": "fr-bourgogne--cote-chalonnaise"
+  },
+  {
+   "code": "fr-mercurey",
+   "libelle": "Mercurey",
+   "parent_code": "fr-bourgogne--cote-chalonnaise"
+  },
+  {
+   "code": "fr-givry",
+   "libelle": "Givry",
+   "parent_code": "fr-bourgogne--cote-chalonnaise"
+  },
+  {
+   "code": "fr-montagny",
+   "libelle": "Montagny",
+   "parent_code": "fr-bourgogne--cote-chalonnaise"
+  },
+  {
+   "code": "fr-macon",
+   "libelle": "Mâcon",
+   "parent_code": "fr-bourgogne--maconnais"
+  },
+  {
+   "code": "fr-macon-villages",
+   "libelle": "Mâcon-Villages",
+   "parent_code": "fr-bourgogne--maconnais"
+  },
+  {
+   "code": "fr-vire-clesse",
+   "libelle": "Viré-Clessé",
+   "parent_code": "fr-bourgogne--maconnais"
+  },
+  {
+   "code": "fr-pouilly-fuisse",
+   "libelle": "Pouilly-Fuissé",
+   "parent_code": "fr-bourgogne--maconnais"
+  },
+  {
+   "code": "fr-pouilly-vinzelles",
+   "libelle": "Pouilly-Vinzelles",
+   "parent_code": "fr-bourgogne--maconnais"
+  },
+  {
+   "code": "fr-saint-veran",
+   "libelle": "Saint-Véran",
+   "parent_code": "fr-bourgogne--maconnais"
+  },
+  {
+   "code": "fr-champagne",
+   "libelle": "Champagne",
+   "parent_code": "fr-champagne"
+  },
+  {
+   "code": "fr-coteaux-champenois",
+   "libelle": "Coteaux champenois",
+   "parent_code": "fr-champagne"
+  },
+  {
+   "code": "fr-rose-des-riceys",
+   "libelle": "Rosé des Riceys",
+   "parent_code": "fr-champagne"
+  },
+  {
+   "code": "fr-corse",
+   "libelle": "Corse",
+   "parent_code": "fr-corse"
+  },
+  {
+   "code": "fr-patrimonio",
+   "libelle": "Patrimonio",
+   "parent_code": "fr-corse"
+  },
+  {
+   "code": "fr-ajaccio",
+   "libelle": "Ajaccio",
+   "parent_code": "fr-corse"
+  },
+  {
+   "code": "fr-arbois",
+   "libelle": "Arbois",
+   "parent_code": "fr-jura"
+  },
+  {
+   "code": "fr-cotes-du-jura",
+   "libelle": "Côtes du Jura",
+   "parent_code": "fr-jura"
+  },
+  {
+   "code": "fr-chateau-chalon",
+   "libelle": "Château-Chalon",
+   "parent_code": "fr-jura"
+  },
+  {
+   "code": "fr-l-etoile",
+   "libelle": "L'Étoile",
+   "parent_code": "fr-jura"
+  },
+  {
+   "code": "fr-cremant-du-jura",
+   "libelle": "Crémant du Jura",
+   "parent_code": "fr-jura"
+  },
+  {
+   "code": "fr-macvin-du-jura",
+   "libelle": "Macvin du Jura",
+   "parent_code": "fr-jura"
+  },
+  {
+   "code": "fr-languedoc",
+   "libelle": "Languedoc",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-pic-saint-loup",
+   "libelle": "Pic Saint-Loup",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-terrasses-du-larzac",
+   "libelle": "Terrasses du Larzac",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-faugeres",
+   "libelle": "Faugères",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-saint-chinian",
+   "libelle": "Saint-Chinian",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-minervois",
+   "libelle": "Minervois",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-corbieres",
+   "libelle": "Corbières",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-fitou",
+   "libelle": "Fitou",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-la-clape",
+   "libelle": "La Clape",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-picpoul-de-pinet",
+   "libelle": "Picpoul de Pinet",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-limoux",
+   "libelle": "Limoux",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-cremant-de-limoux",
+   "libelle": "Crémant de Limoux",
+   "parent_code": "fr-languedoc"
+  },
+  {
+   "code": "fr-cotes-du-roussillon",
+   "libelle": "Côtes du Roussillon",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-cotes-du-roussillon-villages",
+   "libelle": "Côtes du Roussillon Villages",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-collioure",
+   "libelle": "Collioure",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-banyuls",
+   "libelle": "Banyuls",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-maury",
+   "libelle": "Maury",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-rivesaltes",
+   "libelle": "Rivesaltes",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-muscat-de-rivesaltes",
+   "libelle": "Muscat de Rivesaltes",
+   "parent_code": "fr-roussillon"
+  },
+  {
+   "code": "fr-cotes-de-provence",
+   "libelle": "Côtes de Provence",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-coteaux-d-aix-en-provence",
+   "libelle": "Coteaux d'Aix-en-Provence",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-coteaux-varois-en-provence",
+   "libelle": "Coteaux Varois en Provence",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-les-baux-de-provence",
+   "libelle": "Les Baux-de-Provence",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-bandol",
+   "libelle": "Bandol",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-cassis",
+   "libelle": "Cassis",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-bellet",
+   "libelle": "Bellet",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-palette",
+   "libelle": "Palette",
+   "parent_code": "fr-provence"
+  },
+  {
+   "code": "fr-savoie",
+   "libelle": "Savoie",
+   "parent_code": "fr-savoie"
+  },
+  {
+   "code": "fr-roussette-de-savoie",
+   "libelle": "Roussette de Savoie",
+   "parent_code": "fr-savoie"
+  },
+  {
+   "code": "fr-cremant-de-savoie",
+   "libelle": "Crémant de Savoie",
+   "parent_code": "fr-savoie"
+  },
+  {
+   "code": "fr-seyssel",
+   "libelle": "Seyssel",
+   "parent_code": "fr-savoie"
+  },
+  {
+   "code": "fr-cahors",
+   "libelle": "Cahors",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-madiran",
+   "libelle": "Madiran",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-pacherenc-du-vic-bilh",
+   "libelle": "Pacherenc du Vic-Bilh",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-saint-mont",
+   "libelle": "Saint-Mont",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-jurancon",
+   "libelle": "Jurançon",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-irouleguy",
+   "libelle": "Irouléguy",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-bergerac",
+   "libelle": "Bergerac",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-monbazillac",
+   "libelle": "Monbazillac",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-pecharmant",
+   "libelle": "Pécharmant",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-buzet",
+   "libelle": "Buzet",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-gaillac",
+   "libelle": "Gaillac",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-fronton",
+   "libelle": "Fronton",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-marcillac",
+   "libelle": "Marcillac",
+   "parent_code": "fr-sud-ouest"
+  },
+  {
+   "code": "fr-cremant-de-loire",
+   "libelle": "Crémant de Loire",
+   "parent_code": "fr-vallee-de-la-loire"
+  },
+  {
+   "code": "fr-rose-de-loire",
+   "libelle": "Rosé de Loire",
+   "parent_code": "fr-vallee-de-la-loire"
+  },
+  {
+   "code": "fr-muscadet",
+   "libelle": "Muscadet",
+   "parent_code": "fr-vallee-de-la-loire--pays-nantais"
+  },
+  {
+   "code": "fr-muscadet-sevre-et-maine",
+   "libelle": "Muscadet Sèvre et Maine",
+   "parent_code": "fr-vallee-de-la-loire--pays-nantais"
+  },
+  {
+   "code": "fr-anjou",
+   "libelle": "Anjou",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-cabernet-d-anjou",
+   "libelle": "Cabernet d'Anjou",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-savennieres",
+   "libelle": "Savennières",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-coteaux-du-layon",
+   "libelle": "Coteaux du Layon",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-quarts-de-chaume",
+   "libelle": "Quarts de Chaume",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-bonnezeaux",
+   "libelle": "Bonnezeaux",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-saumur",
+   "libelle": "Saumur",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-saumur-champigny",
+   "libelle": "Saumur-Champigny",
+   "parent_code": "fr-vallee-de-la-loire--anjou-saumur"
+  },
+  {
+   "code": "fr-touraine",
+   "libelle": "Touraine",
+   "parent_code": "fr-vallee-de-la-loire--touraine"
+  },
+  {
+   "code": "fr-vouvray",
+   "libelle": "Vouvray",
+   "parent_code": "fr-vallee-de-la-loire--touraine"
+  },
+  {
+   "code": "fr-montlouis-sur-loire",
+   "libelle": "Montlouis-sur-Loire",
+   "parent_code": "fr-vallee-de-la-loire--touraine"
+  },
+  {
+   "code": "fr-chinon",
+   "libelle": "Chinon",
+   "parent_code": "fr-vallee-de-la-loire--touraine"
+  },
+  {
+   "code": "fr-bourgueil",
+   "libelle": "Bourgueil",
+   "parent_code": "fr-vallee-de-la-loire--touraine"
+  },
+  {
+   "code": "fr-saint-nicolas-de-bourgueil",
+   "libelle": "Saint-Nicolas-de-Bourgueil",
+   "parent_code": "fr-vallee-de-la-loire--touraine"
+  },
+  {
+   "code": "fr-sancerre",
+   "libelle": "Sancerre",
+   "parent_code": "fr-vallee-de-la-loire--centre-loire"
+  },
+  {
+   "code": "fr-pouilly-fume",
+   "libelle": "Pouilly-Fumé",
+   "parent_code": "fr-vallee-de-la-loire--centre-loire"
+  },
+  {
+   "code": "fr-menetou-salon",
+   "libelle": "Menetou-Salon",
+   "parent_code": "fr-vallee-de-la-loire--centre-loire"
+  },
+  {
+   "code": "fr-quincy",
+   "libelle": "Quincy",
+   "parent_code": "fr-vallee-de-la-loire--centre-loire"
+  },
+  {
+   "code": "fr-reuilly",
+   "libelle": "Reuilly",
+   "parent_code": "fr-vallee-de-la-loire--centre-loire"
+  },
+  {
+   "code": "fr-cotes-du-rhone",
+   "libelle": "Côtes du Rhône",
+   "parent_code": "fr-vallee-du-rhone"
+  },
+  {
+   "code": "fr-cotes-du-rhone-villages",
+   "libelle": "Côtes du Rhône Villages",
+   "parent_code": "fr-vallee-du-rhone"
+  },
+  {
+   "code": "fr-cote-rotie",
+   "libelle": "Côte-Rôtie",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-condrieu",
+   "libelle": "Condrieu",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-chateau-grillet",
+   "libelle": "Château-Grillet",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-saint-joseph",
+   "libelle": "Saint-Joseph",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-crozes-hermitage",
+   "libelle": "Crozes-Hermitage",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-hermitage",
+   "libelle": "Hermitage",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-cornas",
+   "libelle": "Cornas",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-saint-peray",
+   "libelle": "Saint-Péray",
+   "parent_code": "fr-vallee-du-rhone--rhone-septentrional"
+  },
+  {
+   "code": "fr-chateauneuf-du-pape",
+   "libelle": "Châteauneuf-du-Pape",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-gigondas",
+   "libelle": "Gigondas",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-vacqueyras",
+   "libelle": "Vacqueyras",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-rasteau",
+   "libelle": "Rasteau",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-cairanne",
+   "libelle": "Cairanne",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-vinsobres",
+   "libelle": "Vinsobres",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-beaumes-de-venise",
+   "libelle": "Beaumes-de-Venise",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-muscat-de-beaumes-de-venise",
+   "libelle": "Muscat de Beaumes-de-Venise",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-lirac",
+   "libelle": "Lirac",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-tavel",
+   "libelle": "Tavel",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-ventoux",
+   "libelle": "Ventoux",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-luberon",
+   "libelle": "Luberon",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "fr-costieres-de-nimes",
+   "libelle": "Costières de Nîmes",
+   "parent_code": "fr-vallee-du-rhone--rhone-meridional"
+  },
+  {
+   "code": "it-barolo",
+   "libelle": "Barolo",
+   "parent_code": "it-piemont"
+  },
+  {
+   "code": "it-barbaresco",
+   "libelle": "Barbaresco",
+   "parent_code": "it-piemont"
+  },
+  {
+   "code": "it-chianti-classico",
+   "libelle": "Chianti Classico",
+   "parent_code": "it-toscane"
+  },
+  {
+   "code": "it-brunello-di-montalcino",
+   "libelle": "Brunello di Montalcino",
+   "parent_code": "it-toscane"
+  },
+  {
+   "code": "it-bolgheri",
+   "libelle": "Bolgheri",
+   "parent_code": "it-toscane"
+  },
+  {
+   "code": "it-amarone-della-valpolicella",
+   "libelle": "Amarone della Valpolicella",
+   "parent_code": "it-venetie"
+  },
+  {
+   "code": "it-prosecco",
+   "libelle": "Prosecco",
+   "parent_code": "it-venetie"
+  },
+  {
+   "code": "es-rioja",
+   "libelle": "Rioja",
+   "parent_code": "es-rioja"
+  },
+  {
+   "code": "es-ribera-del-duero",
+   "libelle": "Ribera del Duero",
+   "parent_code": "es-castille-et-leon"
+  },
+  {
+   "code": "es-priorat",
+   "libelle": "Priorat",
+   "parent_code": "es-catalogne"
+  },
+  {
+   "code": "es-cava",
+   "libelle": "Cava",
+   "parent_code": "es-catalogne"
+  },
+  {
+   "code": "es-jerez",
+   "libelle": "Jerez",
+   "parent_code": "es-andalousie"
+  },
+  {
+   "code": "pt-porto",
+   "libelle": "Porto",
+   "parent_code": "pt-douro"
+  },
+  {
+   "code": "pt-douro",
+   "libelle": "Douro",
+   "parent_code": "pt-douro"
+  },
+  {
+   "code": "hu-tokaji",
+   "libelle": "Tokaji",
+   "parent_code": "hu-tokaj"
+  },
+  {
+   "code": "de-mosel",
+   "libelle": "Mosel",
+   "parent_code": "de-moselle"
+  },
+  {
+   "code": "us-napa-valley",
+   "libelle": "Napa Valley",
+   "parent_code": "us-californie"
+  },
+  {
+   "code": "ar-mendoza",
+   "libelle": "Mendoza",
+   "parent_code": "ar-mendoza"
+  },
+  {
+   "code": "nz-marlborough",
+   "libelle": "Marlborough",
+   "parent_code": "nz-marlborough"
+  }
+ ]
+}

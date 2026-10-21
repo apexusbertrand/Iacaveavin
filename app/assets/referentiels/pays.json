@@ -1,0 +1,194 @@
+{
+ "liste": "pays",
+ "source": "ISO 3166-1 alpha-2, noms français courts",
+ "valeurs": [
+  {
+   "code": "FR",
+   "libelle": "France"
+  },
+  {
+   "code": "IT",
+   "libelle": "Italie"
+  },
+  {
+   "code": "ES",
+   "libelle": "Espagne"
+  },
+  {
+   "code": "PT",
+   "libelle": "Portugal"
+  },
+  {
+   "code": "DE",
+   "libelle": "Allemagne"
+  },
+  {
+   "code": "AT",
+   "libelle": "Autriche"
+  },
+  {
+   "code": "CH",
+   "libelle": "Suisse"
+  },
+  {
+   "code": "LU",
+   "libelle": "Luxembourg"
+  },
+  {
+   "code": "BE",
+   "libelle": "Belgique"
+  },
+  {
+   "code": "GB",
+   "libelle": "Royaume-Uni"
+  },
+  {
+   "code": "HU",
+   "libelle": "Hongrie"
+  },
+  {
+   "code": "SI",
+   "libelle": "Slovénie"
+  },
+  {
+   "code": "HR",
+   "libelle": "Croatie"
+  },
+  {
+   "code": "RS",
+   "libelle": "Serbie"
+  },
+  {
+   "code": "RO",
+   "libelle": "Roumanie"
+  },
+  {
+   "code": "BG",
+   "libelle": "Bulgarie"
+  },
+  {
+   "code": "GR",
+   "libelle": "Grèce"
+  },
+  {
+   "code": "CY",
+   "libelle": "Chypre"
+  },
+  {
+   "code": "CZ",
+   "libelle": "Tchéquie"
+  },
+  {
+   "code": "SK",
+   "libelle": "Slovaquie"
+  },
+  {
+   "code": "MK",
+   "libelle": "Macédoine du Nord"
+  },
+  {
+   "code": "ME",
+   "libelle": "Monténégro"
+  },
+  {
+   "code": "MD",
+   "libelle": "Moldavie"
+  },
+  {
+   "code": "UA",
+   "libelle": "Ukraine"
+  },
+  {
+   "code": "GE",
+   "libelle": "Géorgie"
+  },
+  {
+   "code": "AM",
+   "libelle": "Arménie"
+  },
+  {
+   "code": "TR",
+   "libelle": "Turquie"
+  },
+  {
+   "code": "LB",
+   "libelle": "Liban"
+  },
+  {
+   "code": "IL",
+   "libelle": "Israël"
+  },
+  {
+   "code": "MA",
+   "libelle": "Maroc"
+  },
+  {
+   "code": "TN",
+   "libelle": "Tunisie"
+  },
+  {
+   "code": "DZ",
+   "libelle": "Algérie"
+  },
+  {
+   "code": "ZA",
+   "libelle": "Afrique du Sud"
+  },
+  {
+   "code": "US",
+   "libelle": "États-Unis"
+  },
+  {
+   "code": "CA",
+   "libelle": "Canada"
+  },
+  {
+   "code": "MX",
+   "libelle": "Mexique"
+  },
+  {
+   "code": "BR",
+   "libelle": "Brésil"
+  },
+  {
+   "code": "UY",
+   "libelle": "Uruguay"
+  },
+  {
+   "code": "AR",
+   "libelle": "Argentine"
+  },
+  {
+   "code": "CL",
+   "libelle": "Chili"
+  },
+  {
+   "code": "PE",
+   "libelle": "Pérou"
+  },
+  {
+   "code": "BO",
+   "libelle": "Bolivie"
+  },
+  {
+   "code": "AU",
+   "libelle": "Australie"
+  },
+  {
+   "code": "NZ",
+   "libelle": "Nouvelle-Zélande"
+  },
+  {
+   "code": "CN",
+   "libelle": "Chine"
+  },
+  {
+   "code": "JP",
+   "libelle": "Japon"
+  },
+  {
+   "code": "IN",
+   "libelle": "Inde"
+  }
+ ]
+}

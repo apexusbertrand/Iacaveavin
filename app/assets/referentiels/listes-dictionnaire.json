@@ -1,0 +1,310 @@
+{
+ "source": "specs/dictionnaire-donnees.yaml (généré par scripts/generer_referentiels.py)",
+ "listes": [
+  {
+   "liste": "couleur",
+   "valeurs": [
+    {
+     "code": "rouge",
+     "libelle": "Rouge"
+    },
+    {
+     "code": "blanc",
+     "libelle": "Blanc"
+    },
+    {
+     "code": "rose",
+     "libelle": "Rosé"
+    },
+    {
+     "code": "champagne",
+     "libelle": "Champagne"
+    },
+    {
+     "code": "effervescent",
+     "libelle": "Effervescent"
+    },
+    {
+     "code": "liquoreux",
+     "libelle": "Liquoreux"
+    },
+    {
+     "code": "orange",
+     "libelle": "Orange"
+    },
+    {
+     "code": "autre",
+     "libelle": "Autre"
+    }
+   ]
+  },
+  {
+   "liste": "type_vin",
+   "valeurs": [
+    {
+     "code": "tranquille",
+     "libelle": "Tranquille"
+    },
+    {
+     "code": "effervescent",
+     "libelle": "Effervescent"
+    },
+    {
+     "code": "liquoreux",
+     "libelle": "Liquoreux"
+    },
+    {
+     "code": "moelleux",
+     "libelle": "Moelleux"
+    },
+    {
+     "code": "mute",
+     "libelle": "Muté"
+    },
+    {
+     "code": "autre",
+     "libelle": "Autre"
+    }
+   ]
+  },
+  {
+   "liste": "signe_qualite",
+   "valeurs": [
+    {
+     "code": "AOP",
+     "libelle": "AOP"
+    },
+    {
+     "code": "AOC",
+     "libelle": "AOC"
+    },
+    {
+     "code": "IGP",
+     "libelle": "IGP"
+    },
+    {
+     "code": "VSIG",
+     "libelle": "VSIG"
+    },
+    {
+     "code": "DOC",
+     "libelle": "DOC"
+    },
+    {
+     "code": "DOCG",
+     "libelle": "DOCG"
+    },
+    {
+     "code": "DO",
+     "libelle": "DO"
+    },
+    {
+     "code": "autre",
+     "libelle": "Autre"
+    }
+   ]
+  },
+  {
+   "liste": "classement",
+   "valeurs": [
+    {
+     "code": "Grand Cru",
+     "libelle": "Grand Cru"
+    },
+    {
+     "code": "Premier Cru",
+     "libelle": "Premier Cru"
+    },
+    {
+     "code": "Grand Cru Classé",
+     "libelle": "Grand Cru Classé"
+    },
+    {
+     "code": "Premier Grand Cru Classé",
+     "libelle": "Premier Grand Cru Classé"
+    },
+    {
+     "code": "Cru Classé",
+     "libelle": "Cru Classé"
+    },
+    {
+     "code": "Cru Bourgeois",
+     "libelle": "Cru Bourgeois"
+    },
+    {
+     "code": "Cru Artisan",
+     "libelle": "Cru Artisan"
+    },
+    {
+     "code": "Village",
+     "libelle": "Village"
+    }
+   ]
+  },
+  {
+   "liste": "certification",
+   "valeurs": [
+    {
+     "code": "aucune",
+     "libelle": "Aucune"
+    },
+    {
+     "code": "bio",
+     "libelle": "Bio"
+    },
+    {
+     "code": "biodynamie",
+     "libelle": "Biodynamie"
+    },
+    {
+     "code": "HVE",
+     "libelle": "HVE"
+    },
+    {
+     "code": "nature (non certifié)",
+     "libelle": "Nature (non certifié)"
+    }
+   ]
+  },
+  {
+   "liste": "motif_mouvement",
+   "valeurs": [
+    {
+     "code": "achat",
+     "libelle": "Achat"
+    },
+    {
+     "code": "cadeau reçu",
+     "libelle": "Cadeau reçu"
+    },
+    {
+     "code": "ouverture",
+     "libelle": "Ouverture"
+    },
+    {
+     "code": "offert",
+     "libelle": "Offert"
+    },
+    {
+     "code": "casse",
+     "libelle": "Casse"
+    },
+    {
+     "code": "inventaire",
+     "libelle": "Inventaire"
+    },
+    {
+     "code": "erreur de saisie",
+     "libelle": "Erreur de saisie"
+    },
+    {
+     "code": "import Excel",
+     "libelle": "Import Excel"
+    },
+    {
+     "code": "transfert",
+     "libelle": "Transfert"
+    },
+    {
+     "code": "autre",
+     "libelle": "Autre"
+    }
+   ]
+  },
+  {
+   "liste": "critique",
+   "valeurs": [
+    {
+     "code": "Robert Parker Wine Advocate",
+     "libelle": "Robert Parker Wine Advocate"
+    },
+    {
+     "code": "Vinous",
+     "libelle": "Vinous"
+    },
+    {
+     "code": "Jancis Robinson",
+     "libelle": "Jancis Robinson"
+    },
+    {
+     "code": "Decanter",
+     "libelle": "Decanter"
+    },
+    {
+     "code": "Bettane+Desseauve",
+     "libelle": "Bettane+Desseauve"
+    },
+    {
+     "code": "La Revue du vin de France",
+     "libelle": "La Revue du vin de France"
+    },
+    {
+     "code": "Guide Hachette",
+     "libelle": "Guide Hachette"
+    },
+    {
+     "code": "Wine Spectator",
+     "libelle": "Wine Spectator"
+    },
+    {
+     "code": "James Suckling",
+     "libelle": "James Suckling"
+    },
+    {
+     "code": "autre",
+     "libelle": "autre"
+    }
+   ]
+  },
+  {
+   "liste": "format",
+   "defaut": "75",
+   "valeurs": [
+    {
+     "code": "18.75",
+     "libelle": "18,75 cl"
+    },
+    {
+     "code": "37.5",
+     "libelle": "37,5 cl"
+    },
+    {
+     "code": "50",
+     "libelle": "50 cl"
+    },
+    {
+     "code": "62",
+     "libelle": "62 cl"
+    },
+    {
+     "code": "70",
+     "libelle": "70 cl"
+    },
+    {
+     "code": "75",
+     "libelle": "75 cl"
+    },
+    {
+     "code": "100",
+     "libelle": "100 cl"
+    },
+    {
+     "code": "150",
+     "libelle": "150 cl"
+    },
+    {
+     "code": "300",
+     "libelle": "300 cl"
+    },
+    {
+     "code": "450",
+     "libelle": "450 cl"
+    },
+    {
+     "code": "600",
+     "libelle": "600 cl"
+    }
+   ]
+  }
+ ]
+}
