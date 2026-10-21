@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ia-cave-a-vin/contrat-n8n/requete-prix.schema.json",
+  "title": "POST /prix : corps de la requête",
+  "description": "Rafraîchissement du prix marché d'une fiche existante. Aucune photo : l'identité du vin est déjà normalisée.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version_contrat", "request_id", "identite", "format_cl", "devise", "date_client"],
+  "properties": {
+    "version_contrat": { "type": "string", "pattern": "^1\\.[0-9]+$" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "fiche_id": { "type": "string", "format": "uuid" },
+    "identite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domaine", "millesime", "couleur"],
+      "properties": {
+        "domaine": { "type": "string", "minLength": 1 },
+        "cuvee": { "type": ["string", "null"] },
+        "appellation": { "type": ["string", "null"] },
+        "millesime": { "oneOf": [{ "type": "integer", "minimum": 1900, "maximum": 2100 }, { "const": "NM" }] },
+        "couleur": { "enum": ["rouge", "blanc", "rose", "champagne", "effervescent", "liquoreux", "orange", "autre"] },
+        "lwin": { "type": ["string", "null"] },
+        "ean": { "type": ["string", "null"] }
+      }
+    },
+    "format_cl": { "type": "number", "exclusiveMinimum": 0 },
+    "devise": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "forcer": {
+      "type": "boolean",
+      "default": false,
+      "description": "true : ignorer le cache de 24 heures."
+    },
+    "date_client": { "type": "string", "format": "date" }
+  }
+}

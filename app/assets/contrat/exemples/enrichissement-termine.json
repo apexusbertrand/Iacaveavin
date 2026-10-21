@@ -1,0 +1,68 @@
+{
+  "version_contrat": "1.0",
+  "job_id": "9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d",
+  "request_id": "5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60",
+  "fiche_id": "0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10",
+  "type": "enrichissement",
+  "statut": "termine",
+  "etape": "termine",
+  "quota": { "enrichissements_restants_mois": 86, "prix_restants_mois": 120 },
+  "resultat": {
+    "fiche": {
+      "domaine": { "valeur": "Guillaume L'Echanson", "source": "etiquette", "confiance": 0.97 },
+      "domaine_site_officiel": { "valeur": null, "source": null, "confiance": null, "motif": "aucun site officiel identifié avec certitude pour ce nom" },
+      "commentaire_domaine": { "valeur": null, "source": null, "confiance": null, "motif": "pas de source officielle sur le domaine" },
+      "cuvee": { "valeur": null, "source": null, "confiance": null, "motif": "aucun nom de cuvée sur l'étiquette" },
+      "pays": { "valeur": "France", "source": "etiquette", "confiance": 0.95, "note": "mention Produit de France" },
+      "region": { "valeur": "Bourgogne", "source": "etiquette", "confiance": 0.95 },
+      "sous_region": { "valeur": "Côte d'Or", "source": "etiquette", "confiance": 0.9 },
+      "appellation": { "valeur": "Bourgogne Côte d'Or", "source": "etiquette", "confiance": 0.95 },
+      "signe_qualite": { "valeur": "AOP", "source": "etiquette", "confiance": 0.99 },
+      "classement": { "valeur": null, "source": null, "confiance": null, "motif": "aucun classement sur l'étiquette" },
+      "lieu_dit": { "valeur": null, "source": null, "confiance": null, "motif": "aucun lieu-dit sur l'étiquette" },
+      "couleur": { "valeur": "rouge", "source": "estimation", "confiance": 0.9, "note": "déduite de la mention Pinot Noir et de l'appellation" },
+      "type": { "valeur": "tranquille", "source": "estimation", "confiance": 0.9 },
+      "certification": { "valeur": null, "source": null, "confiance": null, "motif": "aucun logo de certification visible" },
+      "millesime": { "valeur": 2024, "source": "etiquette", "confiance": 0.99 },
+      "cepages": { "valeur": [{ "cepage": "Pinot Noir", "pourcentage": null }], "source": "etiquette", "confiance": 0.95, "note": "cépage mentionné, proportion non indiquée" },
+      "degre": { "valeur": 12, "source": "etiquette", "confiance": 0.85, "note": "lu sur la contre-étiquette" },
+      "volume_cl": { "valeur": 75, "source": "etiquette", "confiance": 0.9 },
+      "commentaire_millesime": { "valeur": "[Texte de 400 à 600 caractères rédigé par l'agent à partir de la page citée.]", "source": "interprofession", "url": "https://exemple-interprofession.fr/millesime-2024", "confiance": 0.7 },
+      "garde": { "valeur": null, "source": null, "confiance": null, "motif": "aucune fenêtre publiée par un critique ou par le domaine ; l'app applique ses règles locales" },
+      "accords": { "valeur": ["volaille", "charcuterie", "fromage à pâte molle"], "source": "estimation", "confiance": 0.6 },
+      "lwin": { "valeur": null, "source": null, "confiance": null, "motif": "aucun LWIN trouvé pour ce vin" }
+    },
+    "transcription": [
+      { "index": 0, "texte": "GUILLAUME L'ECHANSON / BOURGOGNE CÔTE D'OR / APPELLATION D'ORIGINE PROTÉGÉE / PINOT NOIR / 2024 / PRODUIT DE FRANCE" },
+      { "index": 1, "texte": "[texte de la contre-étiquette]" }
+    ],
+    "notes_critiques": [],
+    "prix": [
+      {
+        "format_cl": 75,
+        "trouve": true,
+        "prix": 24.5,
+        "devise": "EUR",
+        "nature": "mediane",
+        "nb_offres": 3,
+        "offres": [
+          { "site": "exemple-caviste-a.fr", "url": "https://exemple-caviste-a.fr/produit/1", "prix": 23.9, "millesime_verifie": true },
+          { "site": "exemple-caviste-b.fr", "url": "https://exemple-caviste-b.fr/produit/2", "prix": 24.5, "millesime_verifie": true },
+          { "site": "exemple-caviste-c.fr", "url": "https://exemple-caviste-c.fr/produit/3", "prix": 26.0, "millesime_verifie": false }
+        ],
+        "site": null,
+        "url": null,
+        "date": "2026-10-20"
+      }
+    ],
+    "alertes": [
+      { "code": "aucune_note_critique", "champ": "notes_critiques", "message": "Aucune note critique en accès libre ou citée pour ce vin et ce millésime." }
+    ],
+    "sources_consultees": [
+      { "url": "https://exemple-interprofession.fr/millesime-2024", "consultee_le": "2026-10-20", "utilisee": true },
+      { "url": "https://exemple-caviste-a.fr/produit/1", "consultee_le": "2026-10-20", "utilisee": true }
+    ],
+    "cache": { "hit": false, "cle": "guillaume-l-echanson|bourgogne-cote-d-or||2024" },
+    "cout": { "appels_modele": 6, "credits_recherche": 7, "duree_ms": 41250 }
+  }
+}
