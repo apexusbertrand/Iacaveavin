@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +9,7 @@ import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
+import '../../data/backup_providers.dart';
 import '../../data/providers.dart';
 import '../../domain/garde.dart';
 import '../../domain/wine_list_item.dart';
@@ -40,6 +43,11 @@ class WineCard extends ConsumerWidget {
     final wine = wineColor(item.colorCode);
     final year = ref.watch(currentYearProvider);
     final status = item.statusIn(year);
+    final dir = ref.watch(appDirPathProvider).value;
+    final thumb = dir == null || item.thumbPath == null
+        ? null
+        : File('$dir/${item.thumbPath}');
+    final name = item.isUnidentified ? l.unidentifiedWine : item.displayName;
     final vintage = item.isNonVintage ? l.nonVintage : item.vintage;
     final bottles = l.bottleCount(item.bottles);
     final origin = [
@@ -59,7 +67,7 @@ class WineCard extends ConsumerWidget {
     return Semantics(
       container: true,
       selected: selected,
-      label: l.wineCardSemantics(item.displayName, vintage, bottles),
+      label: l.wineCardSemantics(name, vintage, bottles),
       child: ExcludeSemantics(
         child: Card(
           clipBehavior: Clip.antiAlias,
@@ -76,16 +84,27 @@ class WineCard extends ConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Vignette : la photo d'étiquette arrive au lot 2a.
+                  // Vignette d'étiquette, sinon aplat de la couleur du vin.
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width / 4,
                     child: ColoredBox(
                       color: wine.fill,
-                      child: Icon(
-                        selected ? Icons.check_circle : Icons.wine_bar,
-                        color: wine.onFill,
-                        size: SpacingTokens.xxl,
-                      ),
+                      child: thumb != null && !selected
+                          ? Image.file(
+                              thumb,
+                              fit: BoxFit.cover,
+                              cacheWidth: 320,
+                              errorBuilder: (_, _, _) => Icon(
+                                Icons.wine_bar,
+                                color: wine.onFill,
+                                size: SpacingTokens.xxl,
+                              ),
+                            )
+                          : Icon(
+                              selected ? Icons.check_circle : Icons.wine_bar,
+                              color: wine.onFill,
+                              size: SpacingTokens.xxl,
+                            ),
                     ),
                   ),
                   Expanded(
@@ -98,7 +117,7 @@ class WineCard extends ConsumerWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  item.displayName,
+                                  name,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: theme.textTheme.titleMedium,
@@ -144,8 +163,13 @@ class WineCard extends ConsumerWidget {
                                   score: item.parkerScore!,
                                   initial: l.parkerInitial,
                                 ),
-                              if (item.enrichmentStatus == 'a_valider')
-                                _ToValidateMarker(label: l.toValidate),
+                              if (item.enrichmentStatus != 'valide' &&
+                                  item.enrichmentStatus != 'brouillon')
+                                _ToValidateMarker(
+                                  label: l.enrichmentLabel(
+                                    item.enrichmentStatus,
+                                  ),
+                                ),
                             ],
                           ),
                         ],
@@ -221,13 +245,10 @@ class CompactWineRow extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final vintage = item.isNonVintage ? l.nonVintage : item.vintage;
+    final name = item.isUnidentified ? l.unidentifiedWine : item.displayName;
     return Semantics(
       selected: selected,
-      label: l.wineCardSemantics(
-        item.displayName,
-        vintage,
-        l.bottleCount(item.bottles),
-      ),
+      label: l.wineCardSemantics(name, vintage, l.bottleCount(item.bottles)),
       child: ExcludeSemantics(
         child: ListTile(
           selected: selected,
@@ -236,11 +257,7 @@ class CompactWineRow extends StatelessWidget {
           leading: selected
               ? Icon(Icons.check_circle, color: theme.colorScheme.primary)
               : BottleIcon(fill: wineColor(item.colorCode).fill),
-          title: Text(
-            item.displayName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
           trailing: Text(
             '$vintage   ${item.bottles}',
             style: theme.textTheme.titleMedium,

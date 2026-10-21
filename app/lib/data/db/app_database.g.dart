@@ -10542,6 +10542,28 @@ class $JobsTable extends Jobs with TableInfo<$JobsTable, Job> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _envoyeLeMeta = const VerificationMeta(
+    'envoyeLe',
+  );
+  @override
+  late final GeneratedColumn<String> envoyeLe = GeneratedColumn<String>(
+    'envoye_le',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _reponseMeta = const VerificationMeta(
+    'reponse',
+  );
+  @override
+  late final GeneratedColumn<String> reponse = GeneratedColumn<String>(
+    'reponse',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -10556,6 +10578,8 @@ class $JobsTable extends Jobs with TableInfo<$JobsTable, Job> {
     statut,
     tentatives,
     erreur,
+    envoyeLe,
+    reponse,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -10657,6 +10681,18 @@ class $JobsTable extends Jobs with TableInfo<$JobsTable, Job> {
         erreur.isAcceptableOrUnknown(data['erreur']!, _erreurMeta),
       );
     }
+    if (data.containsKey('envoye_le')) {
+      context.handle(
+        _envoyeLeMeta,
+        envoyeLe.isAcceptableOrUnknown(data['envoye_le']!, _envoyeLeMeta),
+      );
+    }
+    if (data.containsKey('reponse')) {
+      context.handle(
+        _reponseMeta,
+        reponse.isAcceptableOrUnknown(data['reponse']!, _reponseMeta),
+      );
+    }
     return context;
   }
 
@@ -10714,6 +10750,14 @@ class $JobsTable extends Jobs with TableInfo<$JobsTable, Job> {
         DriftSqlType.string,
         data['${effectivePrefix}erreur'],
       ),
+      envoyeLe: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}envoye_le'],
+      ),
+      reponse: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reponse'],
+      ),
     );
   }
 
@@ -10736,6 +10780,12 @@ class Job extends DataClass implements Insertable<Job> {
   final String statut;
   final int? tentatives;
   final String? erreur;
+
+  /// Ajouté en version 2 du schéma.
+  final String? envoyeLe;
+
+  /// Ajouté en version 2 du schéma.
+  final String? reponse;
   const Job({
     required this.id,
     required this.createdAt,
@@ -10749,6 +10799,8 @@ class Job extends DataClass implements Insertable<Job> {
     required this.statut,
     this.tentatives,
     this.erreur,
+    this.envoyeLe,
+    this.reponse,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -10772,6 +10824,12 @@ class Job extends DataClass implements Insertable<Job> {
     }
     if (!nullToAbsent || erreur != null) {
       map['erreur'] = Variable<String>(erreur);
+    }
+    if (!nullToAbsent || envoyeLe != null) {
+      map['envoye_le'] = Variable<String>(envoyeLe);
+    }
+    if (!nullToAbsent || reponse != null) {
+      map['reponse'] = Variable<String>(reponse);
     }
     return map;
   }
@@ -10798,6 +10856,12 @@ class Job extends DataClass implements Insertable<Job> {
       erreur: erreur == null && nullToAbsent
           ? const Value.absent()
           : Value(erreur),
+      envoyeLe: envoyeLe == null && nullToAbsent
+          ? const Value.absent()
+          : Value(envoyeLe),
+      reponse: reponse == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reponse),
     );
   }
 
@@ -10819,6 +10883,8 @@ class Job extends DataClass implements Insertable<Job> {
       statut: serializer.fromJson<String>(json['statut']),
       tentatives: serializer.fromJson<int?>(json['tentatives']),
       erreur: serializer.fromJson<String?>(json['erreur']),
+      envoyeLe: serializer.fromJson<String?>(json['envoyeLe']),
+      reponse: serializer.fromJson<String?>(json['reponse']),
     );
   }
   @override
@@ -10837,6 +10903,8 @@ class Job extends DataClass implements Insertable<Job> {
       'statut': serializer.toJson<String>(statut),
       'tentatives': serializer.toJson<int?>(tentatives),
       'erreur': serializer.toJson<String?>(erreur),
+      'envoyeLe': serializer.toJson<String?>(envoyeLe),
+      'reponse': serializer.toJson<String?>(reponse),
     };
   }
 
@@ -10853,6 +10921,8 @@ class Job extends DataClass implements Insertable<Job> {
     String? statut,
     Value<int?> tentatives = const Value.absent(),
     Value<String?> erreur = const Value.absent(),
+    Value<String?> envoyeLe = const Value.absent(),
+    Value<String?> reponse = const Value.absent(),
   }) => Job(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
@@ -10866,6 +10936,8 @@ class Job extends DataClass implements Insertable<Job> {
     statut: statut ?? this.statut,
     tentatives: tentatives.present ? tentatives.value : this.tentatives,
     erreur: erreur.present ? erreur.value : this.erreur,
+    envoyeLe: envoyeLe.present ? envoyeLe.value : this.envoyeLe,
+    reponse: reponse.present ? reponse.value : this.reponse,
   );
   Job copyWithCompanion(JobsCompanion data) {
     return Job(
@@ -10885,6 +10957,8 @@ class Job extends DataClass implements Insertable<Job> {
           ? data.tentatives.value
           : this.tentatives,
       erreur: data.erreur.present ? data.erreur.value : this.erreur,
+      envoyeLe: data.envoyeLe.present ? data.envoyeLe.value : this.envoyeLe,
+      reponse: data.reponse.present ? data.reponse.value : this.reponse,
     );
   }
 
@@ -10902,7 +10976,9 @@ class Job extends DataClass implements Insertable<Job> {
           ..write('jobIdDistant: $jobIdDistant, ')
           ..write('statut: $statut, ')
           ..write('tentatives: $tentatives, ')
-          ..write('erreur: $erreur')
+          ..write('erreur: $erreur, ')
+          ..write('envoyeLe: $envoyeLe, ')
+          ..write('reponse: $reponse')
           ..write(')'))
         .toString();
   }
@@ -10921,6 +10997,8 @@ class Job extends DataClass implements Insertable<Job> {
     statut,
     tentatives,
     erreur,
+    envoyeLe,
+    reponse,
   );
   @override
   bool operator ==(Object other) =>
@@ -10937,7 +11015,9 @@ class Job extends DataClass implements Insertable<Job> {
           other.jobIdDistant == this.jobIdDistant &&
           other.statut == this.statut &&
           other.tentatives == this.tentatives &&
-          other.erreur == this.erreur);
+          other.erreur == this.erreur &&
+          other.envoyeLe == this.envoyeLe &&
+          other.reponse == this.reponse);
 }
 
 class JobsCompanion extends UpdateCompanion<Job> {
@@ -10953,6 +11033,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
   final Value<String> statut;
   final Value<int?> tentatives;
   final Value<String?> erreur;
+  final Value<String?> envoyeLe;
+  final Value<String?> reponse;
   final Value<int> rowid;
   const JobsCompanion({
     this.id = const Value.absent(),
@@ -10967,6 +11049,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
     this.statut = const Value.absent(),
     this.tentatives = const Value.absent(),
     this.erreur = const Value.absent(),
+    this.envoyeLe = const Value.absent(),
+    this.reponse = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   JobsCompanion.insert({
@@ -10982,6 +11066,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
     required String statut,
     this.tentatives = const Value.absent(),
     this.erreur = const Value.absent(),
+    this.envoyeLe = const Value.absent(),
+    this.reponse = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        createdAt = Value(createdAt),
@@ -11004,6 +11090,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
     Expression<String>? statut,
     Expression<int>? tentatives,
     Expression<String>? erreur,
+    Expression<String>? envoyeLe,
+    Expression<String>? reponse,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -11019,6 +11107,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
       if (statut != null) 'statut': statut,
       if (tentatives != null) 'tentatives': tentatives,
       if (erreur != null) 'erreur': erreur,
+      if (envoyeLe != null) 'envoye_le': envoyeLe,
+      if (reponse != null) 'reponse': reponse,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -11036,6 +11126,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
     Value<String>? statut,
     Value<int?>? tentatives,
     Value<String?>? erreur,
+    Value<String?>? envoyeLe,
+    Value<String?>? reponse,
     Value<int>? rowid,
   }) {
     return JobsCompanion(
@@ -11051,6 +11143,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
       statut: statut ?? this.statut,
       tentatives: tentatives ?? this.tentatives,
       erreur: erreur ?? this.erreur,
+      envoyeLe: envoyeLe ?? this.envoyeLe,
+      reponse: reponse ?? this.reponse,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -11094,6 +11188,12 @@ class JobsCompanion extends UpdateCompanion<Job> {
     if (erreur.present) {
       map['erreur'] = Variable<String>(erreur.value);
     }
+    if (envoyeLe.present) {
+      map['envoye_le'] = Variable<String>(envoyeLe.value);
+    }
+    if (reponse.present) {
+      map['reponse'] = Variable<String>(reponse.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -11115,6 +11215,8 @@ class JobsCompanion extends UpdateCompanion<Job> {
           ..write('statut: $statut, ')
           ..write('tentatives: $tentatives, ')
           ..write('erreur: $erreur, ')
+          ..write('envoyeLe: $envoyeLe, ')
+          ..write('reponse: $reponse, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

@@ -186,6 +186,41 @@ class MarketPriceView {
   final String? url;
 }
 
+/// Provenance d'une valeur enrichie (FIC-06, PRV-R1 à PRV-R4).
+class ProvenanceView {
+  const ProvenanceView({
+    required this.id,
+    required this.field,
+    required this.source,
+    required this.date,
+    required this.status,
+    this.url,
+    this.confidence,
+    this.reported = false,
+  });
+
+  final String id;
+
+  /// Nom du champ dans le contrat (domaine, appellation...).
+  final String field;
+  final String source;
+  final String date;
+
+  /// `valide`, `manuel` ou `verrouille`.
+  final String status;
+  final String? url;
+  final double? confidence;
+
+  /// PRV-R4 : signalé comme faux, affiché barré jusqu'à correction.
+  final bool reported;
+
+  bool get locked => status == 'manuel' || status == 'verrouille';
+
+  /// FIC-07 : texte rédigé par l'agent à partir d'une page web.
+  bool get aiWritten =>
+      url != null && source != 'etiquette' && source != 'manuel';
+}
+
 /// Fiche complète, pour l'écran de détail (FIC-01 à FIC-05).
 class WineDetail {
   const WineDetail({
@@ -201,6 +236,7 @@ class WineDetail {
     required this.scores,
     required this.marketPrices,
     this.gardeSource,
+    this.provenances = const {},
   });
 
   final String id;
@@ -222,6 +258,9 @@ class WineDetail {
 
   /// Du plus ancien au plus récent (courbe FIC-05).
   final List<MarketPriceView> marketPrices;
+
+  /// Provenance en vigueur par champ du contrat (FIC-06).
+  final Map<String, ProvenanceView> provenances;
 
   int get bottles => lots.fold(0, (s, l) => s + l.bottles);
 

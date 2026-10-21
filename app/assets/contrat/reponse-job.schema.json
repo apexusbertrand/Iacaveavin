@@ -1,0 +1,373 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ia-cave-a-vin/contrat-n8n/reponse-job.schema.json",
+  "title": "Réponse du flux n8n (POST /enrichissement, POST /prix, GET /jobs/{job_id})",
+  "description": "Même enveloppe pour la création d'un job (statut en_attente, ou termine en cas de cache) et pour son suivi. Le flux valide sa réponse contre ce schéma avant de la renvoyer ; l'app la valide à la réception.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version_contrat", "job_id", "request_id", "type", "statut"],
+  "properties": {
+    "version_contrat": { "type": "string", "pattern": "^1\\.[0-9]+$" },
+    "job_id": { "type": "string", "format": "uuid" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "fiche_id": { "type": ["string", "null"], "format": "uuid" },
+    "type": { "enum": ["enrichissement", "prix"] },
+    "statut": { "enum": ["en_attente", "en_cours", "termine", "partiel", "erreur"] },
+    "etape": {
+      "enum": ["lecture_etiquette", "normalisation", "identification", "enrichissement", "notes", "prix", "controles", "termine"],
+      "description": "Affichée en clair dans l'app pendant l'attente."
+    },
+    "quota": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enrichissements_restants_mois": { "type": "integer", "minimum": 0 },
+        "prix_restants_mois": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "resultat": {},
+    "erreur": { "$ref": "#/$defs/erreur" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "statut": { "enum": ["termine", "partiel"] } }, "required": ["statut"] },
+      "then": { "required": ["resultat"] }
+    },
+    {
+      "if": { "properties": { "statut": { "const": "erreur" } }, "required": ["statut"] },
+      "then": { "required": ["erreur"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "enrichissement" } }, "required": ["type", "resultat"] },
+      "then": { "properties": { "resultat": { "$ref": "#/$defs/resultat_enrichissement" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "prix" } }, "required": ["type", "resultat"] },
+      "then": { "properties": { "resultat": { "$ref": "#/$defs/resultat_prix" } } }
+    }
+  ],
+
+  "$defs": {
+
+    "source": {
+      "description": "Origine d'une valeur. 'manuel' et 'import' sont réservés à l'app et n'apparaissent jamais ici.",
+      "enum": ["etiquette", "site_officiel", "organisme_officiel", "interprofession", "critique", "marchand", "tiers", "estimation"]
+    },
+
+    "champ": {
+      "description": "Valeur proposée avec sa provenance. valeur nulle = motif obligatoire. Source web = url obligatoire.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valeur", "source", "confiance"],
+      "properties": {
+        "valeur": {},
+        "source": { "anyOf": [{ "$ref": "#/$defs/source" }, { "type": "null" }] },
+        "url": { "type": ["string", "null"], "format": "uri" },
+        "confiance": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "motif": { "type": "string", "minLength": 3 },
+        "note": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "valeur": { "const": null } } },
+          "then": { "required": ["motif"] }
+        },
+        {
+          "if": {
+            "properties": { "source": { "enum": ["site_officiel", "organisme_officiel", "interprofession", "critique", "marchand", "tiers"] } }
+          },
+          "then": { "required": ["url"], "properties": { "url": { "type": "string" } } }
+        }
+      ]
+    },
+
+    "champ_texte": {
+      "allOf": [{ "$ref": "#/$defs/champ" }, { "properties": { "valeur": { "type": ["string", "null"] } } }]
+    },
+    "champ_nombre": {
+      "allOf": [{ "$ref": "#/$defs/champ" }, { "properties": { "valeur": { "type": ["number", "null"] } } }]
+    },
+    "champ_liste_texte": {
+      "allOf": [{ "$ref": "#/$defs/champ" }, { "properties": { "valeur": { "type": ["array", "null"], "items": { "type": "string" } } } }]
+    },
+    "champ_couleur": {
+      "allOf": [
+        { "$ref": "#/$defs/champ" },
+        { "properties": { "valeur": { "enum": ["rouge", "blanc", "rose", "champagne", "effervescent", "liquoreux", "orange", "autre", null] } } }
+      ]
+    },
+    "champ_millesime": {
+      "allOf": [
+        { "$ref": "#/$defs/champ" },
+        {
+          "properties": {
+            "valeur": { "anyOf": [{ "type": "integer", "minimum": 1900, "maximum": 2100 }, { "const": "NM" }, { "type": "null" }] }
+          }
+        }
+      ]
+    },
+    "champ_cepages": {
+      "allOf": [
+        { "$ref": "#/$defs/champ" },
+        {
+          "properties": {
+            "valeur": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["cepage"],
+                "properties": {
+                  "cepage": { "type": "string", "minLength": 2 },
+                  "pourcentage": { "type": ["number", "null"], "minimum": 0, "maximum": 100 }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "champ_garde": {
+      "description": "Fenêtre de dégustation issue d'un critique ou du domaine. Si aucune n'est trouvée, valeur nulle : l'app applique ses règles locales (specs/regles-garde.yaml).",
+      "allOf": [
+        { "$ref": "#/$defs/champ" },
+        {
+          "properties": {
+            "source": { "enum": ["critique", "site_officiel", "marchand", null] },
+            "valeur": {
+              "type": ["object", "null"],
+              "additionalProperties": false,
+              "required": ["debut", "fin"],
+              "properties": {
+                "debut": { "type": "integer", "minimum": 1900, "maximum": 2200 },
+                "apogee": { "type": ["integer", "null"], "minimum": 1900, "maximum": 2200 },
+                "fin": { "type": "integer", "minimum": 1900, "maximum": 2200 }
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    "fiche": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domaine", "appellation", "millesime", "couleur"],
+      "properties": {
+        "domaine": { "$ref": "#/$defs/champ_texte" },
+        "domaine_site_officiel": { "$ref": "#/$defs/champ_texte" },
+        "commentaire_domaine": { "$ref": "#/$defs/champ_texte" },
+        "cuvee": { "$ref": "#/$defs/champ_texte" },
+        "pays": { "$ref": "#/$defs/champ_texte" },
+        "region": { "$ref": "#/$defs/champ_texte" },
+        "sous_region": { "$ref": "#/$defs/champ_texte" },
+        "appellation": { "$ref": "#/$defs/champ_texte" },
+        "signe_qualite": { "$ref": "#/$defs/champ_texte" },
+        "classement": { "$ref": "#/$defs/champ_texte" },
+        "lieu_dit": { "$ref": "#/$defs/champ_texte" },
+        "couleur": { "$ref": "#/$defs/champ_couleur" },
+        "type": { "$ref": "#/$defs/champ_texte" },
+        "certification": { "$ref": "#/$defs/champ_texte" },
+        "millesime": { "$ref": "#/$defs/champ_millesime" },
+        "cepages": { "$ref": "#/$defs/champ_cepages" },
+        "degre": { "$ref": "#/$defs/champ_nombre" },
+        "volume_cl": { "$ref": "#/$defs/champ_nombre" },
+        "commentaire_millesime": { "$ref": "#/$defs/champ_texte" },
+        "garde": { "$ref": "#/$defs/champ_garde" },
+        "accords": { "$ref": "#/$defs/champ_liste_texte" },
+        "lwin": { "$ref": "#/$defs/champ_texte" }
+      }
+    },
+
+    "note_critique": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_critique", "note", "echelle", "acces", "url", "confiance"],
+      "properties": {
+        "source_critique": { "type": "string", "minLength": 2 },
+        "note": { "type": "number", "minimum": 0, "maximum": 100 },
+        "echelle": { "enum": [20, 100] },
+        "degustateur": { "type": ["string", "null"] },
+        "date_note": { "type": ["string", "null"], "format": "date" },
+        "fenetre": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["debut", "fin"],
+          "properties": {
+            "debut": { "type": "integer", "minimum": 1900, "maximum": 2200 },
+            "fin": { "type": "integer", "minimum": 1900, "maximum": 2200 }
+          }
+        },
+        "acces": {
+          "enum": ["libre", "citee"],
+          "description": "libre : page en accès libre du critique. citee : note reprise par un tiers (domaine, marchand), citee_par obligatoire."
+        },
+        "citee_par": { "type": ["string", "null"] },
+        "url": { "type": "string", "format": "uri" },
+        "confiance": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "acces": { "const": "citee" } } },
+          "then": { "required": ["citee_par"], "properties": { "citee_par": { "type": "string", "minLength": 2 } } }
+        },
+        {
+          "if": { "properties": { "echelle": { "const": 20 } } },
+          "then": { "properties": { "note": { "maximum": 20 } } }
+        }
+      ]
+    },
+
+    "prix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_cl", "trouve", "devise", "date"],
+      "properties": {
+        "format_cl": { "type": "number", "exclusiveMinimum": 0 },
+        "trouve": { "type": "boolean" },
+        "prix": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "devise": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "nature": { "enum": ["offre", "mediane", "minimum", "cote"] },
+        "nb_offres": { "type": "integer", "minimum": 0 },
+        "offres": {
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["site", "url", "prix"],
+            "properties": {
+              "site": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "prix": { "type": "number", "exclusiveMinimum": 0 },
+              "millesime_verifie": { "type": "boolean" }
+            }
+          }
+        },
+        "site": { "type": ["string", "null"] },
+        "url": { "type": ["string", "null"], "format": "uri" },
+        "date": { "type": "string", "format": "date" },
+        "motif": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "trouve": { "const": true } } },
+          "then": { "required": ["prix", "nature", "nb_offres", "offres"], "properties": { "prix": { "type": "number" } } }
+        },
+        {
+          "if": { "properties": { "trouve": { "const": false } } },
+          "then": { "required": ["motif"] }
+        }
+      ]
+    },
+
+    "alerte": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "enum": [
+            "desaccord_etiquette_source",
+            "identification_incertaine",
+            "photo_peu_lisible",
+            "aucune_note_critique",
+            "prix_non_trouve",
+            "champ_verrouille_ignore",
+            "quota_proche",
+            "contenu_suspect_ignore",
+            "autre"
+          ]
+        },
+        "champ": { "type": ["string", "null"] },
+        "message": { "type": "string", "minLength": 3, "maxLength": 300 }
+      }
+    },
+
+    "commun_resultat": {
+      "type": "object",
+      "properties": {
+        "alertes": { "type": "array", "items": { "$ref": "#/$defs/alerte" } },
+        "sources_consultees": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url", "consultee_le"],
+            "properties": {
+              "url": { "type": "string", "format": "uri" },
+              "consultee_le": { "type": "string", "format": "date" },
+              "utilisee": { "type": "boolean" }
+            }
+          }
+        },
+        "cache": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hit"],
+          "properties": { "hit": { "type": "boolean" }, "cle": { "type": "string" }, "date": { "type": "string", "format": "date" } }
+        },
+        "cout": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "appels_modele": { "type": "integer", "minimum": 0 },
+            "credits_recherche": { "type": "integer", "minimum": 0 },
+            "duree_ms": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "resultat_enrichissement": {
+      "allOf": [
+        { "$ref": "#/$defs/commun_resultat" },
+        {
+          "type": "object",
+          "required": ["fiche", "transcription", "notes_critiques", "alertes", "sources_consultees"],
+          "properties": {
+            "fiche": { "$ref": "#/$defs/fiche" },
+            "transcription": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["index", "texte"],
+                "properties": { "index": { "type": "integer", "minimum": 0, "maximum": 3 }, "texte": { "type": "string" } }
+              }
+            },
+            "notes_critiques": { "type": "array", "items": { "$ref": "#/$defs/note_critique" } },
+            "prix": { "type": "array", "items": { "$ref": "#/$defs/prix" } }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+
+    "resultat_prix": {
+      "allOf": [
+        { "$ref": "#/$defs/commun_resultat" },
+        {
+          "type": "object",
+          "required": ["prix", "alertes", "sources_consultees"],
+          "properties": { "prix": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/prix" } } }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+
+    "erreur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "reessayable"],
+      "properties": {
+        "code": {
+          "enum": ["requete_invalide", "auth_invalide", "signature_expiree", "quota_depasse", "photo_illisible", "delai_depasse", "version_non_supportee", "interne"]
+        },
+        "message": { "type": "string" },
+        "reessayable": { "type": "boolean" }
+      }
+    }
+  }
+}

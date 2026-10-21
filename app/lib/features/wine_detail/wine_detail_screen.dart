@@ -14,7 +14,9 @@ import '../../data/settings_store.dart';
 import '../../domain/garde.dart';
 import '../../domain/scores.dart';
 import '../../domain/wine_detail.dart';
+import '../add/enrichment_screen.dart' show winePhotosProvider;
 import '../wine_list/wine_card.dart';
+import 'provenance_sheet.dart';
 import 'stock_dialogs.dart';
 
 final wineDetailProvider = StreamProvider.family<WineDetail?, String>((
@@ -77,7 +79,12 @@ class _Detail extends ConsumerWidget {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(wine.draft.producer, overflow: TextOverflow.ellipsis),
+          title: Text(
+            wine.draft.producer.isEmpty
+                ? AppLocalizations.of(context).unidentifiedWine
+                : wine.draft.producer,
+            overflow: TextOverflow.ellipsis,
+          ),
           actions: [
             IconButton(
               tooltip: l.edit,
@@ -94,6 +101,11 @@ class _Detail extends ConsumerWidget {
                   PopupMenuItem(value: 'adjust', child: Text(l.adjustStock)),
                   PopupMenuItem(value: 'transfer', child: Text(l.transfer)),
                 ],
+                PopupMenuItem(
+                  value: 'duplicate',
+                  child: Text(l.duplicateVintage),
+                ),
+                PopupMenuItem(value: 'reenrich', child: Text(l.reEnrich)),
                 PopupMenuItem(value: 'delete', child: Text(l.delete)),
               ],
             ),
@@ -113,6 +125,7 @@ class _Detail extends ConsumerWidget {
         ),
         body: NestedScrollView(
           headerSliverBuilder: (context, _) => [
+            SliverToBoxAdapter(child: StatusBanner(wine: wine)),
             SliverToBoxAdapter(child: _Header(wine: wine)),
           ],
           body: TabBarView(
@@ -141,6 +154,10 @@ class _Detail extends ConsumerWidget {
         await adjustDialog(context, ref, wine);
       case 'transfer':
         await transferDialog(context, ref, wine);
+      case 'duplicate':
+        await duplicateVintageDialog(context, ref, wine);
+      case 'reenrich':
+        await reEnrich(context, ref, wine);
       case 'delete':
         final ok = await confirm(
           context,
@@ -183,6 +200,7 @@ class _HeaderState extends ConsumerState<_Header> {
       name: ref.watch(settingsProvider.select((s) => s.currency)),
     );
     final formats = {for (final lot in w.lots) _cl(lot.formatCl)};
+    final photos = ref.watch(winePhotosProvider(w.id)).value ?? const [];
     final prices = w.lots.map((l) => l.unitPrice).whereType<double>();
     return Padding(
       padding: const EdgeInsets.all(SpacingTokens.l),
@@ -199,11 +217,17 @@ class _HeaderState extends ConsumerState<_Header> {
                   height: SpacingTokens.xxl * 4,
                   child: ColoredBox(
                     color: color.fill,
-                    child: Icon(
-                      Icons.wine_bar,
-                      color: color.onFill,
-                      size: SpacingTokens.xxl * 1.5,
-                    ),
+                    child: photos.isEmpty
+                        ? Icon(
+                            Icons.wine_bar,
+                            color: color.onFill,
+                            size: SpacingTokens.xxl * 1.5,
+                          )
+                        // Un tap ouvre la galerie plein écran (docs/03).
+                        : InkWell(
+                            onTap: () => showGallery(context, ref, w.id),
+                            child: Image.file(photos.first, fit: BoxFit.cover),
+                          ),
                   ),
                 ),
               ),
@@ -372,20 +396,28 @@ class _InfoCard extends StatelessWidget {
 }
 
 class _Row extends StatelessWidget {
-  const _Row(this.label, this.value, {this.onTap, this.child});
+  const _Row(this.label, this.value, {this.onTap, this.child, this.provenance});
 
   final String label;
   final String? value;
   final VoidCallback? onTap;
   final Widget? child;
 
+  /// FIC-06 : pastille de provenance d'une valeur enrichie.
+  final ProvenanceView? provenance;
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final text = value == null || value!.isEmpty ? l.emptyValue : value!;
+    final p = provenance;
     return InkWell(
       onTap: onTap,
+      // PRV-R3 : appui long sur un champ verrouillé pour le déverrouiller.
+      onLongPress: p != null && p.locked
+          ? () => unlockDialog(context, p)
+          : null,
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: minTouchTarget),
         child: Padding(
@@ -413,9 +445,24 @@ class _Row extends StatelessWidget {
                     Text(
                       text,
                       textAlign: TextAlign.end,
-                      style: theme.textTheme.bodyLarge,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        // PRV-R4 : valeur signalée affichée barrée.
+                        decoration: p?.reported == true
+                            ? TextDecoration.lineThrough
+                            : null,
+                      ),
                     ),
               ),
+              if (p != null && !p.locked) ProvenanceBadge(provenance: p),
+              if (p != null && p.locked)
+                Padding(
+                  padding: const EdgeInsets.only(left: SpacingTokens.xs),
+                  child: Icon(
+                    Icons.lock_outline,
+                    size: SpacingTokens.l,
+                    color: context.palette.textSecondary,
+                  ),
+                ),
               if (onTap != null) const Icon(Icons.chevron_right),
             ],
           ),
@@ -472,9 +519,21 @@ class _InfoTab extends ConsumerWidget {
               l.fieldCountry,
               '${flagEmoji(d.country)} ${wine.label('pays', d.country)}'.trim(),
             ),
-            _Row(l.fieldRegion, wine.label('region', d.region)),
-            _Row(l.fieldSubRegion, wine.label('sous_region', d.subRegion)),
-            _Row(l.fieldAppellation, wine.label('appellation', d.appellation)),
+            _Row(
+              l.fieldRegion,
+              wine.label('region', d.region),
+              provenance: wine.provenances['region'],
+            ),
+            _Row(
+              l.fieldSubRegion,
+              wine.label('sous_region', d.subRegion),
+              provenance: wine.provenances['sous_region'],
+            ),
+            _Row(
+              l.fieldAppellation,
+              wine.label('appellation', d.appellation),
+              provenance: wine.provenances['appellation'],
+            ),
             _Row(
               l.fieldQualitySign,
               wine.label('signe_qualite', d.qualitySign),
@@ -483,8 +542,16 @@ class _InfoTab extends ConsumerWidget {
               l.fieldClassification,
               wine.label('classement', d.classification),
             ),
-            _Row(l.fieldLieuDit, d.lieuDit),
-            _Row(l.fieldProducer, d.producer),
+            _Row(
+              l.fieldLieuDit,
+              d.lieuDit,
+              provenance: wine.provenances['lieu_dit'],
+            ),
+            _Row(
+              l.fieldProducer,
+              d.producer,
+              provenance: wine.provenances['domaine'],
+            ),
           ],
         ),
         _InfoCard(
@@ -509,10 +576,11 @@ class _InfoTab extends ConsumerWidget {
                   .map((e) => l.ownerShare(e.key, e.value))
                   .join(', '),
             ),
-            _Row(l.fieldGarde, garde),
+            _Row(l.fieldGarde, garde, provenance: wine.provenances['garde']),
             _Row(
               l.fieldAlcohol,
               d.alcohol == null ? null : '${d.alcohol}'.replaceAll('.', ','),
+              provenance: wine.provenances['degre'],
             ),
           ],
         ),
@@ -554,11 +622,64 @@ class _InfoTab extends ConsumerWidget {
         _InfoCard(
           title: l.sectionComments,
           rows: [
-            _Row(l.fieldProducerComment, d.producerComment),
-            _Row(l.fieldVintageComment, d.vintageComment),
+            _Row(
+              l.fieldProducerComment,
+              d.producerComment,
+              provenance: wine.provenances['commentaire_domaine'],
+              child: _CommentText(
+                text: d.producerComment,
+                provenance: wine.provenances['commentaire_domaine'],
+              ),
+            ),
+            _Row(
+              l.fieldVintageComment,
+              d.vintageComment,
+              provenance: wine.provenances['commentaire_millesime'],
+              child: _CommentText(
+                text: d.vintageComment,
+                provenance: wine.provenances['commentaire_millesime'],
+              ),
+            ),
             _Row(l.fieldPersonalComment, d.personalComment),
           ],
         ),
+      ],
+    );
+  }
+}
+
+/// FIC-07 : un commentaire rédigé par l'agent porte la mention du site.
+class _CommentText extends StatelessWidget {
+  const _CommentText({required this.text, this.provenance});
+
+  final String? text;
+  final ProvenanceView? provenance;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final value = text == null || text!.isEmpty ? l.emptyValue : text!;
+    final p = provenance;
+    final host = p?.url == null ? null : Uri.tryParse(p!.url!)?.host;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          value,
+          textAlign: TextAlign.end,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            decoration: p?.reported == true ? TextDecoration.lineThrough : null,
+          ),
+        ),
+        if (p != null && p.aiWritten && host != null && host.isNotEmpty)
+          Text(
+            l.aiWritten(host),
+            key: const ValueKey('ai-mention'),
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontStyle: FontStyle.italic,
+            ),
+          ),
       ],
     );
   }

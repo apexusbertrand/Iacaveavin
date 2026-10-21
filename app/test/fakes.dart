@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/app.dart';
 import 'package:iacaveavin/data/backup_providers.dart';
@@ -128,10 +131,15 @@ Future<AppDatabase> pumpRealApp(
   String location = '/',
   Map<String, Object> prefs = const {},
   Future<void> Function(AppDatabase db, String cellarId)? seed,
+  List<Override> extra = const [],
+  Directory? appDir,
 }) async {
   tester.view.physicalSize = const Size(1080, 2340);
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
+  // Le cache de rootBundle garde des futures nées dans la zone d'un test
+  // précédent : elles ne se résolvent plus dans le test suivant.
+  rootBundle.clear();
   SharedPreferences.setMockInitialValues(prefs);
   final sharedPrefs = await SharedPreferences.getInstance();
   final db = memoryDatabase();
@@ -154,6 +162,9 @@ Future<AppDatabase> pumpRealApp(
         assetReaderProvider.overrideWithValue(readAssetFromDisk),
         currentYearProvider.overrideWithValue(2026),
         ...noFileSystem,
+        if (appDir != null)
+          appDirProvider.overrideWithValue(() async => appDir),
+        ...extra,
       ],
       child: IaCaveAVinApp(initialLocation: location),
     ),
@@ -172,6 +183,18 @@ Future<void> settle(WidgetTester tester) async {
     await tester.pump(const Duration(milliseconds: 100));
     if (i > 3 && !tester.binding.hasScheduledFrame) break;
   }
+}
+
+/// Laisse tourner les traitements réels (isolates, fichiers) jusqu'à ce que
+/// [done] soit vrai, 10 s au plus.
+Future<void> pumpUntil(WidgetTester tester, bool Function() done) async {
+  for (var i = 0; i < 200 && !done(); i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 50)),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  await settle(tester);
 }
 
 /// Pas de répertoire d'application en test : sauvegardes et photos vides.

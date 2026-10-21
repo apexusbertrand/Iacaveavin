@@ -95,4 +95,75 @@ extension DomainLabels on AppLocalizations {
     'clayette' => locTypeClayette,
     _ => locTypeAutre,
   };
+
+  /// Source d'une valeur (énumération `source_provenance`).
+  String sourceLabel(String? code) => switch (code) {
+    'etiquette' => srcEtiquette,
+    'site_officiel' => srcSiteOfficiel,
+    'organisme_officiel' => srcOrganismeOfficiel,
+    'interprofession' => srcInterprofession,
+    'critique' => srcCritique,
+    'marchand' => srcMarchand,
+    'estimation' => srcEstimation,
+    'manuel' => srcManuel,
+    'import' => srcImport,
+    _ => srcTiers,
+  };
+
+  /// AJO-05 : étape du job, en clair.
+  String stepLabel(String? step) => switch (step) {
+    'lecture_etiquette' => stepLecture,
+    'normalisation' => stepNormalisation,
+    'identification' => stepIdentification,
+    'enrichissement' => stepEnrichissement,
+    'notes' => stepNotes,
+    'prix' => stepPrix,
+    'controles' => stepControles,
+    'termine' => stepTermine,
+    _ => stepWaiting,
+  };
+
+  String photoTypeLabel(String type) => switch (type) {
+    'etiquette' => photoTypeEtiquette,
+    'contre_etiquette' => photoTypeContreEtiquette,
+    'capsule' => photoTypeCapsule,
+    'collerette' => photoTypeCollerette,
+    _ => photoTypeAutre,
+  };
+
+  String scenarioLabel(String name) => switch (name) {
+    'partial' => scenarioPartial,
+    'cacheHit' => scenarioCacheHit,
+    'quota' => scenarioQuota,
+    'invalid' => scenarioInvalid,
+    'never' => scenarioNever,
+    _ => scenarioDone,
+  };
+
+  /// Libellé d'un champ du contrat pour l'écran de validation.
+  String contractFieldLabel(String field) => switch (field) {
+    'domaine' => fieldProducer,
+    'domaine_site_officiel' => fieldProducerSite,
+    'commentaire_domaine' => fieldProducerComment,
+    'cuvee' => fieldCuvee,
+    'pays' => fieldCountry,
+    'region' => fieldRegion,
+    'sous_region' => fieldSubRegion,
+    'appellation' => fieldAppellation,
+    'signe_qualite' => fieldQualitySign,
+    'classement' => fieldClassification,
+    'lieu_dit' => fieldLieuDit,
+    'couleur' => fieldColor,
+    'type' => fieldType,
+    'certification' => fieldCertification,
+    'millesime' => fieldVintage,
+    'cepages' => fieldGrapes,
+    'degre' => fieldAlcohol,
+    'volume_cl' => fieldFormat,
+    'commentaire_millesime' => fieldVintageComment,
+    'garde' => fieldGarde,
+    'accords' => fieldPairings,
+    'lwin' => fieldLwin,
+    _ => field,
+  };
 }
