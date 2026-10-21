@@ -1,0 +1,88 @@
+# Règles d'estimation de la garde, appliquées EN LOCAL sur le téléphone.
+#
+# Usage : seulement quand aucune fenêtre n'est fournie par un critique ni par le domaine.
+# La garde obtenue porte la source "estimation" et s'affiche comme telle.
+# Calcul déterministe (pas d'IA) : même vin, même résultat, hors ligne compris.
+#
+# Lecture : les règles sont testées dans l'ordre, la première qui correspond s'applique.
+# Les décalages sont en années après le millésime : debut, apogee, fin.
+# Pour un non millésimé (NM), les décalages partent de l'année d'achat du premier lot.
+#
+# STATUT : valeurs par défaut prudentes, à valider par Bertrand avant le lot 1.
+# Chaque règle validée passe a_valider à false. Une règle se modifie ici, pas dans le code.
+
+version: 1
+a_valider: true
+
+regles:
+  - id: rose
+    si: {couleur: rose}
+    decalage: {debut: 0, apogee: 1, fin: 2}
+
+  - id: champagne_millesime
+    si: {couleur: champagne, millesime: millesime}
+    decalage: {debut: 3, apogee: 8, fin: 15}
+
+  - id: champagne_nm
+    si: {couleur: champagne, millesime: NM}
+    decalage: {debut: 0, apogee: 2, fin: 4}
+
+  - id: effervescent
+    si: {couleur: effervescent}
+    decalage: {debut: 0, apogee: 1, fin: 3}
+
+  - id: liquoreux
+    si: {couleur: liquoreux}
+    decalage: {debut: 5, apogee: 15, fin: 30}
+
+  - id: blanc_grand_cru
+    si: {couleur: blanc, classement: ["Grand Cru", "Premier Grand Cru Classé", "Grand Cru Classé"]}
+    decalage: {debut: 3, apogee: 8, fin: 15}
+
+  - id: blanc_premier_cru
+    si: {couleur: blanc, classement: ["Premier Cru", "Cru Classé"]}
+    decalage: {debut: 2, apogee: 5, fin: 10}
+
+  - id: blanc
+    si: {couleur: blanc}
+    decalage: {debut: 0, apogee: 2, fin: 4}
+
+  - id: rouge_bordeaux_classe
+    si: {couleur: rouge, region: Bordeaux, classement: ["Premier Grand Cru Classé", "Grand Cru Classé", "Cru Classé"]}
+    decalage: {debut: 8, apogee: 15, fin: 30}
+
+  - id: rouge_bordeaux
+    si: {couleur: rouge, region: Bordeaux}
+    decalage: {debut: 3, apogee: 6, fin: 12}
+
+  - id: rouge_bourgogne_grand_cru
+    si: {couleur: rouge, region: Bourgogne, classement: ["Grand Cru"]}
+    decalage: {debut: 6, apogee: 12, fin: 25}
+
+  - id: rouge_bourgogne_premier_cru
+    si: {couleur: rouge, region: Bourgogne, classement: ["Premier Cru"]}
+    decalage: {debut: 4, apogee: 8, fin: 15}
+
+  - id: rouge_bourgogne
+    si: {couleur: rouge, region: Bourgogne}
+    decalage: {debut: 2, apogee: 4, fin: 8}
+
+  - id: rouge_rhone_nord
+    si: {couleur: rouge, appellation: ["Hermitage", "Côte-Rôtie", "Cornas"]}
+    decalage: {debut: 5, apogee: 10, fin: 20}
+
+  - id: rouge_chateauneuf
+    si: {couleur: rouge, appellation: ["Châteauneuf-du-Pape", "Gigondas", "Vacqueyras"]}
+    decalage: {debut: 3, apogee: 7, fin: 15}
+
+  - id: orange
+    si: {couleur: orange}
+    decalage: {debut: 1, apogee: 3, fin: 6}
+
+  - id: rouge
+    si: {couleur: rouge}
+    decalage: {debut: 1, apogee: 3, fin: 6}
+
+  - id: defaut
+    si: {}
+    decalage: {debut: 0, apogee: 2, fin: 4}

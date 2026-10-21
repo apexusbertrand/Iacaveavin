@@ -1,0 +1,421 @@
+{
+ "liste": "region",
+ "source": "liste provisoire saisie au lot 0 : régions viticoles françaises puis principaux pays producteurs",
+ "valeurs": [
+  {
+   "code": "fr-alsace",
+   "libelle": "Alsace",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-beaujolais",
+   "libelle": "Beaujolais",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-bordeaux",
+   "libelle": "Bordeaux",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-bourgogne",
+   "libelle": "Bourgogne",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-bugey",
+   "libelle": "Bugey",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-champagne",
+   "libelle": "Champagne",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-corse",
+   "libelle": "Corse",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-jura",
+   "libelle": "Jura",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-languedoc",
+   "libelle": "Languedoc",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-lorraine",
+   "libelle": "Lorraine",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-provence",
+   "libelle": "Provence",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-roussillon",
+   "libelle": "Roussillon",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-savoie",
+   "libelle": "Savoie",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-sud-ouest",
+   "libelle": "Sud-Ouest",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-vallee-de-la-loire",
+   "libelle": "Vallée de la Loire",
+   "parent_code": "FR"
+  },
+  {
+   "code": "fr-vallee-du-rhone",
+   "libelle": "Vallée du Rhône",
+   "parent_code": "FR"
+  },
+  {
+   "code": "it-abruzzes",
+   "libelle": "Abruzzes",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-campanie",
+   "libelle": "Campanie",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-frioul-venetie-julienne",
+   "libelle": "Frioul-Vénétie Julienne",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-lombardie",
+   "libelle": "Lombardie",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-marches",
+   "libelle": "Marches",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-ombrie",
+   "libelle": "Ombrie",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-piemont",
+   "libelle": "Piémont",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-pouilles",
+   "libelle": "Pouilles",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-sardaigne",
+   "libelle": "Sardaigne",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-sicile",
+   "libelle": "Sicile",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-toscane",
+   "libelle": "Toscane",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-trentin-haut-adige",
+   "libelle": "Trentin-Haut-Adige",
+   "parent_code": "IT"
+  },
+  {
+   "code": "it-venetie",
+   "libelle": "Vénétie",
+   "parent_code": "IT"
+  },
+  {
+   "code": "es-andalousie",
+   "libelle": "Andalousie",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-aragon",
+   "libelle": "Aragon",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-castille-et-leon",
+   "libelle": "Castille-et-León",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-catalogne",
+   "libelle": "Catalogne",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-galice",
+   "libelle": "Galice",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-navarre",
+   "libelle": "Navarre",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-rioja",
+   "libelle": "Rioja",
+   "parent_code": "ES"
+  },
+  {
+   "code": "es-valence",
+   "libelle": "Valence",
+   "parent_code": "ES"
+  },
+  {
+   "code": "pt-alentejo",
+   "libelle": "Alentejo",
+   "parent_code": "PT"
+  },
+  {
+   "code": "pt-bairrada",
+   "libelle": "Bairrada",
+   "parent_code": "PT"
+  },
+  {
+   "code": "pt-dao",
+   "libelle": "Dão",
+   "parent_code": "PT"
+  },
+  {
+   "code": "pt-douro",
+   "libelle": "Douro",
+   "parent_code": "PT"
+  },
+  {
+   "code": "pt-lisbonne",
+   "libelle": "Lisbonne",
+   "parent_code": "PT"
+  },
+  {
+   "code": "pt-madere",
+   "libelle": "Madère",
+   "parent_code": "PT"
+  },
+  {
+   "code": "pt-vinho-verde",
+   "libelle": "Vinho Verde",
+   "parent_code": "PT"
+  },
+  {
+   "code": "de-bade",
+   "libelle": "Bade",
+   "parent_code": "DE"
+  },
+  {
+   "code": "de-franconie",
+   "libelle": "Franconie",
+   "parent_code": "DE"
+  },
+  {
+   "code": "de-moselle",
+   "libelle": "Moselle",
+   "parent_code": "DE"
+  },
+  {
+   "code": "de-nahe",
+   "libelle": "Nahe",
+   "parent_code": "DE"
+  },
+  {
+   "code": "de-palatinat",
+   "libelle": "Palatinat",
+   "parent_code": "DE"
+  },
+  {
+   "code": "de-rheingau",
+   "libelle": "Rheingau",
+   "parent_code": "DE"
+  },
+  {
+   "code": "de-hesse-rhenane",
+   "libelle": "Hesse rhénane",
+   "parent_code": "DE"
+  },
+  {
+   "code": "at-basse-autriche",
+   "libelle": "Basse-Autriche",
+   "parent_code": "AT"
+  },
+  {
+   "code": "at-burgenland",
+   "libelle": "Burgenland",
+   "parent_code": "AT"
+  },
+  {
+   "code": "at-styrie",
+   "libelle": "Styrie",
+   "parent_code": "AT"
+  },
+  {
+   "code": "at-vienne",
+   "libelle": "Vienne",
+   "parent_code": "AT"
+  },
+  {
+   "code": "ch-geneve",
+   "libelle": "Genève",
+   "parent_code": "CH"
+  },
+  {
+   "code": "ch-neuchatel",
+   "libelle": "Neuchâtel",
+   "parent_code": "CH"
+  },
+  {
+   "code": "ch-tessin",
+   "libelle": "Tessin",
+   "parent_code": "CH"
+  },
+  {
+   "code": "ch-valais",
+   "libelle": "Valais",
+   "parent_code": "CH"
+  },
+  {
+   "code": "ch-vaud",
+   "libelle": "Vaud",
+   "parent_code": "CH"
+  },
+  {
+   "code": "hu-tokaj",
+   "libelle": "Tokaj",
+   "parent_code": "HU"
+  },
+  {
+   "code": "gr-macedoine-grecque",
+   "libelle": "Macédoine grecque",
+   "parent_code": "GR"
+  },
+  {
+   "code": "gr-peloponnese",
+   "libelle": "Péloponnèse",
+   "parent_code": "GR"
+  },
+  {
+   "code": "gr-santorin",
+   "libelle": "Santorin",
+   "parent_code": "GR"
+  },
+  {
+   "code": "lb-bekaa",
+   "libelle": "Bekaa",
+   "parent_code": "LB"
+  },
+  {
+   "code": "za-cap-occidental",
+   "libelle": "Cap-Occidental",
+   "parent_code": "ZA"
+  },
+  {
+   "code": "us-californie",
+   "libelle": "Californie",
+   "parent_code": "US"
+  },
+  {
+   "code": "us-new-york",
+   "libelle": "New York",
+   "parent_code": "US"
+  },
+  {
+   "code": "us-oregon",
+   "libelle": "Oregon",
+   "parent_code": "US"
+  },
+  {
+   "code": "us-washington",
+   "libelle": "Washington",
+   "parent_code": "US"
+  },
+  {
+   "code": "ar-mendoza",
+   "libelle": "Mendoza",
+   "parent_code": "AR"
+  },
+  {
+   "code": "ar-patagonie",
+   "libelle": "Patagonie",
+   "parent_code": "AR"
+  },
+  {
+   "code": "ar-salta",
+   "libelle": "Salta",
+   "parent_code": "AR"
+  },
+  {
+   "code": "cl-aconcagua",
+   "libelle": "Aconcagua",
+   "parent_code": "CL"
+  },
+  {
+   "code": "cl-vallee-centrale",
+   "libelle": "Vallée centrale",
+   "parent_code": "CL"
+  },
+  {
+   "code": "au-australie-meridionale",
+   "libelle": "Australie-Méridionale",
+   "parent_code": "AU"
+  },
+  {
+   "code": "au-australie-occidentale",
+   "libelle": "Australie-Occidentale",
+   "parent_code": "AU"
+  },
+  {
+   "code": "au-nouvelle-galles-du-sud",
+   "libelle": "Nouvelle-Galles du Sud",
+   "parent_code": "AU"
+  },
+  {
+   "code": "au-tasmanie",
+   "libelle": "Tasmanie",
+   "parent_code": "AU"
+  },
+  {
+   "code": "au-victoria",
+   "libelle": "Victoria",
+   "parent_code": "AU"
+  },
+  {
+   "code": "nz-central-otago",
+   "libelle": "Central Otago",
+   "parent_code": "NZ"
+  },
+  {
+   "code": "nz-hawke-s-bay",
+   "libelle": "Hawke's Bay",
+   "parent_code": "NZ"
+  },
+  {
+   "code": "nz-marlborough",
+   "libelle": "Marlborough",
+   "parent_code": "NZ"
+  }
+ ]
+}

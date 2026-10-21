@@ -4,7 +4,7 @@ Application mobile de gestion de cave à vin, aux couleurs d'Apexus-BMT. On phot
 
 Android d'abord, iOS ensuite, une seule base de code Flutter.
 
-Statut au 2026-10-20 : cahier des charges V3 terminé, développement non démarré (lot 0 à lancer).
+Statut au 2026-10-21 : lot 0 (socle installable) réalisé, en attente de recette sur téléphone.
 
 ## Comment ce dépôt est organisé
 

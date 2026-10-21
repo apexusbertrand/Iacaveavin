@@ -1,0 +1,111 @@
+{
+ "liste": "sous_region",
+ "source": "liste provisoire saisie au lot 0",
+ "valeurs": [
+  {
+   "code": "fr-bordeaux--medoc",
+   "libelle": "Médoc",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bordeaux--graves",
+   "libelle": "Graves",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bordeaux--sauternais",
+   "libelle": "Sauternais",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bordeaux--libournais",
+   "libelle": "Libournais",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bordeaux--entre-deux-mers",
+   "libelle": "Entre-deux-Mers",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bordeaux--cotes-de-bordeaux",
+   "libelle": "Côtes de Bordeaux",
+   "parent_code": "fr-bordeaux"
+  },
+  {
+   "code": "fr-bourgogne--chablis-et-grand-auxerrois",
+   "libelle": "Chablis et Grand Auxerrois",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-bourgogne--cote-de-nuits",
+   "libelle": "Côte de Nuits",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-bourgogne--cote-de-beaune",
+   "libelle": "Côte de Beaune",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-bourgogne--cote-chalonnaise",
+   "libelle": "Côte chalonnaise",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-bourgogne--maconnais",
+   "libelle": "Mâconnais",
+   "parent_code": "fr-bourgogne"
+  },
+  {
+   "code": "fr-vallee-du-rhone--rhone-septentrional",
+   "libelle": "Rhône septentrional",
+   "parent_code": "fr-vallee-du-rhone"
+  },
+  {
+   "code": "fr-vallee-du-rhone--rhone-meridional",
+   "libelle": "Rhône méridional",
+   "parent_code": "fr-vallee-du-rhone"
+  },
+  {
+   "code": "fr-vallee-de-la-loire--pays-nantais",
+   "libelle": "Pays nantais",
+   "parent_code": "fr-vallee-de-la-loire"
+  },
+  {
+   "code": "fr-vallee-de-la-loire--anjou-saumur",
+   "libelle": "Anjou-Saumur",
+   "parent_code": "fr-vallee-de-la-loire"
+  },
+  {
+   "code": "fr-vallee-de-la-loire--touraine",
+   "libelle": "Touraine",
+   "parent_code": "fr-vallee-de-la-loire"
+  },
+  {
+   "code": "fr-vallee-de-la-loire--centre-loire",
+   "libelle": "Centre-Loire",
+   "parent_code": "fr-vallee-de-la-loire"
+  },
+  {
+   "code": "fr-champagne--montagne-de-reims",
+   "libelle": "Montagne de Reims",
+   "parent_code": "fr-champagne"
+  },
+  {
+   "code": "fr-champagne--vallee-de-la-marne",
+   "libelle": "Vallée de la Marne",
+   "parent_code": "fr-champagne"
+  },
+  {
+   "code": "fr-champagne--cote-des-blancs",
+   "libelle": "Côte des Blancs",
+   "parent_code": "fr-champagne"
+  },
+  {
+   "code": "fr-champagne--cote-des-bar",
+   "libelle": "Côte des Bar",
+   "parent_code": "fr-champagne"
+  }
+ ]
+}
