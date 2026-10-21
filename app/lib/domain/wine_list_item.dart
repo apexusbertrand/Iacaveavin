@@ -48,6 +48,7 @@ class WineListItem {
     this.grapes = const [],
     this.favorite = false,
     this.searchText = '',
+    this.primaryLotId,
   });
 
   final String id;
@@ -107,6 +108,9 @@ class WineListItem {
 
   /// Texte de recherche déjà normalisé (LST-06).
   final String searchText;
+
+  /// Lot le mieux fourni, utilisé par le geste « ouvrir une bouteille ».
+  final String? primaryLotId;
 
   bool get isNonVintage => vintage == 'NM';
 

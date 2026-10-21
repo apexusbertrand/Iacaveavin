@@ -155,6 +155,17 @@ class ReferenceRepository {
     }
   }
 
+  /// Libellés de toutes les listes, par « liste:code ».
+  Stream<Map<String, String>> watchLabels() => _watch(() async {
+    final out = <String, String>{};
+    for (final v in await (_db.select(
+      _db.listValues,
+    )..where((v) => v.deletedAt.isNull())).get()) {
+      out.putIfAbsent('${v.liste}:${v.code}', () => v.libelle);
+    }
+    return out;
+  }, [_db.listValues]);
+
   // ------------------------------------------------------- Propriétaires
 
   Stream<List<OwnerView>> watchOwners() =>

@@ -62,7 +62,7 @@ void main() {
     );
   });
 
-  test('FIC-01 EAN-13 avec clé de contrôle, cépages à 100 %', () {
+  test('FIC-01 EAN 13 chiffres avec clé de contrôle, cépages à 100 %', () {
     expect(isValidEan13('3017620422003'), isTrue);
     expect(isValidEan13('3017620422004'), isFalse);
     expect(validateWine(draft(ean: '123'), currentYear: 2026), contains('ean'));

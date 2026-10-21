@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/app.dart';
 import 'package:iacaveavin/data/providers.dart';
+import 'package:iacaveavin/data/settings_store.dart';
 import 'package:iacaveavin/domain/demo_data_repository.dart';
 import 'package:iacaveavin/domain/wine_list_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'helpers.dart';
 
 class FakeDemoRepository implements DemoDataRepository {
   FakeDemoRepository({this.count = 0, this.failWith});
@@ -55,7 +59,7 @@ const sampleWines = [
     countryLabel: 'France',
     region: 'Bourgogne',
     appellation: 'Chablis',
-    bottles: 0,
+    bottles: 2,
     enrichmentStatus: 'a_valider',
   ),
   WineListItem(
@@ -78,6 +82,7 @@ Future<FakeDemoRepository> pumpApp(
   Stream<List<WineListItem>>? wines,
   FakeDemoRepository? demo,
   Brightness? brightness,
+  Map<String, Object> prefs = const {},
 }) async {
   // Téléphone de 360 x 780 dp.
   tester.view.physicalSize = const Size(1080, 2340);
@@ -88,10 +93,17 @@ Future<FakeDemoRepository> pumpApp(
   addTearDown(tester.view.reset);
   addTearDown(tester.platformDispatcher.clearAllTestValues);
   final repo = demo ?? FakeDemoRepository();
+  SharedPreferences.setMockInitialValues(prefs);
+  final sharedPrefs = await SharedPreferences.getInstance();
+  final db = memoryDatabase();
+  addTearDown(db.close);
   await tester.pumpWidget(
     ProviderScope(
       retry: (_, _) => null,
       overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
+        databaseProvider.overrideWithValue(db),
+        currentYearProvider.overrideWithValue(2026),
         bootstrapProvider.overrideWith((ref) async => 'cave-test'),
         wineListProvider.overrideWith(
           (ref) => wines ?? Stream.value(sampleWines),

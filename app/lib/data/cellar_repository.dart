@@ -129,9 +129,15 @@ class CellarRepository {
       String? mainLocation;
       var mainLocationBottles = -1;
       StockLot? lastPriced;
+      String? primaryLot;
+      var primaryLotBottles = 0;
       for (final l in lots) {
         final q = stocks[l.id] ?? 0;
         bottles += q;
+        if (q > primaryLotBottles) {
+          primaryLot = l.id;
+          primaryLotBottles = q;
+        }
         perOwner.update(l.proprietaireId, (v) => v + q, ifAbsent: () => q);
         if (q > 0 && l.emplacementId != null) {
           locIds.addAll(ctx.ancestors(l.emplacementId!));
@@ -194,6 +200,7 @@ class CellarRepository {
           gardeEnd: f.gardeFin,
           grapes: grapes.map((g) => g.code).toList(),
           favorite: f.favori ?? false,
+          primaryLotId: primaryLot,
           searchText: buildSearchText([
             p.nom,
             c.nom,

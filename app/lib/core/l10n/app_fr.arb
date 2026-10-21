@@ -1,8 +1,9 @@
 {
   "@@locale": "fr",
   "appTitle": "IA cave à vin",
-  "@appTitle": {"description": "Nom de l'application"},
-
+  "@appTitle": {
+    "description": "Nom de l'application"
+  },
   "navMyWines": "Mes vins",
   "navToDrink": "À boire",
   "navLocations": "Emplacements",
@@ -12,35 +13,77 @@
   "navBackup": "Sauvegarde",
   "navSettings": "Paramètres",
   "navAbout": "À propos",
-
   "placeholderTitle": "Bientôt disponible",
   "placeholderBody": "Cet écran arrive avec le lot {lot}.",
-  "@placeholderBody": {"placeholders": {"lot": {"type": "String"}}},
-
+  "@placeholderBody": {
+    "placeholders": {
+      "lot": {
+        "type": "String"
+      }
+    }
+  },
   "wineListTitle": "Mes vins",
   "wineListSummary": "{wines, plural, =0{Aucun vin} =1{1 vin} other{{wines} vins}} · {bottles, plural, =0{0 bouteille} =1{1 bouteille} other{{bottles} bouteilles}}",
-  "@wineListSummary": {"placeholders": {"wines": {"type": "int"}, "bottles": {"type": "int"}}},
+  "@wineListSummary": {
+    "placeholders": {
+      "wines": {
+        "type": "int"
+      },
+      "bottles": {
+        "type": "int"
+      }
+    }
+  },
   "wineListEmptyTitle": "Aucun vin.",
   "wineListEmptyBody": "Photographiez votre première étiquette, ou chargez le jeu de démonstration pour découvrir l'application.",
   "wineListLoading": "Chargement de la cave",
   "wineListErrorTitle": "La cave n'a pas pu être lue.",
   "wineListErrorDetail": "Détail : {detail}",
-  "@wineListErrorDetail": {"placeholders": {"detail": {"type": "String"}}},
+  "@wineListErrorDetail": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
   "retry": "Réessayer",
   "addBottle": "Ajouter une bouteille",
   "addBottleLater": "L'ajout d'une bouteille arrive au lot 1 (saisie) et au lot 2a (photo).",
   "nonVintage": "NM",
   "bottleCount": "{count, plural, =0{Épuisé} =1{1 bouteille} other{{count} bouteilles}}",
-  "@bottleCount": {"placeholders": {"count": {"type": "int"}}},
+  "@bottleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "toValidate": "À valider",
   "wineCardSemantics": "{name}, millésime {vintage}, {bottles}",
-  "@wineCardSemantics": {"placeholders": {"name": {"type": "String"}, "vintage": {"type": "String"}, "bottles": {"type": "String"}}},
+  "@wineCardSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "vintage": {
+        "type": "String"
+      },
+      "bottles": {
+        "type": "String"
+      }
+    }
+  },
   "backToTop": "Haut de la page",
-
   "settingsDemoSection": "Jeu de démonstration",
   "settingsDemoDescription": "200 fiches fictives (domaines inventés) pour essayer l'application et vérifier la fluidité. Vos propres vins ne sont jamais touchés.",
   "settingsDemoLoaded": "{count, plural, =1{Démonstration chargée : 1 fiche} other{Démonstration chargée : {count} fiches}}",
-  "@settingsDemoLoaded": {"placeholders": {"count": {"type": "int"}}},
+  "@settingsDemoLoaded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsDemoNotLoaded": "Démonstration non chargée",
   "settingsDemoLoad": "Charger la démonstration",
   "settingsDemoErase": "Effacer la démonstration",
@@ -50,14 +93,469 @@
   "settingsDemoErasedSnack": "Démonstration effacée.",
   "settingsMoreLater": "Les autres réglages (connexion au flux, devise, thème, listes) arrivent au lot 1.",
   "operationFailed": "L'opération a échoué : {detail}",
-  "@operationFailed": {"placeholders": {"detail": {"type": "String"}}},
+  "@operationFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
   "cancel": "Annuler",
   "erase": "Effacer",
-
   "aboutDescription": "Gestion de cave à vin aux couleurs d'Apexus-BMT. Les données restent sur ce téléphone.",
   "aboutVersion": "Version {version}",
-  "@aboutVersion": {"placeholders": {"version": {"type": "String"}}},
+  "@aboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "aboutHealthWarning": "L'abus d'alcool est dangereux pour la santé, à consommer avec modération.",
   "aboutReferenceData": "Référentiels : pays selon ISO 3166-1. Appellations, régions et cépages : listes provisoires, à remplacer par les données ouvertes de l'INAO.",
-  "aboutDemoNotice": "Les domaines du jeu de démonstration sont inventés."
+  "aboutDemoNotice": "Les domaines du jeu de démonstration sont inventés.",
+  "search": "Rechercher",
+  "searchHint": "Nom, domaine, appellation, cépage…",
+  "closeSearch": "Fermer la recherche",
+  "sort": "Trier",
+  "filters": "Filtrer",
+  "cardView": "Vue cartes",
+  "compactView": "Vue compacte",
+  "activeFilters": "{count, plural, =1{1 filtre actif} other{{count} filtres actifs}}",
+  "@activeFilters": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetFilters": "Réinitialiser",
+  "sortChip": "Tri {rank} : {criterion} ({direction})",
+  "@sortChip": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "criterion": {
+        "type": "String"
+      },
+      "direction": {
+        "type": "String"
+      }
+    }
+  },
+  "sortAscending": "A-Z",
+  "sortDescending": "Z-A",
+  "sortFirst": "Tri 1",
+  "sortSecond": "Tri 2",
+  "sortNone": "Aucun",
+  "sortDirection": "Ordre décroissant",
+  "apply": "Appliquer",
+  "sortVintage": "Millésime",
+  "sortColor": "Couleur",
+  "sortParkerScore": "Note Parker",
+  "sortBestScore": "Meilleure note",
+  "sortName": "Nom",
+  "sortProducer": "Domaine",
+  "sortCountry": "Pays",
+  "sortRegion": "Région",
+  "sortAppellation": "Appellation",
+  "sortOwner": "Propriétaire",
+  "sortLocation": "Emplacement",
+  "sortPurchasePrice": "Prix d'achat",
+  "sortMarketValue": "Valeur marché",
+  "sortQuantity": "Quantité",
+  "sortAddedAt": "Date d'ajout",
+  "sortGardeStart": "Début de garde",
+  "sortGardeEnd": "Fin de garde",
+  "sortGardePeak": "Année d'apogée",
+  "sortCellarStatus": "Statut de garde",
+  "groupUnknown": "Non renseigné",
+  "groupSummary": "{wines, plural, =1{1 vin} other{{wines} vins}} · {bottles, plural, =0{0 bouteille} =1{1 bouteille} other{{bottles} bouteilles}}",
+  "@groupSummary": {
+    "placeholders": {
+      "wines": {
+        "type": "int"
+      },
+      "bottles": {
+        "type": "int"
+      }
+    }
+  },
+  "stockInStock": "En stock",
+  "stockEmpty": "Épuisé",
+  "stockAll": "Tous",
+  "filterStock": "Stock",
+  "filterColors": "Couleur",
+  "filterTypes": "Type",
+  "filterCountries": "Pays",
+  "filterRegions": "Région",
+  "filterAppellations": "Appellation",
+  "filterVintages": "Millésimes",
+  "filterOwners": "Propriétaire",
+  "filterLocation": "Emplacement (avec ses sous-emplacements)",
+  "filterStatuses": "Statut de garde",
+  "filterIdealYear": "Année de consommation idéale",
+  "filterMinScore": "Note minimale (sur 100)",
+  "filterPrice": "Prix d'achat",
+  "filterGrapes": "Cépage",
+  "filterEnrichment": "Statut d'enrichissement",
+  "filterFavorites": "Favoris uniquement",
+  "rangeFrom": "De",
+  "rangeTo": "À",
+  "anyLocation": "Tous les emplacements",
+  "statusTooYoung": "Trop jeune",
+  "statusToDrink": "À boire",
+  "statusPeak": "Apogée",
+  "statusDrinkSoon": "À boire vite",
+  "statusPast": "Passé",
+  "statusUnknown": "Garde inconnue",
+  "enrichBrouillon": "Brouillon",
+  "enrichAEnrichir": "À enrichir",
+  "enrichEnCours": "Enrichissement en cours",
+  "enrichAValider": "À valider",
+  "enrichValide": "Validé",
+  "enrichErreur": "Erreur d'enrichissement",
+  "noResults": "Aucun vin ne correspond.",
+  "noResultsBody": "Modifiez la recherche ou les filtres.",
+  "selectionCount": "{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}",
+  "@selectionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cancelSelection": "Annuler la sélection",
+  "moveSelection": "Déplacer",
+  "changeOwnerSelection": "Changer de propriétaire",
+  "selectionDone": "{count, plural, =1{1 fiche mise à jour} other{{count} fiches mises à jour}}",
+  "@selectionDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "laterPdf": "PDF (lot 3)",
+  "laterExcel": "Export Excel (lot 3)",
+  "laterEnrich": "Ré-enrichir (lot 2a)",
+  "laterPrices": "Rafraîchir les prix (lot 2c)",
+  "openOneBottle": "Ouvrir 1 bouteille",
+  "bottleOpened": "1 bouteille ouverte : {name}",
+  "@bottleOpened": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "undo": "Annuler",
+  "noStockToOpen": "Plus aucune bouteille à ouvrir.",
+  "favorite": "Favori",
+  "externalBackupReminder": "Aucune sauvegarde exportée depuis 30 jours.",
+  "exportNow": "Exporter",
+  "mvtEntry": "Entrée",
+  "mvtOpening": "Ouverture",
+  "mvtOtherExit": "Sortie",
+  "mvtAdjustment": "Ajustement",
+  "mvtTransferOut": "Transfert sortant",
+  "mvtTransferIn": "Transfert entrant",
+  "parkerInitial": "P",
+  "scoreSemantics": "note {score}",
+  "@scoreSemantics": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "selected": "sélectionné",
+  "wineNotFound": "Cette fiche n'existe plus.",
+  "edit": "Modifier",
+  "delete": "Supprimer",
+  "deleteWineTitle": "Supprimer cette fiche ?",
+  "deleteWineBody": "La fiche et ses lots quittent la liste. L'historique des mouvements est conservé.",
+  "wineDeleted": "Fiche supprimée.",
+  "remaining": "{count, plural, =0{0 restante} =1{1 restante} other{{count} restantes}}",
+  "@remaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumed": "{count, plural, =0{0 consommée} =1{1 consommée} other{{count} consommées}}",
+  "@consumed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "formatCl": "{format} cl",
+  "@formatCl": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "addBottles": "{count, plural, =1{Ajouter 1 bouteille} other{Ajouter {count} bouteilles}}",
+  "@addBottles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "openBottles": "{count, plural, =1{Ouvrir 1 bouteille} other{Ouvrir {count} bouteilles}}",
+  "@openBottles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "decrease": "Moins",
+  "increase": "Plus",
+  "tabInfo": "Informations",
+  "tabOperations": "Opérations",
+  "tabTastings": "Dégustations",
+  "tabPrices": "Prix",
+  "sectionOrigin": "Origine",
+  "sectionCellar": "Cave",
+  "sectionWine": "Vin",
+  "sectionComments": "Commentaires",
+  "fieldCountry": "Pays",
+  "fieldRegion": "Région",
+  "fieldSubRegion": "Sous-région",
+  "fieldAppellation": "Appellation",
+  "fieldQualitySign": "Signe de qualité",
+  "fieldClassification": "Classement",
+  "fieldLieuDit": "Lieu-dit",
+  "fieldProducer": "Domaine",
+  "fieldCuvee": "Cuvée",
+  "fieldColor": "Couleur",
+  "fieldType": "Type",
+  "fieldCertification": "Certification",
+  "fieldVintage": "Millésime",
+  "fieldVintageHint": "Année sur 4 chiffres, ou NM",
+  "fieldGrapes": "Cépages",
+  "fieldAlcohol": "Degré (%)",
+  "fieldGarde": "Garde",
+  "fieldGardeStart": "À boire à partir de",
+  "fieldGardePeak": "Apogée",
+  "fieldGardeEnd": "À boire avant",
+  "fieldPairings": "Accords mets et vins",
+  "fieldScores": "Notes critiques",
+  "fieldEan": "Code-barres EAN",
+  "fieldLwin": "LWIN",
+  "fieldProducerSite": "Site officiel",
+  "fieldProducerComment": "Le domaine",
+  "fieldVintageComment": "Le millésime",
+  "fieldPersonalComment": "Mon commentaire",
+  "fieldLocation": "Emplacement",
+  "fieldPositions": "Positions",
+  "fieldPositionsHint": "Cases de la grille, ex. A3, B5",
+  "fieldOwners": "Propriétaires",
+  "fieldOwner": "Propriétaire",
+  "fieldQuantity": "Quantité",
+  "fieldFormat": "Format",
+  "fieldUnitPrice": "Prix d'achat unitaire TTC",
+  "fieldPurchaseDate": "Date d'achat",
+  "fieldSupplier": "Fournisseur",
+  "fieldFavorite": "Favori",
+  "gardeRange": "{start} → {end}",
+  "@gardeRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "gardeEstimated": "estimée",
+  "ownerShare": "{name} {count}",
+  "@ownerShare": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "emptyValue": "-",
+  "citedBy": "cité par {site}",
+  "@citedBy": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "noMovements": "Aucun mouvement.",
+  "movementLine": "{type} · {quantity}",
+  "@movementLine": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "movementDetail": "{date} · {lot}",
+  "@movementDetail": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "lot": {
+        "type": "String"
+      }
+    }
+  },
+  "noTastings": "Aucune dégustation notée.",
+  "addTasting": "Noter une dégustation",
+  "tastingTitle": "Dégustation",
+  "tastingScore": "Ma note (sur {scale})",
+  "@tastingScore": {
+    "placeholders": {
+      "scale": {
+        "type": "int"
+      }
+    }
+  },
+  "tastingDish": "Plat servi",
+  "tastingComment": "Commentaire",
+  "tastingPrompt": "Noter cette dégustation ?",
+  "later": "Plus tard",
+  "save": "Enregistrer",
+  "tastingSaved": "Dégustation enregistrée.",
+  "purchasePrices": "Prix d'achat par lot",
+  "marketPrices": "Prix marché",
+  "noPurchasePrice": "Prix d'achat inconnu",
+  "noMarketPrice": "Aucun prix marché relevé. Le relevé automatique arrive au lot 2c.",
+  "lastMarketPrice": "Dernier prix : {price} le {date}",
+  "@lastMarketPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "priceNotFound": "Non trouvé le {date}",
+  "@priceNotFound": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "refreshPrice": "Rafraîchir",
+  "refreshPriceLater": "Le relevé des prix marché arrive au lot 2c.",
+  "lots": "Lots",
+  "lotLine": "{owner} · {format} cl · {count}",
+  "@lotLine": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      },
+      "format": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noLocation": "Sans emplacement",
+  "chooseLot": "Choisir le lot",
+  "adjustStock": "Corriger le stock",
+  "adjustTitle": "Quantité réelle du lot",
+  "adjustReason": "Motif",
+  "adjustDone": "{delta, plural, =0{Aucun écart} other{Écart corrigé : {delta}}}",
+  "@adjustDone": {
+    "placeholders": {
+      "delta": {
+        "type": "int"
+      }
+    }
+  },
+  "noDifference": "Aucun écart, rien à corriger.",
+  "transfer": "Transférer",
+  "transferTitle": "Transférer des bouteilles",
+  "transferDone": "Transfert enregistré.",
+  "newLot": "Nouveau lot",
+  "restock": "Réapprovisionner",
+  "stockAdded": "{count, plural, =1{1 bouteille ajoutée} other{{count} bouteilles ajoutées}}",
+  "@stockAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stockOpened": "{count, plural, =1{1 bouteille ouverte} other{{count} bouteilles ouvertes}}",
+  "@stockOpened": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stockErrorNegative": "Stock insuffisant : le lot deviendrait négatif.",
+  "stockErrorReason": "Choisissez un motif.",
+  "stockErrorSameLot": "Choisissez un autre emplacement ou propriétaire.",
+  "stockErrorOther": "Opération refusée.",
+  "whereIsIt": "Où est-il ?",
+  "newWineTitle": "Nouveau vin",
+  "editWineTitle": "Modifier la fiche",
+  "firstLot": "Premier lot",
+  "errorRequired": "Champ obligatoire",
+  "errorVintage": "Millésime entre 1900 et l'année en cours, ou NM",
+  "errorAlcohol": "Degré entre 5 et 23",
+  "errorGardeOrder": "Il faut millésime ≤ début ≤ apogée ≤ fin",
+  "errorEan": "13 chiffres avec une clé de contrôle valide",
+  "errorLwin": "7 ou 11 chiffres",
+  "errorGrapesTotal": "Le total des pourcentages doit faire 100 %",
+  "errorPositions": "Positions invalides pour cette grille",
+  "errorNumber": "Nombre attendu",
+  "duplicateTitle": "Ce vin existe déjà",
+  "duplicateBody": "Une fiche porte déjà ce domaine, cette cuvée et ce millésime. L'ouvrir pour ajouter des bouteilles ?",
+  "openExisting": "Ouvrir la fiche",
+  "createAnyway": "Créer quand même",
+  "wineSaved": "Fiche enregistrée.",
+  "choose": "Choisir",
+  "none": "Aucun",
+  "searchList": "Rechercher dans la liste",
+  "addToList": "Ajouter « {value} »",
+  "@addToList": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "addGrape": "Ajouter un cépage",
+  "grapePercent": "%",
+  "removeGrape": "Retirer",
+  "addPairing": "Ajouter un accord",
+  "selectedCount": "{count} choisis",
+  "@selectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
