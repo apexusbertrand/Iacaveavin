@@ -144,6 +144,107 @@ class WineFilters {
       (enrichment.isNotEmpty ? 1 : 0) +
       (favoritesOnly ? 1 : 0);
 
+  WineFilters copyWith({
+    StockFilter? stock,
+    Set<String>? colors,
+    Set<String>? types,
+    Set<String>? countries,
+    Set<String>? regions,
+    Set<String>? appellations,
+    int? Function()? vintageMin,
+    int? Function()? vintageMax,
+    Set<String>? owners,
+    String? Function()? location,
+    Set<CellarStatus>? statuses,
+    int? Function()? idealYearMin,
+    int? Function()? idealYearMax,
+    double? Function()? minScore,
+    double? Function()? priceMin,
+    double? Function()? priceMax,
+    Set<String>? grapes,
+    Set<String>? enrichment,
+    bool? favoritesOnly,
+  }) => WineFilters(
+    stock: stock ?? this.stock,
+    colors: colors ?? this.colors,
+    types: types ?? this.types,
+    countries: countries ?? this.countries,
+    regions: regions ?? this.regions,
+    appellations: appellations ?? this.appellations,
+    vintageMin: vintageMin != null ? vintageMin() : this.vintageMin,
+    vintageMax: vintageMax != null ? vintageMax() : this.vintageMax,
+    owners: owners ?? this.owners,
+    location: location != null ? location() : this.location,
+    statuses: statuses ?? this.statuses,
+    idealYearMin: idealYearMin != null ? idealYearMin() : this.idealYearMin,
+    idealYearMax: idealYearMax != null ? idealYearMax() : this.idealYearMax,
+    minScore: minScore != null ? minScore() : this.minScore,
+    priceMin: priceMin != null ? priceMin() : this.priceMin,
+    priceMax: priceMax != null ? priceMax() : this.priceMax,
+    grapes: grapes ?? this.grapes,
+    enrichment: enrichment ?? this.enrichment,
+    favoritesOnly: favoritesOnly ?? this.favoritesOnly,
+  );
+
+  /// LST-09 : filtres mémorisés d'une session à l'autre.
+  Map<String, Object?> toJson() => {
+    'stock': stock.name,
+    'colors': colors.toList(),
+    'types': types.toList(),
+    'countries': countries.toList(),
+    'regions': regions.toList(),
+    'appellations': appellations.toList(),
+    'vintageMin': vintageMin,
+    'vintageMax': vintageMax,
+    'owners': owners.toList(),
+    'location': location,
+    'statuses': statuses.map((s) => s.code).toList(),
+    'idealYearMin': idealYearMin,
+    'idealYearMax': idealYearMax,
+    'minScore': minScore,
+    'priceMin': priceMin,
+    'priceMax': priceMax,
+    'grapes': grapes.toList(),
+    'enrichment': enrichment.toList(),
+    'favoritesOnly': favoritesOnly,
+  };
+
+  static WineFilters fromJson(Object? json) {
+    if (json is! Map) return const WineFilters();
+    Set<String> set(String k) => {
+      for (final v in (json[k] as List? ?? const [])) '$v',
+    };
+    int? i(String k) => (json[k] as num?)?.toInt();
+    double? d(String k) => (json[k] as num?)?.toDouble();
+    return WineFilters(
+      stock: StockFilter.values.firstWhere(
+        (s) => s.name == json['stock'],
+        orElse: () => StockFilter.inStock,
+      ),
+      colors: set('colors'),
+      types: set('types'),
+      countries: set('countries'),
+      regions: set('regions'),
+      appellations: set('appellations'),
+      vintageMin: i('vintageMin'),
+      vintageMax: i('vintageMax'),
+      owners: set('owners'),
+      location: json['location'] as String?,
+      statuses: {
+        for (final c in set('statuses'))
+          ...CellarStatus.values.where((s) => s.code == c),
+      },
+      idealYearMin: i('idealYearMin'),
+      idealYearMax: i('idealYearMax'),
+      minScore: d('minScore'),
+      priceMin: d('priceMin'),
+      priceMax: d('priceMax'),
+      grapes: set('grapes'),
+      enrichment: set('enrichment'),
+      favoritesOnly: json['favoritesOnly'] == true,
+    );
+  }
+
   bool matches(WineListItem w, int year) {
     switch (stock) {
       case StockFilter.inStock when w.bottles <= 0:
