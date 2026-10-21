@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -9,6 +10,7 @@ import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
 import '../../core/widgets/state_views.dart';
 import '../../data/backup_providers.dart';
+import '../../data/enrichment/enrichment_gateway.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
@@ -212,6 +214,32 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: Text(l.settingsAutoPricesHint),
             value: s.autoPriceRefresh,
             onChanged: null,
+          ),
+          header(l.settingsFakeFlux),
+          padded(
+            Text(l.settingsFakeFluxHint, style: theme.textTheme.bodyMedium),
+          ),
+          padded(
+            DropdownButtonFormField<String>(
+              key: const ValueKey('fake-scenario'),
+              initialValue: s.fakeScenario,
+              isExpanded: true,
+              decoration: InputDecoration(labelText: l.fakeScenario),
+              items: [
+                for (final sc in FakeScenario.values)
+                  DropdownMenuItem(
+                    value: sc.name,
+                    child: Text(l.scenarioLabel(sc.name)),
+                  ),
+              ],
+              onChanged: (v) => _set((x) => x.copyWith(fakeScenario: v)),
+            ),
+          ),
+          SwitchListTile(
+            key: const ValueKey('simulate-offline'),
+            title: Text(l.simulateOffline),
+            value: s.simulateOffline,
+            onChanged: (v) => _set((x) => x.copyWith(simulateOffline: v)),
           ),
           ListTile(
             title: Text(l.settingsConnection),

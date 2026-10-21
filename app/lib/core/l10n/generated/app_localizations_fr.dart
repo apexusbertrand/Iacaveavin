@@ -1501,4 +1501,437 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get addMenuTitle => 'Ajouter un vin';
+
+  @override
+  String get addByPhoto => 'Photographier l\'étiquette';
+
+  @override
+  String get addByPhotoHint =>
+      '1 à 4 photos, la fiche se remplit presque seule.';
+
+  @override
+  String get addByBarcode => 'Avec le code-barres';
+
+  @override
+  String get addByBarcodeHint =>
+      'Saisir l\'EAN puis photographier : il aide l\'identification.';
+
+  @override
+  String get addManual => 'Saisie manuelle';
+
+  @override
+  String get addManualHint => 'Remplir la fiche soi-même.';
+
+  @override
+  String get addExcel => 'Import Excel';
+
+  @override
+  String get addExcelHint => 'Disponible au lot 3.';
+
+  @override
+  String get unidentifiedWine => 'Vin à identifier';
+
+  @override
+  String get captureTitle => 'Photos de la bouteille';
+
+  @override
+  String get captureHint =>
+      'Cadrez l\'étiquette entière, bien droite, sans reflet. Ajoutez la contre-étiquette si elle porte le degré ou les cépages.';
+
+  @override
+  String get photoTypeEtiquette => 'Étiquette';
+
+  @override
+  String get photoTypeContreEtiquette => 'Contre-étiquette';
+
+  @override
+  String get photoTypeCapsule => 'Capsule';
+
+  @override
+  String get photoTypeCollerette => 'Collerette';
+
+  @override
+  String get photoTypeAutre => 'Autre';
+
+  @override
+  String get takePhoto => 'Appareil photo';
+
+  @override
+  String get fromGallery => 'Galerie';
+
+  @override
+  String get removePhoto => 'Retirer la photo';
+
+  @override
+  String get retakePhoto => 'Reprendre';
+
+  @override
+  String get keepPhoto => 'Garder';
+
+  @override
+  String get photoBlurry =>
+      'Photo floue : reprenez-la pour une meilleure lecture.';
+
+  @override
+  String get photoGlare =>
+      'Reflet sur l\'étiquette : changez d\'angle ou évitez le flash.';
+
+  @override
+  String get photoProcessing => 'Traitement de la photo…';
+
+  @override
+  String get photoUnreadable => 'Image illisible.';
+
+  @override
+  String get eanField => 'Code-barres EAN (facultatif)';
+
+  @override
+  String get vintageHintField => 'Millésime si vous le connaissez (facultatif)';
+
+  @override
+  String get continueToEnrichment => 'Lancer l\'identification';
+
+  @override
+  String get needOnePhoto => 'Ajoutez au moins une photo de l\'étiquette.';
+
+  @override
+  String get consentTitle => 'Envoi des photos';
+
+  @override
+  String get consentBody =>
+      'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement d\'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.';
+
+  @override
+  String get consentAccept => 'J\'accepte';
+
+  @override
+  String get consentRefuse => 'Refuser';
+
+  @override
+  String get consentRefused =>
+      'Photos gardées sur le téléphone, fiche à compléter à la main.';
+
+  @override
+  String get enrichTitle => 'Identification';
+
+  @override
+  String get enrichLotTitle => 'Pendant ce temps, le lot';
+
+  @override
+  String get saveLot => 'Enregistrer le lot';
+
+  @override
+  String get lotSaved => 'Lot enregistré.';
+
+  @override
+  String get stepWaiting => 'En attente d\'envoi';
+
+  @override
+  String get stepLecture => 'Lecture de l\'étiquette';
+
+  @override
+  String get stepNormalisation => 'Mise en forme';
+
+  @override
+  String get stepIdentification => 'Identification du vin';
+
+  @override
+  String get stepEnrichissement => 'Recherche des informations';
+
+  @override
+  String get stepNotes => 'Recherche des notes';
+
+  @override
+  String get stepPrix => 'Recherche des prix';
+
+  @override
+  String get stepControles => 'Contrôles';
+
+  @override
+  String get stepTermine => 'Terminé';
+
+  @override
+  String get enrichOffline =>
+      'Hors ligne : la fiche reste « à enrichir », l\'envoi partira au retour du réseau.';
+
+  @override
+  String get enrichReady => 'Propositions prêtes';
+
+  @override
+  String get reviewProposals => 'Vérifier les propositions';
+
+  @override
+  String enrichFailed(String reason) {
+    return 'L\'identification a échoué : $reason';
+  }
+
+  @override
+  String get enrichRetry => 'Relancer';
+
+  @override
+  String enrichFinishedSnack(String name) {
+    return 'Identification terminée : $name';
+  }
+
+  @override
+  String quotaLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Plus que $count identifications ce mois-ci',
+      one: 'Plus qu\'1 identification ce mois-ci',
+      zero: 'Quota du mois épuisé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pendingJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count identifications en attente',
+      one: '1 identification en attente',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get errorTimeout => 'pas de réponse en 3 minutes';
+
+  @override
+  String get errorInvalid => 'réponse non conforme du flux';
+
+  @override
+  String get validationTitle => 'Propositions';
+
+  @override
+  String get acceptAll => 'Tout accepter et enregistrer';
+
+  @override
+  String get saveValidation => 'Enregistrer';
+
+  @override
+  String get accept => 'Accepter';
+
+  @override
+  String get modify => 'Corriger';
+
+  @override
+  String get reject => 'Rejeter';
+
+  @override
+  String get accepted => 'Accepté';
+
+  @override
+  String get rejected => 'Rejeté';
+
+  @override
+  String modified(String value) {
+    return 'Corrigé : $value';
+  }
+
+  @override
+  String currentValue(String value) {
+    return 'Actuel : $value';
+  }
+
+  @override
+  String proposedValue(String value) {
+    return 'Proposé : $value';
+  }
+
+  @override
+  String confidence(int percent) {
+    return 'confiance $percent %';
+  }
+
+  @override
+  String get lowConfidence => 'Confiance faible : vérifiez';
+
+  @override
+  String notFound(String reason) {
+    return 'Non trouvé : $reason';
+  }
+
+  @override
+  String get lockedField => 'Saisi à la main : conservé';
+
+  @override
+  String get disagreement => 'Désaccord entre l\'étiquette et une source';
+
+  @override
+  String get duplicateFound => 'Ce vin est déjà dans la cave.';
+
+  @override
+  String get duplicateMerge => 'Ajouter ces bouteilles à la fiche existante';
+
+  @override
+  String get scoresSection => 'Notes critiques';
+
+  @override
+  String get pricesSection => 'Prix marché';
+
+  @override
+  String get alertsSection => 'À savoir';
+
+  @override
+  String get includePrices => 'Enregistrer les prix relevés';
+
+  @override
+  String get keepScore => 'Garder cette note';
+
+  @override
+  String priceFound(String price, int offers, String date) {
+    return '$price · $offers offres · $date';
+  }
+
+  @override
+  String get validationSaved => 'Fiche validée.';
+
+  @override
+  String get srcEtiquette => 'Étiquette';
+
+  @override
+  String get srcSiteOfficiel => 'Site officiel';
+
+  @override
+  String get srcOrganismeOfficiel => 'Organisme officiel';
+
+  @override
+  String get srcInterprofession => 'Interprofession';
+
+  @override
+  String get srcCritique => 'Critique';
+
+  @override
+  String get srcMarchand => 'Marchand';
+
+  @override
+  String get srcTiers => 'Autre site';
+
+  @override
+  String get srcEstimation => 'Estimation';
+
+  @override
+  String get srcManuel => 'Saisie manuelle';
+
+  @override
+  String get srcImport => 'Import';
+
+  @override
+  String get provenanceTitle => 'Provenance';
+
+  @override
+  String provenanceSource(String source) {
+    return 'Source : $source';
+  }
+
+  @override
+  String provenanceDate(String date) {
+    return 'Collecté le $date';
+  }
+
+  @override
+  String provenanceUrl(String url) {
+    return 'Lien : $url';
+  }
+
+  @override
+  String get copyLink => 'Copier le lien';
+
+  @override
+  String get linkCopied => 'Lien copié.';
+
+  @override
+  String get reportError => 'Signaler une erreur';
+
+  @override
+  String get reported => 'Signalé comme faux, à corriger';
+
+  @override
+  String get reportedSnack =>
+      'Erreur signalée : elle sera jointe au prochain enrichissement.';
+
+  @override
+  String get provenanceBadge => 'Voir la provenance';
+
+  @override
+  String aiWritten(String site) {
+    return 'Rédigé par IA à partir de $site';
+  }
+
+  @override
+  String get toValidateBanner => 'Propositions à valider';
+
+  @override
+  String get enrichingBanner => 'Identification en cours';
+
+  @override
+  String get toEnrichBanner => 'En attente d\'identification';
+
+  @override
+  String get errorBanner => 'Identification en échec';
+
+  @override
+  String get duplicateVintage => 'Dupliquer pour un autre millésime';
+
+  @override
+  String get duplicateVintageTitle => 'Nouveau millésime';
+
+  @override
+  String get duplicateVintageDone =>
+      'Fiche créée : seuls les champs du millésime sont à enrichir.';
+
+  @override
+  String get reEnrich => 'Ré-enrichir';
+
+  @override
+  String get reEnrichStarted =>
+      'Ré-enrichissement lancé sur les champs non verrouillés.';
+
+  @override
+  String get reEnrichNoPhoto =>
+      'Aucune photo sur cette fiche : ré-enrichissement impossible.';
+
+  @override
+  String get unlockField => 'Déverrouiller';
+
+  @override
+  String get unlocked =>
+      'Champ déverrouillé : il pourra être proposé à nouveau.';
+
+  @override
+  String get settingsFakeFlux => 'Flux de démonstration (lot 2a)';
+
+  @override
+  String get settingsFakeFluxHint =>
+      'Le vrai flux n8n arrive au lot 2c. En attendant, l\'app rejoue les exemples du contrat.';
+
+  @override
+  String get fakeScenario => 'Scénario rejoué';
+
+  @override
+  String get scenarioDone => 'Identification complète';
+
+  @override
+  String get scenarioPartial => 'Résultat partiel avec désaccord';
+
+  @override
+  String get scenarioCacheHit => 'Vin déjà connu (cache)';
+
+  @override
+  String get scenarioQuota => 'Quota épuisé';
+
+  @override
+  String get scenarioInvalid => 'Réponse non conforme';
+
+  @override
+  String get scenarioNever => 'Pas de réponse (délai)';
+
+  @override
+  String get simulateOffline => 'Simuler le mode avion';
 }

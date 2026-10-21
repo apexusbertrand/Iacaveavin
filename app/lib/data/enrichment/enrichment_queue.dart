@@ -258,9 +258,13 @@ class EnrichmentQueue {
   Future<bool> _apply(Job job, JobResponse r) async {
     switch (r.status) {
       case JobStatus.pending || JobStatus.running:
+        // La dernière réponse garde l'étape en cours (AJO-05) et le quota.
         await _update(
           job,
-          JobsCompanion(statut: Value(JobStatus.running.code)),
+          JobsCompanion(
+            statut: Value(JobStatus.running.code),
+            reponse: Value(jsonEncode(r.raw)),
+          ),
         );
         await _setWineStatus(job.ficheId, WineStatus.running);
         return false;
@@ -334,7 +338,15 @@ class EnrichmentQueue {
 
   /// Dernière réponse validée d'une fiche, si elle attend la validation.
   Future<JobResponse?> resultFor(String wineId) async {
-    final job = await latestJobFor(wineId);
+    final r = lastResponse(await latestJobFor(wineId));
+    return r != null &&
+            (r.status == JobStatus.done || r.status == JobStatus.partial)
+        ? r
+        : null;
+  }
+
+  /// Dernière réponse enregistrée d'un job (en cours ou finale).
+  static JobResponse? lastResponse(Job? job) {
     if (job?.reponse == null) return null;
     return JobResponse.fromJson(
       jsonDecode(job!.reponse!) as Map<String, dynamic>,
