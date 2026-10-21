@@ -279,6 +279,8 @@ entites:
       - {cle: statut, libelle: "Statut", type: enum, enum: statut_job, oblig: true}
       - {cle: tentatives, libelle: "Tentatives", type: entier}
       - {cle: erreur, libelle: "Erreur", type: texte}
+      - {cle: envoye_le, libelle: "Premier envoi", type: texte, regle: "horodatage ISO 8601 UTC du premier envoi ; le job passe en erreur 3 min après sans réponse finale (AJO-09)"}
+      - {cle: reponse, libelle: "Dernière réponse du flux", type: json, regle: "réponse validée contre specs/contrat-n8n/reponse-job.schema.json, conservée jusqu'à la validation par l'utilisateur (AJO-06)"}
 
   vue_statistique:
     role: "favori de l'explorateur"
