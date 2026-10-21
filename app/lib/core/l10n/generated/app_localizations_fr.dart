@@ -1490,4 +1490,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get restoreFromAuto => 'Restaurer';
+
+  @override
+  String bottlesWithoutPrice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bouteilles sans prix',
+      one: '1 bouteille sans prix',
+    );
+    return '$_temp0';
+  }
 }

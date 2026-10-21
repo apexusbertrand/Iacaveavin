@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 import 'package:yaml/yaml.dart';
@@ -17,6 +18,7 @@ import '../../core/widgets/state_views.dart';
 import '../../data/backup_providers.dart';
 import '../../data/providers.dart';
 import '../../data/reference_repository.dart';
+import '../../data/settings_store.dart';
 import '../locations/locations_screen.dart' show referenceErrorText;
 
 Future<void> _guard(
@@ -74,6 +76,10 @@ class OwnersScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final owners = ref.watch(ownersProvider);
+    final currency = NumberFormat.simpleCurrency(
+      locale: Localizations.localeOf(context).toLanguageTag(),
+      name: ref.watch(settingsProvider.select((s) => s.currency)),
+    );
     return Scaffold(
       appBar: AppBar(title: Text(l.settingsOwners)),
       floatingActionButton: FloatingActionButton(
@@ -118,6 +124,10 @@ class OwnersScreen extends ConsumerWidget {
                       subtitle: Text(
                         [
                           l.ownerBottles(o.bottles),
+                          if (o.purchaseValue > 0)
+                            currency.format(o.purchaseValue),
+                          if (o.bottlesWithoutPrice > 0)
+                            l.bottlesWithoutPrice(o.bottlesWithoutPrice),
                           if (o.isDefault) l.defaultBadge,
                         ].join(' · '),
                       ),

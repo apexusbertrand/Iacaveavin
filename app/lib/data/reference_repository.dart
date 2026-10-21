@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
+import '../domain/value.dart';
 import 'db/app_database.dart';
 
 /// Listes du dictionnaire modifiables dans le Paramétrage (PAR-01), dans
@@ -50,6 +51,8 @@ class OwnerView {
     this.initials,
     this.color,
     this.isDefault = false,
+    this.purchaseValue = 0,
+    this.bottlesWithoutPrice = 0,
   });
 
   final String id;
@@ -58,6 +61,10 @@ class OwnerView {
   final String? color;
   final bool isDefault;
   final int bottles;
+
+  /// PRO-03 : valeur d'achat du stock (VAL-R1), bouteilles sans prix à part.
+  final double purchaseValue;
+  final int bottlesWithoutPrice;
 }
 
 class LocationView {
@@ -177,13 +184,16 @@ class ReferenceRepository {
 
   Future<List<OwnerView>> owners() async {
     final stocks = await _stockByLot();
-    final perOwner = <String, int>{};
+    final perOwner = <String, List<LotValueInput>>{};
     for (final l in await _liveLots()) {
-      perOwner.update(
-        l.proprietaireId,
-        (v) => v + (stocks[l.id] ?? 0),
-        ifAbsent: () => stocks[l.id] ?? 0,
-      );
+      perOwner
+          .putIfAbsent(l.proprietaireId, () => [])
+          .add(
+            LotValueInput(
+              bottles: stocks[l.id] ?? 0,
+              unitPrice: l.prixAchatUnitaire,
+            ),
+          );
     }
     final rows =
         await (_db.select(_db.owners)
@@ -198,7 +208,13 @@ class ReferenceRepository {
           initials: o.initiales,
           color: o.couleur,
           isDefault: o.parDefaut ?? false,
-          bottles: perOwner[o.id] ?? 0,
+          bottles: (perOwner[o.id] ?? const <LotValueInput>[]).fold(
+            0,
+            (sum, lot) => sum + (lot.bottles > 0 ? lot.bottles : 0),
+          ),
+          purchaseValue: cellarValue(perOwner[o.id] ?? const []).purchase,
+          bottlesWithoutPrice: cellarValue(perOwner[o.id] ?? const [])
+              .bottlesWithoutPrice,
         ),
     ];
   }

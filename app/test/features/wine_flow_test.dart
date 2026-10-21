@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/cellar_repository.dart';
@@ -225,5 +226,103 @@ void main() {
       items!.firstWhere((w) => w.producer == 'Domaine Corvizac').bottles,
       2,
     );
+  });
+
+  testWidgets('FIC-02 l\'appellation renseigne sous-région, région et pays', (
+    tester,
+  ) async {
+    await pumpRealApp(tester, location: '/fiche/nouvelle', seed: seedTwo);
+    await tester.tap(find.text('Appellation'));
+    await settle(tester);
+    await tester.enterText(
+      find.byKey(const ValueKey('picker-search')),
+      'volnay',
+    );
+    await settle(tester);
+    await tester.tap(find.text('Volnay'));
+    await settle(tester);
+    expect(find.text('Volnay'), findsOneWidget);
+    expect(find.text('Côte de Beaune'), findsOneWidget);
+    expect(find.text('Bourgogne'), findsOneWidget);
+    expect(find.text('France'), findsOneWidget);
+  });
+
+  testWidgets('FIC-02 une valeur absente s\'ajoute depuis le formulaire', (
+    tester,
+  ) async {
+    final db = await pumpRealApp(
+      tester,
+      location: '/fiche/nouvelle',
+      seed: seedTwo,
+    );
+    await tester.tap(find.text('Appellation'));
+    await settle(tester);
+    await tester.enterText(
+      find.byKey(const ValueKey('picker-search')),
+      'Coteaux de Test',
+    );
+    await settle(tester);
+    await tester.tap(find.byKey(const ValueKey('picker-add')));
+    await settle(tester);
+    expect(find.text('Coteaux de Test'), findsOneWidget);
+    final values = await tester.runAsync(
+      () => ReferenceRepository(db).values('appellation'),
+    );
+    expect(values!.map((v) => v.label), contains('Coteaux de Test'));
+  });
+
+  testWidgets('FIC-05 onglet Prix : achat par lot, dernier prix marché daté', (
+    tester,
+  ) async {
+    await pumpRealApp(
+      tester,
+      seed: (db, cellar) async {
+        await seedTwo(db, cellar);
+        final wine = (await CellarRepository(
+          db,
+        ).wineItems()).firstWhere((w) => w.producer == 'Château Bralmac');
+        final now = DateTime.utc(2026, 10, 1);
+        for (final (date, prix) in [
+          ('2026-03-01', 52.0),
+          ('2026-09-15', 55.0),
+        ]) {
+          await db
+              .into(db.marketPrices)
+              .insert(
+                MarketPricesCompanion.insert(
+                  id: 'p$date',
+                  caveId: cellar,
+                  createdAt: now,
+                  updatedAt: now,
+                  ficheId: wine.id,
+                  formatCl: 75,
+                  dateReleve: date,
+                  devise: 'EUR',
+                  trouve: true,
+                ).copyWith(prix: Value(prix)),
+              );
+        }
+      },
+    );
+    await tester.tap(find.text('Château Bralmac'));
+    await settle(tester);
+    await tester.ensureVisible(find.text('Prix'));
+    await tester.tap(find.text('Prix'));
+    await settle(tester);
+    expect(find.textContaining('Dernier prix : 55,00'), findsOneWidget);
+    expect(find.textContaining('2026-09-15'), findsOneWidget);
+    expect(find.textContaining('52,00'), findsOneWidget);
+    expect(find.text('Rafraîchir'), findsOneWidget);
+  });
+
+  testWidgets('PRO-03 filtre et valeur par propriétaire', (tester) async {
+    await pumpRealApp(
+      tester,
+      location: '/parametres/proprietaires',
+      seed: seedTwo,
+    );
+    // Bertrand : 3 × 40 € + 2 bouteilles sans prix (VAL-R1).
+    expect(find.textContaining('5 bouteilles · 120,00'), findsOneWidget);
+    expect(find.textContaining('2 bouteilles sans prix'), findsOneWidget);
   });
 }

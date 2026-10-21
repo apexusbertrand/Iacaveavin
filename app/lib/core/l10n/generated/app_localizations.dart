@@ -2547,6 +2547,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Restaurer'**
   String get restoreFromAuto;
+
+  /// No description provided for @bottlesWithoutPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 bouteille sans prix} other{{count} bouteilles sans prix}}'**
+  String bottlesWithoutPrice(int count);
 }
 
 class _AppLocalizationsDelegate

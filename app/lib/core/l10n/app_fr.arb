@@ -830,5 +830,13 @@
   "backupErrorArchive": "Ce fichier n'est pas une archive IA cave à vin.",
   "backupErrorNewer": "Archive créée par une version plus récente de l'application : mettez l'application à jour.",
   "backupErrorCorrupted": "Archive endommagée : la cave n'a pas été modifiée.",
-  "restoreFromAuto": "Restaurer"
+  "restoreFromAuto": "Restaurer",
+  "bottlesWithoutPrice": "{count, plural, =1{1 bouteille sans prix} other{{count} bouteilles sans prix}}",
+  "@bottlesWithoutPrice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
