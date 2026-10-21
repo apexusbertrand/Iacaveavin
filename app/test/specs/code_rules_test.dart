@@ -30,17 +30,26 @@ void main() {
   });
 
   test('règle 7 : aucun texte affiché en dur dans les écrans', () {
-    // Littéral passé à Text(...) ou à un paramètre de libellé.
-    final interdit = RegExp(
-      r'''(Text\(\s*|tooltip:\s*|label:\s*|title:\s*|semanticsLabel:\s*)['"][^'"]*\p{L}''',
-      unicode: true,
+    // Littéral passé à Text(...) ou à un paramètre de libellé. Les
+    // interpolations seules (« '$count' ») ne sont pas du texte.
+    final appel = RegExp(
+      r'''(Text\(\s*|tooltip:\s*|label:\s*|title:\s*|semanticsLabel:\s*)(['"])(.*?)\2''',
     );
+    final lettre = RegExp(r'\p{L}', unicode: true);
+    final interpolation = RegExp(r'\$\{[^}]*\}|\$\w+');
+    bool fautif(String line) => appel
+        .allMatches(line)
+        .any((m) => lettre.hasMatch(m[3]!.replaceAll(interpolation, '')));
+    // Le garde-fou attrape bien un texte en dur, pas une interpolation.
+    expect(fautif("child: Text('Bonjour'),"), isTrue);
+    expect(fautif("tooltip: 'Menu',"), isTrue);
+    expect(fautif(r"label: Text('$count'),"), isFalse);
     final fautes = [
       for (final f in _sources().where(
         (f) => f.path.contains('/features/') || f.path.contains('/core/'),
       ))
         for (final (i, line) in f.readAsLinesSync().indexed)
-          if (interdit.hasMatch(line)) '${f.path}:${i + 1}: ${line.trim()}',
+          if (fautif(line)) '${f.path}:${i + 1}: ${line.trim()}',
     ];
     expect(fautes, isEmpty);
   });

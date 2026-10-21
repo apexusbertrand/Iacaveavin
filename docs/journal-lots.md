@@ -24,10 +24,24 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 1 Cave locale
 
-- Statut : non démarré
+- Statut : réalisé, en attente de recette (branche `lot-1-cave-locale`, démarrée avant la recette du lot 0 à la demande de Bertrand, décision T25)
 - Exigences : LST-01 à LST-10, FIC-01 à FIC-05, STK-01 à STK-07, EMP-01, EMP-02, EMP-04, EMP-05, PRO-01 à PRO-04, PRX-01, PAR-01 à PAR-06, SAV-01 à SAV-05, NAV-02
+  - [x] LST-01 à LST-10 : tri à deux niveaux, couleur dans l'ordre du dictionnaire, groupes repliables, Parker sans note en fin, filtres combinables, recherche sans accents, vue compacte, sélection multiple (déplacer, changer de propriétaire ; PDF, Excel, enrichissement et prix signalés pour leurs lots), mémorisation, compteur
+  - [x] FIC-01 à FIC-05 : fiche en blocs, formulaire complet avec contrôles, listes hiérarchiques avec recherche et ajout, onglets Opérations, Dégustations, Prix (courbe reportée, T37)
+  - [x] STK-01 à STK-07 : ajouter ou ouvrir avec choix du lot, dégustation proposée, correction avec motif, inventaire, transfert partiel, réapprovisionnement, annulation 5 s
+  - [x] EMP-01, EMP-02, EMP-04, EMP-05 : arbre sur 4 niveaux, grille et positions, « Où est-il ? », remplissage et alerte
+  - [x] PRO-01 à PRO-04 : propriétaire par défaut, répartition sur la fiche, filtre et valeur (statistique au lot 3, T38), sans authentification
+  - [x] PRX-01 : prix d'achat unitaire TTC par lot
+  - [x] PAR-01 à PAR-06 : une page par liste modifiable, ajout, renommage, ordre, désactivation, fusion, suppression protégée, CSV, référentiels, réglages, règles de garde
+  - [x] SAV-01 à SAV-05 : archive avec ou sans photos, sauvegarde hebdomadaire, restauration migrée tout ou rien, sauvegarde Android désactivée
+  - [x] NAV-02 : lien iacaveavin://fiche/<id> (Android et iOS)
 - Points d'étape :
-- Mesures :
+  - 2026-10-21 fait : tout le périmètre du lot 1, 227 tests au vert. En cours : rien. Bloquant : recette du lot 0 puis du lot 1 sur téléphone. Prochaine étape : recette (50 vins réels, restauration sur un autre téléphone, 30 mouvements), puis lot 2a.
+- Mesures (2026-10-21, environnement de développement) :
+  - matrice : 43/43 exigences du lot 1 couvertes par au moins un test
+  - restauration d'une archive de 201 fiches sur une base vide : fiches, lots, mouvements et photos identiques (test SAV-04)
+  - stock après mouvements variés (ajout, ouverture, ajustement, transfert, annulation) égal à la somme des mouvements (tests STK)
+  - critère de sortie (50 vins réels saisis, archive restaurée sur un autre téléphone, 30 mouvements) : à mesurer par Bertrand
 - Recette Bertrand :
 
 ## Lot 2a Ajout photo côté app

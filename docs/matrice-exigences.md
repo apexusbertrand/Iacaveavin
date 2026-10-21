@@ -5,22 +5,22 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | Exigence | Source | Libellé | Tests |
 | --- | --- | --- | --- |
 | NAV-01 | docs/05 | Tiroir latéral comme sur les captures : Mes vins (accueil), À boire, E | 5 |
-| NAV-02 | docs/05 | Lien profond `iacaveavin://fiche/<id>` qui ouvre une fiche (utilisé pa | - |
-| LST-01 | docs/05 | Tri à deux niveaux (tri 1 puis tri 2), chacun croissant ou décroissant | - |
-| LST-02 | docs/05 | Tri par couleur dans l'ordre de la liste « couleur » du dictionnaire ( | - |
-| LST-03 | docs/05 | Groupes repliables quand le tri 1 est groupable (millésime, couleur, p | - |
-| LST-04 | docs/05 | Tri par note Parker : les vins sans note Parker passent en fin de list | - |
-| LST-05 | docs/05 | Filtres combinables : stock (en stock, épuisé, tous), couleur, type, p | - |
-| LST-06 | docs/05 | Recherche instantanée insensible aux accents et à la casse sur nom, do | - |
-| LST-07 | docs/05 | Vue cartes et vue compacte (une ligne : pastille couleur, nom, millési | - |
-| LST-08 | docs/05 | Sélection multiple : PDF, export Excel, déplacer, changer de propriéta | - |
-| LST-09 | docs/05 | Tri, filtres et vue mémorisés d'une session à l'autre. | - |
-| LST-10 | docs/05 | Compteur en sous-titre : vins affichés et bouteilles correspondantes. | - |
-| FIC-01 | docs/05 | Lecture comme décrit dans docs/03-design-ergonomie.md, mode édition su | - |
-| FIC-02 | docs/05 | Listes hiérarchiques : choisir l'appellation renseigne la sous-région, | - |
-| FIC-03 | docs/05 | Onglet Opérations : mouvements du plus récent au plus ancien (type, qu | - |
-| FIC-04 | docs/05 | Onglet Dégustations : notes personnelles, proposées à chaque ouverture | - |
-| FIC-05 | docs/05 | Onglet Prix : prix d'achat par lot, courbe des prix marché, dernier pr | - |
+| NAV-02 | docs/05 | Lien profond `iacaveavin://fiche/<id>` qui ouvre une fiche (utilisé pa | 1 |
+| LST-01 | docs/05 | Tri à deux niveaux (tri 1 puis tri 2), chacun croissant ou décroissant | 3 |
+| LST-02 | docs/05 | Tri par couleur dans l'ordre de la liste « couleur » du dictionnaire ( | 1 |
+| LST-03 | docs/05 | Groupes repliables quand le tri 1 est groupable (millésime, couleur, p | 1 |
+| LST-04 | docs/05 | Tri par note Parker : les vins sans note Parker passent en fin de list | 1 |
+| LST-05 | docs/05 | Filtres combinables : stock (en stock, épuisé, tous), couleur, type, p | 6 |
+| LST-06 | docs/05 | Recherche instantanée insensible aux accents et à la casse sur nom, do | 2 |
+| LST-07 | docs/05 | Vue cartes et vue compacte (une ligne : pastille couleur, nom, millési | 1 |
+| LST-08 | docs/05 | Sélection multiple : PDF, export Excel, déplacer, changer de propriéta | 1 |
+| LST-09 | docs/05 | Tri, filtres et vue mémorisés d'une session à l'autre. | 3 |
+| LST-10 | docs/05 | Compteur en sous-titre : vins affichés et bouteilles correspondantes. | 1 |
+| FIC-01 | docs/05 | Lecture comme décrit dans docs/03-design-ergonomie.md, mode édition su | 10 |
+| FIC-02 | docs/05 | Listes hiérarchiques : choisir l'appellation renseigne la sous-région, | 2 |
+| FIC-03 | docs/05 | Onglet Opérations : mouvements du plus récent au plus ancien (type, qu | 2 |
+| FIC-04 | docs/05 | Onglet Dégustations : notes personnelles, proposées à chaque ouverture | 1 |
+| FIC-05 | docs/05 | Onglet Prix : prix d'achat par lot, courbe des prix marché, dernier pr | 1 |
 | FIC-06 | docs/05 | Pastille de provenance par valeur enrichie : source, URL ouvrable, dat | - |
 | FIC-07 | docs/05 | Les commentaires rédigés par l'agent portent la mention « rédigé par I | - |
 | FIC-08 | docs/05 | Dupliquer pour un autre millésime : nouvelle fiche sur la même cuvée,  | - |
@@ -37,23 +37,23 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | AJO-10 | docs/05 | Le code-barres EAN accompagne les photos comme indice, jamais comme id | - |
 | AJO-11 | docs/05 | Quota restant affiché (champ `quota` de la réponse) quand il passe sou | - |
 | AJO-12 | docs/05 | Toute réponse du flux est validée contre specs/contrat-n8n/reponse-job | - |
-| STK-01 | docs/05 | Ajouter ou ouvrir une ou plusieurs bouteilles depuis la fiche. Avec pl | - |
-| STK-02 | docs/05 | Ouvrir crée un mouvement `ouverture` et propose une note de dégustatio | - |
-| STK-03 | docs/05 | Correction de stock : l'utilisateur saisit la quantité réelle du lot,  | - |
-| STK-04 | docs/05 | Mode inventaire : parcours emplacement par emplacement, chaque lot con | - |
-| STK-05 | docs/05 | Transfert d'emplacement ou de propriétaire, quantité partielle possibl | - |
-| STK-06 | docs/05 | Une fiche à 0 bouteille reste en base, filtrable « épuisé », réapprovi | - |
-| STK-07 | docs/05 | Annulation pendant 5 secondes après toute action de stock. | - |
-| EMP-01 | docs/05 | Arbre paramétrable sur 4 niveaux : cave, meuble, casier, clayette. | - |
-| EMP-02 | docs/05 | Un casier peut porter une grille (lignes A à Z, colonnes 1 à 50). Les  | - |
+| STK-01 | docs/05 | Ajouter ou ouvrir une ou plusieurs bouteilles depuis la fiche. Avec pl | 2 |
+| STK-02 | docs/05 | Ouvrir crée un mouvement `ouverture` et propose une note de dégustatio | 2 |
+| STK-03 | docs/05 | Correction de stock : l'utilisateur saisit la quantité réelle du lot,  | 2 |
+| STK-04 | docs/05 | Mode inventaire : parcours emplacement par emplacement, chaque lot con | 1 |
+| STK-05 | docs/05 | Transfert d'emplacement ou de propriétaire, quantité partielle possibl | 1 |
+| STK-06 | docs/05 | Une fiche à 0 bouteille reste en base, filtrable « épuisé », réapprovi | 1 |
+| STK-07 | docs/05 | Annulation pendant 5 secondes après toute action de stock. | 2 |
+| EMP-01 | docs/05 | Arbre paramétrable sur 4 niveaux : cave, meuble, casier, clayette. | 4 |
+| EMP-02 | docs/05 | Un casier peut porter une grille (lignes A à Z, colonnes 1 à 50). Les  | 2 |
 | EMP-03 | docs/05 | [lot 4] Vue casier : cases occupées teintées de la couleur du vin, cas | - |
-| EMP-04 | docs/05 | « Où est-il ? » : le chevron de l'emplacement sur la fiche ouvre l'emp | - |
-| EMP-05 | docs/05 | Taux de remplissage par emplacement, alerte non bloquante au-delà de l | - |
-| PRO-01 | docs/05 | Liste paramétrable avec un propriétaire par défaut. Chaque lot apparti | - |
-| PRO-02 | docs/05 | La fiche affiche la répartition (« Bertrand 4, Julie 2 »). | - |
-| PRO-03 | docs/05 | Filtre, dimension statistique et valeur par propriétaire. | - |
-| PRO-04 | docs/05 | Notion de gestion, pas de droit d'accès (pas d'authentification en pha | - |
-| PRX-01 | docs/05 | Prix d'achat saisi à la main par lot, unitaire TTC, dans la devise de  | - |
+| EMP-04 | docs/05 | « Où est-il ? » : le chevron de l'emplacement sur la fiche ouvre l'emp | 2 |
+| EMP-05 | docs/05 | Taux de remplissage par emplacement, alerte non bloquante au-delà de l | 2 |
+| PRO-01 | docs/05 | Liste paramétrable avec un propriétaire par défaut. Chaque lot apparti | 3 |
+| PRO-02 | docs/05 | La fiche affiche la répartition (« Bertrand 4, Julie 2 »). | 3 |
+| PRO-03 | docs/05 | Filtre, dimension statistique et valeur par propriétaire. | 1 |
+| PRO-04 | docs/05 | Notion de gestion, pas de droit d'accès (pas d'authentification en pha | 1 |
+| PRX-01 | docs/05 | Prix d'achat saisi à la main par lot, unitaire TTC, dans la devise de  | 2 |
 | PRX-02 | docs/05 | Prix marché relevé automatiquement à la création (si `inclure_prix`),  | - |
 | PRX-03 | docs/05 | Chaque relevé ajoute une ligne d'historique, rien n'est écrasé. Pas pl | - |
 | PRX-04 | docs/05 | Un prix introuvable est enregistré « non trouvé » avec la date. Jamais | - |
@@ -80,17 +80,17 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | XLS-08 | docs/05 | Sauvegarde automatique avant import, import transactionnel tout ou rie | - |
 | XLS-09 | docs/05 | Option d'enrichissement des fiches créées, nombre d'appels et quota af | - |
 | XLS-10 | docs/05 | Photos : colonne nom de fichier et import d'un zip de photos. | - |
-| PAR-01 | docs/05 | Un écran par liste du dictionnaire (section `listes`) marquée `modifia | - |
-| PAR-02 | docs/05 | Ajouter, renommer, réordonner, désactiver. Fusionner deux doublons (le | - |
-| PAR-03 | docs/05 | Listes préchargées depuis app/assets/referentiels/ (docs/04-modele-don | - |
-| PAR-04 | docs/05 | Import et export de chaque liste en CSV. | - |
-| PAR-05 | docs/05 | Réglages : adresse du flux n8n et clé secrète (saisie ou QR code, stoc | - |
-| PAR-06 | docs/05 | Écran « Règles de garde » en lecture : règles appliquées, avec l'indic | - |
-| SAV-01 | docs/05 | Export d'une archive zip (base, photos, manifeste avec version de sché | - |
-| SAV-02 | docs/05 | Variante « sans photos », quelques Mo, proposée par défaut pour les sa | - |
-| SAV-03 | docs/05 | Sauvegarde locale automatique hebdomadaire, 3 dernières conservées. Ra | - |
-| SAV-04 | docs/05 | Restauration complète après confirmation, avec migration du schéma si  | - |
-| SAV-05 | docs/05 | Ne pas compter sur la sauvegarde automatique d'Android : son quota par | - |
+| PAR-01 | docs/05 | Un écran par liste du dictionnaire (section `listes`) marquée `modifia | 2 |
+| PAR-02 | docs/05 | Ajouter, renommer, réordonner, désactiver. Fusionner deux doublons (le | 4 |
+| PAR-03 | docs/05 | Listes préchargées depuis app/assets/referentiels/ (docs/04-modele-don | 1 |
+| PAR-04 | docs/05 | Import et export de chaque liste en CSV. | 1 |
+| PAR-05 | docs/05 | Réglages : adresse du flux n8n et clé secrète (saisie ou QR code, stoc | 2 |
+| PAR-06 | docs/05 | Écran « Règles de garde » en lecture : règles appliquées, avec l'indic | 1 |
+| SAV-01 | docs/05 | Export d'une archive zip (base, photos, manifeste avec version de sché | 2 |
+| SAV-02 | docs/05 | Variante « sans photos », quelques Mo, proposée par défaut pour les sa | 1 |
+| SAV-03 | docs/05 | Sauvegarde locale automatique hebdomadaire, 3 dernières conservées. Ra | 2 |
+| SAV-04 | docs/05 | Restauration complète après confirmation, avec migration du schéma si  | 3 |
+| SAV-05 | docs/05 | Ne pas compter sur la sauvegarde automatique d'Android : son quota par | 1 |
 | CMP-01 | docs/05 | À boire : vins dans leur fenêtre, triés par fin de fenêtre, `a_boire_v | - |
 | CMP-02 | docs/05 | Alerte mensuelle : vins qui entrent en apogée ou en fin de fenêtre. | - |
 | CMP-03 | docs/05 | Liste d'achats : vins à racheter (proposé quand une fiche tombe à 0) o | - |
@@ -115,21 +115,21 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | NFR-15 | docs/07 | Industrialisation : `flutter analyze` sans avertissement, formatage `dart f | 2 |
 | NFR-16 | docs/07 | Contenu IA : tout texte rédigé par l'agent est marqué comme tel (FIC | - |
 | NFR-17 | docs/07 | Modération : aucune incitation à boire dans l'app ; mention « L'abus | 1 |
-| STK-R1 | docs/04 | Quantité d'un lot = somme de ses mouvements. Jamais de champ quantité  | 1 |
-| STK-R2 | docs/04 | Une quantité de lot ne devient jamais négative : le mouvement qui la r | - |
+| STK-R1 | docs/04 | Quantité d'un lot = somme de ses mouvements. Jamais de champ quantité  | 3 |
+| STK-R2 | docs/04 | Une quantité de lot ne devient jamais négative : le mouvement qui la r | 2 |
 | STK-R3 | docs/04 | Stock d'une fiche = somme de ses lots. Bouteilles consommées = somme d | 1 |
 | STK-R4 | docs/04 | Un mouvement est immuable. Une erreur se corrige par un mouvement inve | - |
-| STK-R5 | docs/04 | Transfert d'une partie d'un lot : création d'un lot cible et de deux m | - |
-| NOT-R1 | docs/04 | Note Parker affichée = la plus récente des notes de critique « Robert  | - |
-| NOT-R2 | docs/04 | Meilleure note = maximum des notes ramenées sur 100 (une note sur 20 e | - |
+| STK-R5 | docs/04 | Transfert d'une partie d'un lot : création d'un lot cible et de deux m | 1 |
+| NOT-R1 | docs/04 | Note Parker affichée = la plus récente des notes de critique « Robert  | 1 |
+| NOT-R2 | docs/04 | Meilleure note = maximum des notes ramenées sur 100 (une note sur 20 e | 1 |
 | NOT-R3 | docs/04 | Une note « citée » (reprise par un domaine ou un marchand) garde le no | - |
 | NOT-R4 | docs/04 | Tri par note Parker : les vins sans note Parker passent en fin de list | - |
-| VAL-R1 | docs/04 | Valeur d'achat = somme des quantités × prix d'achat unitaire des lots. | - |
-| VAL-R2 | docs/04 | Valeur marché = somme des quantités × dernier prix marché trouvé pour  | - |
-| VAL-R3 | docs/04 | Plus-value latente = valeur marché − valeur d'achat, calculée uniqueme | - |
+| VAL-R1 | docs/04 | Valeur d'achat = somme des quantités × prix d'achat unitaire des lots. | 1 |
+| VAL-R2 | docs/04 | Valeur marché = somme des quantités × dernier prix marché trouvé pour  | 1 |
+| VAL-R3 | docs/04 | Plus-value latente = valeur marché − valeur d'achat, calculée uniqueme | 1 |
 | PRV-R1 | docs/04 | Toute valeur proposée par l'agent crée une ligne de provenance au stat | - |
 | PRV-R2 | docs/04 | L'utilisateur accepte (`valide`), corrige (`manuel`) ou rejette (`reje | - |
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | - |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | - |
 
-11 exigences couvertes sur 127.
+61 exigences couvertes sur 127.

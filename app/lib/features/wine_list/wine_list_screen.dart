@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -9,10 +11,18 @@ import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
 import '../../core/widgets/state_views.dart';
 import '../../data/providers.dart';
+import '../../data/settings_store.dart';
+import '../../domain/app_settings.dart';
+import '../../domain/stock_rules.dart';
 import '../../domain/wine_list_item.dart';
+import '../../domain/wine_query.dart';
+import '../backup/backup_screen.dart';
+import 'list_filters_sheet.dart';
+import 'list_state.dart';
+import 'selection_actions.dart';
 import 'wine_card.dart';
 
-/// « Mes vins », en lecture au lot 0. Tri, filtres et groupes : lot 1.
+/// « Mes vins » (LST-01 à LST-10).
 class WineListScreen extends ConsumerStatefulWidget {
   const WineListScreen({super.key});
 
@@ -22,17 +32,37 @@ class WineListScreen extends ConsumerStatefulWidget {
 
 class _WineListScreenState extends ConsumerState<WineListScreen> {
   final _scroll = ScrollController();
+  final _searchController = TextEditingController();
   bool _showBackToTop = false;
+  bool _searching = false;
+  final _collapsed = <String>{};
+  final _selected = <String>{};
 
   @override
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      final settings = ref.read(settingsProvider.notifier);
+      if (ref.read(settingsProvider).firstLaunch == null) {
+        await settings.update((s) => s.copyWith(firstLaunch: DateTime.now()));
+      }
+      if (mounted) await runAutoBackupIfDue(ref);
+    });
+  }
+
+  /// SAV-03 : rappel si aucun export externe depuis 30 jours.
+  bool _reminderDue(AppSettings s) {
+    final since = s.lastExternalBackup ?? s.firstLaunch;
+    return since != null &&
+        DateTime.now().difference(since) >= const Duration(days: 30);
   }
 
   @override
   void dispose() {
     _scroll.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -44,80 +74,369 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
     if (show != _showBackToTop) setState(() => _showBackToTop = show);
   }
 
+  void _updateQuery(WineQuery Function(WineQuery) change) => ref
+      .read(settingsProvider.notifier)
+      .update((s) => s.copyWith(listQuery: change(s.listQuery)));
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final wines = ref.watch(wineListProvider);
+    final wines = ref.watch(visibleWinesProvider);
+    final settings = ref.watch(settingsProvider);
+    final query = settings.listQuery;
     final summary = wines.whenData(CellarSummary.of).value;
+    final selecting = _selected.isNotEmpty;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return PopScope(
+      canPop: !selecting && !_searching,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        setState(() {
+          _selected.clear();
+          _closeSearch();
+        });
+      },
+      child: Scaffold(
+        appBar: selecting
+            ? _selectionBar(l)
+            : _searching
+            ? _searchBar(l)
+            : _mainBar(l, summary, settings),
+        drawer: selecting
+            ? null
+            : const AppDrawer(current: AppDestination.myWines),
+        floatingActionButton: selecting ? null : _fabs(l),
+        body: Column(
           children: [
-            Text(l.wineListTitle),
-            if (summary != null)
-              Text(
-                l.wineListSummary(summary.wines, summary.bottles),
-                style: Theme.of(context).textTheme.bodyMedium
-                    ?.copyWith(color: context.palette.onAppBar),
+            if (_reminderDue(settings) && !selecting)
+              MaterialBanner(
+                content: Text(l.externalBackupReminder),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.go('/sauvegarde'),
+                    child: Text(l.exportNow),
+                  ),
+                ],
               ),
-          ],
-        ),
-      ),
-      drawer: const AppDrawer(current: AppDestination.myWines),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (_showBackToTop) ...[
-            FloatingActionButton.small(
-              heroTag: 'back-to-top',
-              tooltip: l.backToTop,
-              onPressed: () => _scroll.animateTo(
-                0,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
+            _CriteriaBar(
+              query: query,
+              onSort: () => _openSort(query),
+              onReset: () => _updateQuery(
+                (q) => q.copyWith(filters: settings.defaultQuery.filters),
               ),
-              child: const Icon(Icons.vertical_align_top),
+              onFilters: _openFilters,
+              onChange: _updateQuery,
             ),
-            const SizedBox(height: SpacingTokens.m),
-          ],
-          FloatingActionButton(
-            heroTag: 'add',
-            tooltip: l.addBottle,
-            onPressed: () =>
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(l.addBottleLater))),
-            child: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: wines.when(
-        loading: () => _LoadingList(label: l.wineListLoading),
-        error: (error, _) => MessageStateView(
-          icon: Icons.error_outline,
-          isError: true,
-          title: l.wineListErrorTitle,
-          body: l.wineListErrorDetail('$error'),
-          action: FilledButton(
-            onPressed: () => ref.invalidate(bootstrapProvider),
-            child: Text(l.retry),
-          ),
-        ),
-        data: (items) => items.isEmpty
-            ? MessageStateView(
-                icon: Icons.wine_bar_outlined,
-                title: l.wineListEmptyTitle,
-                body: l.wineListEmptyBody,
-                action: FilledButton(
-                  onPressed: _loadDemo,
-                  child: Text(l.settingsDemoLoad),
+            Expanded(
+              child: wines.when(
+                loading: () => _LoadingList(label: l.wineListLoading),
+                error: (error, _) => MessageStateView(
+                  icon: Icons.error_outline,
+                  isError: true,
+                  title: l.wineListErrorTitle,
+                  body: l.wineListErrorDetail('$error'),
+                  action: FilledButton(
+                    onPressed: () => ref.invalidate(bootstrapProvider),
+                    child: Text(l.retry),
+                  ),
                 ),
-              )
-            : _WineList(items: items, controller: _scroll),
+                data: (items) => _body(l, items, query, settings),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _body(
+    AppLocalizations l,
+    List<WineListItem> items,
+    WineQuery query,
+    AppSettings settings,
+  ) {
+    if (items.isEmpty) {
+      final hasAny = (ref.read(wineListProvider).value ?? const []).isNotEmpty;
+      if (hasAny) {
+        return MessageStateView(
+          icon: Icons.search_off,
+          title: l.noResults,
+          body: l.noResultsBody,
+        );
+      }
+      return MessageStateView(
+        icon: Icons.wine_bar_outlined,
+        title: l.wineListEmptyTitle,
+        body: l.wineListEmptyBody,
+        action: FilledButton(
+          onPressed: _loadDemo,
+          child: Text(l.settingsDemoLoad),
+        ),
+      );
+    }
+    final labels = ref.watch(labelsProvider).value ?? const {};
+    final entries = <_Entry>[];
+    if (query.sort1.criterion.groupable) {
+      for (final g in groupWines(
+        items,
+        query.sort1.criterion,
+        colorLabel: (c) => labels['couleur:$c'] ?? c,
+      )) {
+        entries.add(_Entry.group(g));
+        if (!_collapsed.contains(g.key)) {
+          entries.addAll(g.items.map(_Entry.wine));
+        }
+      }
+    } else {
+      entries.addAll(items.map(_Entry.wine));
+    }
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final currency = NumberFormat.simpleCurrency(
+      locale: locale,
+      name: settings.currency,
+    );
+    return ListView.builder(
+      key: const ValueKey('wine-list'),
+      controller: _scroll,
+      padding: const EdgeInsets.only(
+        top: SpacingTokens.xs,
+        bottom: SpacingTokens.xxl * 3,
+      ),
+      itemCount: entries.length,
+      itemBuilder: (context, i) {
+        final e = entries[i];
+        if (e.group != null) {
+          final g = e.group!;
+          return _GroupHeader(
+            group: g,
+            collapsed: _collapsed.contains(g.key),
+            onTap: () => setState(
+              () => _collapsed.contains(g.key)
+                  ? _collapsed.remove(g.key)
+                  : _collapsed.add(g.key),
+            ),
+          );
+        }
+        final w = e.wine!;
+        final selected = _selected.contains(w.id);
+        void toggle() => setState(
+          () => selected ? _selected.remove(w.id) : _selected.add(w.id),
+        );
+        final tile = settings.compactView
+            ? CompactWineRow(
+                item: w,
+                selected: selected,
+                onTap: _selected.isEmpty ? () => _openWine(w) : toggle,
+                onLongPress: toggle,
+              )
+            : WineCard(
+                item: w,
+                currency: currency,
+                showMarketPrice: settings.cardPrice == CardPrice.market,
+                selected: selected,
+                onTap: _selected.isEmpty ? () => _openWine(w) : toggle,
+                onLongPress: toggle,
+              );
+        if (_selected.isNotEmpty || w.primaryLotId == null) return tile;
+        // Glisser vers la gauche ouvre une bouteille, annulable 5 s.
+        return Dismissible(
+          key: ValueKey('swipe-${w.id}'),
+          direction: DismissDirection.endToStart,
+          background: _SwipeBackground(label: l.openOneBottle),
+          confirmDismiss: (_) async {
+            await _openBottle(w);
+            return false;
+          },
+          child: tile,
+        );
+      },
+    );
+  }
+
+  void _openWine(WineListItem w) => context.push('/fiche/${w.id}');
+
+  Future<void> _openBottle(WineListItem w) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final stock = ref.read(stockServiceProvider);
+    try {
+      final action = await stock.open(w.primaryLotId!, 1);
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 5),
+            content: Text(l.bottleOpened(w.displayName)),
+            action: SnackBarAction(
+              label: l.undo,
+              onPressed: () => stock.undo(action),
+            ),
+          ),
+        );
+    } on StockRuleException {
+      messenger.showSnackBar(SnackBar(content: Text(l.noStockToOpen)));
+    }
+  }
+
+  PreferredSizeWidget _mainBar(
+    AppLocalizations l,
+    CellarSummary? summary,
+    AppSettings settings,
+  ) {
+    final count = settings.listQuery.filters.activeCount;
+    return AppBar(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l.wineListTitle),
+          if (summary != null)
+            Text(
+              l.wineListSummary(summary.wines, summary.bottles),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: context.palette.onAppBar),
+            ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          tooltip: l.search,
+          icon: const Icon(Icons.search),
+          onPressed: () => setState(() => _searching = true),
+        ),
+        IconButton(
+          tooltip: l.filters,
+          icon: Badge(
+            isLabelVisible: count > 0,
+            label: Text('$count'),
+            child: const Icon(Icons.filter_list),
+          ),
+          onPressed: _openFilters,
+        ),
+        IconButton(
+          tooltip: settings.compactView ? l.cardView : l.compactView,
+          icon: Icon(
+            settings.compactView ? Icons.view_agenda_outlined : Icons.view_list,
+          ),
+          onPressed: () => ref
+              .read(settingsProvider.notifier)
+              .update((s) => s.copyWith(compactView: !s.compactView)),
+        ),
+      ],
+    );
+  }
+
+  void _closeSearch() {
+    _searching = false;
+    _searchController.clear();
+    ref.read(searchProvider.notifier).set('');
+  }
+
+  PreferredSizeWidget _searchBar(AppLocalizations l) => AppBar(
+    leading: IconButton(
+      tooltip: l.closeSearch,
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => setState(_closeSearch),
+    ),
+    title: TextField(
+      key: const ValueKey('search-field'),
+      controller: _searchController,
+      autofocus: true,
+      style: TextStyle(color: context.palette.onAppBar),
+      cursorColor: context.palette.onAppBar,
+      decoration: InputDecoration(
+        hintText: l.searchHint,
+        hintStyle: TextStyle(color: context.palette.onAppBar),
+        border: InputBorder.none,
+      ),
+      onChanged: ref.read(searchProvider.notifier).set,
+    ),
+  );
+
+  PreferredSizeWidget _selectionBar(AppLocalizations l) => AppBar(
+    leading: IconButton(
+      tooltip: l.cancelSelection,
+      icon: const Icon(Icons.close),
+      onPressed: () => setState(_selected.clear),
+    ),
+    title: Text(l.selectionCount(_selected.length)),
+    actions: [
+      IconButton(
+        tooltip: l.moveSelection,
+        icon: const Icon(Icons.drive_file_move_outline),
+        onPressed: () => _runSelection(SelectionAction.move),
+      ),
+      IconButton(
+        tooltip: l.changeOwnerSelection,
+        icon: const Icon(Icons.person_outline),
+        onPressed: () => _runSelection(SelectionAction.owner),
+      ),
+      PopupMenuButton<void>(
+        itemBuilder: (_) => [
+          for (final label in [
+            l.laterPdf,
+            l.laterExcel,
+            l.laterEnrich,
+            l.laterPrices,
+          ])
+            PopupMenuItem<void>(enabled: false, child: Text(label)),
+        ],
+      ),
+    ],
+  );
+
+  Future<void> _runSelection(SelectionAction action) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final done = await runSelectionAction(context, ref, action, _selected);
+    if (done == null || !mounted) return;
+    setState(_selected.clear);
+    messenger.showSnackBar(SnackBar(content: Text(l.selectionDone(done))));
+  }
+
+  Widget _fabs(AppLocalizations l) => Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      if (_showBackToTop) ...[
+        FloatingActionButton.small(
+          heroTag: 'back-to-top',
+          tooltip: l.backToTop,
+          onPressed: () => _scroll.animateTo(
+            0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          ),
+          child: const Icon(Icons.vertical_align_top),
+        ),
+        const SizedBox(height: SpacingTokens.m),
+      ],
+      FloatingActionButton(
+        heroTag: 'add',
+        tooltip: l.addBottle,
+        onPressed: () => context.push('/fiche/nouvelle'),
+        child: const Icon(Icons.add),
+      ),
+    ],
+  );
+
+  Future<void> _openSort(WineQuery query) async {
+    final result = await showModalBottomSheet<WineQuery>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => SortSheet(query: query),
+    );
+    if (result != null) _updateQuery((_) => result);
+  }
+
+  Future<void> _openFilters() async {
+    final current = ref.read(settingsProvider).listQuery;
+    final result = await showModalBottomSheet<WineFilters>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) => FiltersSheet(initial: current.filters),
+    );
+    if (result != null) _updateQuery((q) => q.copyWith(filters: result));
   }
 
   Future<void> _loadDemo() async {
@@ -132,26 +451,203 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
   }
 }
 
-class _WineList extends StatelessWidget {
-  const _WineList({required this.items, required this.controller});
+class _Entry {
+  _Entry.group(WineGroup this.group) : wine = null;
+  _Entry.wine(WineListItem this.wine) : group = null;
 
-  final List<WineListItem> items;
-  final ScrollController controller;
+  final WineGroup? group;
+  final WineListItem? wine;
+}
+
+/// Chips des critères actifs (capture 01) : tri, filtres supprimables,
+/// pastille « N filtres actifs » avec réinitialisation.
+class _CriteriaBar extends ConsumerWidget {
+  const _CriteriaBar({
+    required this.query,
+    required this.onSort,
+    required this.onReset,
+    required this.onFilters,
+    required this.onChange,
+  });
+
+  final WineQuery query;
+  final VoidCallback onSort;
+  final VoidCallback onReset;
+  final VoidCallback onFilters;
+  final void Function(WineQuery Function(WineQuery)) onChange;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
+    final f = query.filters;
+    final labels = ref.watch(labelsProvider).value ?? const {};
+    final chips = <Widget>[
+      ActionChip(
+        key: const ValueKey('sort-chip'),
+        avatar: const Icon(Icons.sort),
+        label: Text(l.sortChipLabel(1, query.sort1)),
+        onPressed: onSort,
+      ),
+      if (query.sort2 != null)
+        ActionChip(
+          label: Text(l.sortChipLabel(2, query.sort2!)),
+          onPressed: onSort,
+        ),
+      if (f.stock != StockFilter.inStock)
+        _removable(
+          l.stockLabel(f.stock),
+          () => f.copyWith(stock: StockFilter.inStock),
+        ),
+      for (final c in f.colors)
+        _removable(
+          labels['couleur:$c'] ?? c,
+          () => f.copyWith(colors: {...f.colors}..remove(c)),
+        ),
+      for (final s in f.statuses)
+        _removable(
+          l.statusLabel(s),
+          () => f.copyWith(statuses: {...f.statuses}..remove(s)),
+        ),
+      if (f.favoritesOnly)
+        _removable(l.favorite, () => f.copyWith(favoritesOnly: false)),
+    ];
+    final others =
+        f.activeCount -
+        (f.stock != StockFilter.inStock ? 1 : 0) -
+        (f.colors.isNotEmpty ? 1 : 0) -
+        (f.statuses.isNotEmpty ? 1 : 0) -
+        (f.favoritesOnly ? 1 : 0);
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (f.activeCount > 0)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.l),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        alignment: Alignment.centerLeft,
+                      ),
+                      onPressed: onFilters,
+                      child: Text(l.activeFilters(f.activeCount)),
+                    ),
+                  ),
+                  TextButton(
+                    key: const ValueKey('reset-filters'),
+                    onPressed: onReset,
+                    child: Text(l.resetFilters),
+                  ),
+                ],
+              ),
+            ),
+          SizedBox(
+            height: minTouchTarget + SpacingTokens.s,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.m),
+              children: [
+                for (final c in chips)
+                  Padding(
+                    padding: const EdgeInsets.only(right: SpacingTokens.s),
+                    child: Center(child: c),
+                  ),
+                if (others > 0)
+                  Center(
+                    child: ActionChip(
+                      label: Text(l.activeFilters(others)),
+                      onPressed: onFilters,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _removable(String label, WineFilters Function() without) => InputChip(
+    label: Text(label),
+    onDeleted: () => onChange((q) => q.copyWith(filters: without())),
+  );
+}
+
+class _GroupHeader extends StatelessWidget {
+  const _GroupHeader({
+    required this.group,
+    required this.collapsed,
+    required this.onTap,
+  });
+
+  final WineGroup group;
+  final bool collapsed;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    final currency = NumberFormat.simpleCurrency(locale: locale, name: 'EUR');
-    return ListView.builder(
-      key: const ValueKey('wine-list'),
-      controller: controller,
-      padding: const EdgeInsets.only(
-        top: SpacingTokens.s,
-        bottom: SpacingTokens.xxl * 3,
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          SpacingTokens.l,
+          SpacingTokens.m,
+          SpacingTokens.l,
+          SpacingTokens.xs,
+        ),
+        child: Row(
+          children: [
+            Icon(collapsed ? Icons.chevron_right : Icons.expand_more),
+            const SizedBox(width: SpacingTokens.s),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    group.label ?? l.groupUnknown,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: context.palette.primaryText,
+                    ),
+                  ),
+                  Text(
+                    l.groupSummary(group.items.length, group.bottles),
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      itemCount: items.length,
-      itemBuilder: (context, index) =>
-          WineCard(item: items[index], currency: currency),
+    );
+  }
+}
+
+class _SwipeBackground extends StatelessWidget {
+  const _SwipeBackground({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      color: scheme.primary,
+      alignment: Alignment.centerRight,
+      padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xl),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label, style: TextStyle(color: scheme.onPrimary)),
+          const SizedBox(width: SpacingTokens.s),
+          Icon(Icons.wine_bar, color: scheme.onPrimary),
+        ],
+      ),
     );
   }
 }

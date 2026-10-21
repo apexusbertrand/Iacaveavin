@@ -36,7 +36,7 @@ Le code généré (drift, l10n, jetons) est commité : un `git clone` puis `flut
 | `lib/data/demo/` | jeu de démonstration CMP-07 (générateur déterministe, dépôt drift) |
 | `lib/data/referentiels/` | chargement des listes au premier lancement |
 | `lib/domain/` | entités et interfaces sans Flutter ni réseau |
-| `lib/features/` | un dossier par écran : `wine_list`, `settings`, `about`, `placeholder` |
+| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `placeholder` |
 | `assets/referentiels/` | pays, régions, sous-régions, appellations, cépages, accords, listes du dictionnaire |
 | `assets/regles/` | copie de specs/regles-garde.yaml (un test vérifie qu'elle est identique) |
 | `drift_schemas/` | instantanés du schéma, un par version, pour les tests de migration |
@@ -60,7 +60,12 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | uuid 4.6 | identifiants UUID v4 générés sur le téléphone | oui | oui |
 | flutter_localizations (SDK) | traductions Material et ARB | oui | oui |
 | drift_dev, build_runner (dev) | génération du code drift et des tests de migration | - | - |
-| yaml (dev) | les tests lisent specs/dictionnaire-donnees.yaml et le workflow CI | - | - |
+| shared_preferences 2.5 | réglages et état de la liste mémorisés (PAR-05, LST-09), aucun secret | oui | oui |
+| archive 4.5 | archive zip de sauvegarde, compressée dans un isolate (SAV-01) | oui | oui |
+| share_plus 13.3 | feuille de partage du système pour exporter l'archive et les CSV (SAV-01, PAR-04) | oui | oui |
+| file_picker 13.1 | choisir une archive à restaurer ou un CSV à importer (SAV-04, PAR-04) | oui | oui |
+| path_provider 2.1, path 1.9 | répertoire privé de l'app pour photos et sauvegardes locales (NFR-04, SAV-03) | oui | oui |
+| yaml 3.1 | règles de garde embarquées lues par l'écran PAR-06 ; les tests lisent aussi le dictionnaire | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
 
 Police : système (Roboto sur Android) au lot 0, repli prévu par specs/design-tokens.json. Inter (OFL) sera embarquée quand les fichiers de police seront ajoutés au dépôt.
