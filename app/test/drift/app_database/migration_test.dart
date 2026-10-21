@@ -24,7 +24,7 @@ Future<void> _insertRaw(
     final names = cols.keys.map((c) => '"$c"').join(', ');
     final marks = List.filled(cols.length, '?').join(', ');
     // Même codage que l'application : dates en texte ISO 8601.
-    const types = SqlTypes(true);
+    final types = db.typeMapping;
     await db.customStatement('INSERT INTO $table ($names) VALUES ($marks)', [
       for (final v in cols.values)
         types.mapToSqlVariable((v as Variable).value),
