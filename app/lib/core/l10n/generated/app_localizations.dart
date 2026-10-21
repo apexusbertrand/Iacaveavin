@@ -3163,7 +3163,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportedSnack.
   ///
   /// In fr, this message translates to:
-  /// **'Erreur signalée : elle sera jointe au prochain enrichissement.'**
+  /// **'Erreur signalée : la valeur reste barrée jusqu\'à correction.'**
   String get reportedSnack;
 
   /// No description provided for @provenanceBadge.

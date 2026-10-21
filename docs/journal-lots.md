@@ -46,10 +46,26 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 2a Ajout photo côté app
 
-- Statut : non démarré
+- Statut : réalisé, en attente de recette (branche `lot-2a-ajout-photo`, issue de `lot-1-cave-locale`, décision T42)
 - Exigences : AJO-01 à AJO-12, FIC-06 à FIC-09, PRV-R1 à PRV-R4
+  - [x] AJO-01, AJO-02 : jusqu'à 4 photos (appareil ou galerie), compression 1 500 px qualité 80 dans un isolate, alerte flou ou reflet non bloquante (seuils T49)
+  - [x] AJO-03, AJO-04 : fiche enregistrée tout de suite « à enrichir » (T43), lot saisi pendant l'attente (T45)
+  - [x] AJO-05 : étapes du flux en clair, suivi toutes les 3 s puis 10 s
+  - [x] AJO-06, AJO-08 : validation champ par champ (accepter, corriger, rejeter), source et confiance, confiance faible et désaccords surlignés, garde estimée localement si absente
+  - [x] AJO-07 : doublon proposé, fusion dans la fiche existante
+  - [x] AJO-09, NFR-03 : file d'attente hors ligne, compteur visible, délai de 3 min, relance
+  - [x] AJO-10, AJO-11 : EAN et millésime en indices (EAN saisi, T48), quota affiché sous 20 %
+  - [x] AJO-12, NFR-07 : réponse validée contre le schéma avant tout enregistrement, sinon erreur et fiche éditable
+  - [x] FIC-06 à FIC-09 : pastille de provenance, mention IA, nouveau millésime, ré-enrichissement par l'écran de validation (T54)
+  - [x] PRV-R1 à PRV-R4 : provenances proposées, validées, manuelles et verrouillées, déverrouillage par appui long, signalement (envoi au flux reporté, T50)
+  - [x] NFR-08 : consentement avant le premier envoi de photos
 - Points d'étape :
-- Mesures :
+  - 2026-10-21 fait : tout le périmètre du lot 2a contre `FakeGateway`, migration de la base en v2 (T52). En cours : rien. Bloquant : recette des lots 0, 1 et 2a sur téléphone ; le lot 2b attend l'accès à n8n. Prochaine étape : recette, puis lot 2b dès que l'accès au flux est donné.
+- Mesures (2026-10-21, environnement de développement) :
+  - matrice : 20/20 exigences du lot 2a couvertes par au moins un test
+  - les 7 exemples du contrat rejoués et validés, cas de rejet compris (tests du contrat)
+  - parcours photo complet et parcours hors ligne en test de widget
+  - critère de sortie (parcours photo complet en mode avion puis au retour du réseau) : à mesurer par Bertrand sur téléphone, scénario du faux flux choisi dans Paramètres (T51)
 - Recette Bertrand :
 
 ## Lot 2b Flux n8n

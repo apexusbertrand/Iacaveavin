@@ -66,6 +66,9 @@ class FakeGateway implements EnrichmentGateway {
   FakeScenario scenario;
   int pollsBeforeDone;
   bool online;
+
+  /// Dernière demande reçue, pour vérifier ce que l'app envoie.
+  EnrichmentRequest? lastRequest;
   Duration delay;
 
   final _jobs = <String, _FakeJob>{};
@@ -90,6 +93,7 @@ class FakeGateway implements EnrichmentGateway {
   @override
   Future<JobResponse> requestEnrichment(EnrichmentRequest request) async {
     _checkOnline();
+    lastRequest = request;
     // Idempotence : même request_id, même job.
     final existing = _jobs.values
         .where((j) => j.requestId == request.requestId)

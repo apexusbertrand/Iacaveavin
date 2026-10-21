@@ -1037,7 +1037,7 @@
   "linkCopied": "Lien copié.",
   "reportError": "Signaler une erreur",
   "reported": "Signalé comme faux, à corriger",
-  "reportedSnack": "Erreur signalée : elle sera jointe au prochain enrichissement.",
+  "reportedSnack": "Erreur signalée : la valeur reste barrée jusqu'à correction.",
   "provenanceBadge": "Voir la provenance",
   "aiWritten": "Rédigé par IA à partir de {site}",
   "@aiWritten": {

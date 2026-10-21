@@ -36,8 +36,11 @@ Le code généré (drift, l10n, jetons) est commité : un `git clone` puis `flut
 | `lib/data/demo/` | jeu de démonstration CMP-07 (générateur déterministe, dépôt drift) |
 | `lib/data/referentiels/` | chargement des listes au premier lancement |
 | `lib/domain/` | entités et interfaces sans Flutter ni réseau |
-| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `placeholder` |
+| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `placeholder`, `add` (photo, identification, validation) |
 | `assets/referentiels/` | pays, régions, sous-régions, appellations, cépages, accords, listes du dictionnaire |
+| `lib/data/enrichment/` | contrat n8n : validation, `EnrichmentGateway` et `FakeGateway`, file d'attente, application des propositions |
+| `lib/data/files/` | photos : compression, contrôle qualité, miniatures, répertoire privé |
+| `assets/contrat/` | copie de specs/contrat-n8n (schémas et exemples rejoués par `FakeGateway`) |
 | `assets/regles/` | copie de specs/regles-garde.yaml (un test vérifie qu'elle est identique) |
 | `drift_schemas/` | instantanés du schéma, un par version, pour les tests de migration |
 | `tool/` | générateur des jetons de thème |
@@ -66,6 +69,10 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | file_picker 13.1 | choisir une archive à restaurer ou un CSV à importer (SAV-04, PAR-04) | oui | oui |
 | path_provider 2.1, path 1.9 | répertoire privé de l'app pour photos et sauvegardes locales (NFR-04, SAV-03) | oui | oui |
 | yaml 3.1 | règles de garde embarquées lues par l'écran PAR-06 ; les tests lisent aussi le dictionnaire | oui | oui |
+| json_schema 5.2 | validation des réponses du flux contre le contrat avant tout enregistrement (AJO-12, NFR-07) | oui | oui |
+| image 4.12 | compression 1 500 px, miniature et contrôle flou ou reflet, en Dart pur dans un isolate (AJO-02, NFR-04) | oui | oui |
+| image_picker 1.2 | appareil photo et galerie, plugin officiel (AJO-01, T47) | oui | oui |
+| url_launcher 6.3 | ouvrir l'URL d'une provenance (FIC-06) | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
 
 Police : système (Roboto sur Android) au lot 0, repli prévu par specs/design-tokens.json. Inter (OFL) sera embarquée quand les fichiers de police seront ajoutés au dépôt.

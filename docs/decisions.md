@@ -68,6 +68,25 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T40 | Un motif de mouvement déjà utilisé ne se fusionne pas | les mouvements sont immuables ; on peut le renommer ou le désactiver |
 | T41 | Tous les écrans de premier niveau gardent le tiroir ; « Emplacements » et « Sauvegarde » quittent l'écran « à venir » | livrés au lot 1 |
 
+## Décisions techniques proposées au lot 2a (2026-10-21), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T42 | Lot 2a démarré avant la recette du lot 1, sur une branche issue de `lot-1-cave-locale` | même demande que T25 ; le lot 2b attend l'accès à n8n |
+| T43 | Une fiche photo naît tout de suite avec un domaine vide et le millésime « NM », statut `a_enrichir` ; la liste l'affiche « Vin à identifier » | AJO-03 exige une fiche enregistrée avant la réponse du flux ; aucune valeur inventée (règle 2) |
+| T44 | Toutes les provenances d'une fiche sont rangées sous l'entité `fiche_vin`, avec le nom de champ du contrat (domaine, appellation, degre...) | un seul point de lecture pour la fiche, les champs verrouillés et la requête ; la table de correspondance contrat → dictionnaire est dans `domain/enrichment.dart` |
+| T45 | Le lot saisi pendant l'attente (AJO-04) est enregistré tout de suite, par un mouvement, et rejoint la fiche existante en cas de fusion (AJO-07) | le stock ne change que par des mouvements (règle 4) |
+| T46 | Fin d'enrichissement signalée dans l'app (badge de file, écran d'identification), sans notification système avant le lot 4 | évite une dépendance de notifications et une permission Android 13 au lot 2a |
+| T47 | Prise de vue avec `image_picker` (appareil photo ou galerie) sans cadre de visée personnalisé | plugin officiel Android et iOS ; un cadre demanderait le paquet `camera`, plus lourd ; à revoir après la recette |
+| T48 | Code-barres EAN saisi en texte, contrôlé par la clé EAN-13 ; lecture par l'appareil photo reportée | un lecteur demande un paquet de plus (mobile_scanner) ; l'EAN reste un indice (AJO-10) |
+| T49 | Seuils photo : flou si la variance du laplacien est sous 100, reflet si plus de 8 % des pixels sont saturés ; alerte non bloquante | valeurs de départ à recalibrer sur les photos réelles de la recette |
+| T50 | PRV-R4 : le signalement est enregistré (`signale` à vrai, valeur barrée) mais n'est pas encore transmis au flux, faute de champ dans le contrat 1.0 ; proposition : champ `signalements` dans la requête, contrat 1.1, au lot 2b | écart signalé (règle 10) ; le message affiché ne promet pas l'envoi |
+| T51 | Paramètres : scénario du faux flux (terminé, partiel, cache, quota, réponse invalide, sans réponse) et hors ligne simulé, jusqu'au lot 2c | recette du lot 2a sur téléphone sans n8n |
+| T52 | Base en version 2 : colonnes `envoye_le` et `reponse` sur `job` (dictionnaire, migration et test de migration) | délai de 3 min compté depuis l'envoi, dernière réponse validée gardée pour l'écran de validation |
+| T53 | Déverrouiller un champ (PRV-R3) le repasse au statut `valide` : le prochain ré-enrichissement peut le proposer à nouveau | appui long sur le champ, avec confirmation |
+| T54 | Ré-enrichir (FIC-09) passe par l'écran de validation, qui montre la valeur actuelle à côté de la valeur proposée ; rien n'est appliqué sans validation | « montre les différences avant de les appliquer » |
+| T55 | Nouveau millésime (FIC-08) : même cuvée, cépages et accords repris, photos reprises, aucun lot, commentaire de millésime, degré et garde vides, statut `a_enrichir` | seuls les champs liés au millésime sont à enrichir |
+
 ## À compléter
 
 | Id | Sujet | Quand |

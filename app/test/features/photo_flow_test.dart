@@ -52,54 +52,80 @@ void main() {
         tester.widget<FilledButton>(b).onPressed != null;
   });
 
-  testWidgets('AJO-01 AJO-02 AJO-05 AJO-06 AJO-08 parcours photo complet', (
-    tester,
-  ) async {
-    final db = await start(tester);
-    await tester.tap(find.byTooltip('Ajouter une bouteille'));
-    await settle(tester);
-    await tester.tap(find.byKey(const ValueKey('add-photo')));
-    await settle(tester);
-    await tester.tap(find.byKey(const ValueKey('take-photo')));
-    await photoReady(tester);
-    expect(find.text('Étiquette'), findsWidgets);
-    await tester.ensureVisible(find.byKey(const ValueKey('capture-continue')));
-    await settle(tester);
-    await tester.tap(find.byKey(const ValueKey('capture-continue')));
-    await settle(tester);
-    // NFR-08 : consentement explicite avant le premier envoi.
-    expect(find.text('Envoi des photos'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('consent-accept')));
-    await settleLong(tester);
-    // AJO-04 : le lot se renseigne pendant l'attente.
-    expect(find.text('Pendant ce temps, le lot'), findsOneWidget);
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('lot-save')),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
-    await settle(tester);
-    await tester.tap(find.byKey(const ValueKey('lot-save')));
-    await settleLong(tester, 10);
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('review-proposals')),
-      -300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.byKey(const ValueKey('review-proposals')));
-    await settleLong(tester, 3);
-    // AJO-06 : chaque champ avec source et confiance.
-    expect(find.textContaining('Étiquette · confiance 97 %'), findsOneWidget);
-    expect(find.text('Confiance faible : vérifiez'), findsNothing);
-    await tester.tap(find.byKey(const ValueKey('validation-save')));
-    await settleLong(tester, 3);
-    expect(find.text("GUILLAUME L'ECHANSON"), findsOneWidget);
-    final items = await tester.runAsync(() => CellarRepository(db).wineItems());
-    expect(items!.single.enrichmentStatus, 'valide');
-    expect(items.single.bottles, 1);
-    expect(items.single.thumbPath, isNotNull);
-  });
+  testWidgets(
+    'AJO-01 AJO-02 AJO-04 AJO-05 AJO-06 AJO-08 NFR-08 FIC-06 FIC-07 parcours photo complet',
+    (tester) async {
+      final db = await start(tester);
+      await tester.tap(find.byTooltip('Ajouter une bouteille'));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('add-photo')));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('take-photo')));
+      await photoReady(tester);
+      expect(find.text('Étiquette'), findsWidgets);
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('capture-continue')),
+      );
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('capture-continue')));
+      await settle(tester);
+      // NFR-08 : consentement explicite avant le premier envoi.
+      expect(find.text('Envoi des photos'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('consent-accept')));
+      await settleLong(tester);
+      // AJO-04 : le lot se renseigne pendant l'attente.
+      expect(find.text('Pendant ce temps, le lot'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('lot-save')),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('lot-save')));
+      await settleLong(tester, 10);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('review-proposals')),
+        -300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.tap(find.byKey(const ValueKey('review-proposals')));
+      await settleLong(tester, 3);
+      // AJO-06 : chaque champ avec source et confiance.
+      expect(find.textContaining('Étiquette · confiance 97 %'), findsOneWidget);
+      expect(find.text('Confiance faible : vérifiez'), findsNothing);
+      await tester.tap(find.byKey(const ValueKey('validation-save')));
+      await settleLong(tester, 3);
+      expect(find.text("GUILLAUME L'ECHANSON"), findsOneWidget);
+      // FIC-07 : commentaire de millésime rédigé par l'agent, signalé comme tel.
+      final ai = find.byKey(const ValueKey('ai-mention'));
+      await tester.scrollUntilVisible(
+        ai,
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(
+        find.text('Rédigé par IA à partir de exemple-interprofession.fr'),
+        findsOneWidget,
+      );
+      // FIC-06 : pastille de provenance, puis « Signaler une erreur ».
+      await tester.tap(find.byTooltip('Voir la provenance').first);
+      await settle(tester);
+      expect(find.text('Provenance'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('report-error')));
+      await settleLong(tester, 2);
+      final reported = await tester.runAsync(
+        () => db.select(db.provenances).get(),
+      );
+      expect(reported!.where((p) => p.signale == true), hasLength(1));
+      final items = await tester.runAsync(
+        () => CellarRepository(db).wineItems(),
+      );
+      expect(items!.single.enrichmentStatus, 'valide');
+      expect(items.single.bottles, 1);
+      expect(items.single.thumbPath, isNotNull);
+    },
+  );
 
   testWidgets('AJO-09 NFR-03 hors ligne : fiche « à enrichir » et compteur', (
     tester,
