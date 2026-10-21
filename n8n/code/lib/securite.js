@@ -1,0 +1,126 @@
+// Contrôles d'entrée des webhooks (docs/02-architecture.md, sécurité des
+// appels) : en-têtes, horodatage à moins de 300 s, signature HMAC-SHA256.
+// SHA-256 et HMAC écrits en JavaScript pur : le nœud Code ne dépend ainsi
+// d'aucun module de l'instance.
+//
+// signature = hex(HMAC-SHA256(clé, horodatage + "\n" + méthode + "\n" +
+//                 chemin + "\n" + sha256_hex(corps)))
+// La clé est le texte de la clé partagée, en UTF-8 (décision T57).
+
+const K256 = [
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+];
+
+function utf8(text) {
+  return new TextEncoder().encode(String(text));
+}
+
+function toHex(bytes) {
+  let s = '';
+  for (const b of bytes) s += b.toString(16).padStart(2, '0');
+  return s;
+}
+
+function sha256(bytes) {
+  const len = bytes.length;
+  const total = ((len + 9 + 63) >> 6) << 6;
+  const m = new Uint8Array(total);
+  m.set(bytes);
+  m[len] = 0x80;
+  const bits = len * 8;
+  const view = new DataView(m.buffer);
+  view.setUint32(total - 8, Math.floor(bits / 0x100000000));
+  view.setUint32(total - 4, bits >>> 0);
+  const h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+  const w = new Uint32Array(64);
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let off = 0; off < total; off += 64) {
+    for (let i = 0; i < 16; i++) w[i] = view.getUint32(off + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+      const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, hh] = h;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const t1 = (hh + S1 + ch + K256[i] + w[i]) >>> 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + maj) >>> 0;
+      hh = g; g = f; f = e; e = (d + t1) >>> 0;
+      d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    h[0] = (h[0] + a) >>> 0; h[1] = (h[1] + b) >>> 0; h[2] = (h[2] + c) >>> 0; h[3] = (h[3] + d) >>> 0;
+    h[4] = (h[4] + e) >>> 0; h[5] = (h[5] + f) >>> 0; h[6] = (h[6] + g) >>> 0; h[7] = (h[7] + hh) >>> 0;
+  }
+  const out = new Uint8Array(32);
+  const ov = new DataView(out.buffer);
+  h.forEach((x, i) => ov.setUint32(i * 4, x));
+  return out;
+}
+
+function hmacSha256(key, message) {
+  let k = key.length > 64 ? sha256(key) : key;
+  const block = new Uint8Array(64);
+  block.set(k);
+  const inner = new Uint8Array(64 + message.length);
+  const outer = new Uint8Array(64 + 32);
+  for (let i = 0; i < 64; i++) {
+    inner[i] = block[i] ^ 0x36;
+    outer[i] = block[i] ^ 0x5c;
+  }
+  inner.set(message, 64);
+  outer.set(sha256(inner), 64);
+  return sha256(outer);
+}
+
+/** Signature attendue d'une requête. [corps] : octets exacts reçus. */
+function signatureAttendue(cle, horodatage, methode, chemin, corps) {
+  const texte = horodatage + '\n' + methode.toUpperCase() + '\n' + chemin + '\n' + toHex(sha256(corps));
+  return toHex(hmacSha256(utf8(cle), utf8(texte)));
+}
+
+function egalConstant(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/**
+ * Contrôles d'entrée dans l'ordre de docs/06 : en-têtes présents, horodatage
+ * à moins de [fenetre] secondes, signature. Renvoie { ok: true, installation }
+ * ou { ok: false, code, message } avec un code d'erreur du contrat.
+ */
+function verifierRequete({ entetes, methode, chemin, corps, cle, maintenant, fenetre = 300 }) {
+  const h = {};
+  for (const [k, v] of Object.entries(entetes || {})) h[k.toLowerCase()] = Array.isArray(v) ? v[0] : v;
+  const installation = h['x-iacav-installation'];
+  const horodatage = h['x-iacav-horodatage'];
+  const signature = (h['x-iacav-signature'] || '').toLowerCase();
+  if (!installation || !horodatage || !signature) {
+    return { ok: false, code: 'auth_invalide', message: 'En-têtes de sécurité absents.' };
+  }
+  if (!cle) return { ok: false, code: 'auth_invalide', message: 'Clé du flux non configurée.' };
+  if (!/^\d{1,12}$/.test(horodatage) || Math.abs(maintenant - Number(horodatage)) > fenetre) {
+    return { ok: false, code: 'signature_expiree', message: "Horodatage hors de la fenêtre de 300 secondes : vérifiez l'heure du téléphone." };
+  }
+  const attendue = signatureAttendue(cle, horodatage, methode, chemin, corps);
+  if (!egalConstant(attendue, signature)) {
+    return { ok: false, code: 'auth_invalide', message: 'Signature invalide.' };
+  }
+  return { ok: true, installation };
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = { sha256, hmacSha256, toHex, utf8, signatureAttendue, verifierRequete };
+}

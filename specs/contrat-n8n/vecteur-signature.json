@@ -1,0 +1,11 @@
+{
+  "description": "Vecteur fixe de la signature des requêtes (docs/02-architecture.md). Clé de test, jamais utilisée en production. L'app (lot 2c) et le flux (lot 2b) le vérifient tous les deux.",
+  "cle": "cle-de-test-ne-pas-utiliser-en-production",
+  "horodatage": "1792576800",
+  "methode": "POST",
+  "chemin": "/webhook/iacave/enrichissement",
+  "corps": "{\"version_contrat\":\"1.0\",\"request_id\":\"5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60\"}",
+  "sha256_corps": "c1f53c92dd99082ea65e2dca9d4ba4e98d7e9690b20b81f05d6e53e485623a2a",
+  "texte_signe": "1792576800\nPOST\n/webhook/iacave/enrichissement\nc1f53c92dd99082ea65e2dca9d4ba4e98d7e9690b20b81f05d6e53e485623a2a",
+  "signature": "57c7f9eb516d90546b3dca27bbd82c9fd15cf19a73f055027c5e83402dfc2e65"
+}
