@@ -41,3 +41,4 @@ __pycache__/
 # Sorties de test du jeu d'essai n8n
 n8n/jeu-essai/**/obtenu.json
 n8n/jeu-essai/rapport-*.md
+n8n/code/dist/

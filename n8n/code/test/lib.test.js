@@ -64,6 +64,8 @@ test('NFR-06 refus : en-tête absent, horodatage hors fenêtre, signature fausse
   assert.equal(verifierRequete(requete({ corps: utf8(vecteur.corps + ' ') })).code, 'auth_invalide');
   assert.equal(verifierRequete(requete({ chemin: '/webhook/iacave/prix' })).code, 'auth_invalide');
   assert.equal(verifierRequete(requete({ cle: '' })).code, 'auth_invalide');
+  // Empreinte du corps calculée à l'entrée du flux : même verdict.
+  assert.equal(verifierRequete(requete({ corps: vecteur.sha256_corps })).ok, true);
 });
 
 test('docs/06 clé de cache normalisée', () => {

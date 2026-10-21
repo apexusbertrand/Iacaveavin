@@ -83,9 +83,13 @@ function hmacSha256(key, message) {
   return sha256(outer);
 }
 
-/** Signature attendue d'une requête. [corps] : octets exacts reçus. */
+/**
+ * Signature attendue d'une requête. [corps] : octets exacts reçus, ou leur
+ * empreinte SHA-256 en hexadécimal (calculée une fois à l'entrée du flux).
+ */
 function signatureAttendue(cle, horodatage, methode, chemin, corps) {
-  const texte = horodatage + '\n' + methode.toUpperCase() + '\n' + chemin + '\n' + toHex(sha256(corps));
+  const empreinte = typeof corps === 'string' ? corps : toHex(sha256(corps));
+  const texte = horodatage + '\n' + methode.toUpperCase() + '\n' + chemin + '\n' + empreinte;
   return toHex(hmacSha256(utf8(cle), utf8(texte)));
 }
 
@@ -98,8 +102,9 @@ function egalConstant(a, b) {
 
 /**
  * Contrôles d'entrée dans l'ordre de docs/06 : en-têtes présents, horodatage
- * à moins de [fenetre] secondes, signature. Renvoie { ok: true, installation }
- * ou { ok: false, code, message } avec un code d'erreur du contrat.
+ * à moins de [fenetre] secondes, signature. [corps] : octets reçus ou leur
+ * empreinte hexadécimale. Renvoie { ok: true, installation } ou
+ * { ok: false, code, message } avec un code d'erreur du contrat.
  */
 function verifierRequete({ entetes, methode, chemin, corps, cle, maintenant, fenetre = 300 }) {
   const h = {};
