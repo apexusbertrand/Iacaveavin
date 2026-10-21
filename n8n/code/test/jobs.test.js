@@ -7,7 +7,7 @@ const path = require('node:path');
 // Dans le nœud Code, les fichiers de lib sont concaténés : on reproduit ici
 // leurs fonctions globales.
 Object.assign(globalThis, require('../lib/securite.js'), require('../lib/schema.js'), require('../lib/metier.js'));
-const j = require('../lib/jobs.js');
+const j = { ...require('../lib/entree.js'), ...require('../lib/suivi.js') };
 const { signatureAttendue, sha256, toHex, utf8 } = require('../lib/securite.js');
 
 const racine = path.resolve(__dirname, '../../..');
@@ -86,7 +86,7 @@ test('NFR-06 refus signés, datés et au contrat', () => {
 
 test('AJO-09 suivi : signature du GET, job inconnu, délai dépassé', () => {
   const jobId = '9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d';
-  const { entetes } = signer('', { methode: 'GET', chemin: '/webhook/iacave/jobs/' + jobId });
+  const { entetes } = signer('', { methode: 'GET', chemin: '/webhook/iacave/jobs?job_id=' + jobId });
   const job = {
     job_id: jobId, request_id: requete.request_id, type: 'enrichissement', statut: 'termine', etape: 'termine', fiche_id: '',
     resultat: JSON.stringify(lire('specs/contrat-n8n/exemples/enrichissement-termine.json').resultat),

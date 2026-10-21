@@ -16,7 +16,7 @@ Ce dossier contient tout ce qu'il faut pour construire et faire évoluer le flux
 2. Traitement asynchrone (sous-flux `IA_CAVE_Enrichissement`) : lecture des étiquettes, normalisation, cache, agent d'enrichissement avec outils de recherche et de lecture de pages, agent prix si demandé.
 3. Contrôles de sortie (nœud Code) : URL citées présentes dans `sources_consultees`, domaines de prix autorisés, bornes des valeurs, validation contre `resultat_enrichissement`. Une sortie invalide relance l'agent une fois avec le message d'erreur, puis passe le job en `erreur`.
 4. Écriture du résultat dans `iacave_jobs`, du cache, du quota ; effacement des photos.
-5. Webhook GET `iacave/jobs/:job_id` : lecture du job.
+5. Webhook GET `iacave/jobs?job_id=…` : lecture du job (paramètre de requête, voir T63).
 6. Webhook POST `iacave/prix` : même chaîne, sous-flux `IA_CAVE_Prix`, cache de 24 heures.
 7. Webhook GET `iacave/sante` : version du flux et du contrat.
 8. Flux d'erreur : mail d'alerte avec le job_id, sans les photos.

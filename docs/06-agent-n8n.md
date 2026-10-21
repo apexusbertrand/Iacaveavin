@@ -17,7 +17,7 @@ Décision D4 : un nouveau flux dans l'instance n8n actuelle, isolé des flux exi
 | --- | --- | --- | --- |
 | /webhook/iacave/enrichissement | POST | requete-enrichissement.schema.json | reponse-job.schema.json, statut en_attente (202) ou termine si cache |
 | /webhook/iacave/prix | POST | requete-prix.schema.json | idem |
-| /webhook/iacave/jobs/:job_id | GET | aucun | reponse-job.schema.json |
+| /webhook/iacave/jobs?job_id=… | GET | aucun (signature sur le chemin avec la requête) | reponse-job.schema.json, 404 si job inconnu |
 | /webhook/iacave/sante | GET | aucun | `{"version_flux": "...", "version_contrat": "1.0", "ok": true}` |
 
 Le webhook répond immédiatement avec le job_id (nœud Respond to Webhook), puis le traitement continue. L'app interroge /jobs toutes les 3 secondes pendant 30 secondes, puis toutes les 10 secondes, jusqu'à 3 minutes.

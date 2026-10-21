@@ -5,7 +5,7 @@
 // @inclure metier.js
 // @inclure modele.js
 // @inclure agent.js
-// @inclure jobs.js
+// @inclure enveloppes.js
 const envoi = $('Déclencheur enrichissement').first().json;
 // Trois chemins mènent ici : cache, sortie conforme, sortie corrigée.
 function resultatConforme() {

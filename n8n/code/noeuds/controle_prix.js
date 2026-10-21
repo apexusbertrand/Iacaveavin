@@ -2,7 +2,8 @@
 // horodatage, signature, request_id déjà vu, quota, schéma).
 // @inclure securite.js
 // @inclure schema.js
-// @inclure jobs.js
+// @inclure enveloppes.js
+// @inclure entree.js
 const e = $('Empreinte prix').first().json;
 const config = lireConfig($('Config prix').all().map((i) => i.json));
 const existant = $('Job existant prix').all().map((i) => i.json).find((r) => r.job_id) || null;
