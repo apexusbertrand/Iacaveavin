@@ -1,0 +1,32 @@
+{
+  "version_contrat": "1.0",
+  "job_id": "e5f4d3c2-b1a0-4f9e-8d7c-6b5a4f3e2d1c",
+  "request_id": "c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f",
+  "fiche_id": "0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10",
+  "type": "prix",
+  "statut": "termine",
+  "etape": "termine",
+  "resultat": {
+    "prix": [
+      {
+        "format_cl": 75,
+        "trouve": true,
+        "prix": 25.0,
+        "devise": "EUR",
+        "nature": "mediane",
+        "nb_offres": 2,
+        "offres": [
+          { "site": "exemple-caviste-a.fr", "url": "https://exemple-caviste-a.fr/produit/1", "prix": 24.5, "millesime_verifie": true },
+          { "site": "exemple-caviste-b.fr", "url": "https://exemple-caviste-b.fr/produit/2", "prix": 25.5, "millesime_verifie": true }
+        ],
+        "site": null,
+        "url": null,
+        "date": "2026-11-20"
+      }
+    ],
+    "alertes": [],
+    "sources_consultees": [{ "url": "https://exemple-caviste-a.fr/produit/1", "consultee_le": "2026-11-20", "utilisee": true }],
+    "cache": { "hit": false },
+    "cout": { "appels_modele": 2, "credits_recherche": 3, "duree_ms": 15800 }
+  }
+}

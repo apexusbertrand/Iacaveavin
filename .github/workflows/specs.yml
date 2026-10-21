@@ -1,0 +1,26 @@
+name: Spécifications
+
+on:
+  push:
+    paths: ["specs/**", "scripts/**", "n8n/**", ".github/workflows/specs.yml"]
+  pull_request:
+    paths: ["specs/**", "scripts/**", "n8n/**", ".github/workflows/specs.yml"]
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema pyyaml
+      - name: Contrat n8n (schémas, exemples, cas de rejet)
+        run: python3 scripts/valider_contrat.py
+      - name: Règles de garde et dictionnaire de données
+        run: python3 scripts/verifier_regles.py
+      - name: Aucun secret dans les exports de flux n8n
+        run: |
+          if grep -RInE '("apiKey"|"password"|"secret"|Bearer [A-Za-z0-9]{20,})' n8n/workflow 2>/dev/null; then
+            echo "Secret probable dans n8n/workflow" && exit 1
+          fi

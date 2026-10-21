@@ -1,0 +1,102 @@
+{
+  "$comment": "Jetons de design IA cave à vin. Valeurs provisoires dérivées du logo Apexus (fond noir, engrenage rouge-orangé, carré orange). Remplacer par les valeurs exactes extraites du logo haute définition, puis relancer le test de contraste (test/theme/contrast_test.dart). Contrastes WCAG calculés le 2026-10-20 sur ces valeurs.",
+  "version": 1,
+  "marque": {
+    "orange": "#F28C28",
+    "rougeOrange": "#E2541B",
+    "anthracite": "#1C1C1E",
+    "noir": "#000000"
+  },
+  "themeClair": {
+    "appBar": "#1C1C1E",
+    "onAppBar": "#FFFFFF",
+    "surface": "#F6F3F0",
+    "carte": "#FFFFFF",
+    "texte": "#1C1C1E",
+    "texteSecondaire": "#5A5A60",
+    "primary": "#F28C28",
+    "onPrimary": "#1C1C1E",
+    "primaryTexte": "#B5520F",
+    "secondary": "#2F5D7C",
+    "separateur": "#E4DED8",
+    "erreur": "#B3261E",
+    "succes": "#1E7A3A"
+  },
+  "themeSombre": {
+    "appBar": "#000000",
+    "onAppBar": "#EDEDED",
+    "surface": "#121212",
+    "carte": "#1E1E1E",
+    "texte": "#EDEDED",
+    "texteSecondaire": "#A8A8AE",
+    "primary": "#F28C28",
+    "onPrimary": "#1C1C1E",
+    "primaryTexte": "#F28C28",
+    "secondary": "#8DB8D6",
+    "separateur": "#2C2C2E",
+    "erreur": "#F2B8B5",
+    "succes": "#7CCB8F"
+  },
+  "reglesContraste": {
+    "$comment": "Ratios mesurés. Toute nouvelle paire texte/fond doit atteindre 4,5:1 (3:1 pour un texte de 24 px ou 19 px gras).",
+    "blanc sur appBar clair": 17.01,
+    "anthracite sur primary": 6.93,
+    "primary sur appBar": 6.93,
+    "primaryTexte sur surface claire": 4.55,
+    "primaryTexte sur carte blanche": 5.03,
+    "texte sur surface claire": 15.39,
+    "texteSecondaire sur carte blanche": 6.85,
+    "secondary sur carte blanche": 7.05,
+    "primary sur surface sombre": 7.63,
+    "secondary sombre sur carte sombre": 7.91,
+    "INTERDIT blanc sur primary": 2.45,
+    "INTERDIT primary comme texte sur surface claire": 2.22
+  },
+  "couleursVin": {
+    "$comment": "Palette sémantique distincte de la marque. Utilisée pour l'icône bouteille, les chips couleur et les graphiques. Le texte posé sur une chip suit texteSurCouleurVin. Les icônes bouteille portent un contour texteSecondaire : le blanc et le rosé seuls n'atteignent pas 3:1 sur une carte blanche.",
+    "rouge": "#8E1B2C",
+    "blanc": "#E9D98B",
+    "rose": "#F1A7B5",
+    "champagne": "#C9B26B",
+    "effervescent": "#7FA7D9",
+    "liquoreux": "#B8862B",
+    "orange": "#A3501C",
+    "autre": "#8C8C8C"
+  },
+  "texteSurCouleurVin": {
+    "$comment": "Ratios mesurés : rouge + blanc 8,96 ; orange + blanc 5,6 ; les autres + anthracite entre 5,06 et 11,96.",
+    "rouge": "#FFFFFF",
+    "blanc": "#1C1C1E",
+    "rose": "#1C1C1E",
+    "champagne": "#1C1C1E",
+    "effervescent": "#1C1C1E",
+    "liquoreux": "#1C1C1E",
+    "orange": "#FFFFFF",
+    "autre": "#1C1C1E"
+  },
+  "badgeNote": {
+    "$comment": "Seuils sur une échelle de 100. Une note sur 20 est convertie (x5) pour le choix de couleur uniquement, jamais pour l'affichage.",
+    "seuils": [
+      { "min": 95, "fond": "#C9A227", "texte": "#1C1C1E", "libelle": "exceptionnel" },
+      { "min": 90, "fond": "#1E7A3A", "texte": "#FFFFFF", "libelle": "excellent" },
+      { "min": 85, "fond": "#5E9B4F", "texte": "#1C1C1E", "libelle": "très bon" },
+      { "min": 0, "fond": "#8C8C8C", "texte": "#1C1C1E", "libelle": "autre" }
+    ]
+  },
+  "statutGarde": {
+    "trop_jeune": "#7FA7D9",
+    "a_boire": "#1E7A3A",
+    "apogee": "#C9A227",
+    "a_boire_vite": "#E2541B",
+    "passe": "#8C8C8C",
+    "inconnu": "#C8C8C8"
+  },
+  "typographie": {
+    "police": "Inter (licence OFL), repli sur la police système",
+    "tailles": { "titre": 22, "sousTitre": 17, "corps": 15, "secondaire": 13, "legende": 12, "millesimeCarte": 28 },
+    "graisses": { "normal": 400, "moyen": 500, "gras": 600 }
+  },
+  "espacements": { "xs": 4, "s": 8, "m": 12, "l": 16, "xl": 24, "xxl": 32 },
+  "rayons": { "carte": 12, "chip": 20, "bouton": 12, "badge": 6 },
+  "cibleTactileMin": 48
+}

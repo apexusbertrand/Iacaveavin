@@ -1,0 +1,291 @@
+# Dictionnaire de données IA cave à vin. SOURCE UNIQUE DE VÉRITÉ.
+#
+# Ce fichier décrit chaque champ une seule fois. En découlent :
+#   - le schéma SQLite (app/lib/data/db/) ;
+#   - les colonnes de l'export et de l'import Excel (clé `excel`) ;
+#   - les champs imprimés sur la fiche PDF (clé `pdf`) ;
+#   - les noms de champs du contrat n8n (clé `contrat`, voir specs/contrat-n8n/).
+# Un test automatique (test/specs/dictionnaire_test.dart) vérifie que la base, l'Excel et le
+# contrat restent alignés sur ce fichier. Toute modification ici = mise à jour du code et des tests
+# dans le même commit, et une ligne dans docs/decisions.md si le sens d'un champ change.
+#
+# Légende des clés de champ :
+#   cle       nom technique (snake_case, identique en base et dans le contrat)
+#   libelle   libellé affiché (français)
+#   type      texte | texte_long | entier | decimal | montant | booleen | date | annee | millesime |
+#             url | liste | liste_multiple | reference | json | enum | calcule
+#   liste     nom de la liste de valeurs (section `listes`) quand type = liste ou liste_multiple
+#   enum      nom de l'énumération fixe (section `enums`) quand type = enum
+#   oblig     champ obligatoire à l'enregistrement
+#   enrichi   champ que l'agent n8n peut proposer (provenance tracée, verrouillable)
+#   excel     "Onglet/Colonne" à l'export ; préfixe "RO:" = exporté mais ignoré à l'import
+#   pdf       imprimé sur la fiche PDF
+#   contrat   nom du champ dans la réponse n8n (si différent de `cle`)
+#   regle     contrainte de validation
+
+version: 1
+
+conventions:
+  identifiant: "UUID v4 généré sur le téléphone"
+  champs_techniques: [id, cave_id, created_at, updated_at, deleted_at]
+  dates: "ISO 8601 (AAAA-MM-JJ), fuseau Europe/Paris"
+  horodatages: "ISO 8601 avec fuseau, stockés en UTC"
+  montants: "décimal 2 chiffres, devise de la cave (EUR par défaut)"
+  millesime: "entier entre 1900 et l'année en cours, ou la valeur 'NM' pour un non millésimé"
+  suppression: "logique (deleted_at), jamais physique, sauf purge explicite des photos"
+
+listes:
+  # modifiable: l'utilisateur peut ajouter, renommer, désactiver, fusionner (écran Paramétrage).
+  # hierarchie: la valeur pointe vers une valeur parente d'une autre liste.
+  couleur:
+    modifiable: false
+    valeurs: [rouge, blanc, rose, champagne, effervescent, liquoreux, orange, autre]
+  type_vin:
+    modifiable: true
+    valeurs: [tranquille, effervescent, liquoreux, moelleux, mute, autre]
+  pays:
+    modifiable: true
+    initialisation: "pays producteurs (codes ISO 3166-1 alpha-2 + nom français + drapeau)"
+  region:
+    modifiable: true
+    hierarchie: pays
+    initialisation: "régions viticoles françaises puis principaux pays producteurs"
+  sous_region:
+    modifiable: true
+    hierarchie: region
+  appellation:
+    modifiable: true
+    hierarchie: sous_region
+    initialisation: "appellations françaises (données ouvertes INAO sur data.gouv.fr, à vérifier au lot 0)"
+  signe_qualite:
+    modifiable: true
+    valeurs: [AOP, AOC, IGP, VSIG, DOC, DOCG, DO, autre]
+  classement:
+    modifiable: true
+    valeurs: ["Grand Cru", "Premier Cru", "Grand Cru Classé", "Premier Grand Cru Classé", "Cru Classé", "Cru Bourgeois", "Cru Artisan", "Village"]
+  certification:
+    modifiable: true
+    valeurs: [aucune, bio, biodynamie, HVE, "nature (non certifié)"]
+  cepage:
+    modifiable: true
+    initialisation: "principaux cépages (environ 150)"
+  format:
+    modifiable: true
+    valeurs_cl: [18.75, 37.5, 50, 62, 70, 75, 100, 150, 300, 450, 600]
+    defaut_cl: 75
+  fournisseur:
+    modifiable: true
+  motif_mouvement:
+    modifiable: true
+    valeurs: ["achat", "cadeau reçu", "ouverture", "offert", "casse", "inventaire", "erreur de saisie", "import Excel", "transfert", "autre"]
+  accord_mets:
+    modifiable: true
+    initialisation: "environ 40 catégories (viande rouge, gibier, volaille, poisson, fruits de mer, fromage à pâte dure, dessert au chocolat, etc.)"
+  critique:
+    modifiable: true
+    valeurs: ["Robert Parker Wine Advocate", "Vinous", "Jancis Robinson", "Decanter", "Bettane+Desseauve", "La Revue du vin de France", "Guide Hachette", "Wine Spectator", "James Suckling", "autre"]
+
+enums:
+  source_provenance: [etiquette, site_officiel, organisme_officiel, interprofession, critique, marchand, tiers, estimation, manuel, import]
+  statut_provenance: [propose, valide, rejete, manuel, verrouille]
+  statut_enrichissement: [brouillon, a_enrichir, en_cours, a_valider, valide, erreur]
+  statut_garde: [trop_jeune, a_boire, apogee, a_boire_vite, passe, inconnu]
+  type_mouvement: [entree, ouverture, sortie_autre, ajustement, transfert_sortant, transfert_entrant]
+  type_photo: [etiquette, contre_etiquette, capsule, collerette, autre]
+  type_emplacement: [cave, meuble, casier, clayette, autre]
+  nature_prix: [offre, mediane, minimum, cote]
+  statut_job: [en_attente, en_cours, termine, partiel, erreur]
+
+entites:
+
+  cave:
+    role: "racine, prépare le multi-caves"
+    champs:
+      - {cle: nom, libelle: "Nom de la cave", type: texte, oblig: true}
+      - {cle: devise, libelle: "Devise", type: texte, oblig: true, regle: "code ISO 4217, EUR par défaut"}
+
+  domaine:
+    role: "producteur, château ou négociant"
+    champs:
+      - {cle: nom, libelle: "Domaine", type: texte, oblig: true, enrichi: true, excel: "Vins/Domaine", pdf: true, contrat: domaine}
+      - {cle: site_officiel, libelle: "Site officiel", type: url, enrichi: true, excel: "Vins/Site officiel", contrat: domaine_site_officiel}
+      - {cle: commentaire, libelle: "Le domaine", type: texte_long, enrichi: true, excel: "Vins/Commentaire domaine", pdf: true, contrat: commentaire_domaine, regle: "400 à 600 caractères si enrichi"}
+
+  cuvee:
+    role: "vin générique sans millésime. L'origine (pays, région, appellation) est portée ici et non par le domaine, car un négociant produit dans plusieurs régions."
+    champs:
+      - {cle: domaine_id, libelle: "Domaine", type: reference, oblig: true}
+      - {cle: nom, libelle: "Cuvée", type: texte, enrichi: true, excel: "Vins/Cuvée", pdf: true, contrat: cuvee}
+      - {cle: pays, libelle: "Pays", type: liste, liste: pays, oblig: true, enrichi: true, excel: "Vins/Pays", pdf: true}
+      - {cle: region, libelle: "Région", type: liste, liste: region, enrichi: true, excel: "Vins/Région", pdf: true}
+      - {cle: sous_region, libelle: "Sous-région", type: liste, liste: sous_region, enrichi: true, excel: "Vins/Sous-région", pdf: true}
+      - {cle: appellation, libelle: "Appellation", type: liste, liste: appellation, enrichi: true, excel: "Vins/Appellation", pdf: true, regle: "jamais un signe de qualité (AOP, AOC...) ni un classement"}
+      - {cle: signe_qualite, libelle: "Signe de qualité", type: liste, liste: signe_qualite, enrichi: true, excel: "Vins/Signe de qualité", pdf: true}
+      - {cle: classement, libelle: "Classement", type: liste, liste: classement, enrichi: true, excel: "Vins/Classement", pdf: true}
+      - {cle: lieu_dit, libelle: "Lieu-dit", type: texte, enrichi: true, excel: "Vins/Lieu-dit", pdf: true}
+      - {cle: couleur, libelle: "Couleur", type: liste, liste: couleur, oblig: true, enrichi: true, excel: "Vins/Couleur", pdf: true}
+      - {cle: type_vin, libelle: "Type", type: liste, liste: type_vin, enrichi: true, excel: "Vins/Type", pdf: true, contrat: type}
+      - {cle: certification, libelle: "Certification", type: liste, liste: certification, enrichi: true, excel: "Vins/Certification", pdf: true}
+
+  fiche_vin:
+    role: "objet affiché dans la liste : cuvée + millésime"
+    unicite: "domaine + cuvée + millésime (contrôle de doublon, non bloquant)"
+    champs:
+      - {cle: cuvee_id, libelle: "Cuvée", type: reference, oblig: true}
+      - {cle: id, libelle: "Identifiant", type: texte, excel: "Vins/id", regle: "vide à l'import = création"}
+      - {cle: millesime, libelle: "Millésime", type: millesime, oblig: true, enrichi: true, excel: "Vins/Millésime", pdf: true}
+      - {cle: cepages, libelle: "Cépages", type: json, enrichi: true, excel: "Vins/Cépages", pdf: true, regle: "liste [{cepage, pourcentage}] ; en Excel : 'Merlot 80 %; Cabernet Franc 20 %' ; total 100 % si pourcentages connus"}
+      - {cle: degre, libelle: "Degré", type: decimal, enrichi: true, excel: "Vins/Degré (%)", pdf: true, regle: "entre 5 et 23"}
+      - {cle: commentaire_millesime, libelle: "Le millésime", type: texte_long, enrichi: true, excel: "Vins/Commentaire millésime", pdf: true, regle: "400 à 600 caractères si enrichi"}
+      - {cle: garde_debut, libelle: "À boire à partir de", type: annee, enrichi: true, excel: "Vins/Garde début", pdf: true, contrat: "garde.debut"}
+      - {cle: garde_apogee, libelle: "Apogée", type: annee, enrichi: true, excel: "Vins/Apogée", pdf: true, contrat: "garde.apogee"}
+      - {cle: garde_fin, libelle: "À boire avant", type: annee, enrichi: true, excel: "Vins/Garde fin", pdf: true, contrat: "garde.fin", regle: "début ≥ millésime ; début ≤ apogée ≤ fin"}
+      - {cle: garde_source, libelle: "Origine de la garde", type: enum, enum: source_provenance, excel: "RO:Vins/Origine garde", pdf: true}
+      - {cle: statut_garde, libelle: "Statut de garde", type: calcule, excel: "RO:Vins/Statut garde", pdf: true, regle: "algorithme docs/04-modele-donnees.md §Garde"}
+      - {cle: accords, libelle: "Accords mets et vins", type: liste_multiple, liste: accord_mets, enrichi: true, excel: "Vins/Accords", pdf: true}
+      - {cle: ean, libelle: "Code-barres EAN", type: texte, excel: "Vins/EAN", regle: "13 chiffres, clé de contrôle valide"}
+      - {cle: lwin, libelle: "LWIN", type: texte, enrichi: true, excel: "Vins/LWIN", regle: "LWIN7 (vin) ou LWIN11 (vin + millésime)"}
+      - {cle: commentaire_perso, libelle: "Mon commentaire", type: texte_long, excel: "Vins/Mon commentaire", pdf: true}
+      - {cle: favori, libelle: "Favori", type: booleen, excel: "Vins/Favori"}
+      - {cle: statut_enrichissement, libelle: "Statut d'enrichissement", type: enum, enum: statut_enrichissement, excel: "RO:Vins/Statut enrichissement"}
+      - {cle: note_parker, libelle: "Note Parker", type: calcule, excel: "RO:Vins/Note Parker", pdf: true, regle: "note la plus récente de source 'Robert Parker Wine Advocate'"}
+      - {cle: meilleure_note, libelle: "Meilleure note", type: calcule, excel: "RO:Vins/Meilleure note (/100)", regle: "maximum des notes ramenées sur 100"}
+      - {cle: stock_total, libelle: "Bouteilles en stock", type: calcule, excel: "RO:Vins/Stock total", pdf: true}
+      - {cle: action, libelle: "Action", type: texte, excel: "Vins/Action", regle: "vide ou SUPPRIMER (import uniquement)"}
+
+  note_critique:
+    role: "une ligne par note"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, oblig: true}
+      - {cle: critique, libelle: "Critique", type: liste, liste: critique, oblig: true, enrichi: true, pdf: true, contrat: source_critique}
+      - {cle: note, libelle: "Note", type: decimal, oblig: true, enrichi: true, pdf: true}
+      - {cle: echelle, libelle: "Échelle", type: entier, oblig: true, regle: "20 ou 100"}
+      - {cle: degustateur, libelle: "Dégustateur", type: texte, enrichi: true}
+      - {cle: date_note, libelle: "Date de la note", type: date, enrichi: true}
+      - {cle: fenetre_debut, libelle: "Fenêtre conseillée, début", type: annee, enrichi: true}
+      - {cle: fenetre_fin, libelle: "Fenêtre conseillée, fin", type: annee, enrichi: true}
+      - {cle: url, libelle: "Source", type: url, enrichi: true}
+      - {cle: citee_par, libelle: "Citée par", type: texte, enrichi: true, pdf: true, regle: "site qui reprend la note quand ce n'est pas le critique lui-même (domaine, marchand). Obligatoire si la source n'est pas le site du critique."}
+
+  lot:
+    role: "stock physique homogène : même fiche, format, propriétaire, emplacement, prix"
+    champs:
+      - {cle: id, libelle: "Identifiant du lot", type: texte, excel: "Lots/id lot"}
+      - {cle: fiche_id, libelle: "Fiche", type: reference, oblig: true, excel: "Lots/id fiche"}
+      - {cle: libelle_vin, libelle: "Vin", type: calcule, excel: "RO:Lots/Vin"}
+      - {cle: format_cl, libelle: "Format (cl)", type: liste, liste: format, oblig: true, excel: "Lots/Format (cl)", pdf: true}
+      - {cle: proprietaire_id, libelle: "Propriétaire", type: reference, oblig: true, excel: "Lots/Propriétaire", pdf: true}
+      - {cle: emplacement_id, libelle: "Emplacement", type: reference, excel: "Lots/Emplacement", pdf: true, regle: "en Excel, chemin complet 'Cave > Armoire 1 > Casier A'"}
+      - {cle: positions, libelle: "Positions", type: texte, excel: "Lots/Positions", pdf: true, regle: "cellules de grille séparées par des virgules, ex. 'A3, A4'"}
+      - {cle: quantite, libelle: "Quantité", type: calcule, excel: "Lots/Quantité", pdf: true, regle: "somme des mouvements ; à l'import = quantité cible, l'écart crée un mouvement d'ajustement"}
+      - {cle: prix_achat_unitaire, libelle: "Prix d'achat unitaire", type: montant, excel: "Lots/Prix d'achat unitaire", pdf: true}
+      - {cle: date_achat, libelle: "Date d'achat", type: date, excel: "Lots/Date d'achat"}
+      - {cle: fournisseur, libelle: "Fournisseur", type: liste, liste: fournisseur, excel: "Lots/Fournisseur"}
+      - {cle: action, libelle: "Action", type: texte, excel: "Lots/Action", regle: "vide ou SUPPRIMER"}
+
+  mouvement:
+    role: "toute variation de stock, immuable (une erreur se corrige par un mouvement inverse)"
+    champs:
+      - {cle: lot_id, libelle: "Lot", type: reference, oblig: true, excel: "RO:Mouvements/id lot"}
+      - {cle: type_mouvement, libelle: "Type", type: enum, enum: type_mouvement, oblig: true, excel: "RO:Mouvements/Type"}
+      - {cle: quantite, libelle: "Quantité", type: entier, oblig: true, excel: "RO:Mouvements/Quantité", regle: "signée, jamais 0"}
+      - {cle: date_mouvement, libelle: "Date", type: date, oblig: true, excel: "RO:Mouvements/Date"}
+      - {cle: motif, libelle: "Motif", type: liste, liste: motif_mouvement, excel: "RO:Mouvements/Motif", regle: "obligatoire pour ajustement et sortie_autre"}
+      - {cle: commentaire, libelle: "Commentaire", type: texte, excel: "RO:Mouvements/Commentaire"}
+      - {cle: lot_lie_id, libelle: "Lot lié", type: reference, regle: "renseigné pour un transfert"}
+
+  degustation:
+    role: "note personnelle"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, oblig: true}
+      - {cle: date_degustation, libelle: "Date", type: date, oblig: true}
+      - {cle: note_perso, libelle: "Ma note", type: decimal, regle: "sur l'échelle choisie dans les réglages (20 ou 100)"}
+      - {cle: commentaire, libelle: "Commentaire", type: texte_long}
+      - {cle: plat, libelle: "Plat servi", type: texte}
+      - {cle: mouvement_id, libelle: "Ouverture liée", type: reference}
+
+  prix_marche:
+    role: "historique de prix, jamais écrasé"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, oblig: true}
+      - {cle: format_cl, libelle: "Format (cl)", type: decimal, oblig: true}
+      - {cle: date_releve, libelle: "Date du relevé", type: date, oblig: true, contrat: date}
+      - {cle: prix, libelle: "Prix", type: montant, regle: "nul si non trouvé"}
+      - {cle: devise, libelle: "Devise", type: texte, oblig: true}
+      - {cle: nature, libelle: "Nature", type: enum, enum: nature_prix}
+      - {cle: nb_offres, libelle: "Nombre d'offres", type: entier}
+      - {cle: site, libelle: "Site", type: texte}
+      - {cle: url, libelle: "Lien", type: url}
+      - {cle: trouve, libelle: "Trouvé", type: booleen, oblig: true}
+
+  photo:
+    role: "image locale, chemin relatif au répertoire de l'app"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, oblig: true}
+      - {cle: chemin, libelle: "Fichier", type: texte, oblig: true, excel: "RO:Vins/Photo principale", regle: "relatif, ex. photos/<fiche_id>/<photo_id>.jpg"}
+      - {cle: type_photo, libelle: "Type", type: enum, enum: type_photo, oblig: true}
+      - {cle: principale, libelle: "Photo principale", type: booleen, oblig: true}
+      - {cle: largeur, libelle: "Largeur (px)", type: entier}
+      - {cle: hauteur, libelle: "Hauteur (px)", type: entier}
+      - {cle: octets, libelle: "Taille (octets)", type: entier}
+
+  provenance:
+    role: "origine de chaque valeur enrichie"
+    champs:
+      - {cle: entite, libelle: "Entité", type: texte, oblig: true}
+      - {cle: entite_id, libelle: "Identifiant", type: reference, oblig: true}
+      - {cle: champ, libelle: "Champ", type: texte, oblig: true}
+      - {cle: valeur, libelle: "Valeur proposée", type: json}
+      - {cle: source, libelle: "Source", type: enum, enum: source_provenance, oblig: true}
+      - {cle: url, libelle: "URL", type: url}
+      - {cle: confiance, libelle: "Confiance", type: decimal, regle: "entre 0 et 1"}
+      - {cle: date_collecte, libelle: "Date", type: date, oblig: true}
+      - {cle: statut, libelle: "Statut", type: enum, enum: statut_provenance, oblig: true}
+      - {cle: signale, libelle: "Signalé comme faux", type: booleen}
+
+  emplacement:
+    role: "arbre de rangement sur 4 niveaux"
+    champs:
+      - {cle: parent_id, libelle: "Parent", type: reference}
+      - {cle: nom, libelle: "Nom", type: texte, oblig: true}
+      - {cle: type_emplacement, libelle: "Type", type: enum, enum: type_emplacement, oblig: true}
+      - {cle: lignes, libelle: "Lignes de la grille", type: entier, regle: "1 à 26, libellées A à Z"}
+      - {cle: colonnes, libelle: "Colonnes de la grille", type: entier, regle: "1 à 50"}
+      - {cle: capacite, libelle: "Capacité", type: entier}
+
+  proprietaire:
+    champs:
+      - {cle: nom, libelle: "Nom", type: texte, oblig: true}
+      - {cle: initiales, libelle: "Initiales", type: texte, regle: "2 à 3 lettres"}
+      - {cle: couleur, libelle: "Couleur", type: texte, regle: "#RRGGBB"}
+      - {cle: par_defaut, libelle: "Par défaut", type: booleen}
+
+  valeur_liste:
+    champs:
+      - {cle: liste, libelle: "Liste", type: texte, oblig: true}
+      - {cle: code, libelle: "Code", type: texte, oblig: true}
+      - {cle: libelle, libelle: "Libellé", type: texte, oblig: true}
+      - {cle: parent_code, libelle: "Parent", type: texte}
+      - {cle: ordre, libelle: "Ordre", type: entier}
+      - {cle: actif, libelle: "Actif", type: booleen, oblig: true}
+
+  job:
+    role: "appel au flux n8n, suivi côté téléphone"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, oblig: true}
+      - {cle: type_job, libelle: "Type", type: texte, oblig: true, regle: "enrichissement ou prix"}
+      - {cle: request_id, libelle: "Identifiant de requête", type: texte, oblig: true, regle: "UUID, sert à l'idempotence"}
+      - {cle: job_id_distant, libelle: "Job n8n", type: texte}
+      - {cle: statut, libelle: "Statut", type: enum, enum: statut_job, oblig: true}
+      - {cle: tentatives, libelle: "Tentatives", type: entier}
+      - {cle: erreur, libelle: "Erreur", type: texte}
+
+  vue_statistique:
+    role: "favori de l'explorateur"
+    champs:
+      - {cle: nom, libelle: "Nom", type: texte, oblig: true}
+      - {cle: mesure, libelle: "Mesure", type: texte, oblig: true}
+      - {cle: dimension_1, libelle: "Dimension", type: texte, oblig: true}
+      - {cle: dimension_2, libelle: "Seconde dimension", type: texte}
+      - {cle: filtres, libelle: "Filtres", type: json}
+      - {cle: graphique, libelle: "Graphique", type: texte, oblig: true}

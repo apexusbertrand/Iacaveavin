@@ -1,0 +1,63 @@
+{
+  "version_contrat": "1.0",
+  "job_id": "3e2d1c0b-9a8f-4e7d-8c6b-5a4f3e2d1c0b",
+  "request_id": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+  "fiche_id": null,
+  "type": "enrichissement",
+  "statut": "partiel",
+  "etape": "termine",
+  "resultat": {
+    "fiche": {
+      "domaine": { "valeur": "Château de l'Exemple", "source": "etiquette", "confiance": 0.96 },
+      "domaine_site_officiel": { "valeur": "https://chateau-exemple.fr", "source": "site_officiel", "url": "https://chateau-exemple.fr", "confiance": 0.9 },
+      "commentaire_domaine": { "valeur": "[Texte de 400 à 600 caractères rédigé par l'agent.]", "source": "site_officiel", "url": "https://chateau-exemple.fr/le-chateau", "confiance": 0.85 },
+      "cuvee": { "valeur": "Grand Vin", "source": "etiquette", "confiance": 0.8 },
+      "pays": { "valeur": "France", "source": "etiquette", "confiance": 0.99 },
+      "region": { "valeur": "Bordeaux", "source": "organisme_officiel", "url": "https://exemple-organisme.fr/appellations/pauillac", "confiance": 0.99 },
+      "sous_region": { "valeur": "Médoc", "source": "organisme_officiel", "url": "https://exemple-organisme.fr/appellations/pauillac", "confiance": 0.99 },
+      "appellation": { "valeur": "Pauillac", "source": "etiquette", "confiance": 0.98 },
+      "signe_qualite": { "valeur": "AOP", "source": "etiquette", "confiance": 0.95 },
+      "classement": { "valeur": "Grand Cru Classé", "source": "etiquette", "confiance": 0.92 },
+      "couleur": { "valeur": "rouge", "source": "site_officiel", "url": "https://chateau-exemple.fr/vins/grand-vin-2017", "confiance": 0.99 },
+      "millesime": { "valeur": 2017, "source": "etiquette", "confiance": 0.99 },
+      "cepages": {
+        "valeur": [{ "cepage": "Cabernet Sauvignon", "pourcentage": 70 }, { "cepage": "Merlot", "pourcentage": 30 }],
+        "source": "site_officiel",
+        "url": "https://chateau-exemple.fr/vins/grand-vin-2017",
+        "confiance": 0.9
+      },
+      "degre": { "valeur": 13.5, "source": "etiquette", "confiance": 0.9 },
+      "commentaire_millesime": { "valeur": "[Texte de 400 à 600 caractères rédigé par l'agent.]", "source": "site_officiel", "url": "https://chateau-exemple.fr/vins/grand-vin-2017", "confiance": 0.85 },
+      "garde": { "valeur": { "debut": 2025, "apogee": 2032, "fin": 2045 }, "source": "critique", "url": "https://exemple-caviste-a.fr/produit/42", "confiance": 0.75, "note": "fenêtre Parker citée par le marchand" },
+      "lwin": { "valeur": null, "source": null, "confiance": null, "motif": "LWIN non trouvé" }
+    },
+    "transcription": [{ "index": 0, "texte": "CHÂTEAU DE L'EXEMPLE / GRAND CRU CLASSÉ / PAUILLAC / APPELLATION PAUILLAC CONTRÔLÉE / 2017" }],
+    "notes_critiques": [
+      {
+        "source_critique": "Robert Parker Wine Advocate",
+        "note": 92,
+        "echelle": 100,
+        "degustateur": null,
+        "date_note": null,
+        "fenetre": { "debut": 2025, "fin": 2045 },
+        "acces": "citee",
+        "citee_par": "exemple-caviste-a.fr",
+        "url": "https://exemple-caviste-a.fr/produit/42",
+        "confiance": 0.75
+      }
+    ],
+    "prix": [
+      { "format_cl": 75, "trouve": false, "devise": "EUR", "date": "2026-10-20", "motif": "délai dépassé avant la fin de la recherche de prix, relancer depuis la fiche" }
+    ],
+    "alertes": [
+      { "code": "desaccord_etiquette_source", "champ": "degre", "message": "Étiquette 13,5 %, fiche technique du site 13 %. Valeur de l'étiquette conservée." },
+      { "code": "prix_non_trouve", "champ": "prix", "message": "Recherche de prix interrompue." }
+    ],
+    "sources_consultees": [
+      { "url": "https://chateau-exemple.fr/vins/grand-vin-2017", "consultee_le": "2026-10-20", "utilisee": true },
+      { "url": "https://exemple-caviste-a.fr/produit/42", "consultee_le": "2026-10-20", "utilisee": true }
+    ],
+    "cache": { "hit": false },
+    "cout": { "appels_modele": 9, "credits_recherche": 8, "duree_ms": 178400 }
+  }
+}

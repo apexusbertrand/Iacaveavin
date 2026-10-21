@@ -1,0 +1,43 @@
+# Secrets : ne jamais commiter
+*.jks
+*.keystore
+key.properties
+**/android/key.properties
+.env
+.env.*
+*.pem
+google-services.json
+GoogleService-Info.plist
+
+# Claude Code, préférences personnelles
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Flutter / Dart
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/.packages
+app/build/
+app/coverage/
+app/**/*.g.dart.tmp
+app/android/.gradle/
+app/android/local.properties
+app/android/app/release/
+app/ios/Pods/
+app/ios/.symlinks/
+app/ios/Flutter/Generated.xcconfig
+app/ios/Flutter/flutter_export_environment.sh
+
+# Outils
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# Sorties de test du jeu d'essai n8n
+n8n/jeu-essai/**/obtenu.json
+n8n/jeu-essai/rapport-*.md

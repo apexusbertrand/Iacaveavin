@@ -1,0 +1,39 @@
+# Domaines que les agents peuvent consulter. Chargé par le flux IA_CAVE_Agent au démarrage d'un job.
+#
+# statut :
+#   a_verifier  candidat, à contrôler avant activation (le domaine existe, CGU et robots.txt
+#               autorisent une consultation ponctuelle, les pages sont lisibles sans compte)
+#   actif       vérifié, utilisable
+#   exclu       ne plus consulter (raison obligatoire)
+#
+# Toute vérification se note ici (date + constat). Les agents n'utilisent que les domaines actifs,
+# plus le site officiel du domaine identifié pendant le job (vérifié au cas par cas, étape 4).
+
+version: 1
+
+organismes_officiels:
+  - {domaine: inao.gouv.fr, usage: "appellations, aires, cahiers des charges", statut: a_verifier}
+  - {domaine: data.gouv.fr, usage: "référentiels ouverts (appellations)", statut: a_verifier}
+  - {domaine: champagne.fr, usage: "Comité Champagne, millésimes", statut: a_verifier}
+  - {domaine: vinsalsace.com, usage: "CIVA, appellations et millésimes d'Alsace", statut: a_verifier}
+  - {domaine: bourgogne-wines.com, usage: "BIVB, appellations et millésimes de Bourgogne", statut: a_verifier}
+  - {domaine: bordeaux.com, usage: "CIVB, appellations et millésimes de Bordeaux", statut: a_verifier}
+  - {domaine: vins-rhone.com, usage: "Inter Rhône", statut: a_verifier}
+  - {domaine: vinsvaldeloire.fr, usage: "InterLoire", statut: a_verifier}
+
+critiques_acces_libre:
+  - {domaine: robertparker.com, usage: "uniquement les pages lisibles sans abonnement", statut: a_verifier}
+
+marchands:
+  # Sites publics de vente en ligne (décision D3). Servent aux prix et, quand ils les affichent,
+  # aux notes critiques citées (acces: citee).
+  - {domaine: vinatis.com, statut: a_verifier}
+  - {domaine: millesima.fr, statut: a_verifier}
+  - {domaine: nicolas.com, statut: a_verifier}
+  - {domaine: vandb.fr, statut: a_verifier}
+  - {domaine: idealwine.com, usage: "prix d'enchères, nature: cote", statut: a_verifier}
+
+exclusions_permanentes:
+  - {motif: "pages derrière une connexion ou un paywall"}
+  - {motif: "agrégateurs dont les conditions d'utilisation interdisent l'extraction automatique"}
+  - {motif: "extracteurs tiers non officiels (services de scraping)"}
