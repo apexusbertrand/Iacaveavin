@@ -1,0 +1,287 @@
+{
+  "name": "IA_CAVE_Purge",
+  "nodes": [
+    {
+      "id": "c022ca84-361e-4b82-87b5-a55176eba1d8",
+      "name": "Chaque nuit",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 3,
+              "triggerAtMinute": 17
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "13247093-c98d-40c3-b31b-56934f2e1dff",
+      "name": "Jobs de plus de 90 jours",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "HD54X4WojTN5H2fX",
+          "cachedResultName": "iacave_jobs"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "createdAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ days: 90 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "0a03114d-3ef6-4e2b-9b81-2a0b6707d9ce",
+      "name": "Cache vins de plus de 180 jours",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "AVjh9z57rSyHHW1e",
+          "cachedResultName": "iacave_cache_vins"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "updatedAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ days: 180 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "570dd06a-3579-4563-a2e8-54f3aa583525",
+      "name": "Cache prix de plus de 24 heures",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "nnNm6j6kXtECZxrn",
+          "cachedResultName": "iacave_cache_prix"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "updatedAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ hours: 24 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "94fffee8-77f8-4312-86fa-2d7042c1e98a",
+      "name": "Quotas de plus de 24 mois",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1ip3UBzHPzShXuiU",
+          "cachedResultName": "iacave_quotas"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "createdAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ months: 24 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "721a3dc6-2a66-4892-a32a-5e59660c70e4",
+      "name": "Signalements de plus de 24 mois",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "HcfygIuRGsBxv9vG",
+          "cachedResultName": "iacave_signalements"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "createdAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ months: 24 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "d19852df-d130-4b7e-9490-a955503434e4",
+      "name": "Sticky Note 549e414e",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -96
+      ],
+      "parameters": {
+        "content": "## IA_CAVE_Purge\nDurées de conservation de docs/06 (stockage côté n8n). Source : n8n/workflow/src/ du dépôt iacaveavin.",
+        "color": 5,
+        "width": 1056,
+        "height": 224
+      }
+    }
+  ],
+  "connections": {
+    "Chaque nuit": {
+      "main": [
+        [
+          {
+            "node": "Jobs de plus de 90 jours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jobs de plus de 90 jours": {
+      "main": [
+        [
+          {
+            "node": "Cache vins de plus de 180 jours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cache vins de plus de 180 jours": {
+      "main": [
+        [
+          {
+            "node": "Cache prix de plus de 24 heures",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cache prix de plus de 24 heures": {
+      "main": [
+        [
+          {
+            "node": "Quotas de plus de 24 mois",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quotas de plus de 24 mois": {
+      "main": [
+        [
+          {
+            "node": "Signalements de plus de 24 mois",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "errorWorkflow": "DBnqjEW2q6d4YeOh",
+    "timezone": "Europe/Paris",
+    "executionTimeout": 120
+  },
+  "meta": {
+    "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
+    "idN8n": "2MMx8azV92NVEEEE",
+    "versionId": "a984b23a-b7fb-4ae6-8111-1ba0849254da"
+  }
+}

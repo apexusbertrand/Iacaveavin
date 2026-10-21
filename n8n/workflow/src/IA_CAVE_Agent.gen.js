@@ -1,7 +1,9 @@
 // Flux principal IA_CAVE_Agent : points d'entrée de docs/06 (santé,
-// enrichissement, suivi des jobs). Le traitement tourne dans
-// IA_CAVE_Enrichissement, lancé sans attente.
+// enrichissement, prix, suivi des jobs). POST /enrichissement et POST /prix
+// partagent les contrôles d'entrée ; le traitement tourne dans
+// IA_CAVE_Enrichissement ou IA_CAVE_Prix, lancé sans attente.
 const SOUS_FLUX_ENRICHISSEMENT = '5z197yDZlge7nrpM';
+const SOUS_FLUX_PRIX = 'PeGDu6KX9n4SDml1';
 
 module.exports = (o) => {
   const CTL = "$('Contrôles enrichissement').first().json";
@@ -16,6 +18,7 @@ const repondreSante = node({
 });
 
 ${o.webhook('webhookEnrich', 'Webhook enrichissement', 'POST', 'iacave/enrichissement', true)}
+${o.webhook('webhookPrix', 'Webhook prix', 'POST', 'iacave/prix', true)}
 ${o.code('empreinte', 'Empreinte enrichissement', 'empreinte', "{ empreinte: 'x', texteCorps: '{}', requestId: 'x', entetes: {} }")}
 ${o.lire('configEnrich', 'Config enrichissement', 'config', [], { tout: true })}
 ${o.lire('jobExistant', 'Job existant enrichissement', 'jobs', [['request_id', o.ex("{{ $('Empreinte enrichissement').first().json.requestId }}")]])}
@@ -30,7 +33,7 @@ const lancer = node({
   type: 'n8n-nodes-base.executeWorkflow', version: 1.4,
   config: { name: 'Lancer l\\'enrichissement', executeOnce: true,
     parameters: { mode: 'once', source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: ${o.q(SOUS_FLUX_ENRICHISSEMENT)}, cachedResultName: 'IA_CAVE_Enrichissement' },
+      workflowId: { __rl: true, mode: 'id', value: expr(${o.q(`{{ ${CTL}.envoi.type === 'prix' ? '${SOUS_FLUX_PRIX}' : '${SOUS_FLUX_ENRICHISSEMENT}' }}`)}) },
       options: { waitForSubWorkflow: false } } }
 });
 ${o.repondre('repondreCree', 'Répondre job créé', `{{ ${CTL}.reponse }}`, `{{ ${CTL}.http }}`)}
@@ -43,7 +46,7 @@ ${o.lire('quotaSuivi', 'Quota suivi', 'quotas', [['mois', o.ex(o.MOIS)]])}
 ${o.code('suivi', 'Suivi du job', 'suivi', "{ http: 200, reponse: {} }")}
 ${o.repondre('repondreSuivi', 'Répondre suivi', '{{ $json.reponse }}', '{{ $json.http }}')}
 
-const note = sticky('## IA_CAVE_Agent\\nPoints d\\'entrée de l\\'app IA cave à vin (docs/06-agent-n8n.md) : santé, enrichissement, suivi des jobs. Code des nœuds : n8n/code/ du dépôt iacaveavin, assemblé par n8n/code/assembler.js. Ne pas modifier à la main.', [configSante, sante, repondreSante], { color: 5 });
+const note = sticky('## IA_CAVE_Agent\\nPoints d\\'entrée de l\\'app IA cave à vin (docs/06-agent-n8n.md) : santé, enrichissement, prix, suivi des jobs. Code des nœuds : n8n/code/ du dépôt iacaveavin, assemblé par n8n/code/assembler.js. Ne pas modifier à la main.', [configSante, sante, repondreSante], { color: 5 });
 
 export default workflow('ia-cave-agent', 'IA_CAVE_Agent')
   .add(webhookSante)
@@ -59,6 +62,8 @@ export default workflow('ia-cave-agent', 'IA_CAVE_Agent')
   .to(siNouveau
     .onTrue(creerJob.to(charge).to(lancer).to(repondreCree))
     .onFalse(repondreEnrich))
+  .add(webhookPrix)
+  .to(empreinte)
   .add(webhookSuivi)
   .to(configSuivi)
   .to(jobSuivi)

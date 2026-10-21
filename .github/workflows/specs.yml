@@ -21,6 +21,17 @@ jobs:
         run: python3 scripts/verifier_regles.py
       - name: Aucun secret dans les exports de flux n8n
         run: |
-          if grep -RInE '("apiKey"|"password"|"secret"|Bearer [A-Za-z0-9]{20,})' n8n/workflow 2>/dev/null; then
+          if grep -RInE '("apiKey"|"password"|"secret"|Bearer [A-Za-z0-9]{20,}|tvly-[A-Za-z0-9_-]{10,}|sk-ant-|dev-[A-Za-z0-9_-]{20,})' n8n/workflow 2>/dev/null; then
             echo "Secret probable dans n8n/workflow" && exit 1
           fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Nœuds Code du flux n8n (tests node)
+        run: node --test n8n/code/test/*.test.js
+      - name: Validateur JS des nœuds identique à jsonschema
+        run: python3 n8n/code/test/schema_croise.py
+      - name: Exports de flux conformes au code du dépôt
+        run: for f in n8n/workflow/IA_CAVE_*.json; do node n8n/code/comparer.js "$f"; done
+      - name: Script du jeu d'essai (signature et comparaisons, sans réseau)
+        run: python3 scripts/jeu_essai.py --auto-test

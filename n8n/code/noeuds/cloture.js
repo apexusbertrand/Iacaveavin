@@ -28,8 +28,28 @@ const schema = __SCHEMA_REPONSE__;
 const maintenant = Date.now();
 const jour = jourParis(new Date(maintenant));
 const resultat = c.resultat;
+// Relevé de prix (inclure_prix) : rendu par IA_CAVE_Prix en mode interne.
+let releve = null;
+try {
+  if ($('Relevé de prix').isExecuted) releve = $('Relevé de prix').first().json;
+} catch (e) {
+  // Prix non demandé.
+}
+const coutPrix = (releve && releve.cout) || { appels_modele: 0, credits_recherche: 0 };
+if (releve && releve.ok) {
+  resultat.prix = releve.prix;
+  resultat.alertes = [...resultat.alertes, ...releve.alertes];
+  const vues = new Set(resultat.sources_consultees.map((s) => s.url));
+  resultat.sources_consultees = [...resultat.sources_consultees, ...releve.sources_consultees.filter((s) => !vues.has(s.url))];
+} else if (releve) {
+  resultat.alertes.push({ code: 'prix_non_trouve', message: 'Relevé de prix en erreur : relance possible depuis la fiche.' });
+}
 resultat.cache = c.cache ? { hit: true, cle: c.cle, date: c.date_cache || jour } : { hit: false };
-resultat.cout = { appels_modele: c.cout.appels_modele, credits_recherche: c.cout.credits_recherche, duree_ms: Math.max(0, maintenant - (envoi.recu_le || maintenant)) };
+resultat.cout = {
+  appels_modele: c.cout.appels_modele + coutPrix.appels_modele,
+  credits_recherche: c.cout.credits_recherche + coutPrix.credits_recherche,
+  duree_ms: Math.max(0, maintenant - (envoi.recu_le || maintenant)),
+};
 const statut = statutFinal(resultat);
 const job = { job_id: envoi.job_id, request_id: envoi.requete.request_id, type: 'enrichissement', statut, etape: 'termine', fiche_id: envoi.requete.fiche_id || '', resultat: JSON.stringify(resultat) };
 const erreurs = validateSchema(schema, enveloppeJob(job, quotaRestant(config, ligneQuota)));
@@ -40,7 +60,7 @@ const q = ligneQuota || { mois, enrichissements: 0, prix: 0, credits_recherche: 
 const quota = {
   mois,
   enrichissements: (q.enrichissements || 0) + 1,
-  prix: q.prix || 0,
+  prix: (q.prix || 0) + (releve ? 1 : 0),
   credits_recherche: (q.credits_recherche || 0) + resultat.cout.credits_recherche,
   appels_modele: (q.appels_modele || 0) + resultat.cout.appels_modele,
   alerte_envoyee: !!q.alerte_envoyee,
@@ -49,7 +69,9 @@ const plafond = parseInt(config.quota_enrichissements, 10) || 100;
 const seuil = parseFloat(config.seuil_alerte) || 0.8;
 const alerte = !quota.alerte_envoyee && quota.enrichissements >= Math.ceil(plafond * seuil);
 if (alerte) quota.alerte_envoyee = true;
-const sansTranscription = { ...resultat, transcription: [] };
+// Le cache du vin garde 180 jours : sans la transcription du jour ni les prix,
+// qui ont leur propre cache de 24 heures.
+const sansTranscription = { ...resultat, transcription: [], prix: undefined };
 return [{ json: {
   job_id: envoi.job_id,
   statut,

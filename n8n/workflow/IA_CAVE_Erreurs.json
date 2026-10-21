@@ -1,0 +1,330 @@
+{
+  "name": "IA_CAVE_Erreurs",
+  "nodes": [
+    {
+      "id": "b761b132-3f95-464a-b5c4-f4816b737a89",
+      "name": "Erreur dans un flux IA_CAVE",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0af60cc9-0c7f-4be5-87cb-b1eae0caf9d2",
+      "name": "Erreur analysée",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        80
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Flux d'erreur : message lisible pour le mail et erreur au contrat pour le\n// job concerné (retrouvé par l'identifiant d'exécution).\nconst e = $input.first().json;\nconst ex = e.execution || {};\nconst message = (ex.error && ex.error.message) || 'erreur inconnue';\nconst code = /^photo_illisible/.test(message) ? 'photo_illisible' : 'interne';\nconst erreur = {\n  code,\n  message: code === 'photo_illisible' ? 'Étiquette illisible : reprenez une photo plus nette.' : 'Erreur interne du flux, relance possible.',\n  reessayable: true,\n};\nreturn [{ json: {\n  execution_id: String(ex.id || ''),\n  flux: (e.workflow && e.workflow.name) || '',\n  noeud: ex.lastNodeExecuted || '',\n  url: ex.url || '',\n  message: String(message).slice(0, 1000),\n  erreur: JSON.stringify(erreur),\n} }];\n"
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "6a05237c-d156-4c70-842b-15ef2cdbaa11",
+      "name": "Job concerné",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        80
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "HD54X4WojTN5H2fX",
+          "cachedResultName": "iacave_jobs"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "execution_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.execution_id || \"aucune\" }}"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "d28f5a6a-4ee0-429d-a5ab-7dae5d415414",
+      "name": "Job trouvé ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ !!$json.job_id }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "f1d92349-bb71-4638-bfe4-bf3a38771c87",
+      "name": "Passer le job en erreur",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "HD54X4WojTN5H2fX",
+          "cachedResultName": "iacave_jobs"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Job concerné').first().json.job_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "statut": "erreur",
+            "erreur": "={{ $('Erreur analysée').first().json.erreur }}",
+            "journal": "={{ $('Erreur analysée').first().json.message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "statut",
+              "displayName": "statut",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "erreur",
+              "displayName": "erreur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "journal",
+              "displayName": "journal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "f3d39c84-a32f-45ae-8b00-56fc0f86445a",
+      "name": "Destinataire",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        80
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "wZNVTkGzqgeu2smf",
+          "cachedResultName": "iacave_config"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "cle",
+              "condition": "eq",
+              "keyValue": "email_alerte"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "2f857a3f-fa39-42a3-909b-80f78d3e40d6",
+      "name": "Mail d'alerte",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        80
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.valeur || 'apexus.bertrand@gmail.com' }}",
+        "subject": "=IA cave à vin : erreur dans {{ $('Erreur analysée').first().json.flux }}",
+        "emailType": "html",
+        "message": "=<p>Le flux <b>{{ $('Erreur analysée').first().json.flux }}</b> s'est arrêté au nœud <b>{{ $('Erreur analysée').first().json.noeud }}</b>.</p><p>Message : {{ $('Erreur analysée').first().json.message }}</p><p>Job : {{ $('Job concerné').first().json.job_id || 'aucun' }}</p><p><a href=\"{{ $('Erreur analysée').first().json.url }}\">Voir l'exécution</a></p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "executeOnce": true,
+      "webhookId": "c8e48cd1-8614-4dda-947f-0aeba7f21525",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "XeJ1e39vt2LorL9B",
+          "name": "Gmail APEXUS"
+        }
+      }
+    },
+    {
+      "id": "4e3e4979-b6bd-4356-867e-5d350542e6f4",
+      "name": "Sticky Note 77100628",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -96
+      ],
+      "parameters": {
+        "content": "## IA_CAVE_Erreurs\nFlux d'erreur de IA_CAVE_Agent et de ses sous-flux. Source : n8n/workflow/src/ du dépôt iacaveavin.",
+        "color": 3,
+        "width": 1280,
+        "height": 304
+      }
+    }
+  ],
+  "connections": {
+    "Erreur dans un flux IA_CAVE": {
+      "main": [
+        [
+          {
+            "node": "Erreur analysée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Erreur analysée": {
+      "main": [
+        [
+          {
+            "node": "Job concerné",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job concerné": {
+      "main": [
+        [
+          {
+            "node": "Job trouvé ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job trouvé ?": {
+      "main": [
+        [
+          {
+            "node": "Passer le job en erreur",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Destinataire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Passer le job en erreur": {
+      "main": [
+        [
+          {
+            "node": "Destinataire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Destinataire": {
+      "main": [
+        [
+          {
+            "node": "Mail d'alerte",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "meta": {
+    "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
+    "idN8n": "DBnqjEW2q6d4YeOh",
+    "versionId": "2c5d9b34-38eb-4d4a-b58b-792a46a8a4b2"
+  }
+}

@@ -1,5 +1,6 @@
 // Sous-flux d'enrichissement (docs/06, étapes 1 à 11), lancé sans attente
-// par IA_CAVE_Agent après la création du job.
+// par IA_CAVE_Agent après la création du job. Étape 9 (prix) : IA_CAVE_Prix
+// en mode interne, avec attente.
 module.exports = (o) => {
   const TROUVE = "$('Déclencheur enrichissement').first().json";
   const CLOT = "$('Clôture').first().json";
@@ -121,6 +122,19 @@ ${o.ecrire('jobErreur', 'Job en erreur', 'jobs', 'update',
     { statut: "'erreur'", erreur: o.ex('{{ $json.erreur }}'), journal: o.ex('{{ $json.journal }}') },
     [['job_id', o.ex('{{ $json.job_id }}')]])}
 
+${o.si('siPrix', 'Prix demandé ?', `{{ ${TROUVE}.requete.inclure_prix !== false }}`)}
+
+${o.code('chargePrix', 'Charge prix', 'charge_prix', "{ mode: 'interne', job_id: 'x', requete: {} }")}
+
+const releve = node({
+  type: 'n8n-nodes-base.executeWorkflow', version: 1.4,
+  config: { name: 'Relevé de prix', executeOnce: true, onError: 'continueRegularOutput',
+    parameters: { mode: 'once', source: 'database',
+      workflowId: { __rl: true, mode: 'id', value: 'PeGDu6KX9n4SDml1', cachedResultName: 'IA_CAVE_Prix' },
+      options: { waitForSubWorkflow: true } } },
+  output: [{ ok: true }]
+});
+
 ${o.lire('quotaCloture', 'Quota clôture', 'quotas', [['mois', o.ex(o.MOIS)]])}
 
 ${o.code('cloture', 'Clôture', 'cloture', "{ job_id: 'x', statut: 'termine', resultat: '{}', quota: {}, ecrire_cache: false, alerte: false }")}
@@ -174,12 +188,15 @@ export default workflow('ia-cave-enrichissement', 'IA_CAVE_Enrichissement')
   .to(cacheVin)
   .to(decision)
   .to(siCache
-    .onTrue(resCache.to(quotaCloture))
+    .onTrue(resCache.to(siPrix))
     .onFalse(etapeEnrich.to(preparer).to(agent).to(controles).to(siOk
-      .onTrue(quotaCloture)
+      .onTrue(siPrix)
       .onFalse(prepCorr.to(agentCorr).to(controlesCorr).to(siOk2
-        .onTrue(quotaCloture)
+        .onTrue(siPrix)
         .onFalse(echec.to(jobErreur)))))))
+  .add(siPrix
+    .onTrue(chargePrix.to(releve).to(quotaCloture))
+    .onFalse(quotaCloture))
   .add(quotaCloture)
   .to(cloture)
   .to(jobTermine)
