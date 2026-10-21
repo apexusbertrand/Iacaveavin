@@ -20,7 +20,7 @@ Future<int?> runSelectionAction(
   final l = AppLocalizations.of(context);
   final String? target;
   if (action == SelectionAction.move) {
-    final locations = await ref.read(locationsProvider.future);
+    final locations = await ref.read(referenceRepositoryProvider).locations();
     if (!context.mounted) return null;
     target = await pickFromList(
       context,
@@ -29,7 +29,7 @@ Future<int?> runSelectionAction(
       indent: {for (final loc in locations) loc.id: loc.depth},
     );
   } else {
-    final owners = await ref.read(ownersProvider.future);
+    final owners = await ref.read(referenceRepositoryProvider).owners();
     if (!context.mounted) return null;
     target = await pickFromList(
       context,

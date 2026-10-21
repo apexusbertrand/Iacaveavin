@@ -266,8 +266,8 @@ Future<void> transferDialog(
   final l = AppLocalizations.of(context);
   final lot = await chooseLot(context, wine, inStockOnly: true);
   if (lot == null || !context.mounted) return;
-  final owners = await ref.read(ownersProvider.future);
-  final locations = await ref.read(locationsProvider.future);
+  final owners = await ref.read(referenceRepositoryProvider).owners();
+  final locations = await ref.read(referenceRepositoryProvider).locations();
   if (!context.mounted) return;
   var qty = lot.bottles;
   String ownerId = lot.ownerId;

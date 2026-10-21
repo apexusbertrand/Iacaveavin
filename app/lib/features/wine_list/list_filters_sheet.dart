@@ -87,6 +87,7 @@ class _SortRow extends StatelessWidget {
         Expanded(
           child: DropdownButtonFormField<SortCriterion?>(
             initialValue: value?.criterion,
+            isExpanded: true,
             decoration: InputDecoration(labelText: label),
             items: [
               if (allowNone)

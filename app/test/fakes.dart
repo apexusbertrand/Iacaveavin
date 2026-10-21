@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/app.dart';
+import 'package:iacaveavin/data/db/app_database.dart';
+import 'package:iacaveavin/data/referentiels/referentiel_loader.dart';
 import 'package:iacaveavin/data/providers.dart';
 import 'package:iacaveavin/data/settings_store.dart';
 import 'package:iacaveavin/domain/demo_data_repository.dart';
@@ -115,4 +117,56 @@ Future<FakeDemoRepository> pumpApp(
   );
   await tester.pumpAndSettle();
   return repo;
+}
+
+/// Lance l'application sur une vraie base SQLite en mémoire, référentiels
+/// chargés depuis le disque. Renvoie la base pour préparer ou vérifier.
+Future<AppDatabase> pumpRealApp(
+  WidgetTester tester, {
+  String location = '/',
+  Map<String, Object> prefs = const {},
+  Future<void> Function(AppDatabase db, String cellarId)? seed,
+}) async {
+  tester.view.physicalSize = const Size(1080, 2340);
+  tester.view.devicePixelRatio = 3;
+  addTearDown(tester.view.reset);
+  SharedPreferences.setMockInitialValues(prefs);
+  final sharedPrefs = await SharedPreferences.getInstance();
+  final db = memoryDatabase();
+  addTearDown(db.close);
+  if (seed != null) {
+    await tester.runAsync(() async {
+      final id = await CellarBootstrap(
+        db,
+        readAssetFromDisk,
+      ).ensureInitialized();
+      await seed(db, id);
+    });
+  }
+  await tester.pumpWidget(
+    ProviderScope(
+      retry: (_, _) => null,
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
+        databaseProvider.overrideWithValue(db),
+        assetReaderProvider.overrideWithValue(readAssetFromDisk),
+        currentYearProvider.overrideWithValue(2026),
+      ],
+      child: IaCaveAVinApp(initialLocation: location),
+    ),
+  );
+  await settle(tester);
+  return db;
+}
+
+/// Laisse la base répondre (vraies entrées-sorties) puis stabilise l'écran.
+/// Borné : une animation infinie (indicateur de chargement) ne bloque pas.
+Future<void> settle(WidgetTester tester) async {
+  for (var i = 0; i < 40; i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 10)),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+    if (i > 3 && !tester.binding.hasScheduledFrame) break;
+  }
 }
