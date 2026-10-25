@@ -17,10 +17,10 @@ Décision D4 : un nouveau flux dans l'instance n8n actuelle, isolé des flux exi
 | --- | --- | --- | --- |
 | /webhook/iacave/enrichissement | POST | requete-enrichissement.schema.json | reponse-job.schema.json, statut en_attente (202) ou termine si cache |
 | /webhook/iacave/prix | POST | requete-prix.schema.json | idem |
-| /webhook/iacave/jobs/:job_id | GET | aucun | reponse-job.schema.json |
+| /webhook/iacave/jobs?job_id=… | GET | aucun (signature sur le chemin avec la requête) | reponse-job.schema.json, 404 si job inconnu |
 | /webhook/iacave/sante | GET | aucun | `{"version_flux": "...", "version_contrat": "1.0", "ok": true}` |
 
-Le webhook répond immédiatement avec le job_id (nœud Respond to Webhook), puis le traitement continue. L'app interroge /jobs toutes les 3 secondes pendant 30 secondes, puis toutes les 10 secondes, jusqu'à 3 minutes.
+POST /enrichissement et POST /prix partagent les nœuds de contrôle d'entrée ; le type vient du webhook qui reçoit la requête (T65). Le webhook répond immédiatement avec le job_id (nœud Respond to Webhook), puis le traitement continue. L'app interroge /jobs toutes les 3 secondes pendant 30 secondes, puis toutes les 10 secondes, jusqu'à 3 minutes.
 
 Contrôles à l'entrée, dans cet ordre : en-têtes présents, horodatage à moins de 300 secondes, signature HMAC (docs/02-architecture.md), request_id déjà vu (renvoyer le job existant), quota, validation du corps contre le schéma.
 
@@ -35,7 +35,7 @@ Tables n8n (Data Tables) si la version de l'instance les propose, sinon une base
 | iacave_cache_prix | clé + format, résultat de prix, date | 24 heures |
 | iacave_quotas | mois, enrichissements, prix, crédits de recherche consommés | 24 mois |
 | iacave_signalements | job, champ, valeur signalée comme fausse, date | 24 mois |
-| iacave_photos_temp | photos du job en cours | effacées à la fin du job, 24 heures au plus en cas d'erreur |
+| (pas de table de photos) | les photos passent du webhook au sous-flux en mémoire, elles ne sont écrites nulle part ; les exécutions réussies ne sont pas conservées (T61) | aucune |
 
 Clé de cache d'un vin : domaine, appellation, cuvée et millésime normalisés (minuscules, sans accents, espaces et ponctuation en tirets), séparés par `|`. Le cache intervient après la lecture d'étiquette : il économise les recherches web, pas la lecture. Un signalement d'erreur sur un champ invalide l'entrée de cache correspondante.
 
@@ -63,6 +63,14 @@ Décision D3 : prix relevés sur les sites publics de vente en ligne, sans servi
 4. Résultat : médiane si 2 offres ou plus, sinon l'offre unique (`nature: offre`). Offre écartée si elle dépasse 5 fois la médiane ou en vaut moins du cinquième.
 5. Aucune offre fiable : `trouve: false` avec un motif. Jamais d'estimation.
 6. Respect des sites : robots.txt, une seule visite par page et par job, pas d'aspiration de catalogue, pas de contournement de connexion ni de paywall.
+
+Mise en œuvre (lot 2b, sous-flux IA_CAVE_Prix) :
+
+- Avant l'agent : cache de 24 heures (sauf `forcer`), puis clé Tavily et au moins un site marchand actif. Sans eux, aucun appel au modèle : `trouve: false` avec le motif.
+- La recherche Tavily est restreinte aux domaines marchands actifs (`include_domains`).
+- Une offre n'est retenue que si sa page a été lue par l'outil `lire_page` pendant ce job, sur un site autorisé, avec `millesime_verifie: true` (T59, T66). La médiane et les écarts sont calculés par le flux, pas par le modèle.
+- Avec `inclure_prix`, l'enrichissement appelle IA_CAVE_Prix en mode interne et fusionne prix, alertes, sources et coût à la clôture. Un relevé en erreur n'empêche pas la fiche : alerte `prix_non_trouve`.
+- La purge quotidienne (IA_CAVE_Purge, 3 h 17) applique les durées du tableau de stockage.
 
 ## Recherche web et budget gratuit
 

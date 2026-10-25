@@ -6,32 +6,34 @@
 #   actif       vérifié, utilisable
 #   exclu       ne plus consulter (raison obligatoire)
 #
-# Toute vérification se note ici (date + constat). Les agents n'utilisent que les domaines actifs,
+# Toute vérification se note ici (date + constat). robots : lecture du robots.txt par n8n le
+# 2026-10-21 (une requête par domaine) ; les CGU restent à lire par Bertrand avant tout passage à actif.
+# Les agents n'utilisent que les domaines actifs,
 # plus le site officiel du domaine identifié pendant le job (vérifié au cas par cas, étape 4).
 
 version: 1
 
 organismes_officiels:
-  - {domaine: inao.gouv.fr, usage: "appellations, aires, cahiers des charges", statut: a_verifier}
-  - {domaine: data.gouv.fr, usage: "référentiels ouverts (appellations)", statut: a_verifier}
-  - {domaine: champagne.fr, usage: "Comité Champagne, millésimes", statut: a_verifier}
-  - {domaine: vinsalsace.com, usage: "CIVA, appellations et millésimes d'Alsace", statut: a_verifier}
-  - {domaine: bourgogne-wines.com, usage: "BIVB, appellations et millésimes de Bourgogne", statut: a_verifier}
-  - {domaine: bordeaux.com, usage: "CIVB, appellations et millésimes de Bordeaux", statut: a_verifier}
-  - {domaine: vins-rhone.com, usage: "Inter Rhône", statut: a_verifier}
-  - {domaine: vinsvaldeloire.fr, usage: "InterLoire", statut: a_verifier}
+  - {domaine: inao.gouv.fr, usage: "appellations, aires, cahiers des charges", robots: "2026-10-21 : robots.txt autorise User-agent * hors fichiers techniques, mais interdit une longue liste de robots d'IA (CCBot, Applebot-Extended, cohere-ai...). Signal de refus de l'IA : à trancher avec les CGU", statut: a_verifier}
+  - {domaine: data.gouv.fr, usage: "référentiels ouverts (appellations)", robots: "2026-10-21 : pages publiques autorisées, seuls les exports CSV et la recherche sont interdits", statut: a_verifier}
+  - {domaine: champagne.fr, usage: "Comité Champagne, millésimes", robots: "2026-10-21 : autorisé hors administration", statut: a_verifier}
+  - {domaine: vinsalsace.com, usage: "CIVA, appellations et millésimes d'Alsace", robots: "2026-10-21 : aucune règle, tout autorisé", statut: a_verifier}
+  - {domaine: bourgogne-wines.com, usage: "BIVB, appellations et millésimes de Bourgogne", robots: "2026-10-21 : autorisé hors actualités, agenda et espace privé", statut: a_verifier}
+  - {domaine: bordeaux.com, usage: "CIVB, appellations et millésimes de Bordeaux", robots: "2026-10-21 : interdit explicitement ClaudeBot, anthropic-ai, claude-web, GPTBot, CCBot, Google-Extended. Proposition : exclu", statut: a_verifier}
+  - {domaine: vins-rhone.com, usage: "Inter Rhône", robots: "2026-10-21 : autorisé hors fichiers techniques", statut: a_verifier}
+  - {domaine: vinsvaldeloire.fr, usage: "InterLoire", robots: "2026-10-21 : pas de robots.txt (404 sur www) ; vérifier que le domaine est le bon", statut: a_verifier}
 
 critiques_acces_libre:
-  - {domaine: robertparker.com, usage: "uniquement les pages lisibles sans abonnement", statut: a_verifier}
+  - {domaine: robertparker.com, usage: "uniquement les pages lisibles sans abonnement", robots: "2026-10-21 : robots.txt sans interdiction ; la plupart des notes sont derrière abonnement", statut: a_verifier}
 
 marchands:
   # Sites publics de vente en ligne (décision D3). Servent aux prix et, quand ils les affichent,
   # aux notes critiques citées (acces: citee).
-  - {domaine: vinatis.com, statut: a_verifier}
-  - {domaine: millesima.fr, statut: a_verifier}
-  - {domaine: nicolas.com, statut: a_verifier}
-  - {domaine: vandb.fr, statut: a_verifier}
-  - {domaine: idealwine.com, usage: "prix d'enchères, nature: cote", statut: a_verifier}
+  - {domaine: vinatis.com, robots: "2026-10-21 : robots.txt inaccessible (503, protection anti-robot). Non vérifiable en l'état", statut: a_verifier}
+  - {domaine: millesima.fr, robots: "2026-10-21 : pages produit autorisées, filtres et recherche interdits", statut: a_verifier}
+  - {domaine: nicolas.com, robots: "2026-10-21 : robots.txt de 525 Ko sans règle pour User-agent * ; à relire à la main", statut: a_verifier}
+  - {domaine: vandb.fr, robots: "2026-10-21 : autorisé hors recherche, compte et panier", statut: a_verifier}
+  - {domaine: idealwine.com, usage: "prix d'enchères, nature: cote", robots: "2026-10-21 : autorisé hors API, compte et cave personnelle", statut: a_verifier}
 
 exclusions_permanentes:
   - {motif: "pages derrière une connexion ou un paywall"}

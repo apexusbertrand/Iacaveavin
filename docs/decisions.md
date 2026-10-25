@@ -87,12 +87,32 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T54 | Ré-enrichir (FIC-09) passe par l'écran de validation, qui montre la valeur actuelle à côté de la valeur proposée ; rien n'est appliqué sans validation | « montre les différences avant de les appliquer » |
 | T55 | Nouveau millésime (FIC-08) : même cuvée, cépages et accords repris, photos reprises, aucun lot, commentaire de millésime, degré et garde vides, statut `a_enrichir` | seuls les champs liés au millésime sont à enrichir |
 
+## Décisions techniques proposées au lot 2b (2026-10-21), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T56 | Lot 2b mené pendant la recette des lots 1 et 2a, depuis `lot-0-socle` | il ne dépend que du contrat ; demande de Bertrand du 2026-10-21 (« continue les prochains lots ») |
+| T57 | Modèle : Claude (Anthropic) pour la lecture d'étiquette et les agents, recherche web par Tavily (offre gratuite), compte Tavily créé par Bertrand | choix de Bertrand du 2026-10-21 ; sans clé Tavily le flux tourne sur l'étiquette seule et le dit dans chaque champ |
+| T58 | Clé HMAC partagée : texte UTF-8 (pas des octets décodés du base64), rangée dans la table iacave_config et saisie par Bertrand | choix de Bertrand ; même règle des deux côtés, vecteur fixe dans specs/contrat-n8n/vecteur-signature.json |
+| T59 | `millesime_verifie` strict : une offre n'entre dans le prix que si le millésime est écrit sur la page (true), absent vaut faux | docs/06 étape 2 ; aucun prix d'un autre millésime |
+| T60 | Écart avec les exemples du contrat : enrichissement-termine.json et prix-termine.json citent des URL absentes de `sources_consultees` (et une offre au millésime non vérifié). Le flux les refuserait. Proposition : corriger les exemples au contrat 1.1 | les exemples passent le schéma mais pas les contrôles de docs/06 ; les tests du flux les mettent en règle avant usage |
+| T61 | Pas de table iacave_photos_temp : les photos passent du webhook au sous-flux en mémoire et ne sont écrites nulle part. Les exécutions réussies d'IA_CAVE_Agent et d'IA_CAVE_Enrichissement ne sont pas conservées ; celles en erreur oui, pour le diagnostic | docs/06 prévoyait une table effacée en fin de job ; sans table, rien à effacer. Contrepartie : une exécution réussie ne se relit pas dans n8n, le journal du job (coût, erreurs corrigées) reste dans iacave_jobs |
+| T62 | Clé Tavily rangée dans iacave_config (`tavily_cle`), pas dans un identifiant n8n | Bertrand la colle sans ouvrir les flux ; elle n'apparaît dans aucun export (contrôle en CI) |
+| T63 | Identifiants partagés avec les autres flux de l'instance : « Anthropic account » et « Gmail APEXUS », utilisés sans modification | la règle prévoit des identifiants IA_CAVE propres ; en créer demande un compte ou une clé, action réservée à Bertrand. À dupliquer en `IA_CAVE_Anthropic` et `IA_CAVE_Gmail` s'il le souhaite |
+| T64 | Suivi des jobs : `GET /webhook/iacave/jobs?job_id=…` au lieu de `/jobs/:job_id`, signature sur le chemin avec la requête | n8n préfixe d'un identifiant les chemins à paramètre ; l'app n'a pas encore de client réel (lot 2c), aucun impact |
+| T65 | POST /prix partage les nœuds d'entrée de l'enrichissement (type déduit du webhook) | un seul code de contrôle d'entrée à maintenir, testé pour les deux routes |
+| T66 | Une offre de prix n'est retenue que si sa page a été lue par l'outil `lire_page` pendant le job ; `sources_consultees` du prix vient des appels d'outil, pas de l'agent | défense contre un prix inventé ou une URL inventée, en plus des contrôles de docs/06 |
+| T67 | Prix « non trouvé » jamais mis en cache ; les prix ne vont pas dans le cache des vins (180 jours) | un prix a son propre cache de 24 heures ; un vin non trouvé aujourd'hui peut l'être quand un site sera activé |
+| T68 | Un relevé compte dans le quota de prix même servi par le cache ou sans site actif ; un enrichissement avec prix compte aussi un relevé | même règle que les enrichissements servis par le cache ; plus simple à lire pour Bertrand. À revoir si le quota de prix devient serré |
+| T69 | Activer un domaine de n8n/sources-autorisees.yaml demande de réassembler et republier les nœuds Code (liste figée à l'assemblage) | proposition pour plus tard : lire la liste dans une table iacave_sources pour que Bertrand l'active sans session de développement |
+| T70 | bordeaux.com proposé en `exclu` : son robots.txt interdit nommément ClaudeBot, anthropic-ai et GPTBot | respect du refus explicite des robots d'IA ; décision finale à Bertrand avec les CGU |
+
 ## À compléter
 
 | Id | Sujet | Quand |
 | --- | --- | --- |
 | Q1 | Valeurs exactes des couleurs Apexus extraites du logo | lot 0 |
 | Q2 | Validation des règles de garde par défaut (specs/regles-garde.yaml) | avant la fin du lot 1 |
-| Q3 | Vérification des domaines candidats de n8n/sources-autorisees.yaml | lot 2b |
-| Q4 | Coût moyen d'un enrichissement en appels au modèle IA | fin du lot 2b |
+| Q3 | Vérification des domaines candidats de n8n/sources-autorisees.yaml : robots.txt lus le 2026-10-21 (constats dans le fichier), CGU à lire par Bertrand avant activation | lot 2b |
+| Q4 | Coût moyen d'un enrichissement en appels au modèle IA. Mesure sans recherche web (2026-10-21) : 2 appels (lecture d'étiquette, agent), environ 8 000 jetons pour l'agent, 17 s ; avec cache du vin : 1 appel, 5 s. Mesure avec Tavily sur le jeu d'essai à faire | fin du lot 2b |
 | Q5 | Publier ou non sur Google Play, compte personnel ou organisation | fin du lot 5 |
