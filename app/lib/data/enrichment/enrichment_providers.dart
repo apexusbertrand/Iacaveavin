@@ -7,11 +7,13 @@ import 'package:yaml/yaml.dart';
 import '../../domain/garde_rules.dart';
 import '../backup_providers.dart';
 import '../files/photo_service.dart';
+import '../flux_credentials.dart';
 import '../providers.dart';
 import '../settings_store.dart';
 import 'contract_validator.dart';
 import 'enrichment_gateway.dart';
 import 'enrichment_queue.dart';
+import 'n8n_gateway.dart';
 import 'validation_service.dart';
 
 final contractValidatorProvider = FutureProvider<ContractValidator>((
@@ -25,12 +27,27 @@ final contractValidatorProvider = FutureProvider<ContractValidator>((
   );
 });
 
-/// Lot 2a : faux flux qui rejoue les exemples du contrat. Le vrai flux
-/// (N8nGateway) le remplace au lot 2c, derrière la même interface.
+/// Vrai flux n8n dès qu'une adresse et une clé sont enregistrées (PAR-05),
+/// sinon faux flux du lot 2a qui rejoue les exemples du contrat.
 final gatewayProvider = FutureProvider<EnrichmentGateway>((ref) async {
   final settings = ref.watch(settingsProvider);
+  final validator = await ref.watch(contractValidatorProvider.future);
+  if (settings.usesRealFlux && settings.installationId != null) {
+    await ref.watch(fluxKeyPresentProvider.future);
+    final key = await ref.read(secretStoreProvider).read();
+    if (key != null && key.isNotEmpty) {
+      final gateway = N8nGateway(
+        baseUrl: settings.fluxUrl,
+        key: key,
+        installationId: settings.installationId!,
+        validator: validator,
+      );
+      ref.onDispose(gateway.close);
+      return gateway;
+    }
+  }
   return FakeGateway(
-    validator: await ref.watch(contractValidatorProvider.future),
+    validator: validator,
     readExample: (name) =>
         rootBundle.loadString('assets/contrat/exemples/$name'),
     scenario: FakeScenario.values.firstWhere(
@@ -106,7 +123,9 @@ class EnrichmentRunner extends Notifier<QueueReport?> {
     _startedAt ??= DateTime.now();
     try {
       final queue = await ref.read(enrichmentQueueProvider.future);
-      state = await queue.process();
+      state = await queue.process(
+        currency: ref.read(settingsProvider).currency,
+      );
       final pending = (await queue.pendingJobs()).length;
       if (pending == 0) {
         _startedAt = null;

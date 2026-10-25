@@ -70,18 +70,33 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 2b Flux n8n
 
-- Statut : non démarré
+- Statut : réalisé, en production sur l'instance n8n, en attente de recette (branche `lot-2b-flux-n8n`, issue de `lot-0-socle`, T56)
 - Exigences : docs/06-agent-n8n.md en entier
+  - [x] Flux IA_CAVE_Agent (sante, enrichissement, prix, suivi des jobs), IA_CAVE_Enrichissement, IA_CAVE_Prix, IA_CAVE_Erreurs, IA_CAVE_Purge ; tables iacave_*
+  - [x] Sécurité : signature HMAC vérifiée, horodatage à 300 s, request_id idempotent, quotas, schéma de la requête
+  - [x] Agent : lecture d'étiquette Claude, cache des vins 180 jours, contrôles de sortie, une correction puis erreur, réponse validée avant écriture
+  - [x] Prix : cache 24 heures, offres des seules pages lues (T66), médiane par le flux, jamais d'estimation
+  - [ ] Jeu d'essai des 30 étiquettes : script prêt (`scripts/jeu_essai.py`), photos à fournir par Bertrand
+  - [ ] Sources : robots.txt lus, CGU à lire par Bertrand, aucun domaine actif
 - Points d'étape :
-- Mesures (taux par champ sur le jeu d'essai, durée moyenne, crédits et appels modèle par enrichissement) :
+  - 2026-10-21 fait : flux publiés et testés en production (enrichissement 17 s, cache 5 s, prix, suivi, refus de signature), données d'essai et clé de développement supprimées. Bloquant : clé `cle_app` et compte Tavily à créer par Bertrand. Prochaine étape : jeu d'essai.
+- Mesures (taux par champ sur le jeu d'essai, durée moyenne, crédits et appels modèle par enrichissement) : sans recherche web, 2 appels au modèle, environ 8 000 jetons pour l'agent, 17 s ; avec le cache du vin, 1 appel, 5 s. Jeu d'essai à faire.
 - Recette Bertrand :
 
 ## Lot 2c Branchement réel
 
-- Statut : non démarré
+- Statut : réalisé, en attente de recette (branche `lot-2c-branchement-reel`, issue de `lot-2a-ajout-photo` avec le lot 2b fusionné)
 - Exigences : N8nGateway, PAR-05 (connexion), PRX-02 à PRX-06
+  - [x] N8nGateway : seul client HTTP de l'app, requêtes signées (vecteur fixe testé), 15 s par requête, réponses validées contre le contrat, flux injoignable = job en attente
+  - [x] PAR-05 : adresse du flux et clé dans le stockage sécurisé, jamais réaffichée, test de connexion (/sante puis appel signé), oubli de la connexion. Saisie par QR code reportée (T72)
+  - [x] PRX-02 : relevé à la création (inclure_prix, lot 2a), sur une fiche, une sélection ou toute la cave avec nombre d'appels et quota avant confirmation
+  - [x] PRX-03 : un relevé par fiche et par 24 heures sauf « forcer », historique jamais écrasé
+  - [x] PRX-04 : « non trouvé » enregistré avec la date
+  - [x] PRX-05 : dernier prix, date, nombre d'offres, lien vers l'offre, tendance, courbe (lien vers chaque offre : T73)
+  - [x] PRX-06 : rafraîchissement mensuel au lancement, désactivé par défaut
 - Points d'étape :
-- Mesures :
+  - 2026-10-25 fait : périmètre du lot. Bloquant : clé `cle_app` à saisir dans n8n et dans l'app par Bertrand ; sans elle l'app reste sur le flux de démonstration. Prochaine étape : recette sur téléphone (20 bouteilles par photo).
+- Mesures : à faire sur téléphone avec le vrai flux.
 - Recette Bertrand :
 
 ## Lot 3 Restitution

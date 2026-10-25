@@ -12,10 +12,13 @@ import '../../core/widgets/state_views.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/garde.dart';
+import '../../domain/price_trend.dart';
 import '../../domain/scores.dart';
 import '../../domain/wine_detail.dart';
 import '../add/enrichment_screen.dart' show winePhotosProvider;
 import '../wine_list/wine_card.dart';
+import 'price_actions.dart';
+import 'price_chart.dart';
 import 'provenance_sheet.dart';
 import 'stock_dialogs.dart';
 
@@ -870,6 +873,11 @@ class _PricesTab extends ConsumerWidget {
       name: ref.watch(settingsProvider.select((s) => s.currency)),
     );
     final last = wine.marketPrices.lastOrNull;
+    final trend = priceTrend(wine.marketPrices);
+    final series = priceSeries(wine.marketPrices);
+    final percent = NumberFormat.percentPattern(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
     return ListView(
       padding: const EdgeInsets.only(bottom: SpacingTokens.xxl),
       children: [
@@ -890,15 +898,70 @@ class _PricesTab extends ConsumerWidget {
           rows: [
             Padding(
               padding: const EdgeInsets.all(SpacingTokens.l),
-              child: Text(
-                last == null
-                    ? l.noMarketPrice
-                    : last.found && last.price != null
-                    ? l.lastMarketPrice(currency.format(last.price), last.date)
-                    : l.priceNotFound(last.date),
-                style: theme.textTheme.bodyLarge,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    last == null
+                        ? l.noMarketPrice
+                        : last.found && last.price != null
+                        ? l.lastMarketPrice(
+                            currency.format(last.price),
+                            last.date,
+                          )
+                        : l.priceNotFound(last.date),
+                    key: const ValueKey('last-market-price'),
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  if (last != null && last.found)
+                    Text(
+                      l.priceOffers(last.offers ?? 0),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  if (trend != null)
+                    Text(
+                      trend.abs() < 0.005
+                          ? l.priceTrendFlat
+                          : trend > 0
+                          ? l.priceTrendUp(percent.format(trend.abs()))
+                          : l.priceTrendDown(percent.format(trend.abs())),
+                      key: const ValueKey('price-trend'),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  if (last != null && last.found && last.url != null)
+                    TextButton.icon(
+                      onPressed: () => openLink(last.url!),
+                      icon: const Icon(Icons.open_in_new),
+                      label: Text(
+                        l.priceOpenOffer(
+                          last.site ?? Uri.parse(last.url!).host,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
+            if (series.length >= 2)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpacingTokens.l,
+                ),
+                child: Semantics(
+                  label: l.priceChartLabel,
+                  child: SizedBox(
+                    height: 120,
+                    child: CustomPaint(
+                      key: const ValueKey('price-chart'),
+                      painter: PriceChartPainter(
+                        series,
+                        line: context.palette.primaryText,
+                        axis: context.palette.separator,
+                      ),
+                      size: Size.infinite,
+                    ),
+                  ),
+                ),
+              ),
             for (final p in wine.marketPrices.reversed.skip(1))
               _Row(
                 p.date,
@@ -909,8 +972,8 @@ class _PricesTab extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(SpacingTokens.l),
               child: OutlinedButton.icon(
-                onPressed: () => ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(l.refreshPriceLater))),
+                key: const ValueKey('refresh-price'),
+                onPressed: () => refreshWinePrice(context, ref, wine.id),
                 icon: const Icon(Icons.refresh),
                 label: Text(l.refreshPrice),
               ),

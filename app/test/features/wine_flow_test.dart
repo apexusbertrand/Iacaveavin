@@ -321,7 +321,11 @@ void main() {
     expect(find.textContaining('Dernier prix : 55,00'), findsOneWidget);
     expect(find.textContaining('2026-09-15'), findsOneWidget);
     expect(find.textContaining('52,00'), findsOneWidget);
-    expect(find.text('Rafraîchir'), findsOneWidget);
+    expect(find.text('Relever le prix'), findsOneWidget);
+    // PRX-05 : tendance et courbe à partir de deux relevés trouvés.
+    expect(find.byKey(const ValueKey('price-trend')), findsOneWidget);
+    expect(find.textContaining('En hausse de 6'), findsOneWidget);
+    expect(find.byKey(const ValueKey('price-chart')), findsOneWidget);
   });
 
   testWidgets('PRO-03 filtre et valeur par propriétaire', (tester) async {

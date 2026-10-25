@@ -862,12 +862,6 @@ abstract class AppLocalizations {
   /// **'Ré-enrichir (lot 2a)'**
   String get laterEnrich;
 
-  /// No description provided for @laterPrices.
-  ///
-  /// In fr, this message translates to:
-  /// **'Rafraîchir les prix (lot 2c)'**
-  String get laterPrices;
-
   /// No description provided for @openOneBottle.
   ///
   /// In fr, this message translates to:
@@ -1453,7 +1447,7 @@ abstract class AppLocalizations {
   /// No description provided for @noMarketPrice.
   ///
   /// In fr, this message translates to:
-  /// **'Aucun prix marché relevé. Le relevé automatique arrive au lot 2c.'**
+  /// **'Aucun prix marché relevé pour l\'instant.'**
   String get noMarketPrice;
 
   /// No description provided for @lastMarketPrice.
@@ -1471,14 +1465,8 @@ abstract class AppLocalizations {
   /// No description provided for @refreshPrice.
   ///
   /// In fr, this message translates to:
-  /// **'Rafraîchir'**
+  /// **'Relever le prix'**
   String get refreshPrice;
-
-  /// No description provided for @refreshPriceLater.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le relevé des prix marché arrive au lot 2c.'**
-  String get refreshPriceLater;
 
   /// No description provided for @lots.
   ///
@@ -2137,7 +2125,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsAutoPricesHint.
   ///
   /// In fr, this message translates to:
-  /// **'Désactivé par défaut. Disponible au lot 2c.'**
+  /// **'Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.'**
   String get settingsAutoPricesHint;
 
   /// No description provided for @settingsConnection.
@@ -2149,7 +2137,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsConnectionHint.
   ///
   /// In fr, this message translates to:
-  /// **'Adresse et clé du flux n8n : lot 2c.'**
+  /// **'Adresse de l\'instance n8n et clé secrète partagée avec le flux.'**
   String get settingsConnectionHint;
 
   /// No description provided for @settingsPhotoSpace.
@@ -3253,13 +3241,13 @@ abstract class AppLocalizations {
   /// No description provided for @settingsFakeFlux.
   ///
   /// In fr, this message translates to:
-  /// **'Flux de démonstration (lot 2a)'**
+  /// **'Flux de démonstration'**
   String get settingsFakeFlux;
 
   /// No description provided for @settingsFakeFluxHint.
   ///
   /// In fr, this message translates to:
-  /// **'Le vrai flux n8n arrive au lot 2c. En attendant, l\'app rejoue les exemples du contrat.'**
+  /// **'Utilisé tant qu\'aucune adresse de flux n\'est enregistrée : l\'app rejoue les exemples du contrat.'**
   String get settingsFakeFluxHint;
 
   /// No description provided for @fakeScenario.
@@ -3309,6 +3297,252 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Simuler le mode avion'**
   String get simulateOffline;
+
+  /// No description provided for @fluxUrl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse du flux'**
+  String get fluxUrl;
+
+  /// No description provided for @fluxUrlHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'https://votre-instance.app.n8n.cloud'**
+  String get fluxUrlHint;
+
+  /// No description provided for @fluxKey.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clé secrète'**
+  String get fluxKey;
+
+  /// No description provided for @fluxKeyStored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clé enregistrée dans le stockage sécurisé du téléphone'**
+  String get fluxKeyStored;
+
+  /// No description provided for @fluxKeyMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune clé enregistrée'**
+  String get fluxKeyMissing;
+
+  /// No description provided for @fluxKeyReplace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle clé (remplace l\'ancienne)'**
+  String get fluxKeyReplace;
+
+  /// No description provided for @fluxSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get fluxSave;
+
+  /// No description provided for @fluxForget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oublier la connexion'**
+  String get fluxForget;
+
+  /// No description provided for @fluxTest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tester la connexion'**
+  String get fluxTest;
+
+  /// No description provided for @fluxTesting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Test en cours…'**
+  String get fluxTesting;
+
+  /// No description provided for @fluxUsingReal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vrai flux utilisé pour les enrichissements et les prix.'**
+  String get fluxUsingReal;
+
+  /// No description provided for @fluxUsingFake.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion enregistrée : le flux de démonstration est utilisé.'**
+  String get fluxUsingFake;
+
+  /// No description provided for @fluxTestOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion réussie : flux joignable, clé acceptée (contrat {version}).'**
+  String fluxTestOk(String version);
+
+  /// No description provided for @fluxTestNotReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux joignable, mais sa clé n\'est pas encore configurée côté n8n.'**
+  String get fluxTestNotReady;
+
+  /// No description provided for @fluxTestBadKey.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux joignable, mais la clé est refusée : {message}'**
+  String fluxTestBadKey(String message);
+
+  /// No description provided for @fluxTestOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux injoignable : vérifiez l\'adresse et le réseau.'**
+  String get fluxTestOffline;
+
+  /// No description provided for @fluxTestInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse inattendue du flux : vérifiez l\'adresse.'**
+  String get fluxTestInvalid;
+
+  /// No description provided for @fluxUrlInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse invalide : elle doit commencer par https://'**
+  String get fluxUrlInvalid;
+
+  /// No description provided for @fluxSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion enregistrée.'**
+  String get fluxSaved;
+
+  /// No description provided for @fluxForgotten.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion oubliée : retour au flux de démonstration.'**
+  String get fluxForgotten;
+
+  /// No description provided for @pricesAllTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relever les prix de toute la cave'**
+  String get pricesAllTitle;
+
+  /// No description provided for @pricesAllHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches sans relevé depuis 24 heures.'**
+  String get pricesAllHint;
+
+  /// No description provided for @pricesAllConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.} =1{1 relevé sera envoyé au flux.} other{{count} relevés seront envoyés au flux.}}'**
+  String pricesAllConfirm(int count);
+
+  /// No description provided for @pricesQuotaLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota restant ce mois : {left} relevés.'**
+  String pricesQuotaLeft(int left);
+
+  /// No description provided for @pricesQuotaUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota restant inconnu : il s\'affichera après le premier relevé.'**
+  String get pricesQuotaUnknown;
+
+  /// No description provided for @pricesQueued.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun relevé ajouté.} =1{1 relevé mis en file.} other{{count} relevés mis en file.}}'**
+  String pricesQueued(int count);
+
+  /// No description provided for @confirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer'**
+  String get confirm;
+
+  /// No description provided for @priceQueuedOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relevé du prix mis en file.'**
+  String get priceQueuedOne;
+
+  /// No description provided for @priceAlreadyQueued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un relevé est déjà en cours pour cette fiche.'**
+  String get priceAlreadyQueued;
+
+  /// No description provided for @priceTooRecentTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relevé récent'**
+  String get priceTooRecentTitle;
+
+  /// No description provided for @priceTooRecent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le dernier relevé a moins de 24 heures. Forcer un nouveau relevé ?'**
+  String get priceTooRecent;
+
+  /// No description provided for @priceForce.
+  ///
+  /// In fr, this message translates to:
+  /// **'Forcer'**
+  String get priceForce;
+
+  /// No description provided for @priceOffers.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucune offre} =1{1 offre} other{{count} offres}}'**
+  String priceOffers(int count);
+
+  /// No description provided for @priceNatureMedian.
+  ///
+  /// In fr, this message translates to:
+  /// **'médiane'**
+  String get priceNatureMedian;
+
+  /// No description provided for @priceNatureOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'offre unique'**
+  String get priceNatureOffer;
+
+  /// No description provided for @priceTrendUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'En hausse de {percent} depuis le relevé précédent'**
+  String priceTrendUp(String percent);
+
+  /// No description provided for @priceTrendDown.
+  ///
+  /// In fr, this message translates to:
+  /// **'En baisse de {percent} depuis le relevé précédent'**
+  String priceTrendDown(String percent);
+
+  /// No description provided for @priceTrendFlat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stable depuis le relevé précédent'**
+  String get priceTrendFlat;
+
+  /// No description provided for @priceOpenOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir l\'offre sur {site}'**
+  String priceOpenOffer(String site);
+
+  /// No description provided for @priceChartLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbe des prix relevés'**
+  String get priceChartLabel;
+
+  /// No description provided for @priceHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique des relevés'**
+  String get priceHistory;
 }
 
 class _AppLocalizationsDelegate

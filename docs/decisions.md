@@ -107,6 +107,18 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T69 | Activer un domaine de n8n/sources-autorisees.yaml demande de réassembler et republier les nœuds Code (liste figée à l'assemblage) | proposition pour plus tard : lire la liste dans une table iacave_sources pour que Bertrand l'active sans session de développement |
 | T70 | bordeaux.com proposé en `exclu` : son robots.txt interdit nommément ClaudeBot, anthropic-ai et GPTBot | respect du refus explicite des robots d'IA ; décision finale à Bertrand avec les CGU |
 
+## Décisions techniques proposées au lot 2c (2026-10-25), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T71 | Lot 2c démarré sans phase de plan validée, sur demande expresse de Bertrand (« livre le lot 2c avant la limite de ma session ») | écart à la règle « plan puis validation » de CLAUDE.md, signalé ici |
+| T72 | Saisie de la clé par QR code reportée : la clé se colle dans le champ | un lecteur de QR demande un plugin caméra supplémentaire ; à ajouter si la saisie manuelle gêne |
+| T73 | PRX-05 « lien vers chaque offre » : seule l'offre principale (site et URL) est conservée par relevé, avec le nombre d'offres | la table prix_marche du dictionnaire n'a pas de liste d'offres ; proposition : table prix_offre au lot 4 |
+| T74 | Le vrai flux remplace le faux dès qu'une adresse et une clé sont enregistrées ; « Oublier la connexion » ramène au faux flux | recette possible sans flux, et bascule sans réinstaller |
+| T75 | Un relevé de prix ne change pas le statut d'enrichissement de la fiche ; un job de prix en erreur reste visible dans la file sans mettre la fiche en erreur | la fiche est déjà validée, seul le prix manque |
+| T76 | « Forcer » se déduit à l'envoi : un relevé mis en file alors qu'un autre a moins de 24 heures part avec `forcer: true` | la table job du dictionnaire n'a pas de colonne d'options ; même effet sans changer le schéma |
+| T77 | Le test de connexion appelle /sante puis suit un job inexistant avec la clé : une réponse 404 au contrat prouve que la clé est acceptée | /sante ne vérifie pas la signature |
+
 ## À compléter
 
 | Id | Sujet | Quand |

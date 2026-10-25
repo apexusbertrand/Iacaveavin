@@ -487,9 +487,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get laterEnrich => 'Ré-enrichir (lot 2a)';
 
   @override
-  String get laterPrices => 'Rafraîchir les prix (lot 2c)';
-
-  @override
   String get openOneBottle => 'Ouvrir 1 bouteille';
 
   @override
@@ -835,8 +832,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noPurchasePrice => 'Prix d\'achat inconnu';
 
   @override
-  String get noMarketPrice =>
-      'Aucun prix marché relevé. Le relevé automatique arrive au lot 2c.';
+  String get noMarketPrice => 'Aucun prix marché relevé pour l\'instant.';
 
   @override
   String lastMarketPrice(String price, String date) {
@@ -849,10 +845,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get refreshPrice => 'Rafraîchir';
-
-  @override
-  String get refreshPriceLater => 'Le relevé des prix marché arrive au lot 2c.';
+  String get refreshPrice => 'Relever le prix';
 
   @override
   String get lots => 'Lots';
@@ -1249,13 +1242,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsAutoPricesHint =>
-      'Désactivé par défaut. Disponible au lot 2c.';
+      'Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.';
 
   @override
   String get settingsConnection => 'Connexion au flux d\'enrichissement';
 
   @override
-  String get settingsConnectionHint => 'Adresse et clé du flux n8n : lot 2c.';
+  String get settingsConnectionHint =>
+      'Adresse de l\'instance n8n et clé secrète partagée avec le flux.';
 
   @override
   String get settingsPhotoSpace => 'Espace occupé par les photos';
@@ -1905,11 +1899,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Champ déverrouillé : il pourra être proposé à nouveau.';
 
   @override
-  String get settingsFakeFlux => 'Flux de démonstration (lot 2a)';
+  String get settingsFakeFlux => 'Flux de démonstration';
 
   @override
   String get settingsFakeFluxHint =>
-      'Le vrai flux n8n arrive au lot 2c. En attendant, l\'app rejoue les exemples du contrat.';
+      'Utilisé tant qu\'aucune adresse de flux n\'est enregistrée : l\'app rejoue les exemples du contrat.';
 
   @override
   String get fakeScenario => 'Scénario rejoué';
@@ -1934,4 +1928,177 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get simulateOffline => 'Simuler le mode avion';
+
+  @override
+  String get fluxUrl => 'Adresse du flux';
+
+  @override
+  String get fluxUrlHint => 'https://votre-instance.app.n8n.cloud';
+
+  @override
+  String get fluxKey => 'Clé secrète';
+
+  @override
+  String get fluxKeyStored =>
+      'Clé enregistrée dans le stockage sécurisé du téléphone';
+
+  @override
+  String get fluxKeyMissing => 'Aucune clé enregistrée';
+
+  @override
+  String get fluxKeyReplace => 'Nouvelle clé (remplace l\'ancienne)';
+
+  @override
+  String get fluxSave => 'Enregistrer';
+
+  @override
+  String get fluxForget => 'Oublier la connexion';
+
+  @override
+  String get fluxTest => 'Tester la connexion';
+
+  @override
+  String get fluxTesting => 'Test en cours…';
+
+  @override
+  String get fluxUsingReal =>
+      'Vrai flux utilisé pour les enrichissements et les prix.';
+
+  @override
+  String get fluxUsingFake =>
+      'Pas de connexion enregistrée : le flux de démonstration est utilisé.';
+
+  @override
+  String fluxTestOk(String version) {
+    return 'Connexion réussie : flux joignable, clé acceptée (contrat $version).';
+  }
+
+  @override
+  String get fluxTestNotReady =>
+      'Flux joignable, mais sa clé n\'est pas encore configurée côté n8n.';
+
+  @override
+  String fluxTestBadKey(String message) {
+    return 'Flux joignable, mais la clé est refusée : $message';
+  }
+
+  @override
+  String get fluxTestOffline =>
+      'Flux injoignable : vérifiez l\'adresse et le réseau.';
+
+  @override
+  String get fluxTestInvalid =>
+      'Réponse inattendue du flux : vérifiez l\'adresse.';
+
+  @override
+  String get fluxUrlInvalid =>
+      'Adresse invalide : elle doit commencer par https://';
+
+  @override
+  String get fluxSaved => 'Connexion enregistrée.';
+
+  @override
+  String get fluxForgotten =>
+      'Connexion oubliée : retour au flux de démonstration.';
+
+  @override
+  String get pricesAllTitle => 'Relever les prix de toute la cave';
+
+  @override
+  String get pricesAllHint => 'Fiches sans relevé depuis 24 heures.';
+
+  @override
+  String pricesAllConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count relevés seront envoyés au flux.',
+      one: '1 relevé sera envoyé au flux.',
+      zero: 'Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pricesQuotaLeft(int left) {
+    return 'Quota restant ce mois : $left relevés.';
+  }
+
+  @override
+  String get pricesQuotaUnknown =>
+      'Quota restant inconnu : il s\'affichera après le premier relevé.';
+
+  @override
+  String pricesQueued(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count relevés mis en file.',
+      one: '1 relevé mis en file.',
+      zero: 'Aucun relevé ajouté.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get confirm => 'Confirmer';
+
+  @override
+  String get priceQueuedOne => 'Relevé du prix mis en file.';
+
+  @override
+  String get priceAlreadyQueued =>
+      'Un relevé est déjà en cours pour cette fiche.';
+
+  @override
+  String get priceTooRecentTitle => 'Relevé récent';
+
+  @override
+  String get priceTooRecent =>
+      'Le dernier relevé a moins de 24 heures. Forcer un nouveau relevé ?';
+
+  @override
+  String get priceForce => 'Forcer';
+
+  @override
+  String priceOffers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count offres',
+      one: '1 offre',
+      zero: 'aucune offre',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get priceNatureMedian => 'médiane';
+
+  @override
+  String get priceNatureOffer => 'offre unique';
+
+  @override
+  String priceTrendUp(String percent) {
+    return 'En hausse de $percent depuis le relevé précédent';
+  }
+
+  @override
+  String priceTrendDown(String percent) {
+    return 'En baisse de $percent depuis le relevé précédent';
+  }
+
+  @override
+  String get priceTrendFlat => 'Stable depuis le relevé précédent';
+
+  @override
+  String priceOpenOffer(String site) {
+    return 'Voir l\'offre sur $site';
+  }
+
+  @override
+  String get priceChartLabel => 'Courbe des prix relevés';
+
+  @override
+  String get priceHistory => 'Historique des relevés';
 }

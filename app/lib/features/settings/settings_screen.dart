@@ -14,6 +14,8 @@ import '../../data/enrichment/enrichment_gateway.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
+import '../wine_detail/price_actions.dart';
+import 'connection_section.dart';
 
 const _currencies = ['EUR', 'CHF', 'USD', 'GBP', 'CAD'];
 
@@ -210,11 +212,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onChanged: (v) => _set((x) => x.copyWith(notifications: v)),
           ),
           SwitchListTile(
+            key: const ValueKey('auto-prices'),
             title: Text(l.settingsAutoPrices),
             subtitle: Text(l.settingsAutoPricesHint),
             value: s.autoPriceRefresh,
-            onChanged: null,
+            onChanged: (v) => _set((x) => x.copyWith(autoPriceRefresh: v)),
           ),
+          ListTile(
+            key: const ValueKey('prices-all'),
+            leading: const Icon(Icons.euro),
+            title: Text(l.pricesAllTitle),
+            subtitle: Text(l.pricesAllHint),
+            onTap: () => refreshAllPrices(context, ref),
+          ),
+          header(l.settingsConnection),
+          const ConnectionSection(),
           header(l.settingsFakeFlux),
           padded(
             Text(l.settingsFakeFluxHint, style: theme.textTheme.bodyMedium),
@@ -240,11 +252,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: Text(l.simulateOffline),
             value: s.simulateOffline,
             onChanged: (v) => _set((x) => x.copyWith(simulateOffline: v)),
-          ),
-          ListTile(
-            title: Text(l.settingsConnection),
-            subtitle: Text(l.settingsConnectionHint),
-            leading: const Icon(Icons.cloud_off_outlined),
           ),
           ListTile(
             title: Text(l.settingsPhotoSpace),

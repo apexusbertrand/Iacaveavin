@@ -5,7 +5,8 @@ enum AppThemeMode { system, light, dark }
 enum CardPrice { purchase, market }
 
 /// Réglages de l'application (PAR-05) et état mémorisé de la liste (LST-09).
-/// Aucun secret ici : la clé du flux n8n ira dans le stockage sécurisé (lot 2c).
+/// Aucun secret ici : la clé du flux n8n est dans le stockage sécurisé
+/// (FluxCredentials), jamais dans les préférences.
 class AppSettings {
   const AppSettings({
     this.currency = 'EUR',
@@ -25,6 +26,9 @@ class AppSettings {
     this.photoConsent = false,
     this.fakeScenario = 'done',
     this.simulateOffline = false,
+    this.fluxUrl = '',
+    this.installationId,
+    this.lastAutoPriceRefresh,
   });
 
   /// Code ISO 4217.
@@ -62,6 +66,18 @@ class AppSettings {
   /// Lot 2a : le faux flux se comporte comme en mode avion.
   final bool simulateOffline;
 
+  /// PAR-05 : adresse de l'instance n8n. Vide : faux flux du lot 2a.
+  final String fluxUrl;
+
+  /// UUID de l'installation (en-tête X-IACAV-Installation), généré une fois.
+  final String? installationId;
+
+  /// PRX-06 : dernier rafraîchissement automatique des prix.
+  final DateTime? lastAutoPriceRefresh;
+
+  /// Le vrai flux est utilisé dès qu'une adresse est enregistrée.
+  bool get usesRealFlux => fluxUrl.trim().isNotEmpty;
+
   AppSettings copyWith({
     String? currency,
     AppThemeMode? themeMode,
@@ -80,6 +96,9 @@ class AppSettings {
     bool? photoConsent,
     String? fakeScenario,
     bool? simulateOffline,
+    String? fluxUrl,
+    String? installationId,
+    DateTime? lastAutoPriceRefresh,
   }) => AppSettings(
     currency: currency ?? this.currency,
     themeMode: themeMode ?? this.themeMode,
@@ -102,6 +121,9 @@ class AppSettings {
     photoConsent: photoConsent ?? this.photoConsent,
     fakeScenario: fakeScenario ?? this.fakeScenario,
     simulateOffline: simulateOffline ?? this.simulateOffline,
+    fluxUrl: fluxUrl ?? this.fluxUrl,
+    installationId: installationId ?? this.installationId,
+    lastAutoPriceRefresh: lastAutoPriceRefresh ?? this.lastAutoPriceRefresh,
   );
 
   static Map<String, Object?> _query(WineQuery q) => {
@@ -137,6 +159,9 @@ class AppSettings {
     'photoConsent': photoConsent,
     'fakeScenario': fakeScenario,
     'simulateOffline': simulateOffline,
+    'fluxUrl': fluxUrl,
+    'installationId': installationId,
+    'lastAutoPriceRefresh': lastAutoPriceRefresh?.toIso8601String(),
   };
 
   static AppSettings fromJson(Map<String, Object?> json) => AppSettings(
@@ -162,5 +187,8 @@ class AppSettings {
     photoConsent: json['photoConsent'] == true,
     fakeScenario: json['fakeScenario'] as String? ?? 'done',
     simulateOffline: json['simulateOffline'] == true,
+    fluxUrl: json['fluxUrl'] as String? ?? '',
+    installationId: json['installationId'] as String?,
+    lastAutoPriceRefresh: DateTime.tryParse('${json['lastAutoPriceRefresh']}'),
   );
 }

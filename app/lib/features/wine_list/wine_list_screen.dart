@@ -21,6 +21,7 @@ import '../add/add_menu.dart';
 import '../backup/backup_screen.dart';
 import 'list_filters_sheet.dart';
 import 'list_state.dart';
+import '../wine_detail/price_actions.dart';
 import 'selection_actions.dart';
 import 'wine_card.dart';
 
@@ -54,6 +55,8 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       // AJO-09 : les jobs en attente repartent au lancement.
       ref.read(enrichmentRunnerProvider.notifier).kick();
       await runAutoBackupIfDue(ref);
+      // PRX-06 : rafraîchissement mensuel des prix, si l'option est active.
+      if (mounted) await autoRefreshPricesIfDue(ref);
     });
   }
 
@@ -394,14 +397,18 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         icon: const Icon(Icons.person_outline),
         onPressed: () => _runSelection(SelectionAction.owner),
       ),
+      IconButton(
+        key: const ValueKey('selection-prices'),
+        tooltip: l.refreshPrice,
+        icon: const Icon(Icons.euro),
+        onPressed: () async {
+          await refreshAllPrices(context, ref, wineIds: _selected.toList());
+          if (mounted) setState(_selected.clear);
+        },
+      ),
       PopupMenuButton<void>(
         itemBuilder: (_) => [
-          for (final label in [
-            l.laterPdf,
-            l.laterExcel,
-            l.laterEnrich,
-            l.laterPrices,
-          ])
+          for (final label in [l.laterPdf, l.laterExcel, l.laterEnrich])
             PopupMenuItem<void>(enabled: false, child: Text(label)),
         ],
       ),

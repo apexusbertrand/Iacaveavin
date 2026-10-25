@@ -73,6 +73,8 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | image 4.12 | compression 1 500 px, miniature et contrôle flou ou reflet, en Dart pur dans un isolate (AJO-02, NFR-04) | oui | oui |
 | image_picker 1.2 | appareil photo et galerie, plugin officiel (AJO-01, T47) | oui | oui |
 | url_launcher 6.3 | ouvrir l'URL d'une provenance (FIC-06) | oui | oui |
+| crypto 3.0 | SHA-256 et HMAC de la signature des requêtes au flux (docs/02), paquet Dart de l'équipe Dart, sans code natif | oui | oui |
+| flutter_secure_storage 11.2 | clé du flux dans le Keystore Android et le Trousseau iOS, jamais dans les préférences (PAR-05, règle Flutter) | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
 
 Police : système (Roboto sur Android) au lot 0, repli prévu par specs/design-tokens.json. Inter (OFL) sera embarquée quand les fichiers de police seront ajoutés au dépôt.

@@ -277,6 +277,7 @@ class JobResponse {
     this.enrichmentsLeft,
     this.pricesLeft,
     this.result,
+    this.prices = const [],
     this.error,
   });
 
@@ -297,6 +298,14 @@ class JobResponse {
       result: type == 'enrichissement' && j['resultat'] is Map
           ? EnrichmentResult.fromJson(j['resultat'] as Map<String, dynamic>)
           : null,
+      prices: type == 'prix' && j['resultat'] is Map
+          ? [
+              for (final p
+                  in ((j['resultat'] as Map)['prix'] as List? ?? const [])
+                      .cast<Map<String, dynamic>>())
+                ProposedPrice.fromJson(p),
+            ]
+          : const [],
       error: err == null
           ? null
           : JobError(
@@ -317,8 +326,68 @@ class JobResponse {
   final int? enrichmentsLeft;
   final int? pricesLeft;
   final EnrichmentResult? result;
+
+  /// Relevé d'un job de type `prix` (resultat_prix).
+  final List<ProposedPrice> prices;
   final JobError? error;
   final Map<String, dynamic> raw;
+}
+
+/// POST /prix (requete-prix.schema.json) : identité déjà normalisée de la
+/// fiche, aucune photo.
+class PriceRequest {
+  const PriceRequest({
+    required this.requestId,
+    required this.wineId,
+    required this.domain,
+    required this.vintage,
+    required this.colour,
+    required this.formatCl,
+    required this.currency,
+    required this.clientDate,
+    this.cuvee,
+    this.appellation,
+    this.lwin,
+    this.ean,
+    this.force = false,
+  });
+
+  final String requestId;
+  final String wineId;
+  final String domain;
+
+  /// Année ou « NM ».
+  final Object vintage;
+  final String colour;
+  final double formatCl;
+  final String currency;
+  final String clientDate;
+  final String? cuvee;
+  final String? appellation;
+  final String? lwin;
+  final String? ean;
+
+  /// PRX-03 : ignorer le cache de 24 heures.
+  final bool force;
+
+  Map<String, Object?> toJson() => {
+    'version_contrat': contractVersion,
+    'request_id': requestId,
+    'fiche_id': wineId,
+    'identite': {
+      'domaine': domain,
+      'cuvee': cuvee,
+      'appellation': appellation,
+      'millesime': vintage,
+      'couleur': colour,
+      'lwin': lwin,
+      'ean': ean,
+    },
+    'format_cl': formatCl,
+    'devise': currency,
+    'forcer': force,
+    'date_client': clientDate,
+  };
 }
 
 /// AJO-11 : quota affiché quand il passe sous 20 % du quota mensuel (T10).

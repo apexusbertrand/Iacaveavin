@@ -22,6 +22,9 @@ class FluxHealth {
 /// validée contre le contrat avant d'être renvoyée (AJO-12).
 abstract interface class EnrichmentGateway {
   Future<JobResponse> requestEnrichment(EnrichmentRequest request);
+
+  /// PRX-02 : relevé du prix marché d'une fiche existante.
+  Future<JobResponse> requestPrice(PriceRequest request);
   Future<JobResponse> followJob(String jobId);
   Future<FluxHealth> health();
 }
@@ -121,11 +124,49 @@ class FakeGateway implements EnrichmentGateway {
     );
   }
 
+  /// Dernier relevé de prix demandé.
+  PriceRequest? lastPriceRequest;
+
+  @override
+  Future<JobResponse> requestPrice(PriceRequest request) async {
+    _checkOnline();
+    lastPriceRequest = request;
+    final job = _FakeJob(
+      requestId: request.requestId,
+      wineId: request.wineId,
+      jobId: _uuidFor(_jobs.length),
+      price: true,
+    );
+    _jobs[job.jobId] = job;
+    if (scenario == FakeScenario.quota) {
+      final e = await _example('erreur-quota.json');
+      return _answer({...e, 'request_id': request.requestId, 'type': 'prix'});
+    }
+    final base = await _example('job-en-cours.json');
+    return _answer(
+      job.stamp({
+        ...base,
+        'type': 'prix',
+        'statut': 'en_attente',
+        'etape': 'prix',
+      }),
+    );
+  }
+
   @override
   Future<JobResponse> followJob(String jobId) async {
     _checkOnline();
     final job = _jobs[jobId];
     if (job == null) throw StateError('job inconnu $jobId');
+    if (job.price) {
+      job.polls++;
+      if (job.polls < pollsBeforeDone) {
+        final base = await _example('job-en-cours.json');
+        return _answer(job.stamp({...base, 'type': 'prix', 'etape': 'prix'}));
+      }
+      final e = await _example('prix-termine.json');
+      return _answer(job.stamp(e));
+    }
     job.polls++;
     if (scenario == FakeScenario.never || job.polls < pollsBeforeDone) {
       final base = await _example('job-en-cours.json');
@@ -158,11 +199,17 @@ class FakeGateway implements EnrichmentGateway {
 }
 
 class _FakeJob {
-  _FakeJob({required this.requestId, required this.jobId, this.wineId});
+  _FakeJob({
+    required this.requestId,
+    required this.jobId,
+    this.wineId,
+    this.price = false,
+  });
 
   final String requestId;
   final String jobId;
   final String? wineId;
+  final bool price;
   int polls = 0;
 
   Map<String, dynamic> stamp(Map<String, dynamic> json) => {

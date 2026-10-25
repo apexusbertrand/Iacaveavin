@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/data/flux_credentials.dart';
 import 'package:iacaveavin/app.dart';
 import 'package:iacaveavin/data/backup_providers.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
@@ -201,4 +202,6 @@ Future<void> pumpUntil(WidgetTester tester, bool Function() done) async {
 final noFileSystem = [
   autoBackupsProvider.overrideWith((ref) async => const []),
   photoSpaceProvider.overrideWith((ref) async => 0),
+  // Pas de stockage sécurisé du système dans les tests : clé en mémoire.
+  secretStoreProvider.overrideWith((ref) => MemorySecretStore()),
 ];
