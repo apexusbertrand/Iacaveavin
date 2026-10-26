@@ -49,8 +49,9 @@ Clé de cache d'un vin : domaine, appellation, cuvée et millésime normalisés 
 6. Rédaction des commentaires domaine et millésime : 400 à 600 caractères chacun, écrits par l'agent à partir des sources, jamais copiés.
 7. Notes critiques, gratuites uniquement (décision D2) : page en accès libre du critique (`acces: libre`), ou note reprise par le site du domaine ou par un marchand (`acces: citee`, avec `citee_par`). Parker en priorité, autres critiques en complément.
 8. Garde : uniquement une fenêtre publiée (critique, domaine, marchand qui cite un critique). Sinon valeur nulle : l'app applique ses règles locales.
+8 bis. Accords mets-vins : toujours de 2 à 5, choisis dans la liste `accord_mets` de l'app. D'une source si possible, sinon déduits (couleur, type, appellation, cépages) avec la source `estimation` et une confiance d'au plus 0,6 (T80). Un oubli relance l'agent une fois.
 9. Prix si `inclure_prix` : étapes de l'agent prix ci-dessous.
-10. Contrôles : millésime entre 1900 et l'année en cours ou NM, degré entre 5 et 23 %, fenêtre qui ne commence pas avant le millésime, couleur compatible avec l'appellation, URL présentes dans `sources_consultees`. Validation de la réponse contre le schéma.
+10. Contrôles : toute valeur `estimation` hors couleur, type et accords est retirée (T81) ; millésime entre 1900 et l'année en cours ou NM, degré entre 5 et 23 %, fenêtre qui ne commence pas avant le millésime, couleur compatible avec l'appellation, URL présentes dans `sources_consultees`. Validation de la réponse contre le schéma.
 11. Mise à jour du job et du cache, décompte du quota.
 
 ## Étapes de l'agent prix

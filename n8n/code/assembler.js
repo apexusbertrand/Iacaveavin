@@ -4,7 +4,7 @@
 // - n8n/code/noeuds/<nom>.js : script d'un nœud Code. Une ligne
 //   « // @inclure <fichier> » est remplacée par n8n/code/lib/<fichier> ;
 //   __VERSION_FLUX__, __SCHEMA_REPONSE__, __SCHEMA_ENRICHISSEMENT__,
-//   __SCHEMA_PRIX__ et __VECTEUR__ par leurs valeurs.
+//   __SCHEMA_PRIX__, __VECTEUR__, __SOURCES__ et __ACCORDS__ par leurs valeurs.
 // - n8n/workflow/src/<flux>.sdk.js : source SDK du flux ; CODE('<nom>') y
 //   est remplacé par le script assemblé du nœud, en chaîne JSON.
 //
@@ -61,6 +61,13 @@ function sources() {
   return out;
 }
 
+/** Libellés de la liste accord_mets de l'application (règle 15 du prompt). */
+function accords() {
+  return JSON.parse(lire('app/assets/referentiels/accords-mets.json')).valeurs
+    .filter((v) => v.actif !== false)
+    .map((v) => v.libelle);
+}
+
 function noeud(nom) {
   let s = fs.readFileSync(path.join(ici, 'noeuds', nom + '.js'), 'utf8');
   s = s.replace(/^\/\/ @inclure (\S+)$/gm, (_, f) => sansCommentaires(fs.readFileSync(path.join(ici, 'lib', f), 'utf8')));
@@ -72,7 +79,8 @@ function noeud(nom) {
     .replace(/__VECTEUR__/g, () => json('specs/contrat-n8n/vecteur-signature.json'))
     .replace(/__PROMPT_ENRICHISSEMENT__/g, () => JSON.stringify(prompt('prompt-agent-enrichissement.md')))
     .replace(/__PROMPT_PRIX__/g, () => JSON.stringify(prompt('prompt-agent-prix.md')))
-    .replace(/__SOURCES__/g, () => JSON.stringify(sources()));
+    .replace(/__SOURCES__/g, () => JSON.stringify(sources()))
+    .replace(/__ACCORDS__/g, () => JSON.stringify(accords()));
 }
 
 function flux(nom) {

@@ -8,9 +8,10 @@ if (typeof require !== 'undefined' && typeof jsonDe === 'undefined') {
  * Sortie de l'agent d'enrichissement → { ok, erreurs, resultat, cout }.
  * La transcription vient de la lecture d'étiquette (elle fait foi) ; les prix
  * sont l'affaire de l'agent prix. Toute propriété inconnue fait échouer la
- * validation (défense contre les contenus piégés).
+ * validation (défense contre les contenus piégés). Les accords manquants
+ * relancent l'agent une fois ; après la correction ils ne bloquent plus.
  */
-function analyserSortieAgent(sortie, { schemaReponse, transcription, anneeCourante, champsVerrouilles }) {
+function analyserSortieAgent(sortie, { schemaReponse, transcription, anneeCourante, champsVerrouilles, accordsPermis = null, accordsObligatoires = true }) {
   const cout = coutAgent(sortie);
   let brut;
   try {
@@ -26,7 +27,7 @@ function analyserSortieAgent(sortie, { schemaReponse, transcription, anneeCouran
   if (!Array.isArray(brut.notes_critiques)) brut.notes_critiques = [];
   if (!Array.isArray(brut.alertes)) brut.alertes = [];
   if (!Array.isArray(brut.sources_consultees)) brut.sources_consultees = [];
-  const c = controlerEnrichissement(brut, { anneeCourante, champsVerrouilles, domainesMarchands: [] });
+  const c = controlerEnrichissement(brut, { anneeCourante, champsVerrouilles, domainesMarchands: [], accordsPermis, accordsObligatoires });
   const schema = schemaReponse.$defs.resultat_enrichissement;
   const erreurs = [...c.erreurs, ...validateSchema(schema, c.resultat, schemaReponse)];
   return { ok: erreurs.length === 0, erreurs, resultat: c.resultat, cout };

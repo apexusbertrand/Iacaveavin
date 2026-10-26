@@ -11,5 +11,6 @@ const l = $('Lecture étiquette').first().json;
 const a = analyserSortieAgent($input.first().json, {
   schemaReponse: __SCHEMA_REPONSE__, transcription: l.transcription,
   anneeCourante: new Date().getFullYear(), champsVerrouilles: envoi.requete.champs_verrouilles || [],
+  accordsPermis: __ACCORDS__,
 });
 return [{ json: { ...a, cache: false, cle: l.cle, avec_cle: l.avec_cle, sortie: String($input.first().json.output || '').slice(0, 60000) } }];

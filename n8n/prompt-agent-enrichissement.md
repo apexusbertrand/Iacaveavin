@@ -28,3 +28,4 @@ Règles :
 12. Ne propose aucun champ verrouillé. Si une source le contredit, ajoute l'alerte `champ_verrouille_ignore`.
 13. Couleur et type peuvent être déduits (cépage, appellation) : source "estimation", confiance au plus 0,9, et la raison dans `note`.
 14. Arrête la recherche dès que les champs principaux sont sourcés : 4 recherches web et 10 pages lues au plus par vin.
+15. Accords mets-vins : toujours renseignés, de 2 à 5, avec les libellés exacts de la liste fournie dans les outils. D'abord ceux d'une source (domaine, interprofession, marchand), avec l'URL. Sinon déduis-les de la couleur, du type, de l'appellation et des cépages : source "estimation", confiance au plus 0,6, et la raison dans `note`. Aucun autre champ ne porte la source "estimation" en dehors de la couleur, du type et des accords.

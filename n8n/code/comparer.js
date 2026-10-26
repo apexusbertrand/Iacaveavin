@@ -3,14 +3,15 @@
 // assemblé du dépôt. Usage : node n8n/code/comparer.js <export.json>
 // Un export n8n ou la réponse de get_workflow_details conviennent. Les
 // caractères U+0300 à U+036F écrits en clair ou échappés comptent pour égaux
-// (même expression régulière).
+// (même expression régulière). Le saut de ligne final, que n8n retire, ne
+// compte pas.
 const fs = require('fs');
 const path = require('path');
 const a = require('./assembler.js');
 
 const brut = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 const flux = brut.workflow || brut;
-const lit = (s) => s.replace(/\\u0300-\\u036f/g, '̀-ͯ');
+const lit = (s) => s.replace(/\\u0300-\\u036f/g, '̀-ͯ').replace(/\s+$/, '');
 
 // Nom du nœud → script, lu dans les générateurs : o.code(variable, 'Nom', 'script', ...).
 const scripts = {};

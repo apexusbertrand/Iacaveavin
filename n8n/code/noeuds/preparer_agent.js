@@ -17,6 +17,7 @@ let systeme = __PROMPT_ENRICHISSEMENT__
 systeme += '\n\nOutils : `recherche_web` (une requête, 5 résultats) et `lire_page` (texte d\'une URL). '
   + (config.tavily_cle ? '' : 'La recherche web n\'est pas configurée : n\'appelle aucun outil, renseigne seulement ce que dit l\'étiquette et mets les autres valeurs à null avec le motif « recherche web indisponible ». ')
   + 'Si un outil renvoie une erreur, continue sans lui.'
+  + '\nAccords mets-vins permis (règle 15), libellés exacts : ' + JSON.stringify(__ACCORDS__)
   + '\nDomaines vérifiés (à privilégier) : ' + JSON.stringify(sources)
   + '. Un domaine absent de cette liste ne sert que s\'il s\'agit du site officiel du producteur, vérifié (nom, adresse, mentions légales).'
   + '\nLa lecture des photos est déjà faite : elle t\'est donnée dans le message. Ne renseigne ni `prix`, ni `cache`, ni `cout`, et laisse `transcription` vide : le flux les complète.'

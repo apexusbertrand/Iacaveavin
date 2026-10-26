@@ -155,6 +155,35 @@ test('PRV-R2 champ verrouillé retiré de la proposition, avec alerte', () => {
   assert.deepEqual(validateSchema(schemaReponse, { ...termine, resultat }), []);
 });
 
+test('FIC-01 règle 2 : valeur estimée retirée sauf couleur, type et accords', () => {
+  const r = JSON.parse(JSON.stringify(termine.resultat));
+  r.prix = [];
+  r.fiche.signe_qualite = { valeur: 'AOC', source: 'estimation', confiance: 0.7, note: 'déduit' };
+  r.fiche.commentaire_millesime = { valeur: 'Texte rédigé de mémoire, sans source.', source: 'estimation', confiance: 0.5 };
+  r.fiche.type = { valeur: 'tranquille', source: 'estimation', confiance: 0.9, note: 'pas de bulles' };
+  const { resultat } = m.controlerEnrichissement(r, { anneeCourante: 2026 });
+  assert.equal(resultat.fiche.signe_qualite.valeur, null);
+  assert.equal(resultat.fiche.commentaire_millesime.valeur, null);
+  assert.equal(resultat.fiche.type.valeur, 'tranquille');
+  assert.deepEqual(validateSchema(schemaReponse, { ...termine, resultat }), []);
+});
+
+test('FIC-01 règle 15 : accords toujours proposés, pris dans la liste', () => {
+  const permis = ['Volaille', 'Charcuterie', 'Fromage à pâte molle', 'Poisson grillé'];
+  const ctx = { anneeCourante: 2026, accordsPermis: permis, accordsObligatoires: true };
+  const r = JSON.parse(JSON.stringify(termine.resultat));
+  r.prix = [];
+  r.fiche.accords = { valeur: ['volaille', 'Pizza aux anchois', 'Fromage a pate molle'], source: 'estimation', confiance: 0.9 };
+  const ok = m.controlerEnrichissement(r, ctx);
+  assert.deepEqual(ok.resultat.fiche.accords.valeur, ['Volaille', 'Fromage à pâte molle']);
+  assert.equal(ok.resultat.fiche.accords.confiance, 0.6, 'confiance plafonnée');
+  assert.ok(!ok.erreurs.some((e) => /accords/.test(e)));
+  r.fiche.accords = { valeur: null, source: null, confiance: null, motif: 'recherche web indisponible' };
+  assert.match(m.controlerEnrichissement(r, ctx).erreurs.join(' | '), /accords mets-vins manquants/);
+  assert.deepEqual(m.controlerEnrichissement(r, { ...ctx, champsVerrouilles: ['accords'] }).erreurs.filter((e) => /accords/.test(e)), []);
+  assert.deepEqual(m.controlerEnrichissement(r, { anneeCourante: 2026 }).erreurs.filter((e) => /accords/.test(e)), [], 'cache : pas de relance');
+});
+
 test('docs/06 quota mensuel au fuseau de Paris', () => {
   assert.equal(m.moisQuota(new Date('2026-10-31T23:30:00Z')), '2026-11');
   assert.equal(m.jourParis(new Date('2026-10-21T22:30:00Z')), '2026-10-22');
