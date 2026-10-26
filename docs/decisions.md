@@ -129,6 +129,7 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T81 | Le flux retire toute valeur « estimation » hors couleur, type et accords (exemple constaté : commentaire de millésime « rédigé de mémoire », signe de qualité déduit) | règle 2 ; constat sur le job Cuvée Hortense du 2026-10-26 |
 | T82 | Code-barres lu par mobile_scanner (ML Kit sur Android, Vision sur iOS, sur l'appareil, gratuit) : viseur en direct ou lecture d'une photo de la galerie. L'entrée « Avec le code-barres » ouvre le viseur ; l'EAN reste un indice (AJO-10) | évolution 3 de la recette ; aucune API ni source payante |
 | T83 | Une fiche dont l'étiquette ne montre pas de domaine prend sa cuvée comme nom au lieu de « Vin à identifier » | constat de recette : « Cuvée Hortense » identifiée mais affichée « Vin à identifier » |
+| T84 | Icône « Château Apexus » demandée par Bertrand : château orange dégradé vers le rouge-orangé, engrenage Apexus en rosace, carré orange en drapeau, colline de vigne, fond anthracite. Source SVG dans docs/reference/icone/, PNG Android (classique, adaptative, monochrome Android 13) et iOS régénérés par `node scripts/generer_icones.js` depuis les couleurs de marque de specs/design-tokens.json ; apercu-512.png sert aussi d'icône Play Store | couleurs de marque encore provisoires (Q1) : relancer le script quand elles seront définitives |
 
 ## À compléter
 
