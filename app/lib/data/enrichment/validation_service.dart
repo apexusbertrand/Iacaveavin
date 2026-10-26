@@ -9,6 +9,7 @@ import '../../domain/wine_detail.dart';
 import '../../domain/wine_query.dart' show normalizeSearch;
 import '../cellar_repository.dart';
 import '../db/app_database.dart';
+import '../files/photo_service.dart';
 import '../reference_repository.dart';
 import 'enrichment_queue.dart';
 
@@ -43,6 +44,7 @@ class ValidationService {
     required this.cellar,
     required this.reference,
     required this.rules,
+    this.photos,
     DateTime Function()? clock,
   }) : _clock = clock ?? DateTime.now;
 
@@ -52,6 +54,9 @@ class ValidationService {
 
   /// Règles de garde embarquées (T6).
   final List<GardeRule> rules;
+
+  /// AJO-13 : purge des photos d'origine après validation.
+  final PhotoService? photos;
   final DateTime Function() _clock;
   static const _uuid = Uuid();
 
@@ -143,6 +148,28 @@ class ValidationService {
     Set<int> rejectedScores = const {},
     bool includePrices = true,
     String? mergeIntoWineId,
+  }) async {
+    final out = await _apply(
+      wineId,
+      response,
+      decisions: decisions,
+      rejectedScores: rejectedScores,
+      includePrices: includePrices,
+      mergeIntoWineId: mergeIntoWineId,
+    );
+    // AJO-13 : fiche validée, les photos d'origine des photos recadrées
+    // sont supprimées (T87).
+    await photos?.dropOriginals(out.mergedInto ?? out.wineId);
+    return out;
+  }
+
+  Future<ValidationOutcome> _apply(
+    String wineId,
+    JobResponse response, {
+    required Map<String, FieldDecision> decisions,
+    required Set<int> rejectedScores,
+    required bool includePrices,
+    required String? mergeIntoWineId,
   }) async {
     final result = response.result ?? const EnrichmentResult(fields: {});
     final detail = (await cellar.wine(wineId))!;

@@ -2129,4 +2129,77 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get priceHistory => 'Historique des relevés';
+
+  @override
+  String get photoTypeDegustation => 'Dégustation';
+
+  @override
+  String get photoTypeRepas => 'Repas';
+
+  @override
+  String get photoTypeEvenement => 'Événement';
+
+  @override
+  String get tabPhotos => 'Photos';
+
+  @override
+  String get libraryEmpty =>
+      'Aucune photo de dégustation ou de repas pour cette bouteille.';
+
+  @override
+  String get libraryAdd => 'Ajouter une photo';
+
+  @override
+  String get libraryTypeTitle => 'Type de photo';
+
+  @override
+  String get libraryAdded => 'Photo ajoutée';
+
+  @override
+  String get photoDelete => 'Supprimer la photo';
+
+  @override
+  String get photoDeleteBody => 'La photo est effacée de l\'appareil.';
+
+  @override
+  String get photoDeleted => 'Photo supprimée';
+
+  @override
+  String photoCounter(int index, int total) {
+    return '$index / $total';
+  }
+
+  @override
+  String photoOpen(int index) {
+    return 'Voir la photo $index';
+  }
+
+  @override
+  String get validationPhotos => 'Photos';
+
+  @override
+  String get photoCroppedLabel => 'Recadrée sur l\'étiquette';
+
+  @override
+  String get photoWholeLabel => 'Photo entière';
+
+  @override
+  String get cropAction => 'Recadrer';
+
+  @override
+  String get cropTitle => 'Recadrer l\'étiquette';
+
+  @override
+  String get cropHint =>
+      'Faites glisser le cadre ou ses coins sur l\'étiquette.';
+
+  @override
+  String get cropWhole => 'Photo entière';
+
+  @override
+  String get cropSaved => 'Cadre enregistré';
+
+  @override
+  String get cropOriginalNote =>
+      'La photo d\'origine est gardée jusqu\'à la validation de la fiche.';
 }

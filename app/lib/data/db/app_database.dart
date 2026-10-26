@@ -38,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase.open() => AppDatabase(driftDatabase(name: 'iacaveavin'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -48,6 +48,11 @@ class AppDatabase extends _$AppDatabase {
       from1To2: (m, schema) async {
         await m.addColumn(schema.job, schema.job.envoyeLe);
         await m.addColumn(schema.job, schema.job.reponse);
+      },
+      // v3 (évolution 1 du 2026-10-26) : recadrage des photos (AJO-13).
+      from2To3: (m, schema) async {
+        await m.addColumn(schema.photo, schema.photo.cheminOriginal);
+        await m.addColumn(schema.photo, schema.photo.cadre);
       },
     ),
     beforeOpen: (details) async {

@@ -7,6 +7,7 @@ import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 
+import '../../domain/photo_frame.dart';
 import '../db/app_database.dart';
 
 /// Tailles de docs/02-architecture.md (§ Volumes et stockage).
@@ -116,6 +117,32 @@ ProcessedPhoto processPhoto(Uint8List bytes) {
   );
 }
 
+/// AJO-13 : photo rognée sur le cadre de l'étiquette, mêmes tailles que
+/// [processPhoto].
+ProcessedPhoto cropPhoto(Uint8List bytes, PhotoFrame frame) {
+  final decoded = img.decodeImage(bytes);
+  if (decoded == null) throw const FormatException('image illisible');
+  final oriented = img.bakeOrientation(decoded);
+  final r = frame.toPixels(oriented.width, oriented.height);
+  final cropped = img.copyCrop(
+    oriented,
+    x: r.left,
+    y: r.top,
+    width: r.width,
+    height: r.height,
+  );
+  final stored = _resize(cropped, storedLongSide);
+  return ProcessedPhoto(
+    stored: Uint8List.fromList(img.encodeJpg(stored, quality: jpegQuality)),
+    thumb: Uint8List.fromList(
+      img.encodeJpg(_resize(stored, thumbLongSide), quality: jpegQuality),
+    ),
+    width: stored.width,
+    height: stored.height,
+    quality: measureQuality(stored),
+  );
+}
+
 /// Version envoyée au flux : 1 500 px, qualité 80, en base64.
 String encodeForFlux(Uint8List stored) {
   final decoded = img.decodeImage(stored)!;
@@ -145,8 +172,9 @@ class PhotoService {
   static String thumbPathFor(String relative) =>
       relative.replaceFirst(RegExp(r'\.jpg$'), '_mini.jpg');
 
-  /// Enregistre une photo traitée pour une fiche. La première photo
-  /// d'étiquette devient la photo principale.
+  /// Enregistre une photo traitée pour une fiche. La première photo de la
+  /// bouteille devient la photo principale ; une photo de la bibliothèque
+  /// (FIC-11) ne l'est jamais.
   Future<String> save({
     required String wineId,
     required String cellarId,
@@ -159,7 +187,7 @@ class PhotoService {
     await file.parent.create(recursive: true);
     await file.writeAsBytes(photo.stored);
     await File(await _abs(thumbPathFor(relative))).writeAsBytes(photo.thumb);
-    final existing = await photosOf(wineId);
+    final existing = await bottlePhotosOf(wineId);
     final now = _clock().toUtc();
     await _db
         .into(_db.photos)
@@ -172,7 +200,7 @@ class PhotoService {
             ficheId: wineId,
             chemin: relative,
             typePhoto: type,
-            principale: existing.isEmpty,
+            principale: existing.isEmpty && !isLibraryPhoto(type),
           ).copyWith(
             largeur: Value(photo.width),
             hauteur: Value(photo.height),
@@ -188,7 +216,24 @@ class PhotoService {
             ..orderBy([(x) => OrderingTerm.asc(x.createdAt)]))
           .get();
 
+  /// Photos de la bouteille (étiquette, contre-étiquette…), dans l'ordre de
+  /// prise : celles envoyées au flux.
+  Future<List<Photo>> bottlePhotosOf(String wineId) async => [
+    for (final ph in await photosOf(wineId))
+      if (!isLibraryPhoto(ph.typePhoto)) ph,
+  ];
+
+  /// FIC-11 : bibliothèque de la bouteille (dégustation, repas, événement).
+  Future<List<Photo>> libraryOf(String wineId) async => [
+    for (final ph in await photosOf(wineId))
+      if (isLibraryPhoto(ph.typePhoto)) ph,
+  ];
+
   Future<File> fileOf(Photo photo) async => File(await _abs(photo.chemin));
+
+  /// AJO-13 : photo entière, tant que la fiche n'est pas validée.
+  Future<File> originalOf(Photo photo) async =>
+      File(await _abs(photo.cheminOriginal ?? photo.chemin));
 
   Future<File> thumbOf(Photo photo) async =>
       File(await _abs(thumbPathFor(photo.chemin)));
@@ -198,7 +243,7 @@ class PhotoService {
     String wineId,
   ) async {
     final out = <({int index, String type, String base64})>[];
-    for (final (i, ph) in (await photosOf(wineId)).take(4).indexed) {
+    for (final (i, ph) in (await bottlePhotosOf(wineId)).take(4).indexed) {
       final bytes = await (await fileOf(ph)).readAsBytes();
       out.add((
         index: i,
@@ -207,6 +252,100 @@ class PhotoService {
       ));
     }
     return out;
+  }
+
+  /// AJO-13 : applique les cadres renvoyés par le flux. L'index suit
+  /// l'ordre de [forRequest] ; un cadre absent laisse la photo entière. Une
+  /// photo déjà recadrée (cadre du flux ou retouche) n'est pas rognée une
+  /// seconde fois : relire la même réponse ne change rien.
+  Future<void> applyFrames(String wineId, List<LabelFrame> frames) async {
+    final photos = (await bottlePhotosOf(wineId)).take(4).toList();
+    for (final f in frames) {
+      final frame = f.frame;
+      if (frame == null || frame.isFull) continue;
+      if (f.index < 0 || f.index >= photos.length) continue;
+      final ph = photos[f.index];
+      if (ph.cheminOriginal != null) continue;
+      await setFrame(ph, frame);
+    }
+  }
+
+  /// AJO-13 : rogne la photo sur [frame] (en fractions de la photo
+  /// d'origine), ou la remet entière si [frame] est null. La photo d'origine
+  /// est gardée à part jusqu'à la validation de la fiche.
+  Future<void> setFrame(Photo photo, PhotoFrame? frame) async {
+    final whole = frame == null || frame.isFull;
+    if (whole && photo.cheminOriginal == null) return;
+    var original = photo.cheminOriginal;
+    if (original == null) {
+      original = photo.chemin.replaceFirst(RegExp(r'\.jpg$'), '_origine.jpg');
+      await File(await _abs(photo.chemin)).rename(await _abs(original));
+      final thumb = File(await _abs(thumbPathFor(photo.chemin)));
+      if (thumb.existsSync()) await thumb.delete();
+    }
+    final bytes = await File(await _abs(original)).readAsBytes();
+    final processed = whole
+        ? await process(bytes)
+        : await Isolate.run(() => cropPhoto(bytes, frame));
+    // Nouveau nom à chaque recadrage : l'écran ne garde pas l'ancienne image
+    // en cache.
+    final relative = p.posix.join(
+      p.posix.dirname(photo.chemin),
+      '${photo.id}-${_clock().microsecondsSinceEpoch}.jpg',
+    );
+    await File(await _abs(relative)).writeAsBytes(processed.stored);
+    await File(await _abs(thumbPathFor(relative)))
+        .writeAsBytes(processed.thumb);
+    if (photo.cheminOriginal != null) await _deleteWithThumb(photo.chemin);
+    await (_db.update(_db.photos)..where((x) => x.id.equals(photo.id))).write(
+      PhotosCompanion(
+        chemin: Value(relative),
+        cheminOriginal: Value(original),
+        cadre: Value(whole ? null : frame.encode()),
+        largeur: Value(processed.width),
+        hauteur: Value(processed.height),
+        octets: Value(processed.stored.length),
+        updatedAt: Value(_clock().toUtc()),
+      ),
+    );
+  }
+
+  /// AJO-13 : à la validation de la fiche, les photos d'origine des photos
+  /// recadrées sont supprimées (décision de Bertrand du 2026-10-26, T87).
+  Future<void> dropOriginals(String wineId) async {
+    for (final ph in await photosOf(wineId)) {
+      final original = ph.cheminOriginal;
+      if (original == null) continue;
+      final file = File(await _abs(original));
+      if (file.existsSync()) await file.delete();
+      await (_db.update(_db.photos)..where((x) => x.id.equals(ph.id))).write(
+        PhotosCompanion(
+          cheminOriginal: const Value(null),
+          cadre: const Value(null),
+          updatedAt: Value(_clock().toUtc()),
+        ),
+      );
+    }
+  }
+
+  /// FIC-11 : suppression d'une photo demandée par l'utilisateur (fichier,
+  /// miniature et photo d'origine).
+  Future<void> delete(Photo photo) async {
+    await _deleteWithThumb(photo.chemin);
+    if (photo.cheminOriginal != null) {
+      final file = File(await _abs(photo.cheminOriginal!));
+      if (file.existsSync()) await file.delete();
+    }
+    await (_db.update(_db.photos)..where((x) => x.id.equals(photo.id))).write(
+      PhotosCompanion(deletedAt: Value(_clock().toUtc())),
+    );
+  }
+
+  Future<void> _deleteWithThumb(String relative) async {
+    for (final path in [relative, thumbPathFor(relative)]) {
+      final file = File(await _abs(path));
+      if (file.existsSync()) await file.delete();
+    }
   }
 
   /// Suppression en cascade des photos d'une fiche (purge explicite).

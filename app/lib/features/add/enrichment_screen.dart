@@ -35,7 +35,8 @@ final winePhotosProvider = FutureProvider.family<List<File>, String>((
   ref.watch(latestJobProvider(wineId));
   final service = ref.watch(photoServiceProvider);
   return [
-    for (final p in await service.photosOf(wineId)) await service.thumbOf(p),
+    for (final p in await service.bottlePhotosOf(wineId))
+      await service.thumbOf(p),
   ];
 });
 

@@ -870,7 +870,9 @@
   "scanFound": "Code-barres lu : {code}",
   "@scanFound": {
     "placeholders": {
-      "code": {"type": "String"}
+      "code": {
+        "type": "String"
+      }
     }
   },
   "scanNotFound": "Aucun code-barres EAN lisible sur cette photo.",
@@ -1183,5 +1185,44 @@
     }
   },
   "priceChartLabel": "Courbe des prix relevés",
-  "priceHistory": "Historique des relevés"
+  "priceHistory": "Historique des relevés",
+  "photoTypeDegustation": "Dégustation",
+  "photoTypeRepas": "Repas",
+  "photoTypeEvenement": "Événement",
+  "tabPhotos": "Photos",
+  "libraryEmpty": "Aucune photo de dégustation ou de repas pour cette bouteille.",
+  "libraryAdd": "Ajouter une photo",
+  "libraryTypeTitle": "Type de photo",
+  "libraryAdded": "Photo ajoutée",
+  "photoDelete": "Supprimer la photo",
+  "photoDeleteBody": "La photo est effacée de l'appareil.",
+  "photoDeleted": "Photo supprimée",
+  "photoCounter": "{index} / {total}",
+  "@photoCounter": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "photoOpen": "Voir la photo {index}",
+  "@photoOpen": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "validationPhotos": "Photos",
+  "photoCroppedLabel": "Recadrée sur l'étiquette",
+  "photoWholeLabel": "Photo entière",
+  "cropAction": "Recadrer",
+  "cropTitle": "Recadrer l'étiquette",
+  "cropHint": "Faites glisser le cadre ou ses coins sur l'étiquette.",
+  "cropWhole": "Photo entière",
+  "cropSaved": "Cadre enregistré",
+  "cropOriginalNote": "La photo d'origine est gardée jusqu'à la validation de la fiche."
 }

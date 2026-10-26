@@ -75,7 +75,7 @@ void main() {
   });
 
   testWidgets(
-    'AJO-01 AJO-02 AJO-04 AJO-05 AJO-06 AJO-08 NFR-08 FIC-06 FIC-07 parcours photo complet',
+    'AJO-01 AJO-02 AJO-04 AJO-05 AJO-06 AJO-08 AJO-13 NFR-08 FIC-06 FIC-07 parcours photo complet',
     (tester) async {
       final db = await start(tester);
       await tester.tap(find.byTooltip('Ajouter une bouteille'));
@@ -116,6 +116,17 @@ void main() {
       // AJO-06 : chaque champ avec source et confiance.
       expect(find.textContaining('Étiquette · confiance 97 %'), findsOneWidget);
       expect(find.text('Confiance faible : vérifiez'), findsNothing);
+      // AJO-13 : photo rognée sur le cadre renvoyé, retour à la photo entière.
+      expect(find.text("Recadrée sur l'étiquette"), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('crop-photo-0')));
+      final editor = find.byKey(const ValueKey('crop-frame'));
+      await pumpUntil(tester, () => editor.evaluate().isNotEmpty);
+      expect(editor, findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('crop-whole')));
+      await pumpUntil(tester, () => editor.evaluate().isEmpty);
+      await settle(tester);
+      expect(find.text('Photo entière'), findsOneWidget);
+      expect(find.text("Recadrée sur l'étiquette"), findsNothing);
       await tester.tap(find.byKey(const ValueKey('validation-save')));
       await settleLong(tester, 3);
       expect(find.text("GUILLAUME L'ECHANSON"), findsOneWidget);

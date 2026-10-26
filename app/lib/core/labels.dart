@@ -128,6 +128,9 @@ extension DomainLabels on AppLocalizations {
     'contre_etiquette' => photoTypeContreEtiquette,
     'capsule' => photoTypeCapsule,
     'collerette' => photoTypeCollerette,
+    'degustation' => photoTypeDegustation,
+    'repas' => photoTypeRepas,
+    'evenement' => photoTypeEvenement,
     _ => photoTypeAutre,
   };
 

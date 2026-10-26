@@ -13,6 +13,9 @@ import '../../data/enrichment/validation_service.dart';
 import '../../data/providers.dart';
 import '../../domain/enrichment.dart';
 import '../../domain/wine_detail.dart';
+import '../photos/photo_crop_screen.dart';
+import '../photos/photo_gallery.dart';
+import 'enrichment_screen.dart' show winePhotosProvider;
 
 /// Ordre d'affichage des champs proposés (docs/03, fiche).
 const _fieldOrder = [
@@ -298,6 +301,7 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
                     title: Text(a.message),
                   ),
               ],
+              _PhotosSection(wineId: widget.wineId),
               _Header(l.validationTitle),
               for (final field in _fieldOrder)
                 if (result.fields.containsKey(field))
@@ -532,6 +536,81 @@ class _FieldTile extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+/// AJO-13 : photos recadrées sur l'étiquette à la réception du résultat,
+/// retouche du cadre ou retour à la photo entière avant validation.
+class _PhotosSection extends ConsumerWidget {
+  const _PhotosSection({required this.wineId});
+
+  final String wineId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final photos = ref.watch(bottlePhotosProvider(wineId)).value ?? const [];
+    if (photos.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _Header(l.validationPhotos),
+        SizedBox(
+          height: SpacingTokens.xxl * 5,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.l),
+            itemCount: photos.length,
+            separatorBuilder: (_, _) => const SizedBox(width: SpacingTokens.m),
+            itemBuilder: (context, i) {
+              final p = photos[i];
+              return Column(
+                key: ValueKey('validation-photo-$i'),
+                children: [
+                  Expanded(
+                    child: Semantics(
+                      button: true,
+                      label: l.photoOpen(i + 1),
+                      child: InkWell(
+                        onTap: () =>
+                            showPhotoGallery(context, photos, initialIndex: i),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            RadiusTokens.carte,
+                          ),
+                          child: Image.file(p.thumb, fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    p.cropped ? l.photoCroppedLabel : l.photoWholeLabel,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                  TextButton.icon(
+                    key: ValueKey('crop-photo-$i'),
+                    onPressed: () async {
+                      final changed = await Navigator.of(context).push<bool>(
+                        MaterialPageRoute(
+                          builder: (_) => PhotoCropScreen(photo: p.photo),
+                        ),
+                      );
+                      if (changed == true) {
+                        ref.invalidate(bottlePhotosProvider(wineId));
+                        ref.invalidate(winePhotosProvider(wineId));
+                      }
+                    },
+                    icon: const Icon(Icons.crop),
+                    label: Text(l.cropAction),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

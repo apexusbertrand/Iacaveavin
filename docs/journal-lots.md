@@ -105,6 +105,10 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
     - évolution 3 (code-barres par l'appareil photo ou une photo) : T82 ;
     - évolution 4 (résultat enregistré même à 0 bouteille) : la validation n'exige aucun lot, la fiche reste visible (T78), et une fiche sans domaine lisible prend le nom de sa cuvée (T83).
   - Constat : la recherche web échoue (« erreur d'authentification des outils »). La valeur rangée dans `tavily_cle` ne commence pas par `tvly-` : ce n'est pas une clé Tavily. À recoller par Bertrand.
+  - 2026-10-26, second retour (évolutions 1, 1 bis et 2), traité le jour même :
+    - évolution 2 (recherche web générale sans intermédiaire) : Tavily retiré, recherche intégrée de Claude dans les flux Enrichissement et Prix, sources refaites à partir des URL vues ; les trois flux sont republiés, /sante répond en contrat 1.1 (T85). Le commentaire de millésime et les accords obtenus avant ce changement venaient de la mémoire du modèle, pas d'une recherche ;
+    - évolution 1 (recadrage sur l'étiquette, toutes les photos visibles) : cadre renvoyé par la lecture vision (contrat 1.1, T86), photo rognée à la réception, entière si aucune étiquette n'est identifiable, retouche ou retour à la photo entière à l'écran de validation, photo d'origine supprimée à la validation (AJO-13, T87) ; carrousel et plein écran de toutes les photos sur la fiche (FIC-10) ;
+    - évolution 1 bis (bibliothèque de photos par bouteille) : onglet Photos de la fiche, photos de dégustation, de repas ou d'événement, jamais envoyées au flux (FIC-11, T88). Base en version 3 (colonnes `chemin_original` et `cadre` de photo).
 
 ## Lot 3 Restitution
 

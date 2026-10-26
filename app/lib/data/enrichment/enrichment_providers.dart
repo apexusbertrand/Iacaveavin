@@ -92,6 +92,7 @@ final validationServiceProvider = FutureProvider<ValidationService>((
     cellar: ref.watch(cellarRepositoryProvider),
     reference: ref.watch(referenceRepositoryProvider),
     rules: await ref.watch(gardeRulesListProvider.future),
+    photos: ref.watch(photoServiceProvider),
   );
 });
 

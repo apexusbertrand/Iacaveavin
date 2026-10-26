@@ -33,6 +33,8 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 - FIC-07. Les commentaires rédigés par l'agent portent la mention « rédigé par IA à partir de [site] ».
 - FIC-08. Dupliquer pour un autre millésime : nouvelle fiche sur la même cuvée, seuls les champs liés au millésime sont à enrichir.
 - FIC-09. Ré-enrichir : relance le flux sur les champs non verrouillés et montre les différences avant de les appliquer.
+- FIC-10. Toutes les photos de la bouteille sont visibles : carrousel sur la fiche, plein écran avec zoom et balayage d'une photo à l'autre (2026-10-26, évolution 1).
+- FIC-11. Bibliothèque de photos par bouteille, ajoutées à tout moment (dégustation, repas, événement) depuis l'appareil photo ou la galerie, supprimables. Ces photos ne sont jamais envoyées au flux et ne deviennent pas la photo principale (2026-10-26, évolution 1 bis, T88).
 
 ## AJO. Ajout d'une bouteille par photo [lot 2a côté app, 2b côté n8n]
 
@@ -50,6 +52,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - AJO-10. Le code-barres EAN accompagne les photos comme indice, jamais comme identifiant (certains producteurs gardent le même EAN d'un millésime à l'autre).
 - AJO-11. Quota restant affiché (champ `quota` de la réponse) quand il passe sous 20 %.
 - AJO-12. Toute réponse du flux est validée contre specs/contrat-n8n/reponse-job.schema.json. Une réponse invalide est traitée comme une erreur, journalisée, et la fiche reste éditable à la main.
+- AJO-13. Recadrage sur l'étiquette : la lecture du flux renvoie le cadre de l'étiquette de chaque photo (contrat 1.1) ; l'app rogne la photo à la réception, garde la photo entière quand aucune étiquette n'est identifiable, et permet de retoucher le cadre ou de revenir à la photo entière à l'écran de validation. La photo d'origine est conservée jusqu'à la validation de la fiche, puis supprimée (2026-10-26, évolution 1, T86, T87).
 
 ## STK. Stock et corrections [lot 1]
 

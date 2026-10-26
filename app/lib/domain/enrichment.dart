@@ -5,7 +5,10 @@
 /// règles du schéma.
 library;
 
-const contractVersion = '1.0';
+import 'photo_frame.dart';
+
+/// 1.1 : cadre de l'étiquette par photo (`resultat.cadrages`, AJO-13).
+const contractVersion = '1.1';
 
 enum JobStatus {
   pending('en_attente'),
@@ -209,6 +212,7 @@ class EnrichmentResult {
     this.prices = const [],
     this.alerts = const [],
     this.cacheHit = false,
+    this.frames = const [],
   });
 
   factory EnrichmentResult.fromJson(Map<String, dynamic> j) => EnrichmentResult(
@@ -237,6 +241,11 @@ class EnrichmentResult {
         ),
     ],
     cacheHit: (j['cache'] as Map?)?['hit'] == true,
+    frames: [
+      for (final c
+          in (j['cadrages'] as List? ?? const []).cast<Map<String, dynamic>>())
+        LabelFrame.fromJson(c),
+    ],
   );
 
   final Map<String, ProposedValue> fields;
@@ -244,6 +253,9 @@ class EnrichmentResult {
   final List<ProposedPrice> prices;
   final List<EnrichmentAlert> alerts;
   final bool cacheHit;
+
+  /// AJO-13 : cadre de l'étiquette par photo envoyée (contrat 1.1).
+  final List<LabelFrame> frames;
 
   /// AJO-06 : champs en désaccord entre l'étiquette et une source.
   Set<String> get disagreements => {

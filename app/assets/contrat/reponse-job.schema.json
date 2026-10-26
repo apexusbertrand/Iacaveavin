@@ -338,7 +338,31 @@
               }
             },
             "notes_critiques": { "type": "array", "items": { "$ref": "#/$defs/note_critique" } },
-            "prix": { "type": "array", "items": { "$ref": "#/$defs/prix" } }
+            "prix": { "type": "array", "items": { "$ref": "#/$defs/prix" } },
+            "cadrages": {
+              "description": "Contrat 1.1, envoyé seulement si la requête est en 1.1 : rectangle de l'étiquette principale de chaque photo, en fractions de l'image (origine en haut à gauche), ou null si aucune étiquette n'est identifiable. L'app rogne la photo sur ce rectangle.",
+              "type": "array",
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["index", "cadre"],
+                "properties": {
+                  "index": { "type": "integer", "minimum": 0, "maximum": 3 },
+                  "cadre": {
+                    "type": ["object", "null"],
+                    "additionalProperties": false,
+                    "required": ["x", "y", "largeur", "hauteur"],
+                    "properties": {
+                      "x": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "y": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "largeur": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+                      "hauteur": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       ],

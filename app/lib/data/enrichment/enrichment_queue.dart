@@ -460,6 +460,14 @@ class EnrichmentQueue {
         await _fail(job, r.error?.message ?? 'erreur');
         return false;
       case JobStatus.done || JobStatus.partial:
+        // AJO-13 : rognage sur l'étiquette avant d'annoncer le résultat, pour
+        // que l'écran de validation montre déjà les photos rognées. Un échec
+        // laisse la photo entière sans bloquer la validation.
+        try {
+          await photos.applyFrames(job.ficheId, r.result?.frames ?? const []);
+        } on Object {
+          // Photo illisible ou absente : rien à rogner.
+        }
         await _db.transaction(() async {
           await _update(
             job,
@@ -492,6 +500,14 @@ class EnrichmentQueue {
         await _fail(job, r.error?.message ?? 'erreur');
         return false;
       case JobStatus.done || JobStatus.partial:
+        // AJO-13 : rognage sur l'étiquette avant d'annoncer le résultat, pour
+        // que l'écran de validation montre déjà les photos rognées. Un échec
+        // laisse la photo entière sans bloquer la validation.
+        try {
+          await photos.applyFrames(job.ficheId, r.result?.frames ?? const []);
+        } on Object {
+          // Photo illisible ou absente : rien à rogner.
+        }
         await _db.transaction(() async {
           await _update(
             job,

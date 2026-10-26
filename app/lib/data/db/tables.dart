@@ -211,6 +211,12 @@ class Photos extends Table with TechnicalColumns, CellarScoped {
   IntColumn get largeur => integer().nullable()();
   IntColumn get hauteur => integer().nullable()();
   IntColumn get octets => integer().nullable()();
+
+  /// AJO-13 : photo entière gardée jusqu'à la validation de la fiche.
+  TextColumn get cheminOriginal => text().nullable()();
+
+  /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
+  TextColumn get cadre => text().nullable()();
 }
 
 @DataClassName('Provenance')

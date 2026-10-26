@@ -8327,6 +8327,26 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _cheminOriginalMeta = const VerificationMeta(
+    'cheminOriginal',
+  );
+  @override
+  late final GeneratedColumn<String> cheminOriginal = GeneratedColumn<String>(
+    'chemin_original',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cadreMeta = const VerificationMeta('cadre');
+  @override
+  late final GeneratedColumn<String> cadre = GeneratedColumn<String>(
+    'cadre',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -8341,6 +8361,8 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     largeur,
     hauteur,
     octets,
+    cheminOriginal,
+    cadre,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -8439,6 +8461,21 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         octets.isAcceptableOrUnknown(data['octets']!, _octetsMeta),
       );
     }
+    if (data.containsKey('chemin_original')) {
+      context.handle(
+        _cheminOriginalMeta,
+        cheminOriginal.isAcceptableOrUnknown(
+          data['chemin_original']!,
+          _cheminOriginalMeta,
+        ),
+      );
+    }
+    if (data.containsKey('cadre')) {
+      context.handle(
+        _cadreMeta,
+        cadre.isAcceptableOrUnknown(data['cadre']!, _cadreMeta),
+      );
+    }
     return context;
   }
 
@@ -8496,6 +8533,14 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         DriftSqlType.int,
         data['${effectivePrefix}octets'],
       ),
+      cheminOriginal: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}chemin_original'],
+      ),
+      cadre: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cadre'],
+      ),
     );
   }
 
@@ -8518,6 +8563,12 @@ class Photo extends DataClass implements Insertable<Photo> {
   final int? largeur;
   final int? hauteur;
   final int? octets;
+
+  /// AJO-13 : photo entière gardée jusqu'à la validation de la fiche.
+  final String? cheminOriginal;
+
+  /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
+  final String? cadre;
   const Photo({
     required this.id,
     required this.createdAt,
@@ -8531,6 +8582,8 @@ class Photo extends DataClass implements Insertable<Photo> {
     this.largeur,
     this.hauteur,
     this.octets,
+    this.cheminOriginal,
+    this.cadre,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -8554,6 +8607,12 @@ class Photo extends DataClass implements Insertable<Photo> {
     }
     if (!nullToAbsent || octets != null) {
       map['octets'] = Variable<int>(octets);
+    }
+    if (!nullToAbsent || cheminOriginal != null) {
+      map['chemin_original'] = Variable<String>(cheminOriginal);
+    }
+    if (!nullToAbsent || cadre != null) {
+      map['cadre'] = Variable<String>(cadre);
     }
     return map;
   }
@@ -8580,6 +8639,12 @@ class Photo extends DataClass implements Insertable<Photo> {
       octets: octets == null && nullToAbsent
           ? const Value.absent()
           : Value(octets),
+      cheminOriginal: cheminOriginal == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cheminOriginal),
+      cadre: cadre == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cadre),
     );
   }
 
@@ -8601,6 +8666,8 @@ class Photo extends DataClass implements Insertable<Photo> {
       largeur: serializer.fromJson<int?>(json['largeur']),
       hauteur: serializer.fromJson<int?>(json['hauteur']),
       octets: serializer.fromJson<int?>(json['octets']),
+      cheminOriginal: serializer.fromJson<String?>(json['cheminOriginal']),
+      cadre: serializer.fromJson<String?>(json['cadre']),
     );
   }
   @override
@@ -8619,6 +8686,8 @@ class Photo extends DataClass implements Insertable<Photo> {
       'largeur': serializer.toJson<int?>(largeur),
       'hauteur': serializer.toJson<int?>(hauteur),
       'octets': serializer.toJson<int?>(octets),
+      'cheminOriginal': serializer.toJson<String?>(cheminOriginal),
+      'cadre': serializer.toJson<String?>(cadre),
     };
   }
 
@@ -8635,6 +8704,8 @@ class Photo extends DataClass implements Insertable<Photo> {
     Value<int?> largeur = const Value.absent(),
     Value<int?> hauteur = const Value.absent(),
     Value<int?> octets = const Value.absent(),
+    Value<String?> cheminOriginal = const Value.absent(),
+    Value<String?> cadre = const Value.absent(),
   }) => Photo(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
@@ -8648,6 +8719,10 @@ class Photo extends DataClass implements Insertable<Photo> {
     largeur: largeur.present ? largeur.value : this.largeur,
     hauteur: hauteur.present ? hauteur.value : this.hauteur,
     octets: octets.present ? octets.value : this.octets,
+    cheminOriginal: cheminOriginal.present
+        ? cheminOriginal.value
+        : this.cheminOriginal,
+    cadre: cadre.present ? cadre.value : this.cadre,
   );
   Photo copyWithCompanion(PhotosCompanion data) {
     return Photo(
@@ -8665,6 +8740,10 @@ class Photo extends DataClass implements Insertable<Photo> {
       largeur: data.largeur.present ? data.largeur.value : this.largeur,
       hauteur: data.hauteur.present ? data.hauteur.value : this.hauteur,
       octets: data.octets.present ? data.octets.value : this.octets,
+      cheminOriginal: data.cheminOriginal.present
+          ? data.cheminOriginal.value
+          : this.cheminOriginal,
+      cadre: data.cadre.present ? data.cadre.value : this.cadre,
     );
   }
 
@@ -8682,7 +8761,9 @@ class Photo extends DataClass implements Insertable<Photo> {
           ..write('principale: $principale, ')
           ..write('largeur: $largeur, ')
           ..write('hauteur: $hauteur, ')
-          ..write('octets: $octets')
+          ..write('octets: $octets, ')
+          ..write('cheminOriginal: $cheminOriginal, ')
+          ..write('cadre: $cadre')
           ..write(')'))
         .toString();
   }
@@ -8701,6 +8782,8 @@ class Photo extends DataClass implements Insertable<Photo> {
     largeur,
     hauteur,
     octets,
+    cheminOriginal,
+    cadre,
   );
   @override
   bool operator ==(Object other) =>
@@ -8717,7 +8800,9 @@ class Photo extends DataClass implements Insertable<Photo> {
           other.principale == this.principale &&
           other.largeur == this.largeur &&
           other.hauteur == this.hauteur &&
-          other.octets == this.octets);
+          other.octets == this.octets &&
+          other.cheminOriginal == this.cheminOriginal &&
+          other.cadre == this.cadre);
 }
 
 class PhotosCompanion extends UpdateCompanion<Photo> {
@@ -8733,6 +8818,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
   final Value<int?> largeur;
   final Value<int?> hauteur;
   final Value<int?> octets;
+  final Value<String?> cheminOriginal;
+  final Value<String?> cadre;
   final Value<int> rowid;
   const PhotosCompanion({
     this.id = const Value.absent(),
@@ -8747,6 +8834,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     this.largeur = const Value.absent(),
     this.hauteur = const Value.absent(),
     this.octets = const Value.absent(),
+    this.cheminOriginal = const Value.absent(),
+    this.cadre = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PhotosCompanion.insert({
@@ -8762,6 +8851,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     this.largeur = const Value.absent(),
     this.hauteur = const Value.absent(),
     this.octets = const Value.absent(),
+    this.cheminOriginal = const Value.absent(),
+    this.cadre = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        createdAt = Value(createdAt),
@@ -8784,6 +8875,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Expression<int>? largeur,
     Expression<int>? hauteur,
     Expression<int>? octets,
+    Expression<String>? cheminOriginal,
+    Expression<String>? cadre,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -8799,6 +8892,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       if (largeur != null) 'largeur': largeur,
       if (hauteur != null) 'hauteur': hauteur,
       if (octets != null) 'octets': octets,
+      if (cheminOriginal != null) 'chemin_original': cheminOriginal,
+      if (cadre != null) 'cadre': cadre,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -8816,6 +8911,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Value<int?>? largeur,
     Value<int?>? hauteur,
     Value<int?>? octets,
+    Value<String?>? cheminOriginal,
+    Value<String?>? cadre,
     Value<int>? rowid,
   }) {
     return PhotosCompanion(
@@ -8831,6 +8928,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       largeur: largeur ?? this.largeur,
       hauteur: hauteur ?? this.hauteur,
       octets: octets ?? this.octets,
+      cheminOriginal: cheminOriginal ?? this.cheminOriginal,
+      cadre: cadre ?? this.cadre,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -8874,6 +8973,12 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     if (octets.present) {
       map['octets'] = Variable<int>(octets.value);
     }
+    if (cheminOriginal.present) {
+      map['chemin_original'] = Variable<String>(cheminOriginal.value);
+    }
+    if (cadre.present) {
+      map['cadre'] = Variable<String>(cadre.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -8895,6 +9000,8 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
           ..write('largeur: $largeur, ')
           ..write('hauteur: $hauteur, ')
           ..write('octets: $octets, ')
+          ..write('cheminOriginal: $cheminOriginal, ')
+          ..write('cadre: $cadre, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

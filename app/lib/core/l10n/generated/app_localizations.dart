@@ -3591,6 +3591,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Historique des relevés'**
   String get priceHistory;
+
+  /// No description provided for @photoTypeDegustation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dégustation'**
+  String get photoTypeDegustation;
+
+  /// No description provided for @photoTypeRepas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repas'**
+  String get photoTypeRepas;
+
+  /// No description provided for @photoTypeEvenement.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get photoTypeEvenement;
+
+  /// No description provided for @tabPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos'**
+  String get tabPhotos;
+
+  /// No description provided for @libraryEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune photo de dégustation ou de repas pour cette bouteille.'**
+  String get libraryEmpty;
+
+  /// No description provided for @libraryAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une photo'**
+  String get libraryAdd;
+
+  /// No description provided for @libraryTypeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de photo'**
+  String get libraryTypeTitle;
+
+  /// No description provided for @libraryAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo ajoutée'**
+  String get libraryAdded;
+
+  /// No description provided for @photoDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la photo'**
+  String get photoDelete;
+
+  /// No description provided for @photoDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La photo est effacée de l\'appareil.'**
+  String get photoDeleteBody;
+
+  /// No description provided for @photoDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo supprimée'**
+  String get photoDeleted;
+
+  /// No description provided for @photoCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'{index} / {total}'**
+  String photoCounter(int index, int total);
+
+  /// No description provided for @photoOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la photo {index}'**
+  String photoOpen(int index);
+
+  /// No description provided for @validationPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos'**
+  String get validationPhotos;
+
+  /// No description provided for @photoCroppedLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrée sur l\'étiquette'**
+  String get photoCroppedLabel;
+
+  /// No description provided for @photoWholeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo entière'**
+  String get photoWholeLabel;
+
+  /// No description provided for @cropAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer'**
+  String get cropAction;
+
+  /// No description provided for @cropTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer l\'étiquette'**
+  String get cropTitle;
+
+  /// No description provided for @cropHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faites glisser le cadre ou ses coins sur l\'étiquette.'**
+  String get cropHint;
+
+  /// No description provided for @cropWhole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo entière'**
+  String get cropWhole;
+
+  /// No description provided for @cropSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadre enregistré'**
+  String get cropSaved;
+
+  /// No description provided for @cropOriginalNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'La photo d\'origine est gardée jusqu\'à la validation de la fiche.'**
+  String get cropOriginalNote;
 }
 
 class _AppLocalizationsDelegate

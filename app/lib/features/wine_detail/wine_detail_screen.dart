@@ -15,7 +15,8 @@ import '../../domain/garde.dart';
 import '../../domain/price_trend.dart';
 import '../../domain/scores.dart';
 import '../../domain/wine_detail.dart';
-import '../add/enrichment_screen.dart' show winePhotosProvider;
+import '../photos/photo_gallery.dart';
+import '../photos/photo_library_tab.dart';
 import '../wine_list/wine_card.dart';
 import 'price_actions.dart';
 import 'price_chart.dart';
@@ -79,7 +80,7 @@ class _Detail extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -125,6 +126,7 @@ class _Detail extends ConsumerWidget {
               Tab(text: l.tabOperations),
               Tab(text: l.tabTastings),
               Tab(text: l.tabPrices),
+              Tab(text: l.tabPhotos),
             ],
           ),
         ),
@@ -139,6 +141,7 @@ class _Detail extends ConsumerWidget {
               _OperationsTab(wine: wine),
               _TastingsTab(wine: wine),
               _PricesTab(wine: wine),
+              PhotoLibraryTab(wineId: wine.id),
             ],
           ),
         ),
@@ -205,7 +208,7 @@ class _HeaderState extends ConsumerState<_Header> {
       name: ref.watch(settingsProvider.select((s) => s.currency)),
     );
     final formats = {for (final lot in w.lots) _cl(lot.formatCl)};
-    final photos = ref.watch(winePhotosProvider(w.id)).value ?? const [];
+    final photos = ref.watch(bottlePhotosProvider(w.id)).value ?? const [];
     final prices = w.lots.map((l) => l.unitPrice).whereType<double>();
     return Padding(
       padding: const EdgeInsets.all(SpacingTokens.l),
@@ -228,11 +231,9 @@ class _HeaderState extends ConsumerState<_Header> {
                             color: color.onFill,
                             size: SpacingTokens.xxl * 1.5,
                           )
-                        // Un tap ouvre la galerie plein écran (docs/03).
-                        : InkWell(
-                            onTap: () => showGallery(context, ref, w.id),
-                            child: Image.file(photos.first, fit: BoxFit.cover),
-                          ),
+                        // FIC-10 : toutes les photos, un tap ouvre le plein
+                        // écran (docs/03).
+                        : PhotoCarousel(photos: photos),
                   ),
                 ),
               ),
