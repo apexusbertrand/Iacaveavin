@@ -77,89 +77,94 @@ class EnrichmentScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(SpacingTokens.l),
-        children: [
-          if (photos.isNotEmpty)
-            SizedBox(
-              height: SpacingTokens.xxl * 3,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (final f in photos)
-                    Padding(
-                      padding: const EdgeInsets.only(right: SpacingTokens.s),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(RadiusTokens.badge),
-                        child: Image.file(f, fit: BoxFit.cover),
+      body: SafeArea(
+        top: false,
+        child: ListView(
+          padding: const EdgeInsets.all(SpacingTokens.l),
+          children: [
+            if (photos.isNotEmpty)
+              SizedBox(
+                height: SpacingTokens.xxl * 3,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (final f in photos)
+                      Padding(
+                        padding: const EdgeInsets.only(right: SpacingTokens.s),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            RadiusTokens.badge,
+                          ),
+                          child: Image.file(f, fit: BoxFit.cover),
+                        ),
                       ),
-                    ),
-                ],
-              ),
-            ),
-          const SizedBox(height: SpacingTokens.l),
-          _Progress(
-            status: status,
-            job: job,
-            last: last,
-            offline: report?.offline == true,
-          ),
-          if (quotaLow(left, monthlyEnrichmentQuota))
-            Padding(
-              padding: const EdgeInsets.only(top: SpacingTokens.s),
-              child: Text(
-                l.quotaLeft(left!),
-                key: const ValueKey('quota'),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.error,
+                  ],
                 ),
               ),
+            const SizedBox(height: SpacingTokens.l),
+            _Progress(
+              status: status,
+              job: job,
+              last: last,
+              offline: report?.offline == true,
             ),
-          const SizedBox(height: SpacingTokens.m),
-          if (status == WineStatus.toValidate)
-            FilledButton.icon(
-              key: const ValueKey('review-proposals'),
-              onPressed: () =>
-                  context.pushReplacement('/fiche/$wineId/validation'),
-              icon: const Icon(Icons.fact_check_outlined),
-              label: Text(l.reviewProposals),
-            ),
-          if (status == WineStatus.error)
-            OutlinedButton.icon(
-              key: const ValueKey('enrich-retry'),
-              onPressed: () async {
-                await (await ref.read(enrichmentQueueProvider.future))
-                    .retry(wineId);
-                ref.read(enrichmentRunnerProvider.notifier).kick();
-              },
-              icon: const Icon(Icons.refresh),
-              label: Text(l.enrichRetry),
-            ),
-          const SizedBox(height: SpacingTokens.xl),
-          Text(
-            l.enrichLotTitle,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: context.palette.primaryText,
-            ),
-          ),
-          const SizedBox(height: SpacingTokens.s),
-          if (w.lots.isEmpty)
-            _LotEditor(wine: w)
-          else
-            for (final lot in w.lots)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.inventory_2_outlined),
-                title: Text(
-                  l.lotLine(
-                    lot.ownerName,
-                    '${lot.formatCl.round()}',
-                    lot.bottles,
+            if (quotaLow(left, monthlyEnrichmentQuota))
+              Padding(
+                padding: const EdgeInsets.only(top: SpacingTokens.s),
+                child: Text(
+                  l.quotaLeft(left!),
+                  key: const ValueKey('quota'),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.error,
                   ),
                 ),
-                subtitle: Text(lot.locationPath ?? l.noLocation),
               ),
-        ],
+            const SizedBox(height: SpacingTokens.m),
+            if (status == WineStatus.toValidate)
+              FilledButton.icon(
+                key: const ValueKey('review-proposals'),
+                onPressed: () =>
+                    context.pushReplacement('/fiche/$wineId/validation'),
+                icon: const Icon(Icons.fact_check_outlined),
+                label: Text(l.reviewProposals),
+              ),
+            if (status == WineStatus.error)
+              OutlinedButton.icon(
+                key: const ValueKey('enrich-retry'),
+                onPressed: () async {
+                  await (await ref.read(enrichmentQueueProvider.future))
+                      .retry(wineId);
+                  ref.read(enrichmentRunnerProvider.notifier).kick();
+                },
+                icon: const Icon(Icons.refresh),
+                label: Text(l.enrichRetry),
+              ),
+            const SizedBox(height: SpacingTokens.xl),
+            Text(
+              l.enrichLotTitle,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: context.palette.primaryText,
+              ),
+            ),
+            const SizedBox(height: SpacingTokens.s),
+            if (w.lots.isEmpty)
+              _LotEditor(wine: w)
+            else
+              for (final lot in w.lots)
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(
+                    l.lotLine(
+                      lot.ownerName,
+                      '${lot.formatCl.round()}',
+                      lot.bottles,
+                    ),
+                  ),
+                  subtitle: Text(lot.locationPath ?? l.noLocation),
+                ),
+          ],
+        ),
       ),
     );
   }

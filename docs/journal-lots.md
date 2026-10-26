@@ -98,6 +98,13 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - 2026-10-25 fait : périmètre du lot. Bloquant : clé `cle_app` à saisir dans n8n et dans l'app par Bertrand ; sans elle l'app reste sur le flux de démonstration. Prochaine étape : recette sur téléphone (20 bouteilles par photo).
 - Mesures : à faire sur téléphone avec le vrai flux.
 - Recette Bertrand :
+  - 2026-10-26, premiers essais sur téléphone avec le vrai flux. Retours traités le jour même :
+    - bug 1 (fiche à 0 bouteille absente de la liste) : corrigé, T78 ;
+    - évolution 1 (fournisseur retiré, « Enregistrer » toujours visible) : T79 ;
+    - évolution 2 (accords mets-vins toujours proposés) : flux Enrichissement republié, T80 et T81 ;
+    - évolution 3 (code-barres par l'appareil photo ou une photo) : T82 ;
+    - évolution 4 (résultat enregistré même à 0 bouteille) : la validation n'exige aucun lot, la fiche reste visible (T78), et une fiche sans domaine lisible prend le nom de sa cuvée (T83).
+  - Constat : la recherche web échoue (« erreur d'authentification des outils »). La valeur rangée dans `tavily_cle` ne commence pas par `tvly-` : ce n'est pas une clé Tavily. À recoller par Bertrand.
 
 ## Lot 3 Restitution
 

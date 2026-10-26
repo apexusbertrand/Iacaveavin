@@ -119,6 +119,17 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T76 | « Forcer » se déduit à l'envoi : un relevé mis en file alors qu'un autre a moins de 24 heures part avec `forcer: true` | la table job du dictionnaire n'a pas de colonne d'options ; même effet sans changer le schéma |
 | T77 | Le test de connexion appelle /sante puis suit un job inexistant avec la clé : une réponse 404 au contrat prouve que la clé est acceptée | /sante ne vérifie pas la signature |
 
+## Retours de recette du 2026-10-26, à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T78 | Une fiche jamais approvisionnée (identifiée sans lot ou avec un lot à 0 bouteille, aucun mouvement) reste dans la vue « en stock » de « Mes vins » ; « épuisé » ne garde que les fiches dont le stock a été bu | bug 1 de la recette : la fiche enregistrée à 0 bouteille disparaissait de la liste (filtre par défaut « en stock ») |
+| T79 | Le champ fournisseur n'est plus saisi dans le formulaire de lot (écart à AJO-04) ; la colonne `fournisseur` du dictionnaire reste, et un lot existant garde sa valeur | évolution 1 de la recette ; le bouton « Enregistrer » reste visible en bas de la feuille, au-dessus de la barre de navigation |
+| T80 | Accords mets-vins toujours proposés : d'une source si possible, sinon déduits de la couleur, du type, de l'appellation et des cépages, source « estimation », confiance au plus 0,6, choisis dans la liste `accord_mets` de l'app (règle 15 du prompt). L'agent qui les oublie est relancé une fois | évolution 2 de la recette ; exception à la règle 2 « aucune donnée inventée », limitée aux accords et affichée avec sa confiance à l'écran de validation |
+| T81 | Le flux retire toute valeur « estimation » hors couleur, type et accords (exemple constaté : commentaire de millésime « rédigé de mémoire », signe de qualité déduit) | règle 2 ; constat sur le job Cuvée Hortense du 2026-10-26 |
+| T82 | Code-barres lu par mobile_scanner (ML Kit sur Android, Vision sur iOS, sur l'appareil, gratuit) : viseur en direct ou lecture d'une photo de la galerie. L'entrée « Avec le code-barres » ouvre le viseur ; l'EAN reste un indice (AJO-10) | évolution 3 de la recette ; aucune API ni source payante |
+| T83 | Une fiche dont l'étiquette ne montre pas de domaine prend sa cuvée comme nom au lieu de « Vin à identifier » | constat de recette : « Cuvée Hortense » identifiée mais affichée « Vin à identifier » |
+
 ## À compléter
 
 | Id | Sujet | Quand |

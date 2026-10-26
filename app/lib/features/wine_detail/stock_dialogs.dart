@@ -379,17 +379,15 @@ Future<bool> addLotDialog(
     useSafeArea: true,
     builder: (context) => Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(SpacingTokens.l),
-        child: LotForm(
-          title: l.newLot,
-          initial: LotDraft(
-            ownerId: defaultOwner,
-            quantity: quantity,
-            locationId: settings.defaultLocationId,
-          ),
-          onSubmit: (d) => Navigator.of(context).pop(d),
+      child: LotForm(
+        title: l.newLot,
+        scrollable: true,
+        initial: LotDraft(
+          ownerId: defaultOwner,
+          quantity: quantity,
+          locationId: settings.defaultLocationId,
         ),
+        onSubmit: (d) => Navigator.of(context).pop(d),
       ),
     ),
   );
@@ -403,7 +401,8 @@ Future<bool> addLotDialog(
 }
 
 /// Saisie d'un lot : propriétaire, emplacement, positions, quantité, format,
-/// prix d'achat unitaire TTC (PRX-01), date, fournisseur.
+/// prix d'achat unitaire TTC (PRX-01), date. Le fournisseur n'est plus saisi
+/// ici (décision T79) ; celui d'un lot existant est conservé.
 class LotForm extends ConsumerStatefulWidget {
   const LotForm({
     super.key,
@@ -411,10 +410,15 @@ class LotForm extends ConsumerStatefulWidget {
     this.onSubmit,
     this.onChanged,
     this.title,
+    this.scrollable = false,
   });
 
   final LotDraft initial;
   final String? title;
+
+  /// Feuille modale : les champs défilent et « Enregistrer » reste visible en
+  /// bas, au-dessus de la barre de navigation et du clavier.
+  final bool scrollable;
   final ValueChanged<LotDraft>? onSubmit;
 
   /// Utilisé dans le formulaire de fiche : chaque modification remonte.
@@ -440,7 +444,6 @@ class _LotFormState extends ConsumerState<LotForm> {
         widget.initial.purchaseDate ??
         DateTime.now().toIso8601String().substring(0, 10),
   );
-  late final _supplier = TextEditingController(text: widget.initial.supplier);
   String? _positionsError;
 
   @override
@@ -451,7 +454,7 @@ class _LotFormState extends ConsumerState<LotForm> {
 
   @override
   void dispose() {
-    for (final c in [_qty, _price, _positions, _date, _supplier]) {
+    for (final c in [_qty, _price, _positions, _date]) {
       c.dispose();
     }
     super.dispose();
@@ -483,7 +486,7 @@ class _LotFormState extends ConsumerState<LotForm> {
       positions: cells.isEmpty ? null : cells.join(', '),
       unitPrice: p,
       purchaseDate: _date.text.trim().isEmpty ? null : _date.text.trim(),
-      supplier: _supplier.text.trim().isEmpty ? null : _supplier.text.trim(),
+      supplier: widget.initial.supplier,
     );
   }
 
@@ -501,7 +504,12 @@ class _LotFormState extends ConsumerState<LotForm> {
     final locations = ref.watch(locationsProvider).value ?? const [];
     final formats = ref.watch(listValuesProvider('format')).value ?? const [];
     final ownerIds = owners.map((o) => o.id).toSet();
-    return Column(
+    final save = FilledButton(
+      key: const ValueKey('lot-save'),
+      onPressed: _draft() == null ? null : () => widget.onSubmit!(_draft()!),
+      child: Text(l.save),
+    );
+    final fields = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -596,21 +604,36 @@ class _LotFormState extends ConsumerState<LotForm> {
           decoration: InputDecoration(labelText: l.fieldPurchaseDate),
           onChanged: (_) => _emit(),
         ),
-        TextField(
-          controller: _supplier,
-          decoration: InputDecoration(labelText: l.fieldSupplier),
-          onChanged: (_) => _emit(),
-        ),
-        if (widget.onSubmit != null) ...[
+        if (widget.onSubmit != null && !widget.scrollable) ...[
           const SizedBox(height: SpacingTokens.l),
-          FilledButton(
-            key: const ValueKey('lot-save'),
-            onPressed: _draft() == null
-                ? null
-                : () => widget.onSubmit!(_draft()!),
-            child: Text(l.save),
-          ),
+          save,
         ],
+      ],
+    );
+    if (!widget.scrollable) return fields;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Flexible(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(
+              SpacingTokens.l,
+              SpacingTokens.l,
+              SpacingTokens.l,
+              0,
+            ),
+            child: fields,
+          ),
+        ),
+        if (widget.onSubmit != null)
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(SpacingTokens.l),
+              child: save,
+            ),
+          ),
       ],
     );
   }

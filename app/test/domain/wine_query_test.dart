@@ -21,6 +21,7 @@ WineListItem w(
   String search = '',
   List<String> grapes = const [],
   bool favorite = false,
+  bool neverStocked = false,
 }) => WineListItem(
   id: id,
   producer: producer,
@@ -41,6 +42,7 @@ WineListItem w(
   searchText: search,
   grapes: grapes,
   favorite: favorite,
+  neverStocked: neverStocked,
 );
 
 List<String> ids(List<WineListItem> l) => l.map((e) => e.id).toList();
@@ -149,6 +151,16 @@ void main() {
       expect(run(const WineFilters(stock: StockFilter.empty)), ['vide']);
       expect(run(all), hasLength(5));
     });
+    test(
+      'STK-06 fiche identifiée sans bouteille : visible en stock, pas épuisée',
+      () {
+        final l = [...items, w('nouveau', bottles: 0, neverStocked: true)];
+        List<String> r(WineFilters f) =>
+            ids(WineQuery(filters: f).apply(l, year: 2026));
+        expect(r(const WineFilters()), contains('nouveau'));
+        expect(r(const WineFilters(stock: StockFilter.empty)), ['vide']);
+      },
+    );
     test('LST-05 couleur, propriétaire, emplacement avec ses parents', () {
       expect(run(const WineFilters(colors: {'blanc'})), ['blanc']);
       expect(run(const WineFilters(owners: {'o1'})), ['alex']);
@@ -192,5 +204,20 @@ void main() {
     const s = SortSpec(SortCriterion.parkerScore, ascending: false);
     expect(SortSpec.fromJson(s.toJson()), s);
     expect(SortSpec.fromJson({'c': 'inconnu'}), isNull);
+  });
+
+  test('AJO-08 étiquette sans domaine lisible : la cuvée sert de nom', () {
+    const sansDomaine = WineListItem(
+      id: 'h',
+      producer: '',
+      cuvee: 'Hortense',
+      vintage: '2020',
+      colorCode: 'blanc',
+      countryCode: 'FR',
+      bottles: 0,
+    );
+    expect(sansDomaine.isUnidentified, isFalse);
+    expect(sansDomaine.displayName, 'Hortense');
+    expect(w('x', producer: '').isUnidentified, isTrue);
   });
 }

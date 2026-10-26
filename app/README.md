@@ -75,6 +75,7 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | url_launcher 6.3 | ouvrir l'URL d'une provenance (FIC-06) | oui | oui |
 | crypto 3.0 | SHA-256 et HMAC de la signature des requêtes au flux (docs/02), paquet Dart de l'équipe Dart, sans code natif | oui | oui |
 | flutter_secure_storage 11.2 | clé du flux dans le Keystore Android et le Trousseau iOS, jamais dans les préférences (PAR-05, règle Flutter) | oui | oui |
+| mobile_scanner 7.4 | lecture du code-barres EAN en direct et sur une photo, décodage sur l'appareil sans réseau (AJO-10, T82) | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
 
 Police : système (Roboto sur Android) au lot 0, repli prévu par specs/design-tokens.json. Inter (OFL) sera embarquée quand les fichiers de police seront ajoutés au dépôt.

@@ -751,9 +751,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fieldPurchaseDate => 'Date d\'achat';
 
   @override
-  String get fieldSupplier => 'Fournisseur';
-
-  @override
   String get fieldFavorite => 'Favori';
 
   @override
@@ -1511,7 +1508,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get addByBarcodeHint =>
-      'Saisir l\'EAN puis photographier : il aide l\'identification.';
+      'Scanner l\'EAN puis photographier : il aide l\'identification.';
 
   @override
   String get addManual => 'Saisie manuelle';
@@ -1581,6 +1578,37 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eanField => 'Code-barres EAN (facultatif)';
+
+  @override
+  String get scanLive => 'Scanner le code-barres';
+
+  @override
+  String get scanFromPhoto => 'Lire le code-barres sur une photo';
+
+  @override
+  String get scanTitle => 'Code-barres';
+
+  @override
+  String get scanHint =>
+      'Cadrez le code-barres de la contre-étiquette : il est lu tout seul.';
+
+  @override
+  String scanFound(String code) {
+    return 'Code-barres lu : $code';
+  }
+
+  @override
+  String get scanNotFound => 'Aucun code-barres EAN lisible sur cette photo.';
+
+  @override
+  String get scanPermissionDenied => 'Accès à l\'appareil photo refusé';
+
+  @override
+  String get scanUnavailable =>
+      'Lecteur de code-barres indisponible sur cet appareil';
+
+  @override
+  String get scanUseField => 'Saisissez les 13 chiffres dans le champ.';
 
   @override
   String get vintageHintField => 'Millésime si vous le connaissez (facultatif)';

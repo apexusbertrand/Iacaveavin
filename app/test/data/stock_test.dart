@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/domain/stock_rules.dart';
 import 'package:iacaveavin/domain/wine_detail.dart';
+import 'package:iacaveavin/domain/wine_query.dart';
 
 import '../fixture.dart';
 
@@ -173,4 +174,37 @@ void main() {
     final rows = await f.db.select(f.db.wines).get();
     expect(rows.single.deletedAt, isNotNull);
   });
+
+  test(
+    'STK-06 fiche enregistrée à 0 bouteille visible dans « Mes vins »',
+    () async {
+      final sansLot = await f.repo.createWine(
+        const WineDraft(
+          producer: 'Cuvée Hortense',
+          country: 'FR',
+          color: 'blanc',
+          vintage: '2020',
+        ),
+        cellarId: f.cellar,
+      );
+      final zero = await f.repo.createWine(
+        const WineDraft(
+          producer: 'Domaine Zéro',
+          country: 'FR',
+          color: 'rouge',
+          vintage: '2021',
+        ),
+        cellarId: f.cellar,
+        lot: const LotDraft(ownerId: 'o1', quantity: 0),
+      );
+      await f.stock.open(f.lot, 6);
+      final items = await f.repo.wineItems();
+      List<String> shown(WineFilters filters) => [
+        for (final i in WineQuery(filters: filters).apply(items, year: 2026))
+          i.id,
+      ];
+      expect(shown(const WineFilters()), unorderedEquals([sansLot, zero]));
+      expect(shown(const WineFilters(stock: StockFilter.empty)), [f.wine]);
+    },
+  );
 }

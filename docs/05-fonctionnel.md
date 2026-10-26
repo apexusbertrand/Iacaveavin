@@ -41,7 +41,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - AJO-01. Le FAB « + » propose : photo (par défaut), scan du code-barres, saisie manuelle, import Excel.
 - AJO-02. Prise de vue de 1 à 4 photos (étiquette, contre-étiquette, capsule, collerette) avec guide de cadrage. Détection de flou et de reflet, invitation à reprendre. Import depuis la galerie possible.
 - AJO-03. Compression locale (1 600 px stockés, 1 500 px envoyés, qualité 80, miniature 320 px) et enregistrement immédiat de la fiche en `a_enrichir`.
-- AJO-04. Pendant le travail de l'agent, l'utilisateur renseigne le lot : quantité, format, prix d'achat, date, fournisseur, propriétaire, emplacement, valeurs par défaut pré-remplies.
+- AJO-04. Pendant le travail de l'agent, l'utilisateur renseigne le lot : quantité, format, prix d'achat, date, propriétaire, emplacement, valeurs par défaut pré-remplies. Le fournisseur n'est plus saisi (2026-10-26, T79). Le lot reste facultatif : la fiche s'enregistre même à 0 bouteille (T78).
 - AJO-05. Avancement en clair à partir du champ `etape` : lecture de l'étiquette, identification, enrichissement, notes, prix.
 - AJO-06. Écran de validation : chaque champ proposé avec valeur, source et confiance. Confiance sous 0,6 surlignée. Tout accepter, ou accepter, modifier, rejeter champ par champ. Un désaccord étiquette/source s'affiche côte à côte (alerte `desaccord_etiquette_source`).
 - AJO-07. Doublon : même domaine, cuvée et millésime déjà en cave, l'app propose d'ajouter un lot à la fiche existante.

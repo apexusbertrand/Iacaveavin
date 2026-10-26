@@ -124,6 +124,30 @@ void main() {
     expect(find.text('Entrée · +3'), findsOneWidget);
   });
 
+  testWidgets(
+    'STK-06 nouveau lot : sans fournisseur, « Enregistrer » visible sur petit écran',
+    (tester) async {
+      await pumpRealApp(tester, seed: seedTwo);
+      // Petit téléphone avec barre de navigation Android de 48 dp.
+      tester.view.physicalSize = const Size(1080, 1560);
+      tester.view.padding = const FakeViewPadding(bottom: 144);
+      tester.view.viewPadding = const FakeViewPadding(bottom: 144);
+      await tester.tap(find.text('Château Bralmac'));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('wine-menu')));
+      await settle(tester);
+      await tester.tap(find.text('Réapprovisionner'));
+      await settle(tester);
+      expect(find.text('Nouveau lot'), findsOneWidget);
+      expect(find.text('Fournisseur'), findsNothing);
+      final save = tester.getRect(find.byKey(const ValueKey('lot-save')));
+      expect(save.bottom, lessThanOrEqualTo(1560 / 3 - 48));
+      await tester.tap(find.byKey(const ValueKey('lot-save')));
+      await settle(tester);
+      expect(find.text('4 restantes · 0 consommée'), findsOneWidget);
+    },
+  );
+
   testWidgets('FIC-01 PRO-02 onglet Informations : origine et propriétaires', (
     tester,
   ) async {

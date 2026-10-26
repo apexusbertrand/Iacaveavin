@@ -1306,12 +1306,6 @@ abstract class AppLocalizations {
   /// **'Date d\'achat'**
   String get fieldPurchaseDate;
 
-  /// No description provided for @fieldSupplier.
-  ///
-  /// In fr, this message translates to:
-  /// **'Fournisseur'**
-  String get fieldSupplier;
-
   /// No description provided for @fieldFavorite.
   ///
   /// In fr, this message translates to:
@@ -2569,7 +2563,7 @@ abstract class AppLocalizations {
   /// No description provided for @addByBarcodeHint.
   ///
   /// In fr, this message translates to:
-  /// **'Saisir l\'EAN puis photographier : il aide l\'identification.'**
+  /// **'Scanner l\'EAN puis photographier : il aide l\'identification.'**
   String get addByBarcodeHint;
 
   /// No description provided for @addManual.
@@ -2703,6 +2697,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Code-barres EAN (facultatif)'**
   String get eanField;
+
+  /// No description provided for @scanLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner le code-barres'**
+  String get scanLive;
+
+  /// No description provided for @scanFromPhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le code-barres sur une photo'**
+  String get scanFromPhoto;
+
+  /// No description provided for @scanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code-barres'**
+  String get scanTitle;
+
+  /// No description provided for @scanHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrez le code-barres de la contre-étiquette : il est lu tout seul.'**
+  String get scanHint;
+
+  /// No description provided for @scanFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code-barres lu : {code}'**
+  String scanFound(String code);
+
+  /// No description provided for @scanNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun code-barres EAN lisible sur cette photo.'**
+  String get scanNotFound;
+
+  /// No description provided for @scanPermissionDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès à l\'appareil photo refusé'**
+  String get scanPermissionDenied;
+
+  /// No description provided for @scanUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecteur de code-barres indisponible sur cet appareil'**
+  String get scanUnavailable;
+
+  /// No description provided for @scanUseField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez les 13 chiffres dans le champ.'**
+  String get scanUseField;
 
   /// No description provided for @vintageHintField.
   ///

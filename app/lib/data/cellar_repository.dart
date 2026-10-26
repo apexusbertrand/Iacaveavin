@@ -140,6 +140,8 @@ class CellarRepository {
       StockLot? lastPriced;
       String? primaryLot;
       var primaryLotBottles = 0;
+      // Un lot sans aucun mouvement n'a pas de ligne dans [stocks].
+      final neverStocked = !lots.any((l) => stocks.containsKey(l.id));
       for (final l in lots) {
         final q = stocks[l.id] ?? 0;
         bottles += q;
@@ -211,6 +213,7 @@ class CellarRepository {
           favorite: f.favori ?? false,
           primaryLotId: primaryLot,
           thumbPath: thumbs[f.id],
+          neverStocked: neverStocked,
           searchText: buildSearchText([
             p.nom,
             c.nom,

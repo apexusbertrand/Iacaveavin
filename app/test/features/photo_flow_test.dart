@@ -6,10 +6,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/cellar_repository.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/reference_repository.dart';
+import 'package:iacaveavin/features/add/barcode_reader.dart';
 import 'package:iacaveavin/features/add/capture_screen.dart';
 
 import '../data/photo_test.dart' show sharpLabel;
 import '../fakes.dart';
+
+/// Lecteur de code-barres sans appareil photo : renvoie [live] et [photo].
+class FakeBarcodeReader implements BarcodeReader {
+  FakeBarcodeReader({this.live, this.photo});
+
+  final BarcodeResult? live;
+  final BarcodeResult? photo;
+  var liveCalls = 0;
+
+  @override
+  Future<BarcodeResult> scanLive(BuildContext context) async {
+    liveCalls++;
+    return live ?? const BarcodeResult.cancelled();
+  }
+
+  @override
+  Future<BarcodeResult> fromPhoto() async =>
+      photo ?? const BarcodeResult.cancelled();
+}
 
 Future<void> seedOwner(AppDatabase db, String cellar) async {
   await ReferenceRepository(db)
@@ -27,6 +47,7 @@ void main() {
   Future<AppDatabase> start(
     WidgetTester tester, {
     Map<String, Object> prefs = const {},
+    BarcodeReader? barcode,
   }) => pumpRealApp(
     tester,
     seed: seedOwner,
@@ -36,6 +57,7 @@ void main() {
       imagePickerProvider.overrideWithValue(
         ({required bool camera}) async => label,
       ),
+      if (barcode != null) barcodeReaderProvider.overrideWithValue(barcode),
     ],
   );
 
@@ -154,4 +176,32 @@ void main() {
     final items = await tester.runAsync(() => CellarRepository(db).wineItems());
     expect(items!.single.enrichmentStatus, 'a_enrichir');
   });
+
+  testWidgets(
+    'AJO-10 code-barres : viseur ouvert d\'office, lecture sur une photo',
+    (tester) async {
+      final reader = FakeBarcodeReader(
+        live: const BarcodeResult.found('3760256272183'),
+        photo: const BarcodeResult.notFound(),
+      );
+      await start(tester, barcode: reader);
+      await tester.tap(find.byTooltip('Ajouter une bouteille'));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('add-barcode')));
+      await settle(tester);
+      expect(reader.liveCalls, 1, reason: 'viseur ouvert sans autre geste');
+      final field = tester.widget<TextField>(
+        find.byKey(const ValueKey('capture-ean')),
+      );
+      expect(field.controller!.text, '3760256272183');
+      expect(find.text('Code-barres lu : 3760256272183'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('scan-photo')));
+      await settle(tester);
+      expect(
+        find.text('Aucun code-barres EAN lisible sur cette photo.'),
+        findsOneWidget,
+      );
+      expect(field.controller!.text, '3760256272183', reason: 'EAN conservé');
+    },
+  );
 }

@@ -363,7 +363,6 @@
   "fieldFormat": "Format",
   "fieldUnitPrice": "Prix d'achat unitaire TTC",
   "fieldPurchaseDate": "Date d'achat",
-  "fieldSupplier": "Fournisseur",
   "fieldFavorite": "Favori",
   "gardeRange": "{start} → {end}",
   "@gardeRange": {
@@ -841,7 +840,7 @@
   "addByPhoto": "Photographier l'étiquette",
   "addByPhotoHint": "1 à 4 photos, la fiche se remplit presque seule.",
   "addByBarcode": "Avec le code-barres",
-  "addByBarcodeHint": "Saisir l'EAN puis photographier : il aide l'identification.",
+  "addByBarcodeHint": "Scanner l'EAN puis photographier : il aide l'identification.",
   "addManual": "Saisie manuelle",
   "addManualHint": "Remplir la fiche soi-même.",
   "addExcel": "Import Excel",
@@ -864,6 +863,20 @@
   "photoProcessing": "Traitement de la photo…",
   "photoUnreadable": "Image illisible.",
   "eanField": "Code-barres EAN (facultatif)",
+  "scanLive": "Scanner le code-barres",
+  "scanFromPhoto": "Lire le code-barres sur une photo",
+  "scanTitle": "Code-barres",
+  "scanHint": "Cadrez le code-barres de la contre-étiquette : il est lu tout seul.",
+  "scanFound": "Code-barres lu : {code}",
+  "@scanFound": {
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+  "scanNotFound": "Aucun code-barres EAN lisible sur cette photo.",
+  "scanPermissionDenied": "Accès à l'appareil photo refusé",
+  "scanUnavailable": "Lecteur de code-barres indisponible sur cet appareil",
+  "scanUseField": "Saisissez les 13 chiffres dans le champ.",
   "vintageHintField": "Millésime si vous le connaissez (facultatif)",
   "continueToEnrichment": "Lancer l'identification",
   "needOnePhoto": "Ajoutez au moins une photo de l'étiquette.",

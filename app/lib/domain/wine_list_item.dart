@@ -50,6 +50,7 @@ class WineListItem {
     this.searchText = '',
     this.primaryLotId,
     this.thumbPath,
+    this.neverStocked = false,
   });
 
   final String id;
@@ -116,16 +117,25 @@ class WineListItem {
   /// Miniature de la photo principale, relative au répertoire de l'app.
   final String? thumbPath;
 
-  /// Fiche créée par photo, pas encore identifiée (domaine vide).
-  bool get isUnidentified => producer.isEmpty;
+  /// Aucun mouvement de stock n'a jamais été saisi : fiche identifiée sans
+  /// bouteille (quantité 0), ou pas encore de lot. Elle reste dans la vue
+  /// « en stock » ; « épuisé » est réservé aux fiches dont le stock a été bu.
+  final bool neverStocked;
+
+  /// Fiche créée par photo, pas encore identifiée (ni domaine ni cuvée).
+  /// Une étiquette sans nom de domaine lisible garde sa cuvée comme nom.
+  bool get isUnidentified => producer.isEmpty && (cuvee ?? '').isEmpty;
 
   bool get isNonVintage => vintage == 'NM';
 
   int? get vintageYear => int.tryParse(vintage);
 
   /// Nom affiché : domaine puis cuvée.
-  String get displayName =>
-      cuvee == null || cuvee!.isEmpty ? producer : '$producer · $cuvee';
+  String get displayName => cuvee == null || cuvee!.isEmpty
+      ? producer
+      : producer.isEmpty
+      ? cuvee!
+      : '$producer · $cuvee';
 
   String? get mainOwner => owners.isEmpty ? null : owners.first.name;
 

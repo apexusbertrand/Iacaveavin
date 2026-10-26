@@ -83,9 +83,11 @@ class _Detail extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            wine.draft.producer.isEmpty
-                ? AppLocalizations.of(context).unidentifiedWine
-                : wine.draft.producer,
+            wine.draft.producer.isNotEmpty
+                ? wine.draft.producer
+                : (wine.draft.cuvee ?? '').isNotEmpty
+                ? wine.draft.cuvee!
+                : AppLocalizations.of(context).unidentifiedWine,
             overflow: TextOverflow.ellipsis,
           ),
           actions: [
