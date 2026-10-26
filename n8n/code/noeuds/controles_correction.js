@@ -6,9 +6,13 @@
 // @inclure metier.js
 // @inclure modele.js
 // @inclure agent.js
+// @inclure recherche.js
 const envoi = $('Déclencheur enrichissement').first().json;
 const l = $('Lecture étiquette').first().json;
-const a = analyserSortieAgent($input.first().json, {
+// L'agent de correction ne cherche pas : il garde les URL vues au premier passage.
+const vues = urlsVues($('Agent enrichissement').first().json);
+const texte = completerSources(texteDe($input.first().json), vues, jourParis(new Date()));
+const a = analyserSortieAgent(texte, {
   schemaReponse: __SCHEMA_REPONSE__, transcription: l.transcription,
   anneeCourante: new Date().getFullYear(), champsVerrouilles: envoi.requete.champs_verrouilles || [],
   accordsPermis: __ACCORDS__, accordsObligatoires: false,

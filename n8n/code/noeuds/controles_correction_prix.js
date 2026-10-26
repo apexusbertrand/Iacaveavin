@@ -3,6 +3,7 @@
 // @inclure normalisation.js
 // @inclure metier.js
 // @inclure modele.js
+// @inclure recherche.js
 // @inclure prix.js
 const e = $('Déclencheur prix').first().json;
 const d = $('Décision prix').first().json;

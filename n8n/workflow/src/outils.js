@@ -11,11 +11,14 @@ const TABLES = {
 };
 
 const IDENTIFIANTS = {
-  anthropic: "{ anthropicApi: { id: 'ulgGU4l7jg4SIODM', name: 'Anthropic account' } }",
-  gmail: "{ gmailOAuth2: { id: 'XeJ1e39vt2LorL9B', name: 'Gmail APEXUS' } }",
+  // Identifiants propres à l'app, choisis par Bertrand le 2026-10-26.
+  anthropic: "{ anthropicApi: { id: 'Nv5Wx8v6RReLoKNy', name: 'Claude AI Cave' } }",
+  gmail: "{ gmailOAuth2: { id: 'Lvc7ImPNsOcz6WAu', name: 'Gmail Claude' } }",
 };
 
 const MODELE = 'claude-sonnet-5';
+// Agent d'enrichissement : Claude Sonnet 4.6, choix de Bertrand du 2026-10-26.
+const MODELE_AGENT = 'claude-sonnet-4-6';
 
 const q = (s) => JSON.stringify(s);
 const ex = (s) => `expr(${q(s)})`;
@@ -108,4 +111,4 @@ function prompt(fichier) {
 
 const MOIS = "{{ $now.setZone('Europe/Paris').toFormat('yyyy-MM') }}";
 
-module.exports = { prompt, TABLES, IDENTIFIANTS, MODELE, MOIS, q, ex, table, lire, ecrire, code, si, repondre, webhook };
+module.exports = { prompt, TABLES, IDENTIFIANTS, MODELE, MODELE_AGENT, MOIS, q, ex, table, lire, ecrire, code, si, repondre, webhook };

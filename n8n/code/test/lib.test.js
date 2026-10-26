@@ -184,6 +184,28 @@ test('FIC-01 règle 15 : accords toujours proposés, pris dans la liste', () => 
   assert.deepEqual(m.controlerEnrichissement(r, { anneeCourante: 2026 }).erreurs.filter((e) => /accords/.test(e)), [], 'cache : pas de relance');
 });
 
+test('NFR-07 recherche intégrée : URL vues, coût, sources refaites (T85)', () => {
+  const rc = require('../lib/recherche.js');
+  const message = {
+    content: [
+      { type: 'web_search_tool_result', content: [{ type: 'web_search_result', url: 'https://masonesime.com/' }, { url: 'https://www.demeter.fr/a' }] },
+      { type: 'web_search_tool_result', content: { type: 'web_search_tool_result_error', error_code: 'max_uses_exceeded' } },
+      { type: 'text', text: 'x' },
+    ],
+    usage: { server_tool_use: { web_search_requests: 3 } },
+  };
+  assert.deepEqual(rc.urlsVues(message), ['https://masonesime.com/', 'https://www.demeter.fr/a']);
+  assert.deepEqual(rc.coutRecherche(message), { appels_modele: 1, credits_recherche: 3 });
+  assert.equal(rc.urlComparable('https://www.Demeter.fr/a/#x'), rc.urlComparable('https://demeter.fr/a'));
+  const r = { fiche: {
+    domaine_site_officiel: { valeur: 'https://masonesime.com', source: 'site_officiel', url: 'https://masonesime.com', confiance: 1 },
+    cepages: { valeur: null, source: null, confiance: null, motif: 'x', url: 'https://inventee.fr/p' },
+  }, sources_consultees: [{ url: 'https://pas-vue.fr', consultee_le: '2020-01-01' }] };
+  const c = JSON.parse(rc.completerSources(JSON.stringify(r), rc.urlsVues(message), '2026-10-26'));
+  assert.deepEqual(c.sources_consultees, [{ url: 'https://masonesime.com', consultee_le: '2026-10-26', utilisee: true }]);
+  assert.equal(rc.completerSources('pas de JSON', [], '2026-10-26'), 'pas de JSON');
+});
+
 test('docs/06 quota mensuel au fuseau de Paris', () => {
   assert.equal(m.moisQuota(new Date('2026-10-31T23:30:00Z')), '2026-11');
   assert.equal(m.jourParis(new Date('2026-10-21T22:30:00Z')), '2026-10-22');

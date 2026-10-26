@@ -23,29 +23,63 @@ async function executer(script, noeuds, entree) {
   return JSON.parse(JSON.stringify(await vm.runInContext(`(async function () {\n${a.noeud(script)}\n}).call({ helpers: {} })`, ctx)));
 }
 
-const config = [{ cle: 'cle_app', valeur: 'k' }, { cle: 'tavily_cle', valeur: '' }, { cle: 'quota_enrichissements', valeur: '100' }, { cle: 'email_alerte', valeur: 'a@b.fr' }];
+const config = [{ cle: 'cle_app', valeur: 'k' }, { cle: 'quota_enrichissements', valeur: '100' }, { cle: 'email_alerte', valeur: 'a@b.fr' }];
 const envoi = { job_id: '9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d', type: 'enrichissement', requete: { ...requete, champs_verrouilles: ['degre'] }, recu_le: Date.now() - 5000 };
-const lectureModele = { content: '```json\n' + JSON.stringify({ transcription: [{ index: 0, texte: "GUILLAUME L'ECHANSON" }], etiquette: { domaine: "Guillaume L'Echanson", appellation: "Bourgogne Côte d'Or", millesime: 2024 } }) + '\n```' };
+const lectureModele = { content: '```json\n' + JSON.stringify({
+  transcription: [{ index: 0, texte: "GUILLAUME L'ECHANSON" }],
+  etiquette: { domaine: "Guillaume L'Echanson", appellation: "Bourgogne Côte d'Or", millesime: 2024 },
+  // Cadres : un correct, un débordant (borné), un trop petit (null), un doublon (ignoré).
+  cadrages: [{ index: 0, cadre: { x: 0.2, y: 0.1, largeur: 0.6, hauteur: 0.7 } }, { index: 1, cadre: { x: 0.5, y: 0.5, largeur: 0.9, hauteur: 0.9 } },
+    { index: 2, cadre: { x: 0.1, y: 0.1, largeur: 0.05, hauteur: 0.5 } }, { index: 0, cadre: null }],
+}) + '\n```' };
 
 test('NFR-07 parcours des nœuds du sous-flux avec données simulées', async () => {
   const [l] = await executer('lecture', {}, lectureModele);
   assert.equal(l.json.cle, "guillaume-l-echanson|bourgogne-cote-d-or||2024");
+  assert.deepEqual(l.json.cadrages, [
+    { index: 0, cadre: { x: 0.2, y: 0.1, largeur: 0.6, hauteur: 0.7 } },
+    { index: 1, cadre: { x: 0.5, y: 0.5, largeur: 0.5, hauteur: 0.5 } },
+    { index: 2, cadre: null },
+  ]);
   const [p] = await executer('preparer_agent', {
     'Déclencheur enrichissement': envoi, 'Config enrichissement': config, 'Décision cache': { ...l.json, cache: false }, 'Photos en binaire': { types: 'photo 0 (etiquette)' },
   }, {});
   assert.match(p.json.systeme, /Date du jour : \d{4}-\d{2}-\d{2}/);
-  assert.match(p.json.systeme, /recherche web n'est pas configurée/);
+  assert.match(p.json.systeme, /recherche web intégrée, 4 recherches au plus/);
   assert.match(p.json.systeme, /\["degre"\]/);
   const r = JSON.parse(JSON.stringify(termine.resultat));
   r.prix = [];
-  r.sources_consultees = [{ url: 'https://exemple-interprofession.fr/millesime-2024', consultee_le: '2026-10-20', utilisee: true }];
-  const [c] = await executer('controles_agent', { 'Déclencheur enrichissement': envoi, 'Lecture étiquette': l.json }, { output: JSON.stringify(r), intermediateSteps: [{ action: { tool: 'recherche_web' } }] });
+  // Sortie brute du nœud Anthropic avec recherche intégrée (T85) : l'agent a
+  // oublié sources_consultees, le flux la refait à partir des URL vues.
+  r.sources_consultees = [];
+  const message = (texte, urls) => ({
+    content: [
+      { type: 'server_tool_use', id: 's1', name: 'web_search', input: { query: 'x' } },
+      { type: 'web_search_tool_result', tool_use_id: 's1', content: urls.map((url) => ({ type: 'web_search_result', title: 't', url })) },
+      { type: 'text', text: '```json\n' + texte + '\n```' },
+    ],
+    usage: { input_tokens: 9000, output_tokens: 900, server_tool_use: { web_search_requests: 1 } },
+  });
+  const [c] = await executer('controles_agent', { 'Déclencheur enrichissement': envoi, 'Lecture étiquette': l.json },
+    message(JSON.stringify(r), ['https://www.exemple-interprofession.fr/millesime-2024/']));
   assert.deepEqual(c.json.erreurs, []);
+  assert.equal(c.json.resultat.sources_consultees[0].url, 'https://exemple-interprofession.fr/millesime-2024');
+  assert.equal(c.json.cout.credits_recherche, 1);
+  const [faux] = await executer('controles_agent', { 'Déclencheur enrichissement': envoi, 'Lecture étiquette': l.json },
+    message(JSON.stringify(r), ['https://autre-site.fr/page']));
+  assert.equal(faux.json.ok, false, 'URL citée sans résultat de recherche');
+  assert.match(faux.json.erreurs.join(' | '), /absente de sources_consultees/);
+  const [corr] = await executer('controles_correction', {
+    'Déclencheur enrichissement': envoi, 'Lecture étiquette': l.json, 'Contrôles de sortie': faux.json,
+    'Agent enrichissement': message('{}', ['https://exemple-interprofession.fr/millesime-2024']),
+  }, { output: JSON.stringify(r) });
+  assert.equal(corr.json.ok, true, 'la correction garde les URL vues au premier passage');
+  assert.equal(corr.json.cout.credits_recherche, 1);
   assert.equal(c.json.ok, true);
   assert.equal(c.json.resultat.fiche.degre, undefined, 'champ verrouillé retiré');
   const [k] = await executer('cloture', {
     'Déclencheur enrichissement': envoi, 'Config enrichissement': config, 'Quota clôture': { mois: '2026-10', enrichissements: 79 },
-    'Contrôles après correction': {}, 'Contrôles de sortie': c.json, 'Résultat du cache': {},
+    'Contrôles après correction': {}, 'Contrôles de sortie': c.json, 'Résultat du cache': {}, 'Lecture étiquette': l.json,
   }, {});
   assert.equal(k.json.statut, 'termine');
   assert.equal(k.json.quota.enrichissements, 80);
@@ -53,6 +87,14 @@ test('NFR-07 parcours des nœuds du sous-flux avec données simulées', async ()
   assert.equal(k.json.ecrire_cache, true);
   const res = JSON.parse(k.json.resultat);
   assert.equal(res.cout.credits_recherche, 1);
+  assert.equal(res.cadrages.length, 3, 'requête en 1.1 : cadres renvoyés');
+  assert.equal(JSON.parse(k.json.cache_ligne.resultat).cadrages, undefined, 'cadres hors du cache');
+  const ancien = { ...envoi, requete: { ...envoi.requete, version_contrat: '1.0' } };
+  const [k0] = await executer('cloture', {
+    'Déclencheur enrichissement': ancien, 'Config enrichissement': config, 'Quota clôture': { mois: '2026-10', enrichissements: 1 },
+    'Contrôles après correction': {}, 'Contrôles de sortie': JSON.parse(JSON.stringify({ ...c.json, resultat: { ...c.json.resultat, cadrages: undefined } })), 'Résultat du cache': {}, 'Lecture étiquette': l.json,
+  }, {});
+  assert.equal(JSON.parse(k0.json.resultat).cadrages, undefined, 'app en 1.0 : pas de cadres');
   const [rc] = await executer('resultat_cache', { 'Déclencheur enrichissement': envoi }, { ...l.json, cache_ligne: { resultat: k.json.cache_ligne.resultat, date_maj: '2026-10-01' } });
   assert.equal(rc.json.cache, true);
   assert.equal(rc.json.resultat.transcription[0].texte, "GUILLAUME L'ECHANSON");
@@ -62,5 +104,5 @@ test('NFR-07 parcours des nœuds du sous-flux avec données simulées', async ()
 
 test('NFR-06 nœud santé : autotest de signature dans le bac à sable', async () => {
   const [s] = await executer('sante', { 'Config santé': config }, {});
-  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.0', ok: true });
+  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.1', ok: true });
 });

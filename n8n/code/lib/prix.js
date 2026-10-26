@@ -1,10 +1,10 @@
 // Relevé de prix (docs/06, étapes de l'agent prix) : clé de cache, décision
 // avant l'agent, lecture de sa sortie. Une offre n'est retenue que si sa page
-// a réellement été lue par l'outil lire_page pendant ce job : l'agent ne peut
-// pas citer un prix qu'il n'a pas vu. Dépend de normalisation.js, metier.js,
-// modele.js et schema.js.
+// a réellement été vue pendant ce job (résultat de la recherche intégrée de
+// Claude, T85) : l'agent ne peut pas citer un prix qu'il n'a pas vu. Dépend de
+// normalisation.js, metier.js, modele.js, schema.js et recherche.js.
 if (typeof require !== 'undefined' && typeof agregerPrix === 'undefined') {
-  Object.assign(globalThis, require('./metier.js'), require('./modele.js'), require('./schema.js'));
+  Object.assign(globalThis, require('./metier.js'), require('./modele.js'), require('./schema.js'), require('./recherche.js'));
 }
 
 const CACHE_PRIX_MS = 24 * 3600 * 1000;
@@ -25,9 +25,9 @@ function prixNonTrouve(motif, { formatCl, devise, jour }) {
 }
 
 /**
- * Avant l'agent : cache de 24 heures (sauf forcer), puis conditions minimales
- * (clé Tavily, au moins un site marchand actif). Sans elles, aucun appel au
- * modèle : le résultat est « non trouvé » avec le motif.
+ * Avant l'agent : cache de 24 heures (sauf forcer), puis au moins un site
+ * marchand actif. Sans lui, aucun appel au modèle : le résultat est « non
+ * trouvé » avec le motif.
  */
 function decisionPrix({ requete, config, ligneCache, maintenant, domainesMarchands }) {
   const jour = jourParis(new Date(maintenant));
@@ -46,9 +46,6 @@ function decisionPrix({ requete, config, ligneCache, maintenant, domainesMarchan
   if (!domainesMarchands.length) {
     return { agent: false, cle, cache: false, resultat: prixNonTrouve('Aucun site marchand vérifié n\'est encore actif.', base), jour };
   }
-  if (!config.tavily_cle) {
-    return { agent: false, cle, cache: false, resultat: prixNonTrouve('Recherche web non configurée.', base), jour };
-  }
   return { agent: true, cle, cache: false, resultat: null, jour };
 }
 
@@ -60,8 +57,8 @@ function messagesPrix({ prompt, requete, jour, domainesMarchands }) {
     .replace('{{ $json.format_cl }}', String(requete.format_cl))
     .replace('{{ $json.devise }}', requete.devise)
     .replace('{{ JSON.stringify($json.domaines_marchands) }}', JSON.stringify(domainesMarchands))
-    + '\n\nOutils : `recherche_web` (déjà limitée aux sites autorisés) et `lire_page` (texte d\'une page produit).'
-    + ' Seules les pages lues avec `lire_page` comptent : une offre dont la page n\'a pas été lue est écartée par le flux.'
+    + '\n\nOutil : la recherche web intégrée, déjà limitée aux sites autorisés.'
+    + ' Seules les pages renvoyées par tes recherches comptent : une offre dont la page n\'a pas été vue est écartée par le flux.'
     + '\nFormat de sortie : {"offres": [{"site", "url", "prix", "millesime_verifie"}], "alertes": [{"code", "message"}]}.'
     + ' Le flux calcule lui-même la médiane, le format du contrat et les sources consultées.';
   const message = 'Relève le prix de ce vin : ' + JSON.stringify(requete.identite)
@@ -69,9 +66,12 @@ function messagesPrix({ prompt, requete, jour, domainesMarchands }) {
   return { systeme, message };
 }
 
-/** URL lues par l'outil lire_page, tirées des étapes intermédiaires de l'agent. */
+/**
+ * Pages vues pendant le job : résultats de la recherche intégrée (T85), ou
+ * pages lues par l'outil lire_page d'un agent à outils.
+ */
 function pagesLues(sortie) {
-  const urls = [];
+  const urls = urlsVues(sortie);
   for (const e of (sortie && sortie.intermediateSteps) || []) {
     const a = (e && e.action) || {};
     if (!/lire|extract/i.test(a.tool || '')) continue;
@@ -91,7 +91,7 @@ const CODES_ALERTE = ['prix_non_trouve', 'contenu_suspect_ignore', 'identificati
  * ici (agregerPrix), pas par le modèle.
  */
 function analyserSortiePrix(sortie, { requete, jour, domainesMarchands, schemaReponse, dejaLues = [] }) {
-  const cout = coutAgent(sortie);
+  const cout = sortie && sortie.usage ? coutRecherche(sortie) : coutAgent(sortie);
   let brut;
   try {
     brut = jsonDe(texteDe(sortie));
@@ -102,7 +102,7 @@ function analyserSortiePrix(sortie, { requete, jour, domainesMarchands, schemaRe
   let offres = brut.offres;
   if (!Array.isArray(offres) && Array.isArray(brut.prix) && brut.prix[0]) offres = brut.prix[0].offres;
   if (!Array.isArray(offres)) offres = [];
-  // L'agent de correction n'a pas d'outil : il reprend les pages du premier passage.
+  // L'agent de correction ne cherche pas : il reprend les pages du premier passage.
   const lues = [...new Set([...dejaLues, ...pagesLues(sortie)])];
   const ecartees = [];
   const valides = [];

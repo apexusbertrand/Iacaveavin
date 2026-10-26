@@ -36,6 +36,8 @@ m = copy.deepcopy(neg); m["statut"]="termine"; m.pop("resultat"); mut["termine s
 m = copy.deepcopy(neg); m["resultat"]["fiche"]["garde"] = {"valeur":{"debut":2026,"fin":2032},"source":"estimation","confiance":0.5}; mut["garde estimée par l'agent"] = m
 m = copy.deepcopy(neg); m["resultat"]["champ_inconnu"] = 1; mut["propriété inconnue dans resultat"] = m
 m = copy.deepcopy(neg); m["resultat"]["fiche"]["millesime"]["valeur"] = 1850; mut["millésime hors bornes"] = m
+m = copy.deepcopy(neg); m["resultat"]["cadrages"][0]["cadre"]["largeur"] = 1.4; mut["cadre d'étiquette hors de l'image"] = m
+m = copy.deepcopy(neg); m["resultat"]["cadrages"][0]["cadre"].pop("hauteur"); mut["cadre d'étiquette incomplet"] = m
 v = Draft202012Validator(schemas["reponse-job.schema.json"], format_checker=FormatChecker())
 for k,doc in mut.items():
     rejete = any(True for _ in v.iter_errors(doc))

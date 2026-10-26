@@ -7,7 +7,7 @@ if (typeof require !== 'undefined' && typeof jsonDe === 'undefined') {
 /**
  * Sortie de l'agent d'enrichissement → { ok, erreurs, resultat, cout }.
  * La transcription vient de la lecture d'étiquette (elle fait foi) ; les prix
- * sont l'affaire de l'agent prix. Toute propriété inconnue fait échouer la
+ * sont l'affaire de l'agent prix, les cadres d'étiquette celle de la lecture. Toute propriété inconnue fait échouer la
  * validation (défense contre les contenus piégés). Les accords manquants
  * relancent l'agent une fois ; après la correction ils ne bloquent plus.
  */
@@ -24,6 +24,7 @@ function analyserSortieAgent(sortie, { schemaReponse, transcription, anneeCouran
   delete brut.prix;
   delete brut.cache;
   delete brut.cout;
+  delete brut.cadrages;
   if (!Array.isArray(brut.notes_critiques)) brut.notes_critiques = [];
   if (!Array.isArray(brut.alertes)) brut.alertes = [];
   if (!Array.isArray(brut.sources_consultees)) brut.sources_consultees = [];

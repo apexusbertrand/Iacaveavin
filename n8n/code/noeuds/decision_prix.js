@@ -1,4 +1,4 @@
-// Avant l'agent prix : cache de 24 heures, clé Tavily, sites marchands actifs.
+// Avant l'agent prix : cache de 24 heures, sites marchands actifs.
 // Sans ces conditions, aucun appel au modèle (prix non trouvé avec motif).
 // @inclure normalisation.js
 // @inclure enveloppes.js

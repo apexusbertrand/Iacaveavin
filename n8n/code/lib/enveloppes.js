@@ -1,6 +1,7 @@
 // Enveloppes conformes à reponse-job.schema.json, configuration et quotas.
 
-const VERSION_CONTRAT = '1.0';
+// 1.1 : cadres d'étiquette (resultat.cadrages), envoyés aux requêtes en 1.1.
+const VERSION_CONTRAT = '1.1';
 const UUID_NUL = '00000000-0000-4000-8000-000000000000';
 const DELAI_JOB_MS = 4 * 60 * 1000; // l'app abandonne à 3 min ; marge d'une minute
 const HTTP = {

@@ -36,15 +36,15 @@ test('docs/06 prix : clé de cache par vin, format et devise', () => {
 test('docs/06 prix : cache de 24 heures, sauf forcer', () => {
   const maintenant = Date.parse('2026-11-20T10:00:00Z');
   const ligne = { cle: 'k', resultat: JSON.stringify({ prix: [], alertes: [], sources_consultees: [] }), date_maj: '2026-11-19T12:00:00Z' };
-  const base = { requete: requetePrix, config: { tavily_cle: 't' }, maintenant, domainesMarchands: MARCHANDS };
+  const base = { requete: requetePrix, config: {}, maintenant, domainesMarchands: MARCHANDS };
   assert.equal(p.decisionPrix({ ...base, ligneCache: ligne }).cache, true);
   assert.equal(p.decisionPrix({ ...base, ligneCache: { ...ligne, date_maj: '2026-11-19T09:00:00Z' } }).agent, true, 'cache de plus de 24 h');
   assert.equal(p.decisionPrix({ ...base, requete: { ...requetePrix, forcer: true }, ligneCache: ligne }).agent, true, 'forcer');
 });
 
-test('docs/06 prix : sans site actif ni clé de recherche, aucun appel au modèle et jamais de prix estimé', () => {
+test('docs/06 prix : sans site actif, aucun appel au modèle et jamais de prix estimé', () => {
   const maintenant = Date.parse('2026-11-20T10:00:00Z');
-  for (const [config, domaines, motif] of [[{ tavily_cle: 't' }, [], /site marchand/], [{ tavily_cle: '' }, MARCHANDS, /Recherche web/]]) {
+  for (const [config, domaines, motif] of [[{}, [], /site marchand/]]) {
     const d = p.decisionPrix({ requete: requetePrix, config, ligneCache: null, maintenant, domainesMarchands: domaines });
     assert.equal(d.agent, false);
     assert.equal(d.resultat.prix[0].trouve, false);
@@ -76,6 +76,26 @@ test('docs/06 prix : seules les pages lues, autorisées et du bon millésime com
   assert.equal(r.cout.credits_recherche, 5);
 });
 
+test('docs/06 prix : recherche intégrée, seules les pages renvoyées par la recherche comptent (T85)', () => {
+  const offres = [
+    { site: 'vinatis.com', url: 'https://www.vinatis.com/a', prix: 24.5, millesime_verifie: true },
+    { site: 'millesima.fr', url: 'https://millesima.fr/inventee', prix: 12, millesime_verifie: true },
+  ];
+  const message = {
+    content: [
+      { type: 'server_tool_use', id: 's1', name: 'web_search', input: { query: 'x' } },
+      { type: 'web_search_tool_result', tool_use_id: 's1', content: [{ type: 'web_search_result', url: 'https://www.vinatis.com/a', title: 'a' }] },
+      { type: 'text', text: JSON.stringify({ offres, alertes: [] }) },
+    ],
+    usage: { server_tool_use: { web_search_requests: 2 } },
+  };
+  const r = p.analyserSortiePrix(message, { requete: requetePrix, jour, domainesMarchands: MARCHANDS, schemaReponse });
+  assert.deepEqual(r.erreurs, []);
+  assert.equal(r.resultat.prix[0].prix, 24.5);
+  assert.deepEqual(r.ecartees.map((e) => e.motif), ['page non lue']);
+  assert.deepEqual(r.cout, { appels_modele: 1, credits_recherche: 2 });
+});
+
 test('docs/06 prix : sortie illisible refusée, la correction reprend les pages lues', () => {
   assert.equal(p.analyserSortiePrix({ output: 'pas de JSON' }, { requete: requetePrix, jour, domainesMarchands: MARCHANDS, schemaReponse }).ok, false);
   const corr = p.analyserSortiePrix(sortieAgent([{ site: 'vinatis.com', url: 'https://www.vinatis.com/a', prix: 30, millesime_verifie: true }], []), {
@@ -85,7 +105,7 @@ test('docs/06 prix : sortie illisible refusée, la correction reprend les pages 
   assert.equal(corr.resultat.prix[0].prix, 30);
 });
 
-const configPrix = [{ cle: 'tavily_cle', valeur: 't' }, { cle: 'quota_prix', valeur: '120' }, { cle: 'email_alerte', valeur: 'a@b.fr' }];
+const configPrix = [{ cle: 'quota_prix', valeur: '120' }, { cle: 'email_alerte', valeur: 'a@b.fr' }];
 const envoiJob = { job_id: 'e5f4d3c2-b1a0-4f9e-8d7c-6b5a4f3e2d1c', type: 'prix', mode: 'job', requete: requetePrix, recu_le: Date.now() - 3000 };
 
 test('docs/06 nœuds prix : décision, contrôles, clôture en mode job', async () => {
@@ -149,7 +169,7 @@ test('docs/06 inclure_prix : requête de relevé tirée de la fiche, prix fusion
   };
   const [k] = await executer('cloture', {
     'Déclencheur enrichissement': envoi, 'Config enrichissement': [{ cle: 'quota_enrichissements', valeur: '100' }], 'Quota clôture': { mois: '2026-11', enrichissements: 1, prix: 0 },
-    'Contrôles de sortie': controles, 'Relevé de prix': releve,
+    'Contrôles de sortie': controles, 'Relevé de prix': releve, 'Lecture étiquette': { cadrages: [] },
   }, {});
   const res = JSON.parse(k.json.resultat);
   assert.equal(res.prix[0].prix, 24.5);

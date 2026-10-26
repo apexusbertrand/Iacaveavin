@@ -39,12 +39,12 @@ URL de l'app : `https://apexus.app.n8n.cloud/webhook/iacave/...` (sante, enrichi
 ## Mise en service par Bertrand
 
 1. Clé de l'app. Générer une clé de 32 caractères ou plus, par exemple `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`. Dans n8n, ouvrir la table iacave_config, ligne `cle_app`, coller la clé dans `valeur`. La même clé va dans l'app (Paramètres, connexion, lot 2c). Jamais dans git, jamais dans un mail.
-2. Tavily. Créer le compte sur tavily.com (offre gratuite, 1 000 crédits par mois), copier la clé API dans la ligne `tavily_cle`. Sans elle, le flux lit l'étiquette et laisse vides les champs qui demandent une recherche, avec le motif « recherche web indisponible ».
+2. Recherche web. Rien à saisir : l'agent utilise la recherche intégrée de Claude avec l'identifiant Anthropic « Claude AI Cave » (T85). La recherche web doit être autorisée dans la console Anthropic de l'organisation (c'est le cas, essai du 2026-10-26) ; elle est facturée 10 dollars pour 1 000 recherches. La ligne `tavily_cle` de iacave_config n'est plus lue et peut être supprimée.
 3. Sources. Lire les CGU des domaines de sources-autorisees.yaml (les robots.txt sont déjà notés), puis passer à `actif` ceux qui conviennent. L'activation demande une session de développement pour réassembler et republier les nœuds Code (T69).
 4. Vérifier : `curl https://apexus.app.n8n.cloud/webhook/iacave/sante` renvoie `ok: true` dès que la clé est en place.
 5. Jeu d'essai : déposer les 30 dossiers dans jeu-essai/, puis `IACAVE_URL=https://apexus.app.n8n.cloud IACAVE_CLE=... python3 scripts/jeu_essai.py`. Le rapport s'écrit dans jeu-essai/.
 
-Les identifiants « Anthropic account » et « Gmail APEXUS » sont ceux de l'instance, utilisés sans modification (T63).
+Les identifiants « Claude AI Cave » (Anthropic) et « Gmail Claude » sont ceux choisis par Bertrand le 2026-10-26 (T85), à la place de « Anthropic account » et « Gmail APEXUS » (T63).
 
 ## Faire évoluer un flux
 
@@ -57,7 +57,6 @@ Les identifiants « Anthropic account » et « Gmail APEXUS » sont ceux de l'in
 | Clé | Valeur par défaut | Rôle |
 | --- | --- | --- |
 | cle_app | vide, à saisir | clé partagée avec l'app (signature HMAC) |
-| tavily_cle | vide, à saisir | recherche web |
 | fenetre_secondes | 300 | écart maximal d'horodatage |
 | quota_enrichissements | 100 | par mois |
 | quota_prix | 120 | par mois |

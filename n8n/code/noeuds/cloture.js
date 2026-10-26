@@ -50,6 +50,11 @@ resultat.cout = {
   credits_recherche: c.cout.credits_recherche + coutPrix.credits_recherche,
   duree_ms: Math.max(0, maintenant - (envoi.recu_le || maintenant)),
 };
+// Contrat 1.1 : cadres d'étiquette de la lecture du jour, seulement pour une
+// app qui les demande (une app en 1.0 refuserait la propriété).
+const mineure = parseInt(String(envoi.requete.version_contrat || '1.0').split('.')[1] || '0', 10);
+const cadrages = $('Lecture étiquette').first().json.cadrages || [];
+if (mineure >= 1 && cadrages.length) resultat.cadrages = cadrages;
 const statut = statutFinal(resultat);
 const job = { job_id: envoi.job_id, request_id: envoi.requete.request_id, type: 'enrichissement', statut, etape: 'termine', fiche_id: envoi.requete.fiche_id || '', resultat: JSON.stringify(resultat) };
 const erreurs = validateSchema(schema, enveloppeJob(job, quotaRestant(config, ligneQuota)));
@@ -69,9 +74,9 @@ const plafond = parseInt(config.quota_enrichissements, 10) || 100;
 const seuil = parseFloat(config.seuil_alerte) || 0.8;
 const alerte = !quota.alerte_envoyee && quota.enrichissements >= Math.ceil(plafond * seuil);
 if (alerte) quota.alerte_envoyee = true;
-// Le cache du vin garde 180 jours : sans la transcription du jour ni les prix,
-// qui ont leur propre cache de 24 heures.
-const sansTranscription = { ...resultat, transcription: [], prix: undefined };
+// Le cache du vin garde 180 jours : sans la transcription ni les cadres du
+// jour, ni les prix, qui ont leur propre cache de 24 heures.
+const sansTranscription = { ...resultat, transcription: [], prix: undefined, cadrages: undefined };
 return [{ json: {
   job_id: envoi.job_id,
   statut,

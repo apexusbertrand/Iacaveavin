@@ -29,7 +29,7 @@ flowchart TB
   end
   Q -- "POST photos + contexte" --> WH
   JOBS -- "GET /jobs : résultat JSON" --> Q
-  AG -- "recherche web (Tavily)" --> SRC
+  AG -- "recherche web intégrée de Claude" --> SRC
 ```
 
 ## Stack
