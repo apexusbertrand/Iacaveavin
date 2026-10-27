@@ -2535,4 +2535,294 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pdfPreparing => 'Préparation du PDF…';
+
+  @override
+  String get statsTabGeneral => 'Général';
+
+  @override
+  String get statsTabRegions => 'Régions';
+
+  @override
+  String get statsTabGarde => 'Garde';
+
+  @override
+  String get statsTabValue => 'Valeur';
+
+  @override
+  String get statsTabBuying => 'Aide à l\'achat';
+
+  @override
+  String get statsTabExplorer => 'Explorateur';
+
+  @override
+  String get statsEmpty =>
+      'Aucune bouteille en cave : ajoutez des vins pour voir les statistiques.';
+
+  @override
+  String get statNoData => 'Aucune donnée pour cette vue.';
+
+  @override
+  String get statMeasureBottles => 'Nombre de bouteilles';
+
+  @override
+  String get statMeasureReferences => 'Nombre de références';
+
+  @override
+  String get statMeasurePurchase => 'Valeur d\'achat';
+
+  @override
+  String get statMeasureMarket => 'Valeur marché';
+
+  @override
+  String get statMeasureGain => 'Plus-value latente';
+
+  @override
+  String get statMeasureAvgPrice => 'Prix moyen';
+
+  @override
+  String get statMeasureAvgScore => 'Note moyenne (/100)';
+
+  @override
+  String get statMeasureOpened => 'Bouteilles ouvertes (12 mois)';
+
+  @override
+  String get statMeasureYears => 'Années moyennes avant de boire';
+
+  @override
+  String get statDimColor => 'Couleur';
+
+  @override
+  String get statDimType => 'Type';
+
+  @override
+  String get statDimCountry => 'Pays';
+
+  @override
+  String get statDimRegion => 'Région';
+
+  @override
+  String get statDimSubRegion => 'Sous-région';
+
+  @override
+  String get statDimAppellation => 'Appellation';
+
+  @override
+  String get statDimProducer => 'Domaine';
+
+  @override
+  String get statDimVintage => 'Millésime';
+
+  @override
+  String get statDimVintageBand => 'Tranche de 5 millésimes';
+
+  @override
+  String get statDimGrape => 'Cépage principal';
+
+  @override
+  String get statDimOwner => 'Propriétaire';
+
+  @override
+  String get statDimLocation => 'Emplacement';
+
+  @override
+  String get statDimGardeStatus => 'Statut de garde';
+
+  @override
+  String get statDimGardeStart => 'Année de début de garde';
+
+  @override
+  String get statDimPeak => 'Année d\'apogée';
+
+  @override
+  String get statDimScoreBand => 'Tranche de note';
+
+  @override
+  String get statDimPriceBand => 'Tranche de prix';
+
+  @override
+  String get statDimSupplier => 'Fournisseur';
+
+  @override
+  String get statDimPurchaseMonth => 'Mois d\'achat';
+
+  @override
+  String get statDimOpeningMonth => 'Mois d\'ouverture';
+
+  @override
+  String get statChartDonut => 'Donut';
+
+  @override
+  String get statChartBarsV => 'Barres verticales';
+
+  @override
+  String get statChartBarsH => 'Barres horizontales';
+
+  @override
+  String get statChartStacked => 'Barres empilées';
+
+  @override
+  String get statChartLine => 'Courbe';
+
+  @override
+  String get statChartCross => 'Tableau croisé';
+
+  @override
+  String get statChartKpi => 'Indicateur seul';
+
+  @override
+  String get statNone => 'Non renseigné';
+
+  @override
+  String get statOther => 'Autres';
+
+  @override
+  String statBand(String from, String to) {
+    return '$from à $to';
+  }
+
+  @override
+  String statFrom(String from) {
+    return '$from et plus';
+  }
+
+  @override
+  String get statToDrinkThisYear => 'À boire cette année';
+
+  @override
+  String get statDrinkSoon => 'À boire vite';
+
+  @override
+  String get statPast => 'Passées';
+
+  @override
+  String get statGardeByYear =>
+      'Bouteilles par année d\'entrée dans la fenêtre de garde';
+
+  @override
+  String get statByColor => 'Bouteilles par couleur';
+
+  @override
+  String get statVintageColor => 'Millésime et couleur';
+
+  @override
+  String get statByOrigin => 'Bouteilles par origine';
+
+  @override
+  String get statDrillHint =>
+      'Touchez une barre pour descendre du pays à la région, puis à l\'appellation.';
+
+  @override
+  String get statDrillUp => 'Remonter';
+
+  @override
+  String get statPurchaseVsMarket => 'Achat et marché par couleur';
+
+  @override
+  String get statPurchaseVsMarketRegion => 'Achat et marché par région';
+
+  @override
+  String get statMarketHistory => 'Valeur marché du stock actuel, sur 24 mois';
+
+  @override
+  String get statOpenedVsStock =>
+      'Ouvertures des 12 derniers mois et stock, par couleur';
+
+  @override
+  String get statMonthsLeft => 'Mois de stock restant au rythme des ouvertures';
+
+  @override
+  String statMonthsValue(String n) {
+    return '$n mois';
+  }
+
+  @override
+  String get statNoOpening => 'aucune ouverture en 12 mois';
+
+  @override
+  String get statSeriesPurchase => 'Achat';
+
+  @override
+  String get statSeriesMarket => 'Marché';
+
+  @override
+  String get statSeriesOpened => 'Ouvertes';
+
+  @override
+  String get statSeriesStock => 'En stock';
+
+  @override
+  String statSeeWines(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Voir les $n vins',
+      one: 'Voir le vin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statWinesTitle => 'Vins de la sélection';
+
+  @override
+  String get statMeasure => 'Mesure';
+
+  @override
+  String get statDimension => 'Dimension';
+
+  @override
+  String get statDimension2 => 'Seconde dimension';
+
+  @override
+  String get statNoDimension2 => 'Aucune';
+
+  @override
+  String get statChartType => 'Graphique';
+
+  @override
+  String get statFilters => 'Filtres';
+
+  @override
+  String get statFilterAdd => 'Ajouter un filtre';
+
+  @override
+  String statFilterLine(String dimension, String values) {
+    return '$dimension : $values';
+  }
+
+  @override
+  String get statFavorites => 'Favoris';
+
+  @override
+  String get statNoFavorites => 'Aucune vue enregistrée.';
+
+  @override
+  String get statSave => 'Enregistrer en favori';
+
+  @override
+  String get statViewName => 'Nom de la vue';
+
+  @override
+  String get statSaved => 'Vue enregistrée';
+
+  @override
+  String get statDeleteView => 'Supprimer la vue';
+
+  @override
+  String get statExport => 'Exporter';
+
+  @override
+  String get statExportPng => 'Image PNG';
+
+  @override
+  String get statExportPdf => 'PDF';
+
+  @override
+  String get statExportCsv => 'Tableau CSV';
+
+  @override
+  String get statTotal => 'Total';
+
+  @override
+  String get statAverage => 'Moyenne';
 }

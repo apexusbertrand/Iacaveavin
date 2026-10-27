@@ -112,10 +112,35 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 3 Restitution
 
-- Statut : non démarré
-- Exigences : STA-01 à STA-06, PDF-01 à PDF-05, XLS-01 à XLS-10
+- Statut : réalisé, en attente de recette (branche `lot-3-restitution`, issue de `lot-2c-branchement-reel` sans attendre la recette du lot 2, accord de Bertrand du 2026-10-27)
+- Exigences :
+  - [x] XLS-01 : export à 5 onglets (Vins, Lots, Mouvements, Listes, Notice), colonnes et ordre du dictionnaire, test d'alignement
+  - [x] XLS-02 : nombres, dates et booléens écrits typés, jamais en texte
+  - [x] XLS-03 : modèle vierge au même format
+  - [x] XLS-04 : id rempli = mise à jour, id vide = création, Action SUPPRIMER = suppression logique, colonnes RO ignorées
+  - [x] XLS-05 : quantité cible, mouvement d'ajustement de l'écart, motif « import Excel »
+  - [x] XLS-06 : valeur de liste inconnue en erreur, ou créée en bloc après accord
+  - [x] XLS-07 : simulation obligatoire, rapport par ligne, colonne et motif
+  - [x] XLS-08 : sauvegarde automatique avant import, transaction tout ou rien
+  - [x] XLS-09 : enrichissement des fiches créées avec photo, nombre d'appels et quota affichés
+  - [x] XLS-10 : zip de photos rattachées par le nom de la colonne Photo principale (T90)
+  - [x] PDF-01 : fiche unitaire A4 depuis le menu de la fiche
+  - [x] PDF-02 : catalogue 2 fiches par page, filtres et tri de la liste repris et modifiables
+  - [x] PDF-03 : page de garde (date, filtres, nombre de fiches), numéros de page
+  - [x] PDF-04 : champs pdf du dictionnaire, photo, QR code iacaveavin://fiche/<id>, date d'édition, commentaires coupés à la phrase
+  - [x] PDF-05 : génération dans un isolate avec progression, partage
+  - [x] STA-01 : onglets Général, Régions (zoom pays, région, appellation), Garde, Valeur, Aide à l'achat
+  - [x] STA-02 : explorateur (9 mesures, 20 dimensions, seconde dimension, filtres, 7 graphiques)
+  - [x] STA-03 : graphiques compatibles seulement, donut à 8 parts au plus avec « Autres »
+  - [x] STA-04 : un tap sur une part, une barre ou une ligne de légende ouvre la liste de ses vins
+  - [x] STA-05 : favoris, export PNG, PDF et CSV
+  - [x] STA-06 : calcul local, libellés en clair
 - Points d'étape :
-- Mesures :
+  - 2026-10-27 fait : tout le périmètre du lot, testé (au moins un test par exigence, 26 nouveaux tests). Dépendances pdf, xml et fl_chart ; le paquet excel est écarté (T89). En cours : rien. Bloquant : recette sur téléphone. Prochaine étape : APK de la pull request, recette de Bertrand.
+- Mesures (poste de développement, à refaire sur téléphone pendant la recette) :
+  - aller-retour Excel : 565 lignes (260 fiches et 305 lots), aucun écart, simulation et import en 2,6 s ;
+  - catalogue PDF : 200 fiches avec photo en 8 à 9 s, cible 30 s ;
+  - statistiques : 5 000 fiches lues et agrégées en 0,56 s, cible 1 s ; agrégation seule de toutes les mesures en moins de 0,1 s.
 - Recette Bertrand :
 
 ## Lot 4 Confort

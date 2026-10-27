@@ -135,6 +135,19 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T87 | Recadrage dans l'app (AJO-13) : photo rognée à la réception du résultat, avant l'écran de validation, depuis la photo stockée de 1 600 px ; photo gardée entière si le cadre est absent ou couvre toute l'image ; une photo déjà recadrée n'est pas rognée une seconde fois. Retouche à l'écran de validation : cadre déplaçable et redimensionnable sur la photo d'origine, ou retour à la photo entière. La photo d'origine est conservée à part (`chemin_original`) jusqu'à la validation de la fiche, puis supprimée | évolution 1, décisions de Bertrand du 2026-10-26 (« Auto par l'IA + retouche », « Supprimée à la validation ») ; suppression physique demandée par l'utilisateur, donc conforme à la règle sur les données |
 | T88 | Bibliothèque par bouteille (FIC-11) : types de photo `degustation`, `repas`, `evenement` ajoutés au dictionnaire, onglet Photos de la fiche, ajout par l'appareil photo ou la galerie, suppression sur demande. Ces photos ne sont jamais envoyées au flux (le contrat ne connaît que les photos de la bouteille) et ne deviennent pas la photo principale | évolution 1 bis du 2026-10-26 ; aucune donnée transmise hors du téléphone |
 
+## Décisions techniques proposées au lot 3 (2026-10-27), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T89 | Le classeur xlsx est écrit et lu par le code de l'app (data/files/xlsx.dart), lecture XML par le paquet xml, sans le paquet excel | toutes les versions du paquet excel exigent archive 3, incompatible avec archive 4 utilisée par la sauvegarde ; le format écrit se limite à des cellules typées, une ligne d'en-tête figée et le format date |
+| T90 | XLS-10 : la colonne RO « Photo principale » donne le nom de fichier. À l'import avec un zip, la photo de ce nom est rattachée à la fiche comme étiquette (principale si la fiche n'en a pas) ; la colonne reste ignorée pour les données | XLS-10 demande une colonne nom de fichier sans en créer une nouvelle dans le dictionnaire |
+| T91 | Un lot d'une fiche créée par le même import se rattache par « #numéro de ligne » de l'onglet Vins (exemple #12), expliqué dans la Notice | une fiche nouvelle n'a pas encore d'id ; id rempli = mise à jour (XLS-04) |
+| T92 | Une valeur importée est une saisie manuelle : provenance « import », statut manuel, jamais écrasée par un ré-enrichissement | règle 3 et PRV-R2 |
+| T93 | XLS-06 : sont créables en bloc les valeurs des listes modifiables et les propriétaires. La couleur (liste fermée) et l'emplacement inconnus restent des erreurs. Un lot ne change pas de fiche à l'import : erreur, créer un nouveau lot | un emplacement se crée dans l'arbre avec son type et sa grille ; changer la fiche d'un lot casserait l'historique des mouvements |
+| T94 | PDF : QR code iacaveavin://fiche/<id> (décision de Bertrand du 2026-10-27), polices Roboto embarquées, commentaires coupés à la phrase entière sous 900 caractères (fiche) ou 260 (demi-page), 14 champs au plus en demi-page, le catalogue part des filtres et du tri de la liste | accents et « € » à l'impression ; une demi-page A4 ne tient pas plus |
+| T95 | Statistiques au grain du lot (propriétaire, emplacement, prix et date d'achat sont portés par le lot). Ouvertures sur 12 mois glissants, mois en cours compris. Mois de stock restant = stock / (ouvertures des 12 mois / 12). Évolution de la valeur marché = stock actuel × dernier relevé connu à la fin de chaque mois | aucune donnée historique de stock n'est gardée à part ; approximation affichée comme telle dans le titre du graphique |
+| T96 | STA-04 : un tap ouvre un écran avec exactement les vins de la part ; dans l'onglet Régions, le tap descend d'un niveau et la liste s'ouvre à l'appellation ou par le bouton « Voir les vins » | le zoom est demandé par STA-01 sur le même geste |
+
 ## À compléter
 
 | Id | Sujet | Quand |

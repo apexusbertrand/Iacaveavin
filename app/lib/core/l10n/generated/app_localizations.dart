@@ -4221,6 +4221,546 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Préparation du PDF…'**
   String get pdfPreparing;
+
+  /// No description provided for @statsTabGeneral.
+  ///
+  /// In fr, this message translates to:
+  /// **'Général'**
+  String get statsTabGeneral;
+
+  /// No description provided for @statsTabRegions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Régions'**
+  String get statsTabRegions;
+
+  /// No description provided for @statsTabGarde.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garde'**
+  String get statsTabGarde;
+
+  /// No description provided for @statsTabValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur'**
+  String get statsTabValue;
+
+  /// No description provided for @statsTabBuying.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide à l\'achat'**
+  String get statsTabBuying;
+
+  /// No description provided for @statsTabExplorer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explorateur'**
+  String get statsTabExplorer;
+
+  /// No description provided for @statsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune bouteille en cave : ajoutez des vins pour voir les statistiques.'**
+  String get statsEmpty;
+
+  /// No description provided for @statNoData.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune donnée pour cette vue.'**
+  String get statNoData;
+
+  /// No description provided for @statMeasureBottles.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de bouteilles'**
+  String get statMeasureBottles;
+
+  /// No description provided for @statMeasureReferences.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de références'**
+  String get statMeasureReferences;
+
+  /// No description provided for @statMeasurePurchase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur d\'achat'**
+  String get statMeasurePurchase;
+
+  /// No description provided for @statMeasureMarket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur marché'**
+  String get statMeasureMarket;
+
+  /// No description provided for @statMeasureGain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus-value latente'**
+  String get statMeasureGain;
+
+  /// No description provided for @statMeasureAvgPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix moyen'**
+  String get statMeasureAvgPrice;
+
+  /// No description provided for @statMeasureAvgScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note moyenne (/100)'**
+  String get statMeasureAvgScore;
+
+  /// No description provided for @statMeasureOpened.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles ouvertes (12 mois)'**
+  String get statMeasureOpened;
+
+  /// No description provided for @statMeasureYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'Années moyennes avant de boire'**
+  String get statMeasureYears;
+
+  /// No description provided for @statDimColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur'**
+  String get statDimColor;
+
+  /// No description provided for @statDimType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get statDimType;
+
+  /// No description provided for @statDimCountry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pays'**
+  String get statDimCountry;
+
+  /// No description provided for @statDimRegion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Région'**
+  String get statDimRegion;
+
+  /// No description provided for @statDimSubRegion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous-région'**
+  String get statDimSubRegion;
+
+  /// No description provided for @statDimAppellation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appellation'**
+  String get statDimAppellation;
+
+  /// No description provided for @statDimProducer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Domaine'**
+  String get statDimProducer;
+
+  /// No description provided for @statDimVintage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime'**
+  String get statDimVintage;
+
+  /// No description provided for @statDimVintageBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tranche de 5 millésimes'**
+  String get statDimVintageBand;
+
+  /// No description provided for @statDimGrape.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cépage principal'**
+  String get statDimGrape;
+
+  /// No description provided for @statDimOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get statDimOwner;
+
+  /// No description provided for @statDimLocation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Emplacement'**
+  String get statDimLocation;
+
+  /// No description provided for @statDimGardeStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut de garde'**
+  String get statDimGardeStatus;
+
+  /// No description provided for @statDimGardeStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Année de début de garde'**
+  String get statDimGardeStart;
+
+  /// No description provided for @statDimPeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Année d\'apogée'**
+  String get statDimPeak;
+
+  /// No description provided for @statDimScoreBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tranche de note'**
+  String get statDimScoreBand;
+
+  /// No description provided for @statDimPriceBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tranche de prix'**
+  String get statDimPriceBand;
+
+  /// No description provided for @statDimSupplier.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur'**
+  String get statDimSupplier;
+
+  /// No description provided for @statDimPurchaseMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois d\'achat'**
+  String get statDimPurchaseMonth;
+
+  /// No description provided for @statDimOpeningMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois d\'ouverture'**
+  String get statDimOpeningMonth;
+
+  /// No description provided for @statChartDonut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donut'**
+  String get statChartDonut;
+
+  /// No description provided for @statChartBarsV.
+  ///
+  /// In fr, this message translates to:
+  /// **'Barres verticales'**
+  String get statChartBarsV;
+
+  /// No description provided for @statChartBarsH.
+  ///
+  /// In fr, this message translates to:
+  /// **'Barres horizontales'**
+  String get statChartBarsH;
+
+  /// No description provided for @statChartStacked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Barres empilées'**
+  String get statChartStacked;
+
+  /// No description provided for @statChartLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbe'**
+  String get statChartLine;
+
+  /// No description provided for @statChartCross.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau croisé'**
+  String get statChartCross;
+
+  /// No description provided for @statChartKpi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indicateur seul'**
+  String get statChartKpi;
+
+  /// No description provided for @statNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non renseigné'**
+  String get statNone;
+
+  /// No description provided for @statOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres'**
+  String get statOther;
+
+  /// No description provided for @statBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'{from} à {to}'**
+  String statBand(String from, String to);
+
+  /// No description provided for @statFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'{from} et plus'**
+  String statFrom(String from);
+
+  /// No description provided for @statToDrinkThisYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire cette année'**
+  String get statToDrinkThisYear;
+
+  /// No description provided for @statDrinkSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire vite'**
+  String get statDrinkSoon;
+
+  /// No description provided for @statPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passées'**
+  String get statPast;
+
+  /// No description provided for @statGardeByYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles par année d\'entrée dans la fenêtre de garde'**
+  String get statGardeByYear;
+
+  /// No description provided for @statByColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles par couleur'**
+  String get statByColor;
+
+  /// No description provided for @statVintageColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime et couleur'**
+  String get statVintageColor;
+
+  /// No description provided for @statByOrigin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles par origine'**
+  String get statByOrigin;
+
+  /// No description provided for @statDrillHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez une barre pour descendre du pays à la région, puis à l\'appellation.'**
+  String get statDrillHint;
+
+  /// No description provided for @statDrillUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remonter'**
+  String get statDrillUp;
+
+  /// No description provided for @statPurchaseVsMarket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat et marché par couleur'**
+  String get statPurchaseVsMarket;
+
+  /// No description provided for @statPurchaseVsMarketRegion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat et marché par région'**
+  String get statPurchaseVsMarketRegion;
+
+  /// No description provided for @statMarketHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur marché du stock actuel, sur 24 mois'**
+  String get statMarketHistory;
+
+  /// No description provided for @statOpenedVsStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvertures des 12 derniers mois et stock, par couleur'**
+  String get statOpenedVsStock;
+
+  /// No description provided for @statMonthsLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois de stock restant au rythme des ouvertures'**
+  String get statMonthsLeft;
+
+  /// No description provided for @statMonthsValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} mois'**
+  String statMonthsValue(String n);
+
+  /// No description provided for @statNoOpening.
+  ///
+  /// In fr, this message translates to:
+  /// **'aucune ouverture en 12 mois'**
+  String get statNoOpening;
+
+  /// No description provided for @statSeriesPurchase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat'**
+  String get statSeriesPurchase;
+
+  /// No description provided for @statSeriesMarket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marché'**
+  String get statSeriesMarket;
+
+  /// No description provided for @statSeriesOpened.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvertes'**
+  String get statSeriesOpened;
+
+  /// No description provided for @statSeriesStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'En stock'**
+  String get statSeriesStock;
+
+  /// No description provided for @statSeeWines.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{Voir le vin} other{Voir les {n} vins}}'**
+  String statSeeWines(int n);
+
+  /// No description provided for @statWinesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vins de la sélection'**
+  String get statWinesTitle;
+
+  /// No description provided for @statMeasure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mesure'**
+  String get statMeasure;
+
+  /// No description provided for @statDimension.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dimension'**
+  String get statDimension;
+
+  /// No description provided for @statDimension2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seconde dimension'**
+  String get statDimension2;
+
+  /// No description provided for @statNoDimension2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune'**
+  String get statNoDimension2;
+
+  /// No description provided for @statChartType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Graphique'**
+  String get statChartType;
+
+  /// No description provided for @statFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres'**
+  String get statFilters;
+
+  /// No description provided for @statFilterAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un filtre'**
+  String get statFilterAdd;
+
+  /// No description provided for @statFilterLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{dimension} : {values}'**
+  String statFilterLine(String dimension, String values);
+
+  /// No description provided for @statFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favoris'**
+  String get statFavorites;
+
+  /// No description provided for @statNoFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune vue enregistrée.'**
+  String get statNoFavorites;
+
+  /// No description provided for @statSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer en favori'**
+  String get statSave;
+
+  /// No description provided for @statViewName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la vue'**
+  String get statViewName;
+
+  /// No description provided for @statSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue enregistrée'**
+  String get statSaved;
+
+  /// No description provided for @statDeleteView.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la vue'**
+  String get statDeleteView;
+
+  /// No description provided for @statExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter'**
+  String get statExport;
+
+  /// No description provided for @statExportPng.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image PNG'**
+  String get statExportPng;
+
+  /// No description provided for @statExportPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'PDF'**
+  String get statExportPdf;
+
+  /// No description provided for @statExportCsv.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau CSV'**
+  String get statExportCsv;
+
+  /// No description provided for @statTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get statTotal;
+
+  /// No description provided for @statAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyenne'**
+  String get statAverage;
 }
 
 class _AppLocalizationsDelegate

@@ -11,6 +11,7 @@ import '../../features/locations/locations_screen.dart';
 import '../../features/settings/reference_screens.dart';
 import '../../features/placeholder/placeholder_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/statistics/statistics_screen.dart';
 import '../../features/wine_detail/wine_detail_screen.dart';
 import '../../features/wine_edit/wine_edit_screen.dart';
 import '../../features/wine_list/wine_list_screen.dart';
@@ -104,5 +105,6 @@ Widget _screenFor(AppDestination d) => switch (d) {
   AppDestination.backup => const BackupScreen(),
   AppDestination.about => const AboutScreen(),
   AppDestination.importExport => const ImportExportScreen(),
+  AppDestination.statistics => const StatisticsScreen(),
   _ => PlaceholderScreen(destination: d),
 };

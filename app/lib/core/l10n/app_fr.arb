@@ -1503,5 +1503,136 @@
     }
   },
   "winePdf": "Fiche PDF",
-  "pdfPreparing": "Préparation du PDF…"
+  "pdfPreparing": "Préparation du PDF…",
+  "statsTabGeneral": "Général",
+  "statsTabRegions": "Régions",
+  "statsTabGarde": "Garde",
+  "statsTabValue": "Valeur",
+  "statsTabBuying": "Aide à l'achat",
+  "statsTabExplorer": "Explorateur",
+  "statsEmpty": "Aucune bouteille en cave : ajoutez des vins pour voir les statistiques.",
+  "statNoData": "Aucune donnée pour cette vue.",
+  "statMeasureBottles": "Nombre de bouteilles",
+  "statMeasureReferences": "Nombre de références",
+  "statMeasurePurchase": "Valeur d'achat",
+  "statMeasureMarket": "Valeur marché",
+  "statMeasureGain": "Plus-value latente",
+  "statMeasureAvgPrice": "Prix moyen",
+  "statMeasureAvgScore": "Note moyenne (/100)",
+  "statMeasureOpened": "Bouteilles ouvertes (12 mois)",
+  "statMeasureYears": "Années moyennes avant de boire",
+  "statDimColor": "Couleur",
+  "statDimType": "Type",
+  "statDimCountry": "Pays",
+  "statDimRegion": "Région",
+  "statDimSubRegion": "Sous-région",
+  "statDimAppellation": "Appellation",
+  "statDimProducer": "Domaine",
+  "statDimVintage": "Millésime",
+  "statDimVintageBand": "Tranche de 5 millésimes",
+  "statDimGrape": "Cépage principal",
+  "statDimOwner": "Propriétaire",
+  "statDimLocation": "Emplacement",
+  "statDimGardeStatus": "Statut de garde",
+  "statDimGardeStart": "Année de début de garde",
+  "statDimPeak": "Année d'apogée",
+  "statDimScoreBand": "Tranche de note",
+  "statDimPriceBand": "Tranche de prix",
+  "statDimSupplier": "Fournisseur",
+  "statDimPurchaseMonth": "Mois d'achat",
+  "statDimOpeningMonth": "Mois d'ouverture",
+  "statChartDonut": "Donut",
+  "statChartBarsV": "Barres verticales",
+  "statChartBarsH": "Barres horizontales",
+  "statChartStacked": "Barres empilées",
+  "statChartLine": "Courbe",
+  "statChartCross": "Tableau croisé",
+  "statChartKpi": "Indicateur seul",
+  "statNone": "Non renseigné",
+  "statOther": "Autres",
+  "statBand": "{from} à {to}",
+  "@statBand": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "statFrom": "{from} et plus",
+  "@statFrom": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "statToDrinkThisYear": "À boire cette année",
+  "statDrinkSoon": "À boire vite",
+  "statPast": "Passées",
+  "statGardeByYear": "Bouteilles par année d'entrée dans la fenêtre de garde",
+  "statByColor": "Bouteilles par couleur",
+  "statVintageColor": "Millésime et couleur",
+  "statByOrigin": "Bouteilles par origine",
+  "statDrillHint": "Touchez une barre pour descendre du pays à la région, puis à l'appellation.",
+  "statDrillUp": "Remonter",
+  "statPurchaseVsMarket": "Achat et marché par couleur",
+  "statPurchaseVsMarketRegion": "Achat et marché par région",
+  "statMarketHistory": "Valeur marché du stock actuel, sur 24 mois",
+  "statOpenedVsStock": "Ouvertures des 12 derniers mois et stock, par couleur",
+  "statMonthsLeft": "Mois de stock restant au rythme des ouvertures",
+  "statMonthsValue": "{n} mois",
+  "@statMonthsValue": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "statNoOpening": "aucune ouverture en 12 mois",
+  "statSeriesPurchase": "Achat",
+  "statSeriesMarket": "Marché",
+  "statSeriesOpened": "Ouvertes",
+  "statSeriesStock": "En stock",
+  "statSeeWines": "{n, plural, =1{Voir le vin} other{Voir les {n} vins}}",
+  "@statSeeWines": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "statWinesTitle": "Vins de la sélection",
+  "statMeasure": "Mesure",
+  "statDimension": "Dimension",
+  "statDimension2": "Seconde dimension",
+  "statNoDimension2": "Aucune",
+  "statChartType": "Graphique",
+  "statFilters": "Filtres",
+  "statFilterAdd": "Ajouter un filtre",
+  "statFilterLine": "{dimension} : {values}",
+  "@statFilterLine": {
+    "placeholders": {
+      "dimension": {
+        "type": "String"
+      },
+      "values": {
+        "type": "String"
+      }
+    }
+  },
+  "statFavorites": "Favoris",
+  "statNoFavorites": "Aucune vue enregistrée.",
+  "statSave": "Enregistrer en favori",
+  "statViewName": "Nom de la vue",
+  "statSaved": "Vue enregistrée",
+  "statDeleteView": "Supprimer la vue",
+  "statExport": "Exporter",
+  "statExportPng": "Image PNG",
+  "statExportPdf": "PDF",
+  "statExportCsv": "Tableau CSV",
+  "statTotal": "Total",
+  "statAverage": "Moyenne"
 }
