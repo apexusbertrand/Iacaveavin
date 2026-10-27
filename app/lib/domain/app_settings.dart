@@ -29,6 +29,7 @@ class AppSettings {
     this.fluxUrl = '',
     this.installationId,
     this.lastAutoPriceRefresh,
+    this.alertSeenMonth,
   });
 
   /// Code ISO 4217.
@@ -53,6 +54,9 @@ class AppSettings {
   final bool compactView;
   final DateTime? lastAutoBackup;
   final DateTime? lastExternalBackup;
+
+  /// CMP-02 : mois (AAAA-MM) dont l'alerte a été vue et fermée.
+  final String? alertSeenMonth;
 
   /// Premier lancement, point de départ du rappel d'export (SAV-03).
   final DateTime? firstLaunch;
@@ -92,6 +96,7 @@ class AppSettings {
     bool? compactView,
     DateTime? lastAutoBackup,
     DateTime? lastExternalBackup,
+    String? alertSeenMonth,
     DateTime? firstLaunch,
     bool? photoConsent,
     String? fakeScenario,
@@ -117,6 +122,7 @@ class AppSettings {
     compactView: compactView ?? this.compactView,
     lastAutoBackup: lastAutoBackup ?? this.lastAutoBackup,
     lastExternalBackup: lastExternalBackup ?? this.lastExternalBackup,
+    alertSeenMonth: alertSeenMonth ?? this.alertSeenMonth,
     firstLaunch: firstLaunch ?? this.firstLaunch,
     photoConsent: photoConsent ?? this.photoConsent,
     fakeScenario: fakeScenario ?? this.fakeScenario,
@@ -155,6 +161,7 @@ class AppSettings {
     'compactView': compactView,
     'lastAutoBackup': lastAutoBackup?.toIso8601String(),
     'lastExternalBackup': lastExternalBackup?.toIso8601String(),
+    'alertSeenMonth': alertSeenMonth,
     'firstLaunch': firstLaunch?.toIso8601String(),
     'photoConsent': photoConsent,
     'fakeScenario': fakeScenario,
@@ -183,6 +190,7 @@ class AppSettings {
     compactView: json['compactView'] == true,
     lastAutoBackup: DateTime.tryParse('${json['lastAutoBackup']}'),
     lastExternalBackup: DateTime.tryParse('${json['lastExternalBackup']}'),
+    alertSeenMonth: json['alertSeenMonth'] as String?,
     firstLaunch: DateTime.tryParse('${json['firstLaunch']}'),
     photoConsent: json['photoConsent'] == true,
     fakeScenario: json['fakeScenario'] as String? ?? 'done',

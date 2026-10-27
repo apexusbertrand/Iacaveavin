@@ -6,10 +6,10 @@ import '../l10n/generated/app_localizations.dart';
 /// [lot] : lot qui livre l'écran ; null quand il est déjà disponible.
 enum AppDestination {
   myWines('/', Icons.wine_bar_outlined, null),
-  toDrink('/a-boire', Icons.event_available_outlined, '4'),
+  toDrink('/a-boire', Icons.event_available_outlined, null),
   locations('/emplacements', Icons.grid_view_outlined, null),
   statistics('/statistiques', Icons.pie_chart_outline, null),
-  shoppingList('/liste-achats', Icons.shopping_cart_outlined, '4'),
+  shoppingList('/liste-achats', Icons.shopping_cart_outlined, null),
   importExport('/import-export', Icons.import_export, null),
   backup('/sauvegarde', Icons.backup_outlined, null),
   settings('/parametres', Icons.settings_outlined, null),

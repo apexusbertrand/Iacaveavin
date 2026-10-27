@@ -284,6 +284,7 @@ class LocationLot {
     required this.locationId,
     required this.ownerName,
     required this.bottles,
+    this.ownerId = '',
     this.positions,
   });
 
@@ -292,7 +293,10 @@ class LocationLot {
   final String wineName;
   final String vintage;
   final String colorCode;
-  final String locationId;
+
+  /// Nul pour un lot sans emplacement (seulement via [stockedLots]).
+  final String? locationId;
+  final String ownerId;
   final String ownerName;
   final int bottles;
   final String? positions;

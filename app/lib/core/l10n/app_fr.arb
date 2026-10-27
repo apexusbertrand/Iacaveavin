@@ -1634,5 +1634,127 @@
   "statExportPdf": "PDF",
   "statExportCsv": "Tableau CSV",
   "statTotal": "Total",
-  "statAverage": "Moyenne"
+  "statAverage": "Moyenne",
+  "toDrinkTab": "À boire",
+  "tastingsTab": "Dégustations",
+  "toDrinkEmpty": "Aucun vin dans sa fenêtre de garde en ce moment.",
+  "toDrinkHint": "Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.",
+  "dishPick": "Pour quel plat ?",
+  "dishAny": "Tous les plats",
+  "dishNoWine": "Aucun vin à boire ne s'accorde avec ce plat.",
+  "dishCount": "{n, plural, =1{1 vin pour ce plat} other{{n} vins pour ce plat}}",
+  "@dishCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tastingsEmpty": "Aucune dégustation notée. Elles sont proposées à chaque ouverture de bouteille.",
+  "alertTitle": "Ce mois-ci dans la cave",
+  "alertBody": "{peak, plural, =0{} =1{1 vin entre en apogée. } other{{peak} vins entrent en apogée. }}{ending, plural, =0{} =1{1 vin arrive en fin de fenêtre.} other{{ending} vins arrivent en fin de fenêtre.}}",
+  "@alertBody": {
+    "placeholders": {
+      "peak": {
+        "type": "int"
+      },
+      "ending": {
+        "type": "int"
+      }
+    }
+  },
+  "alertSee": "Voir les vins",
+  "alertDismiss": "Fermer",
+  "alertWinesTitle": "Apogée et fin de fenêtre",
+  "shoppingEmpty": "Rien à acheter. Un vin qui n'a plus de bouteille vous est proposé ici, et vous pouvez noter un vin repéré ailleurs.",
+  "shoppingAdd": "Ajouter un vin repéré",
+  "shoppingLabel": "Vin",
+  "shoppingQuantity": "Quantité souhaitée",
+  "shoppingNote": "Note (où l'acheter, prix vu)",
+  "shoppingBought": "Acheté",
+  "shoppingDelete": "Retirer de la liste",
+  "shoppingAdded": "Ajouté à la liste d'achats",
+  "shoppingProposeTitle": "Plus aucune bouteille",
+  "shoppingProposeBody": "{wine} : l'ajouter à la liste d'achats ?",
+  "@shoppingProposeBody": {
+    "placeholders": {
+      "wine": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingProposeAction": "Ajouter à la liste",
+  "shoppingQuantityValue": "{n, plural, =1{1 bouteille} other{{n} bouteilles}}",
+  "@shoppingQuantityValue": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "shareImage": "Partager en image",
+  "sharePreviewTitle": "Partager la fiche",
+  "shareAsImage": "Image",
+  "shareAsPdf": "PDF",
+  "favoriteOn": "Ajouter aux favoris",
+  "favoriteOff": "Retirer des favoris",
+  "gridTitle": "Vue casier",
+  "gridHint": "Un tap sur une case occupée ouvre la fiche. Un appui long sur une case vide y range une bouteille.",
+  "gridCell": "Case {cell}",
+  "@gridCell": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      }
+    }
+  },
+  "gridCellWine": "Case {cell} : {wine}",
+  "@gridCellWine": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      },
+      "wine": {
+        "type": "String"
+      }
+    }
+  },
+  "gridPlaceTitle": "Ranger en {cell}",
+  "@gridPlaceTitle": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      }
+    }
+  },
+  "gridHere": "Déjà dans ce casier, sans case",
+  "gridElsewhere": "Venant d'un autre emplacement",
+  "gridNoCandidate": "Aucune bouteille à ranger.",
+  "gridPlaced": "Bouteille rangée en {cell}",
+  "@gridPlaced": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      }
+    }
+  },
+  "gridUnplaced": "{n, plural, =1{1 bouteille sans case} other{{n} bouteilles sans case}}",
+  "@gridUnplaced": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tastingScoreValue": "{score} / {scale}",
+  "@tastingScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "scale": {
+        "type": "int"
+      }
+    }
+  }
 }

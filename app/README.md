@@ -36,7 +36,7 @@ Le code généré (drift, l10n, jetons) est commité : un `git clone` puis `flut
 | `lib/data/demo/` | jeu de démonstration CMP-07 (générateur déterministe, dépôt drift) |
 | `lib/data/referentiels/` | chargement des listes au premier lancement |
 | `lib/domain/` | entités et interfaces sans Flutter ni réseau |
-| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `placeholder`, `add` (photo, identification, validation), `photos` (galerie, recadrage, bibliothèque), `import_export` (Excel et catalogue PDF), `statistics` |
+| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `to_drink` (À boire, alerte du mois, dégustations), `shopping` (liste d'achats), `add` (photo, identification, validation), `photos` (galerie, recadrage, bibliothèque), `import_export` (Excel et catalogue PDF), `statistics` |
 | `assets/referentiels/` | pays, régions, sous-régions, appellations, cépages, accords, listes du dictionnaire |
 | `lib/data/enrichment/` | contrat n8n : validation, `EnrichmentGateway` et `FakeGateway`, file d'attente, application des propositions |
 | `lib/data/files/` | photos : compression, contrôle qualité, miniatures, recadrage, répertoire privé ; classeur xlsx (lecture et écriture) |

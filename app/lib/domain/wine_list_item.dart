@@ -46,6 +46,7 @@ class WineListItem {
     this.gardePeak,
     this.gardeEnd,
     this.grapes = const [],
+    this.pairings = const [],
     this.favorite = false,
     this.searchText = '',
     this.primaryLotId,
@@ -106,6 +107,9 @@ class WineListItem {
 
   /// Libellés des cépages.
   final List<String> grapes;
+
+  /// Codes de la liste accord_mets (CMP-04).
+  final List<String> pairings;
   final bool favorite;
 
   /// Texte de recherche déjà normalisé (LST-06).

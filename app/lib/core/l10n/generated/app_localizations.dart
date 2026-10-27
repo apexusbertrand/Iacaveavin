@@ -4761,6 +4761,264 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Moyenne'**
   String get statAverage;
+
+  /// No description provided for @toDrinkTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire'**
+  String get toDrinkTab;
+
+  /// No description provided for @tastingsTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dégustations'**
+  String get tastingsTab;
+
+  /// No description provided for @toDrinkEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun vin dans sa fenêtre de garde en ce moment.'**
+  String get toDrinkEmpty;
+
+  /// No description provided for @toDrinkHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.'**
+  String get toDrinkHint;
+
+  /// No description provided for @dishPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour quel plat ?'**
+  String get dishPick;
+
+  /// No description provided for @dishAny.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les plats'**
+  String get dishAny;
+
+  /// No description provided for @dishNoWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun vin à boire ne s\'accorde avec ce plat.'**
+  String get dishNoWine;
+
+  /// No description provided for @dishCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 vin pour ce plat} other{{n} vins pour ce plat}}'**
+  String dishCount(int n);
+
+  /// No description provided for @tastingsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune dégustation notée. Elles sont proposées à chaque ouverture de bouteille.'**
+  String get tastingsEmpty;
+
+  /// No description provided for @alertTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci dans la cave'**
+  String get alertTitle;
+
+  /// No description provided for @alertBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{peak, plural, =0{} =1{1 vin entre en apogée. } other{{peak} vins entrent en apogée. }}{ending, plural, =0{} =1{1 vin arrive en fin de fenêtre.} other{{ending} vins arrivent en fin de fenêtre.}}'**
+  String alertBody(int peak, int ending);
+
+  /// No description provided for @alertSee.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les vins'**
+  String get alertSee;
+
+  /// No description provided for @alertDismiss.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get alertDismiss;
+
+  /// No description provided for @alertWinesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apogée et fin de fenêtre'**
+  String get alertWinesTitle;
+
+  /// No description provided for @shoppingEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien à acheter. Un vin qui n\'a plus de bouteille vous est proposé ici, et vous pouvez noter un vin repéré ailleurs.'**
+  String get shoppingEmpty;
+
+  /// No description provided for @shoppingAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un vin repéré'**
+  String get shoppingAdd;
+
+  /// No description provided for @shoppingLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vin'**
+  String get shoppingLabel;
+
+  /// No description provided for @shoppingQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quantité souhaitée'**
+  String get shoppingQuantity;
+
+  /// No description provided for @shoppingNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note (où l\'acheter, prix vu)'**
+  String get shoppingNote;
+
+  /// No description provided for @shoppingBought.
+  ///
+  /// In fr, this message translates to:
+  /// **'Acheté'**
+  String get shoppingBought;
+
+  /// No description provided for @shoppingDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer de la liste'**
+  String get shoppingDelete;
+
+  /// No description provided for @shoppingAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté à la liste d\'achats'**
+  String get shoppingAdded;
+
+  /// No description provided for @shoppingProposeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus aucune bouteille'**
+  String get shoppingProposeTitle;
+
+  /// No description provided for @shoppingProposeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{wine} : l\'ajouter à la liste d\'achats ?'**
+  String shoppingProposeBody(String wine);
+
+  /// No description provided for @shoppingProposeAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter à la liste'**
+  String get shoppingProposeAction;
+
+  /// No description provided for @shoppingQuantityValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 bouteille} other{{n} bouteilles}}'**
+  String shoppingQuantityValue(int n);
+
+  /// No description provided for @shareImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager en image'**
+  String get shareImage;
+
+  /// No description provided for @sharePreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager la fiche'**
+  String get sharePreviewTitle;
+
+  /// No description provided for @shareAsImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image'**
+  String get shareAsImage;
+
+  /// No description provided for @shareAsPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'PDF'**
+  String get shareAsPdf;
+
+  /// No description provided for @favoriteOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter aux favoris'**
+  String get favoriteOn;
+
+  /// No description provided for @favoriteOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des favoris'**
+  String get favoriteOff;
+
+  /// No description provided for @gridTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue casier'**
+  String get gridTitle;
+
+  /// No description provided for @gridHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un tap sur une case occupée ouvre la fiche. Un appui long sur une case vide y range une bouteille.'**
+  String get gridHint;
+
+  /// No description provided for @gridCell.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case {cell}'**
+  String gridCell(String cell);
+
+  /// No description provided for @gridCellWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case {cell} : {wine}'**
+  String gridCellWine(String cell, String wine);
+
+  /// No description provided for @gridPlaceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ranger en {cell}'**
+  String gridPlaceTitle(String cell);
+
+  /// No description provided for @gridHere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà dans ce casier, sans case'**
+  String get gridHere;
+
+  /// No description provided for @gridElsewhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Venant d\'un autre emplacement'**
+  String get gridElsewhere;
+
+  /// No description provided for @gridNoCandidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune bouteille à ranger.'**
+  String get gridNoCandidate;
+
+  /// No description provided for @gridPlaced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteille rangée en {cell}'**
+  String gridPlaced(String cell);
+
+  /// No description provided for @gridUnplaced.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 bouteille sans case} other{{n} bouteilles sans case}}'**
+  String gridUnplaced(int n);
+
+  /// No description provided for @tastingScoreValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{score} / {scale}'**
+  String tastingScoreValue(String score, int scale);
 }
 
 class _AppLocalizationsDelegate

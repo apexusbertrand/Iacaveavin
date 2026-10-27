@@ -145,10 +145,18 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 4 Confort
 
-- Statut : non démarré
-- Exigences : CMP-01 à CMP-06, EMP-03
+- Statut : réalisé, en attente de recette (branche `lot-4-confort`, issue de `lot-3-restitution` sans attendre la recette du lot 3, demande de Bertrand du 2026-10-27)
+- Exigences :
+  - [x] CMP-01 : écran À boire, vins en stock dans leur fenêtre, à boire vite en tête puis fin de fenêtre la plus proche
+  - [x] CMP-02 : alerte du mois dans l'app (apogée cette année, fin de fenêtre), sur la liste et sur À boire, soumise au réglage Notifications (T97)
+  - [x] CMP-03 : liste d'achats (entité liste_achat, schéma v4), proposée quand la dernière bouteille d'une fiche est ouverte, vins repérés ailleurs, coché acheté, retrait logique
+  - [x] CMP-04 : accords inversés, choix d'un plat parmi ceux des vins à boire
+  - [x] CMP-05 : historique des dégustations, onglet de l'écran À boire (T98)
+  - [x] CMP-06 : étoile Favori dans la barre de la fiche, partage de la fiche en image (PNG) ou en PDF depuis un aperçu
+  - [x] EMP-03 : vue casier sur l'emplacement qui a une grille, cases à la couleur du vin, tap vers la fiche, appui long sur une case vide pour y ranger une bouteille (T100)
 - Points d'étape :
-- Mesures :
+  - 2026-10-27 fait : tout le périmètre du lot, testé (domaine, dépôt, écrans, migration v3 vers v4). Écran provisoire « bientôt disponible » retiré, toutes les entrées du menu sont livrées. Corrigé au passage : le libellé de garde débordait de la carte de vin dans une colonne étroite. En cours : rien. Bloquant : recette sur téléphone. Prochaine étape : APK de la branche, recette de Bertrand.
+- Mesures : aucune cible chiffrée propre au lot ; listes paresseuses (ListView.builder), calculs en fonctions pures sur la liste déjà chargée.
 - Recette Bertrand :
 
 ## Lot 5 Recette élargie

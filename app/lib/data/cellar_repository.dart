@@ -210,6 +210,9 @@ class CellarRepository {
           gardePeak: f.gardeApogee,
           gardeEnd: f.gardeFin,
           grapes: grapes.map((g) => g.code).toList(),
+          pairings: f.accords == null || f.accords!.isEmpty
+              ? const []
+              : (jsonDecode(f.accords!) as List).cast<String>(),
           favorite: f.favori ?? false,
           primaryLotId: primaryLot,
           thumbPath: thumbs[f.id],
@@ -423,11 +426,20 @@ class CellarRepository {
   /// Lots en stock rangés dans [locationIds], triés par nom de vin.
   Future<List<LocationLot>> lotsIn(Set<String> locationIds) async {
     if (locationIds.isEmpty) return const [];
+    return _locationLots(locationIds);
+  }
+
+  /// EMP-03 : tous les lots en stock de la cave, rangés ou non.
+  Future<List<LocationLot>> stockedLots() => _locationLots(null);
+
+  Future<List<LocationLot>> _locationLots(Set<String>? locationIds) async {
     final ctx = await _context();
     final stocks = await _lotStocks();
     final lots =
         await (_db.select(_db.stockLots)..where(
-              (l) => l.emplacementId.isIn(locationIds) & l.deletedAt.isNull(),
+              (l) => locationIds == null
+                  ? l.deletedAt.isNull()
+                  : l.emplacementId.isIn(locationIds) & l.deletedAt.isNull(),
             ))
             .get();
     final items = {for (final w in await wineItems()) w.id: w};
@@ -443,7 +455,8 @@ class CellarRepository {
           wineName: w.displayName,
           vintage: w.vintage,
           colorCode: w.colorCode,
-          locationId: l.emplacementId!,
+          locationId: l.emplacementId,
+          ownerId: l.proprietaireId,
           ownerName: ctx.owners[l.proprietaireId]?.nom ?? '',
           bottles: q,
           positions: l.positions,
@@ -462,6 +475,16 @@ class CellarRepository {
       yield await lotsIn(locationIds);
     }
   }
+
+  /// EMP-03 : range une bouteille d'un lot dans une case. Les positions ne
+  /// touchent pas au stock : aucun mouvement.
+  Future<void> setLotPositions(String lotId, String? positions) =>
+      (_db.update(_db.stockLots)..where((l) => l.id.equals(lotId))).write(
+        StockLotsCompanion(
+          updatedAt: Value(_now),
+          positions: Value(_blank(positions)),
+        ),
+      );
 
   // ---------------------------------------------------------- Écritures
 

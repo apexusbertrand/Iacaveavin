@@ -148,6 +148,17 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T95 | Statistiques au grain du lot (propriétaire, emplacement, prix et date d'achat sont portés par le lot). Ouvertures sur 12 mois glissants, mois en cours compris. Mois de stock restant = stock / (ouvertures des 12 mois / 12). Évolution de la valeur marché = stock actuel × dernier relevé connu à la fin de chaque mois | aucune donnée historique de stock n'est gardée à part ; approximation affichée comme telle dans le titre du graphique |
 | T96 | STA-04 : un tap ouvre un écran avec exactement les vins de la part ; dans l'onglet Régions, le tap descend d'un niveau et la liste s'ouvre à l'appellation ou par le bouton « Voir les vins » | le zoom est demandé par STA-01 sur le même geste |
 
+## Décisions techniques proposées au lot 4 (2026-10-27), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T97 | CMP-02 : l'alerte mensuelle est un bandeau dans l'app, au premier lancement du mois, sur la liste et sur À boire. « Fermer » la masque jusqu'au mois suivant (réglage alertSeenMonth). Le réglage Notifications la coupe. Pas de notification système | choix de Bertrand du 2026-10-27 ; une notification système demande un plugin et une permission de plus |
+| T98 | CMP-05 : l'historique des dégustations est le second onglet de l'écran À boire, toutes fiches confondues | choix de Bertrand du 2026-10-27 ; le menu reste à 10 entrées |
+| T99 | CMP-03 : nouvelle entité liste_achat (fiche_id facultatif, libelle, quantite, note, achete), schéma v4. Un vin de la cave n'est proposé qu'une fois tant qu'il n'est pas acheté. La liste n'entre ni dans l'Excel ni dans le PDF | un vin repéré ailleurs n'a pas de fiche ; XLS-01 fixe les 5 onglets |
+| T100 | EMP-03 : un appui long sur une case vide propose d'abord les lots de ce casier qui ont des bouteilles sans case (la case s'ajoute aux positions, sans mouvement), puis les lots en stock ailleurs, déplacés d'une bouteille par transfert (STK-05, deux mouvements liés). La grille ne s'affiche que si lignes et colonnes sont renseignées | choix de Bertrand du 2026-10-27 ; une position n'est pas du stock, un changement d'emplacement passe par un mouvement (règle 4) |
+| T101 | CMP-06 : l'image partagée est une carte de la fiche (photo, domaine, cuvée, millésime, origine, couleur, statut de garde, fenêtre, 3 notes critiques au plus) rendue en PNG à 3 fois la résolution de l'écran | pas de dépendance ajoutée ; même rendu que l'aperçu |
+| T102 | Les accords d'une fiche (accords, codes de la liste accord_mets) sont chargés avec la liste des vins pour CMP-04 | les accords inversés se calculent sur la liste déjà en mémoire, sans requête de plus |
+
 ## À compléter
 
 | Id | Sujet | Quand |

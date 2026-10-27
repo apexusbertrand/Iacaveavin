@@ -22,6 +22,7 @@ import 'pdf_actions.dart';
 import 'price_actions.dart';
 import 'price_chart.dart';
 import 'provenance_sheet.dart';
+import 'share_sheet.dart';
 import 'stock_dialogs.dart';
 
 final wineDetailProvider = StreamProvider.family<WineDetail?, String>((
@@ -94,6 +95,16 @@ class _Detail extends ConsumerWidget {
           ),
           actions: [
             IconButton(
+              key: const ValueKey('favorite-toggle'),
+              tooltip: wine.draft.favorite ? l.favoriteOff : l.favoriteOn,
+              isSelected: wine.draft.favorite,
+              icon: const Icon(Icons.star_border),
+              selectedIcon: const Icon(Icons.star),
+              onPressed: () => ref
+                  .read(cellarRepositoryProvider)
+                  .setFavorite(wine.id, !wine.draft.favorite),
+            ),
+            IconButton(
               tooltip: l.edit,
               icon: const Icon(Icons.edit_outlined),
               onPressed: () => context.push('/fiche/${wine.id}/modifier'),
@@ -102,7 +113,6 @@ class _Detail extends ConsumerWidget {
               key: const ValueKey('wine-menu'),
               onSelected: (v) => _menu(context, ref, v),
               itemBuilder: (_) => [
-                PopupMenuItem(value: 'favorite', child: Text(l.fieldFavorite)),
                 PopupMenuItem(value: 'restock', child: Text(l.restock)),
                 if (wine.lots.isNotEmpty) ...[
                   PopupMenuItem(value: 'adjust', child: Text(l.adjustStock)),
@@ -114,6 +124,7 @@ class _Detail extends ConsumerWidget {
                 ),
                 PopupMenuItem(value: 'reenrich', child: Text(l.reEnrich)),
                 PopupMenuItem(value: 'pdf', child: Text(l.winePdf)),
+                PopupMenuItem(value: 'share', child: Text(l.shareImage)),
                 PopupMenuItem(value: 'delete', child: Text(l.delete)),
               ],
             ),
@@ -154,10 +165,6 @@ class _Detail extends ConsumerWidget {
   Future<void> _menu(BuildContext context, WidgetRef ref, String action) async {
     final l = AppLocalizations.of(context);
     switch (action) {
-      case 'favorite':
-        await ref
-            .read(cellarRepositoryProvider)
-            .setFavorite(wine.id, !wine.draft.favorite);
       case 'restock':
         await addLotDialog(context, ref, wine);
       case 'adjust':
@@ -170,6 +177,8 @@ class _Detail extends ConsumerWidget {
         await reEnrich(context, ref, wine);
       case 'pdf':
         await shareWinePdf(context, ref, wine.id);
+      case 'share':
+        await showShareSheet(context, ref, wine);
       case 'delete':
         final ok = await confirm(
           context,

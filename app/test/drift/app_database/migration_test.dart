@@ -62,7 +62,7 @@ void main() {
 
     final db = AppDatabase(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 3);
+    await verifier.migrateAndValidate(db, 4);
     final items = await CellarRepository(db).wineItems();
     expect(items, hasLength(200));
     final stock = items.fold<int>(0, (s, w) => s + w.bottles);
@@ -117,6 +117,14 @@ void main() {
     expect(photo.cadre, isNull);
   });
 
+  test('NFR-05 CMP-03 migration v3 vers v4 : liste d\'achats créée', () async {
+    final connection = await verifier.startAt(3);
+    final db = AppDatabase(connection);
+    addTearDown(db.close);
+    await verifier.migrateAndValidate(db, 4);
+    expect(await db.select(db.shoppingItems).get(), isEmpty);
+  });
+
   test('NFR-05 la version de schéma courante a son instantané figé', () {
     final db = AppDatabase(
       DatabaseConnection(
@@ -126,6 +134,6 @@ void main() {
     );
     addTearDown(db.close);
     expect(GeneratedHelper.versions, contains(db.schemaVersion));
-    expect(db.schemaVersion, 3);
+    expect(db.schemaVersion, 4);
   });
 }

@@ -293,3 +293,12 @@ entites:
       - {cle: dimension_2, libelle: "Seconde dimension", type: texte}
       - {cle: filtres, libelle: "Filtres", type: json}
       - {cle: graphique, libelle: "Graphique", type: texte, oblig: true}
+
+  liste_achat:
+    role: "vin à racheter (proposé quand une fiche tombe à 0 bouteille) ou repéré ailleurs (CMP-03)"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, regle: "renseignée pour un vin de la cave à racheter, vide pour un vin repéré ailleurs"}
+      - {cle: libelle, libelle: "Vin", type: texte, oblig: true}
+      - {cle: quantite, libelle: "Quantité souhaitée", type: entier}
+      - {cle: note, libelle: "Note", type: texte, regle: "où l'acheter, prix vu, occasion"}
+      - {cle: achete, libelle: "Acheté", type: booleen, oblig: true}

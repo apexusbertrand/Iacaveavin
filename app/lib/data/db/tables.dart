@@ -311,3 +311,16 @@ class SavedStatViews extends Table with TechnicalColumns, CellarScoped {
   TextColumn get filtres => text().nullable()();
   TextColumn get graphique => text()();
 }
+
+/// CMP-03 : liste d'achats.
+@DataClassName('ShoppingItem')
+class ShoppingItems extends Table with TechnicalColumns, CellarScoped {
+  @override
+  String get tableName => 'liste_achat';
+
+  TextColumn get ficheId => text().nullable().references(Wines, #id)();
+  TextColumn get libelle => text()();
+  IntColumn get quantite => integer().nullable()();
+  TextColumn get note => text().nullable()();
+  BoolColumn get achete => boolean()();
+}

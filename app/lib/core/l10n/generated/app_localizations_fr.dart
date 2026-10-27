@@ -2825,4 +2825,189 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get statAverage => 'Moyenne';
+
+  @override
+  String get toDrinkTab => 'À boire';
+
+  @override
+  String get tastingsTab => 'Dégustations';
+
+  @override
+  String get toDrinkEmpty => 'Aucun vin dans sa fenêtre de garde en ce moment.';
+
+  @override
+  String get toDrinkHint =>
+      'Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.';
+
+  @override
+  String get dishPick => 'Pour quel plat ?';
+
+  @override
+  String get dishAny => 'Tous les plats';
+
+  @override
+  String get dishNoWine => 'Aucun vin à boire ne s\'accorde avec ce plat.';
+
+  @override
+  String dishCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n vins pour ce plat',
+      one: '1 vin pour ce plat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tastingsEmpty =>
+      'Aucune dégustation notée. Elles sont proposées à chaque ouverture de bouteille.';
+
+  @override
+  String get alertTitle => 'Ce mois-ci dans la cave';
+
+  @override
+  String alertBody(int peak, int ending) {
+    String _temp0 = intl.Intl.pluralLogic(
+      peak,
+      locale: localeName,
+      other: '$peak vins entrent en apogée. ',
+      one: '1 vin entre en apogée. ',
+      zero: '',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      ending,
+      locale: localeName,
+      other: '$ending vins arrivent en fin de fenêtre.',
+      one: '1 vin arrive en fin de fenêtre.',
+      zero: '',
+    );
+    return '$_temp0$_temp1';
+  }
+
+  @override
+  String get alertSee => 'Voir les vins';
+
+  @override
+  String get alertDismiss => 'Fermer';
+
+  @override
+  String get alertWinesTitle => 'Apogée et fin de fenêtre';
+
+  @override
+  String get shoppingEmpty =>
+      'Rien à acheter. Un vin qui n\'a plus de bouteille vous est proposé ici, et vous pouvez noter un vin repéré ailleurs.';
+
+  @override
+  String get shoppingAdd => 'Ajouter un vin repéré';
+
+  @override
+  String get shoppingLabel => 'Vin';
+
+  @override
+  String get shoppingQuantity => 'Quantité souhaitée';
+
+  @override
+  String get shoppingNote => 'Note (où l\'acheter, prix vu)';
+
+  @override
+  String get shoppingBought => 'Acheté';
+
+  @override
+  String get shoppingDelete => 'Retirer de la liste';
+
+  @override
+  String get shoppingAdded => 'Ajouté à la liste d\'achats';
+
+  @override
+  String get shoppingProposeTitle => 'Plus aucune bouteille';
+
+  @override
+  String shoppingProposeBody(String wine) {
+    return '$wine : l\'ajouter à la liste d\'achats ?';
+  }
+
+  @override
+  String get shoppingProposeAction => 'Ajouter à la liste';
+
+  @override
+  String shoppingQuantityValue(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n bouteilles',
+      one: '1 bouteille',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareImage => 'Partager en image';
+
+  @override
+  String get sharePreviewTitle => 'Partager la fiche';
+
+  @override
+  String get shareAsImage => 'Image';
+
+  @override
+  String get shareAsPdf => 'PDF';
+
+  @override
+  String get favoriteOn => 'Ajouter aux favoris';
+
+  @override
+  String get favoriteOff => 'Retirer des favoris';
+
+  @override
+  String get gridTitle => 'Vue casier';
+
+  @override
+  String get gridHint =>
+      'Un tap sur une case occupée ouvre la fiche. Un appui long sur une case vide y range une bouteille.';
+
+  @override
+  String gridCell(String cell) {
+    return 'Case $cell';
+  }
+
+  @override
+  String gridCellWine(String cell, String wine) {
+    return 'Case $cell : $wine';
+  }
+
+  @override
+  String gridPlaceTitle(String cell) {
+    return 'Ranger en $cell';
+  }
+
+  @override
+  String get gridHere => 'Déjà dans ce casier, sans case';
+
+  @override
+  String get gridElsewhere => 'Venant d\'un autre emplacement';
+
+  @override
+  String get gridNoCandidate => 'Aucune bouteille à ranger.';
+
+  @override
+  String gridPlaced(String cell) {
+    return 'Bouteille rangée en $cell';
+  }
+
+  @override
+  String gridUnplaced(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n bouteilles sans case',
+      one: '1 bouteille sans case',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tastingScoreValue(String score, int scale) {
+    return '$score / $scale';
+  }
 }

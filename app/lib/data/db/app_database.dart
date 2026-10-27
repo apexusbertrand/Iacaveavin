@@ -29,6 +29,7 @@ part 'app_database.g.dart';
     ListValues,
     Jobs,
     SavedStatViews,
+    ShoppingItems,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -38,7 +39,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase.open() => AppDatabase(driftDatabase(name: 'iacaveavin'));
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -53,6 +54,10 @@ class AppDatabase extends _$AppDatabase {
       from2To3: (m, schema) async {
         await m.addColumn(schema.photo, schema.photo.cheminOriginal);
         await m.addColumn(schema.photo, schema.photo.cadre);
+      },
+      // v4 (lot 4) : liste d'achats (CMP-03).
+      from3To4: (m, schema) async {
+        await m.createTable(schema.listeAchat);
       },
     ),
     beforeOpen: (details) async {

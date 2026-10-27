@@ -9,9 +9,10 @@ import '../../features/backup/backup_screen.dart';
 import '../../features/import_export/import_export_screen.dart';
 import '../../features/locations/locations_screen.dart';
 import '../../features/settings/reference_screens.dart';
-import '../../features/placeholder/placeholder_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/shopping/shopping_screen.dart';
 import '../../features/statistics/statistics_screen.dart';
+import '../../features/to_drink/to_drink_screen.dart';
 import '../../features/wine_detail/wine_detail_screen.dart';
 import '../../features/wine_edit/wine_edit_screen.dart';
 import '../../features/wine_list/wine_list_screen.dart';
@@ -106,5 +107,6 @@ Widget _screenFor(AppDestination d) => switch (d) {
   AppDestination.about => const AboutScreen(),
   AppDestination.importExport => const ImportExportScreen(),
   AppDestination.statistics => const StatisticsScreen(),
-  _ => PlaceholderScreen(destination: d),
+  AppDestination.toDrink => const ToDrinkScreen(),
+  AppDestination.shoppingList => const ShoppingScreen(),
 };

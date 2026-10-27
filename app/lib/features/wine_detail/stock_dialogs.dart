@@ -9,6 +9,7 @@ import '../../data/stock_service.dart';
 import '../../domain/stock_rules.dart';
 import '../../domain/wine_detail.dart';
 import '../../domain/wine_validation.dart';
+import '../to_drink/comfort_providers.dart';
 import '../wine_list/selection_actions.dart';
 
 /// Dernier lot utilisé par fiche, proposé en premier (STK-01).
@@ -161,6 +162,10 @@ Future<bool> openBottles(
         wine,
         movementId: action.movementIds.single,
       );
+    }
+    // CMP-03 : la dernière bouteille ouverte, proposer de racheter.
+    if (wine.bottles - count <= 0 && context.mounted) {
+      await proposeShopping(context, ref, wine);
     }
     return true;
   } catch (e) {
@@ -710,4 +715,34 @@ Future<void> tastingDialog(
           .showSnackBar(SnackBar(content: Text(l.tastingSaved)));
     }
   }
+}
+
+/// CMP-03 : une fiche tombe à 0 bouteille, l'app propose de la racheter.
+Future<void> proposeShopping(
+  BuildContext context,
+  WidgetRef ref,
+  WineDetail wine,
+) async {
+  final l = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final name = [
+    wine.draft.producer,
+    wine.draft.cuvee,
+    wine.draft.vintage == 'NM' ? l.nonVintage : wine.draft.vintage,
+  ].whereType<String>().where((s) => s.isNotEmpty).join(' · ');
+  final ok = await confirm(
+    context,
+    title: l.shoppingProposeTitle,
+    body: l.shoppingProposeBody(name),
+    action: l.shoppingProposeAction,
+  );
+  if (!ok) return;
+  await ref
+      .read(comfortRepositoryProvider)
+      .addShopping(
+        cellarId: await ref.read(bootstrapProvider.future),
+        label: name,
+        wineId: wine.id,
+      );
+  messenger.showSnackBar(SnackBar(content: Text(l.shoppingAdded)));
 }
