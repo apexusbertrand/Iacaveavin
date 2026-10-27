@@ -200,7 +200,9 @@
     },
     {
       "parameters": {
-        "jsCode": "// Cache des vins (docs/06, étape 3) : une entrée de moins de 180 jours\n// évite les recherches web. La lecture d'étiquette a déjà eu lieu.\nconst l = $('Lecture étiquette').first().json;\nconst ligne = $input.all().map((i) => i.json).find((r) => r.cle && r.cle === l.cle) || null;\nconst age = ligne ? Date.now() - Date.parse(ligne.date_maj || ligne.updatedAt || 0) : Infinity;\nconst frais = l.avec_cle && ligne && age < 180 * 86400000;\nreturn [{ json: { ...l, cache: !!frais, cache_ligne: ligne ? { id: ligne.id, utilisations: ligne.utilisations || 0, resultat: ligne.resultat, date_maj: ligne.date_maj } : null } }];\n"
+        "jsCode": "// Cache des vins (docs/06, étape 3) : une entrée de moins de 180 jours\n// évite les recherches web. La lecture d'étiquette a déjà eu lieu. Une entrée\n// sans source web (recherche en panne ce jour-là) est ignorée.\nconst l = $('Lecture étiquette').first().json;\nconst ligne = $input.all().map((i) => i.json).find((r) => r.cle && r.cle === l.cle) || null;\nconst age = ligne ? Date.now() - Date.parse(ligne.date_maj || ligne.updatedAt || 0) : Infinity;\nlet source = false;\ntry {\n  const r = ligne && JSON.parse(ligne.resultat);\n  source = !!r && Array.isArray(r.sources_consultees) && r.sources_consultees.length > 0;\n} catch (e) {\n  // Entrée illisible : relance de l'agent.\n}\nconst frais = l.avec_cle && ligne && age < 180 * 86400000 && source;\nreturn [{ json: { ...l, cache: !!frais, cache_ligne: ligne ? { id: ligne.id, utilisations: ligne.utilisations || 0, resultat: ligne.resultat, date_maj: ligne.date_maj } : null } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
       },
       "id": "162c1a25-aa8b-4797-a5a3-e80f66de9619",
       "name": "Décision cache",
@@ -1481,6 +1483,6 @@
   "meta": {
     "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
     "idN8n": "5z197yDZlge7nrpM",
-    "versionId": "994615c5-60f5-41b3-b1e2-9c400cb33aa0"
+    "versionId": "cc7e0c0e-ae4f-49f2-b221-678f6957002b"
   }
 }

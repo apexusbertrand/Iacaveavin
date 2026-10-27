@@ -102,6 +102,20 @@ test('NFR-07 parcours des nœuds du sous-flux avec données simulées', async ()
   assert.equal(JSON.parse(e.json.erreur).code, 'interne');
 });
 
+test('AJO-13 cache des vins : une entrée sans source web n\'est pas resservie', async () => {
+  const [l] = await executer('lecture', {}, lectureModele);
+  const r = JSON.parse(JSON.stringify(termine.resultat));
+  const ligne = (res) => ({ cle: l.json.cle, resultat: JSON.stringify(res), utilisations: 1, date_maj: new Date().toISOString().slice(0, 10), id: 1 });
+  const [bon] = await executer('decision_cache', { 'Lecture étiquette': l.json }, ligne(r));
+  assert.equal(bon.json.cache, true, 'entrée sourcée et fraîche : resservie');
+  // Entrée écrite le 2026-10-26, recherche web en panne (erreur d'authentification).
+  const [panne] = await executer('decision_cache', { 'Lecture étiquette': l.json }, ligne({ ...r, sources_consultees: [] }));
+  assert.equal(panne.json.cache, false, 'entrée sans source : agent relancé');
+  const [illisible] = await executer('decision_cache', { 'Lecture étiquette': l.json }, { ...ligne(r), resultat: '{' });
+  assert.equal(illisible.json.cache, false);
+
+});
+
 test('NFR-06 nœud santé : autotest de signature dans le bac à sable', async () => {
   const [s] = await executer('sante', { 'Config santé': config }, {});
   assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.1', ok: true });

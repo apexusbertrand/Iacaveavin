@@ -883,7 +883,7 @@
   "continueToEnrichment": "Lancer l'identification",
   "needOnePhoto": "Ajoutez au moins une photo de l'étiquette.",
   "consentTitle": "Envoi des photos",
-  "consentBody": "Pour identifier le vin, les photos d'étiquettes sont envoyées au flux d'enrichissement d'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n'est envoyée.",
+  "consentBody": "Pour identifier le vin, les photos d'étiquettes sont envoyées au flux d'enrichissement sur le serveur, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n'est envoyée.",
   "consentAccept": "J'accepte",
   "consentRefuse": "Refuser",
   "consentRefused": "Photos gardées sur le téléphone, fiche à compléter à la main.",

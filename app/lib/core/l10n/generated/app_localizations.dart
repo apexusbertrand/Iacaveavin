@@ -2779,7 +2779,7 @@ abstract class AppLocalizations {
   /// No description provided for @consentBody.
   ///
   /// In fr, this message translates to:
-  /// **'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement d\'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.'**
+  /// **'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement sur le serveur, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.'**
   String get consentBody;
 
   /// No description provided for @consentAccept.

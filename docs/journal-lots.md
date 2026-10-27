@@ -136,6 +136,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - [x] STA-05 : favoris, export PNG, PDF et CSV
   - [x] STA-06 : calcul local, libellés en clair
 - Points d'étape :
+  - 2026-10-27 recette : texte du consentement corrigé (T104). Bug de recherche web : un résultat dégradé du 2026-10-26 était resservi par le cache ; le cache ignore désormais une entrée sans source web (T103), flux d'enrichissement republié.
   - 2026-10-27 fait : tout le périmètre du lot, testé (au moins un test par exigence, 26 nouveaux tests). Dépendances pdf, xml et fl_chart ; le paquet excel est écarté (T89). En cours : rien. Bloquant : recette sur téléphone. Prochaine étape : APK de la pull request, recette de Bertrand.
 - Mesures (poste de développement, à refaire sur téléphone pendant la recette) :
   - aller-retour Excel : 565 lignes (260 fiches et 305 lots), aucun écart, simulation et import en 2,6 s ;

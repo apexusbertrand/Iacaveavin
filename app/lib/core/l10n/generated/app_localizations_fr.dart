@@ -1624,7 +1624,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get consentBody =>
-      'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement d\'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.';
+      'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement sur le serveur, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.';
 
   @override
   String get consentAccept => 'J\'accepte';

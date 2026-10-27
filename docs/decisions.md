@@ -159,6 +159,13 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T101 | CMP-06 : l'image partagée est une carte de la fiche (photo, domaine, cuvée, millésime, origine, couleur, statut de garde, fenêtre, 3 notes critiques au plus) rendue en PNG à 3 fois la résolution de l'écran | pas de dépendance ajoutée ; même rendu que l'aperçu |
 | T102 | Les accords d'une fiche (accords, codes de la liste accord_mets) sont chargés avec la liste des vins pour CMP-04 | les accords inversés se calculent sur la liste déjà en mémoire, sans requête de plus |
 
+## Retours de recette du 2026-10-27, à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T103 | Le cache des vins ne ressert plus une entrée sans source web consultée : l'agent est relancé avec la recherche web, et le résultat sourcé remplace l'entrée (écriture par clé). Nœud « Décision cache » du flux IA_CAVE_Enrichissement republié le 2026-10-27 | bug 1 : Mas Onésime Insoumis 2022 affichait « recherche web indisponible ». Le résultat venait du cache, écrit le 2026-10-26 à 10 h 09 avec l'ancienne configuration (Tavily sans clé, « erreur d'authentification des outils »), avant la publication de T85. La recherche web intégrée répond (essai du 2026-10-27 : 1 recherche, 10 résultats, cépages et accords trouvés) |
+| T104 | Le message de consentement dit « flux d'enrichissement sur le serveur » au lieu de « d'Apexus » | évolution 1 de la recette du 2026-10-27 |
+
 ## À compléter
 
 | Id | Sujet | Quand |
