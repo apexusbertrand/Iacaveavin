@@ -5,10 +5,14 @@
 /// règles du schéma.
 library;
 
+import 'dart:convert';
+
 import 'photo_frame.dart';
 
 /// 1.1 : cadre de l'étiquette par photo (`resultat.cadrages`, AJO-13).
-const contractVersion = '1.1';
+/// 1.2 : valeurs signalées fausses jointes à la requête (`signalements`,
+/// PRV-R4).
+const contractVersion = '1.2';
 
 enum JobStatus {
   pending('en_attente'),
@@ -423,6 +427,44 @@ class RequestPhoto {
   final String mime;
 }
 
+/// PRV-R4 : une valeur signalée fausse, telle qu'affichée.
+class ReportedValue {
+  const ReportedValue(this.field, this.value);
+
+  /// Nom du champ dans le contrat (`cepages`, `region`...).
+  final String field;
+  final String value;
+
+  /// Texte lisible d'une valeur de provenance (JSON enregistré à
+  /// l'enrichissement), 500 caractères au plus ; null si vide.
+  static String? textOf(String? json) {
+    if (json == null) return null;
+    Object? v;
+    try {
+      v = jsonDecode(json);
+    } on FormatException {
+      v = json;
+    }
+    String part(Object? x) => switch (x) {
+      {'cepage': final String c, 'pourcentage': final num p} => '$c ${_n(p)} %',
+      {'cepage': final String c} => c,
+      {'debut': final Object d, 'fin': final Object f} => '$d-$f',
+      final List<Object?> l =>
+        l.map(part).where((s) => s.isNotEmpty).join(', '),
+      null => '',
+      _ => '$x',
+    };
+    final t = part(v).trim();
+    if (t.isEmpty) return null;
+    return t.length > 500 ? t.substring(0, 500) : t;
+  }
+
+  static String _n(num p) => p == p.roundToDouble() ? '${p.toInt()}' : '$p';
+}
+
+/// 20 signalements au plus par requête (contrat 1.2).
+const maxReports = 20;
+
 /// POST /enrichissement (requete-enrichissement.schema.json).
 class EnrichmentRequest {
   const EnrichmentRequest({
@@ -435,12 +477,16 @@ class EnrichmentRequest {
     this.formatCl,
     this.freeText,
     this.lockedFields = const [],
+    this.reports = const [],
     this.includePrices = true,
   });
 
   final String requestId;
   final String? wineId;
   final List<RequestPhoto> photos;
+
+  /// PRV-R4 : valeurs signalées fausses sur cette fiche (contrat 1.2).
+  final List<ReportedValue> reports;
 
   /// AJO-10 : indice d'identification, jamais une clé.
   final String? ean;
@@ -477,6 +523,11 @@ class EnrichmentRequest {
       ],
       if (indices.isNotEmpty) 'indices': indices,
       'champs_verrouilles': lockedFields.toSet().toList(),
+      if (reports.isNotEmpty)
+        'signalements': [
+          for (final r in reports.take(maxReports))
+            {'champ': r.field, 'valeur': r.value},
+        ],
       'inclure_prix': includePrices,
       'langue': 'fr',
       'date_client': clientDate,

@@ -142,6 +142,39 @@ void main() {
     expect(json['champs_verrouilles'], ['degre']);
   });
 
+  test('PRV-R4 contrat 1.2 : signalements joints, texte lisible', () {
+    const req = EnrichmentRequest(
+      requestId: '5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60',
+      wineId: '0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10',
+      photos: [RequestPhoto(index: 0, type: 'etiquette', base64: '/9j/4AAQ')],
+      reports: [ReportedValue('cepages', 'Pinot noir 100 %')],
+      clientDate: '2026-10-28',
+    );
+    final json = req.toJson();
+    expect(json['version_contrat'], '1.2');
+    expect(v.requestErrors(json), isEmpty);
+    expect(json['signalements'], [
+      {'champ': 'cepages', 'valeur': 'Pinot noir 100 %'},
+    ]);
+    const sans = EnrichmentRequest(
+      requestId: '5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60',
+      photos: [RequestPhoto(index: 0, type: 'etiquette', base64: '/9j/4AAQ')],
+      clientDate: '2026-10-28',
+    );
+    expect(sans.toJson().containsKey('signalements'), isFalse);
+    expect(ReportedValue.textOf('"Volnay"'), 'Volnay');
+    expect(
+      ReportedValue.textOf(
+        '[{"cepage":"Cinsault","pourcentage":35},{"cepage":"Syrah"}]',
+      ),
+      'Cinsault 35 %, Syrah',
+    );
+    expect(ReportedValue.textOf('["Volaille","Fromage"]'), 'Volaille, Fromage');
+    expect(ReportedValue.textOf('13.5'), '13.5');
+    expect(ReportedValue.textOf('null'), isNull);
+    expect(ReportedValue.textOf(null), isNull);
+  });
+
   group('FakeGateway', () {
     const req = EnrichmentRequest(
       requestId: '5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60',

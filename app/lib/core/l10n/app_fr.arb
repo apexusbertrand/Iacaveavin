@@ -1050,7 +1050,7 @@
   "linkCopied": "Lien copié.",
   "reportError": "Signaler une erreur",
   "reported": "Signalé comme faux, à corriger",
-  "reportedSnack": "Erreur signalée : la valeur reste barrée jusqu'à correction.",
+  "reportedSnack": "Erreur signalée : la valeur reste barrée jusqu'à correction, et le signalement part avec le prochain enrichissement de la fiche.",
   "provenanceBadge": "Voir la provenance",
   "aiWritten": "Rédigé par IA à partir de {site}",
   "@aiWritten": {

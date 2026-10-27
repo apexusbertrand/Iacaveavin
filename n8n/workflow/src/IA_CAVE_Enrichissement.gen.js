@@ -39,6 +39,14 @@ ${o.lire('cacheVin', 'Cache vin', 'cache_vins', [['cle', o.ex('{{ $json.cle }}')
 
 ${o.code('decision', 'Décision cache', 'decision_cache', "{ cache: false }")}
 
+// PRV-R4 : une ligne par signalement, en parallèle du chemin principal.
+${o.code('signalements', 'Signalements', 'signalements', "{ job_id: 'x', champ: 'cepages', valeur: 'x', date_signalement: '2026-10-27' }")}
+
+${o.ecrire('signalementsEcrire', 'Enregistrer les signalements', 'signalements', 'insert', {
+    job_id: o.ex('{{ $json.job_id }}'), champ: o.ex('{{ $json.champ }}'),
+    valeur: o.ex('{{ $json.valeur }}'), date_signalement: o.ex('{{ $json.date_signalement }}'),
+  }, null, { uneFois: false })}
+
 ${o.si('siCache', 'Cache valide ?', '{{ $json.cache }}')}
 
 ${o.code('resCache', 'Résultat du cache', 'resultat_cache', "{ ok: true }")}
@@ -168,6 +176,9 @@ export default workflow('ia-cave-enrichissement', 'IA_CAVE_Enrichissement')
       .onFalse(prepCorr.to(agentCorr).to(controlesCorr).to(siOk2
         .onTrue(siPrix)
         .onFalse(echec.to(jobErreur)))))))
+  .add(decision)
+  .to(signalements)
+  .to(signalementsEcrire)
   .add(siPrix
     .onTrue(chargePrix.to(releve).to(quotaCloture))
     .onFalse(quotaCloture))

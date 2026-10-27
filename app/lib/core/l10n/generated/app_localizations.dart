@@ -3199,7 +3199,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportedSnack.
   ///
   /// In fr, this message translates to:
-  /// **'Erreur signalée : la valeur reste barrée jusqu\'à correction.'**
+  /// **'Erreur signalée : la valeur reste barrée jusqu\'à correction, et le signalement part avec le prochain enrichissement de la fiche.'**
   String get reportedSnack;
 
   /// No description provided for @provenanceBadge.

@@ -52,6 +52,20 @@
       "items": { "type": "string" },
       "description": "Champs saisis à la main que l'agent ne doit pas proposer de modifier (noms du contrat)."
     },
+    "signalements": {
+      "type": "array",
+      "maxItems": 20,
+      "description": "PRV-R4, contrat 1.2 : valeurs de cette fiche signalées comme fausses par l'utilisateur. Le flux les enregistre, ne ressert pas le cache du vin et demande à l'agent de ne pas les reproposer sans source nouvelle.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["champ", "valeur"],
+        "properties": {
+          "champ": { "type": "string", "pattern": "^[a-z_]{1,40}$", "description": "Nom du champ dans le contrat, comme champs_verrouilles." },
+          "valeur": { "type": "string", "minLength": 1, "maxLength": 500, "description": "Valeur signalée, telle qu'affichée." }
+        }
+      }
+    },
     "inclure_prix": {
       "type": "boolean",
       "default": true,

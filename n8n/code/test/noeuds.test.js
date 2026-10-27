@@ -24,7 +24,7 @@ async function executer(script, noeuds, entree) {
 }
 
 const config = [{ cle: 'cle_app', valeur: 'k' }, { cle: 'quota_enrichissements', valeur: '100' }, { cle: 'email_alerte', valeur: 'a@b.fr' }];
-const envoi = { job_id: '9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d', type: 'enrichissement', requete: { ...requete, champs_verrouilles: ['degre'] }, recu_le: Date.now() - 5000 };
+const envoi = { job_id: '9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d', type: 'enrichissement', requete: { ...requete, champs_verrouilles: ['degre'], signalements: [] }, recu_le: Date.now() - 5000 };
 const lectureModele = { content: '```json\n' + JSON.stringify({
   transcription: [{ index: 0, texte: "GUILLAUME L'ECHANSON" }],
   etiquette: { domaine: "Guillaume L'Echanson", appellation: "Bourgogne Côte d'Or", millesime: 2024 },
@@ -106,17 +106,38 @@ test('AJO-13 cache des vins : une entrée sans source web n\'est pas resservie',
   const [l] = await executer('lecture', {}, lectureModele);
   const r = JSON.parse(JSON.stringify(termine.resultat));
   const ligne = (res) => ({ cle: l.json.cle, resultat: JSON.stringify(res), utilisations: 1, date_maj: new Date().toISOString().slice(0, 10), id: 1 });
-  const [bon] = await executer('decision_cache', { 'Lecture étiquette': l.json }, ligne(r));
+  const d = { 'Lecture étiquette': l.json, 'Déclencheur enrichissement': envoi };
+  const [bon] = await executer('decision_cache', d, ligne(r));
   assert.equal(bon.json.cache, true, 'entrée sourcée et fraîche : resservie');
   // Entrée écrite le 2026-10-26, recherche web en panne (erreur d'authentification).
-  const [panne] = await executer('decision_cache', { 'Lecture étiquette': l.json }, ligne({ ...r, sources_consultees: [] }));
+  const [panne] = await executer('decision_cache', d, ligne({ ...r, sources_consultees: [] }));
   assert.equal(panne.json.cache, false, 'entrée sans source : agent relancé');
-  const [illisible] = await executer('decision_cache', { 'Lecture étiquette': l.json }, { ...ligne(r), resultat: '{' });
+  const [illisible] = await executer('decision_cache', d, { ...ligne(r), resultat: '{' });
   assert.equal(illisible.json.cache, false);
+});
+
+test('PRV-R4 signalements (contrat 1.2) : enregistrés, cache contourné, rappelés à l\'agent', async () => {
+  const [l] = await executer('lecture', {}, lectureModele);
+  const signalements = [{ champ: 'cepages', valeur: 'Pinot noir 100 %' }, { champ: 'region', valeur: 'Alsace' }];
+  const signale = { ...envoi, requete: { ...envoi.requete, signalements } };
+  const ligne = { cle: l.json.cle, resultat: JSON.stringify(termine.resultat), utilisations: 1, date_maj: new Date().toISOString().slice(0, 10), id: 1 };
+  const [c] = await executer('decision_cache', { 'Lecture étiquette': l.json, 'Déclencheur enrichissement': signale }, ligne);
+  assert.equal(c.json.cache, false, 'entrée fraîche et sourcée, mais signalée : agent relancé');
+  const lignes = await executer('signalements', { 'Déclencheur enrichissement': signale }, {});
+  assert.deepEqual(lignes.map((x) => [x.json.job_id, x.json.champ, x.json.valeur]), [
+    [envoi.job_id, 'cepages', 'Pinot noir 100 %'], [envoi.job_id, 'region', 'Alsace'],
+  ]);
+  assert.match(lignes[0].json.date_signalement, /^\d{4}-\d{2}-\d{2}$/);
+  assert.deepEqual(await executer('signalements', { 'Déclencheur enrichissement': envoi }, {}), [], 'aucune ligne sans signalement');
+  const noeuds = (e) => ({ 'Déclencheur enrichissement': e, 'Config enrichissement': config, 'Décision cache': { ...l.json, cache: false }, 'Photos en binaire': { types: 'photo 0 (etiquette)' } });
+  const [p] = await executer('preparer_agent', noeuds(signale), {});
+  assert.match(p.json.systeme, /signalées fausses.*Pinot noir 100 %/);
+  const [p0] = await executer('preparer_agent', noeuds(envoi), {});
+  assert.doesNotMatch(p0.json.systeme, /signalées fausses/);
 
 });
 
 test('NFR-06 nœud santé : autotest de signature dans le bac à sable', async () => {
   const [s] = await executer('sante', { 'Config santé': config }, {});
-  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.1', ok: true });
+  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.2', ok: true });
 });

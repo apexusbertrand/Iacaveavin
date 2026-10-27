@@ -80,7 +80,7 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T47 | Prise de vue avec `image_picker` (appareil photo ou galerie) sans cadre de visée personnalisé | plugin officiel Android et iOS ; un cadre demanderait le paquet `camera`, plus lourd ; à revoir après la recette |
 | T48 | Code-barres EAN saisi en texte, contrôlé par la clé EAN-13 ; lecture par l'appareil photo reportée | un lecteur demande un paquet de plus (mobile_scanner) ; l'EAN reste un indice (AJO-10) |
 | T49 | Seuils photo : flou si la variance du laplacien est sous 100, reflet si plus de 8 % des pixels sont saturés ; alerte non bloquante | valeurs de départ à recalibrer sur les photos réelles de la recette |
-| T50 | PRV-R4 : le signalement est enregistré (`signale` à vrai, valeur barrée) mais n'est pas encore transmis au flux, faute de champ dans le contrat 1.0 ; proposition : champ `signalements` dans la requête, contrat 1.1, au lot 2b | écart signalé (règle 10) ; le message affiché ne promet pas l'envoi |
+| T50 | (soldé par T105 le 2026-10-28) PRV-R4 : le signalement est enregistré (`signale` à vrai, valeur barrée) mais n'est pas encore transmis au flux, faute de champ dans le contrat 1.0 ; proposition : champ `signalements` dans la requête, contrat 1.1, au lot 2b | écart signalé (règle 10) ; le message affiché ne promet pas l'envoi |
 | T51 | Paramètres : scénario du faux flux (terminé, partiel, cache, quota, réponse invalide, sans réponse) et hors ligne simulé, jusqu'au lot 2c | recette du lot 2a sur téléphone sans n8n |
 | T52 | Base en version 2 : colonnes `envoye_le` et `reponse` sur `job` (dictionnaire, migration et test de migration) | délai de 3 min compté depuis l'envoi, dernière réponse validée gardée pour l'écran de validation |
 | T53 | Déverrouiller un champ (PRV-R3) le repasse au statut `valide` : le prochain ré-enrichissement peut le proposer à nouveau | appui long sur le champ, avec confirmation |
@@ -165,6 +165,14 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | --- | --- | --- |
 | T103 | Le cache des vins ne ressert plus une entrée sans source web consultée : l'agent est relancé avec la recherche web, et le résultat sourcé remplace l'entrée (écriture par clé). Nœud « Décision cache » du flux IA_CAVE_Enrichissement republié le 2026-10-27 | bug 1 : Mas Onésime Insoumis 2022 affichait « recherche web indisponible ». Le résultat venait du cache, écrit le 2026-10-26 à 10 h 09 avec l'ancienne configuration (Tavily sans clé, « erreur d'authentification des outils »), avant la publication de T85. La recherche web intégrée répond (essai du 2026-10-27 : 1 recherche, 10 résultats, cépages et accords trouvés) |
 | T104 | Le message de consentement dit « flux d'enrichissement sur le serveur » au lieu de « d'Apexus » | évolution 1 de la recette du 2026-10-27 |
+
+## Sujets soldés avant la recette des lots 0 à 4 (2026-10-28), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T105 | PRV-R4 transmis au flux (écart T50 soldé) : contrat 1.2, champ facultatif `signalements` de la requête d'enrichissement (20 au plus, `champ` et `valeur`). L'app joint les valeurs signalées dont la provenance la plus récente reste signalée ; une nouvelle proposition du flux arrête l'envoi. Le flux enregistre chaque signalement dans iacave_signalements, ne ressert pas le cache du vin et demande à l'agent de ne pas reproposer la valeur sans source nouvelle | docs/04 PRV-R4 : « le signalement est joint au prochain appel du flux pour améliorer le cache » ; changement compatible, une app 1.1 reste acceptée |
+| T106 | Écart signalé : /sante annonce le contrat 1.2, mais les réponses de job gardent `version_contrat: "1.1"`. Le schéma des réponses n'a pas changé en 1.2 ; la constante sera montée au prochain changement des réponses, avec la republication des 8 nœuds qui l'embarquent | éviter de republier 160 Ko de code de flux sans changement de comportement |
+| T107 | Version du flux 0.2.0 dans /sante et dans les jobs (case « version incrémentée » de la liste de mise en production, oubliée aux republications T85 et T103) | n8n/README.md, avant chaque mise en production |
 
 ## À compléter
 

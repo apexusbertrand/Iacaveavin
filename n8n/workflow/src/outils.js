@@ -55,11 +55,11 @@ function lire(variable, nom, cle, filtres, { tout = false, limite = 1 } = {}) {
 }
 
 /** Écriture : insert, update (filtres) ou upsert (filtres). valeurs : {colonne: valeurSDK}. */
-function ecrire(variable, nom, cle, operation, valeurs, filtres) {
+function ecrire(variable, nom, cle, operation, valeurs, filtres, { uneFois = true } = {}) {
   const f = filtres ? `, matchType: 'allConditions', filters: ${conditions(filtres)}` : '';
   return `const ${variable} = node({
   type: 'n8n-nodes-base.dataTable', version: 1.1,
-  config: { name: ${q(nom)}, executeOnce: true,
+  config: { name: ${q(nom)}, executeOnce: ${uneFois},
     parameters: { resource: 'row', operation: ${q(operation)}, dataTableId: ${table(cle)}${f}, columns: ${colonnes(valeurs)} } },
   output: [{ id: 1 }]
 });`;

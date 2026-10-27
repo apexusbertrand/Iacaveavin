@@ -1876,7 +1876,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reportedSnack =>
-      'Erreur signalée : la valeur reste barrée jusqu\'à correction.';
+      'Erreur signalée : la valeur reste barrée jusqu\'à correction, et le signalement part avec le prochain enrichissement de la fiche.';
 
   @override
   String get provenanceBadge => 'Voir la provenance';

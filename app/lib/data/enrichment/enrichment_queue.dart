@@ -272,6 +272,32 @@ class EnrichmentQueue {
     return {for (final r in rows) r.champ}.toList();
   }
 
+  /// PRV-R4 : valeurs signalées fausses et pas encore corrigées, c'est-à-dire
+  /// dont la provenance la plus récente du champ reste signalée. Elles partent
+  /// avec chaque enrichissement de la fiche jusqu'à correction.
+  Future<List<ReportedValue>> reports(String wineId) async {
+    final rows =
+        await (_db.select(_db.provenances)
+              ..where(
+                (p) =>
+                    p.deletedAt.isNull() &
+                    p.entite.equals('fiche_vin') &
+                    p.entiteId.equals(wineId),
+              )
+              ..orderBy([(p) => OrderingTerm.desc(p.createdAt)]))
+            .get();
+    final latest = <String, Provenance>{};
+    for (final r in rows) {
+      latest.putIfAbsent(r.champ, () => r);
+    }
+    return [
+      for (final r in latest.values)
+        if (r.signale == true && RegExp(r'^[a-z_]{1,40}$').hasMatch(r.champ))
+          if (ReportedValue.textOf(r.valeur) case final String text)
+            ReportedValue(r.champ, text),
+    ].take(maxReports).toList();
+  }
+
   Future<EnrichmentRequest> _request(Job job) async {
     final wine = await (_db.select(
       _db.wines,
@@ -293,6 +319,7 @@ class EnrichmentQueue {
       vintageHint: year ?? (wine.millesime == 'NM' ? null : wine.millesime),
       formatCl: lot?.formatCl,
       lockedFields: await lockedFields(job.ficheId),
+      reports: await reports(job.ficheId),
       clientDate: _clock().toIso8601String().substring(0, 10),
     );
   }

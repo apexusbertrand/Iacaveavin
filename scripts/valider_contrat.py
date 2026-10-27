@@ -43,5 +43,16 @@ for k,doc in mut.items():
     rejete = any(True for _ in v.iter_errors(doc))
     print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
     ok &= rejete
+# Requête : un signalement incomplet ou trop long doit être REJETÉ (contrat 1.2)
+req = json.loads((base/"exemples"/"requete-enrichissement.json").read_text())
+vr = Draft202012Validator(schemas["requete-enrichissement.schema.json"], format_checker=FormatChecker())
+mreq = {}
+m = copy.deepcopy(req); m["signalements"][0].pop("valeur"); mreq["signalement sans valeur"] = m
+m = copy.deepcopy(req); m["signalements"][0]["champ"] = "Cépages"; mreq["signalement sur un nom de champ invalide"] = m
+m = copy.deepcopy(req); m["signalements"] = m["signalements"] * 21; mreq["plus de 20 signalements"] = m
+for k,doc in mreq.items():
+    rejete = any(True for _ in vr.iter_errors(doc))
+    print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
+    ok &= rejete
 print("TOUT EST CONFORME" if ok else "ÉCHECS")
 sys.exit(0 if ok else 1)

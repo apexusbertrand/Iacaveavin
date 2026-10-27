@@ -35,7 +35,7 @@ void main() {
     Future<Map<String, dynamic>> example() async =>
         jsonDecode(await readExample('enrichissement-termine.json'))
             as Map<String, dynamic>;
-    expect(contractVersion, '1.1');
+    expect(contractVersion, '1.2');
     final r = JobResponse.fromJson(await example());
     final frames = r.result!.frames;
     expect(frames, hasLength(2));

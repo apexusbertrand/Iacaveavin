@@ -57,7 +57,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - [x] AJO-10, AJO-11 : EAN et millésime en indices (EAN saisi, T48), quota affiché sous 20 %
   - [x] AJO-12, NFR-07 : réponse validée contre le schéma avant tout enregistrement, sinon erreur et fiche éditable
   - [x] FIC-06 à FIC-09 : pastille de provenance, mention IA, nouveau millésime, ré-enrichissement par l'écran de validation (T54)
-  - [x] PRV-R1 à PRV-R4 : provenances proposées, validées, manuelles et verrouillées, déverrouillage par appui long, signalement (envoi au flux reporté, T50)
+  - [x] PRV-R1 à PRV-R4 : provenances proposées, validées, manuelles et verrouillées, déverrouillage par appui long, signalement, joint au prochain enrichissement de la fiche depuis le 2026-10-28 (contrat 1.2, T105 ; reporté jusque-là, T50)
   - [x] NFR-08 : consentement avant le premier envoi de photos
 - Points d'étape :
   - 2026-10-21 fait : tout le périmètre du lot 2a contre `FakeGateway`, migration de la base en v2 (T52). En cours : rien. Bloquant : recette des lots 0, 1 et 2a sur téléphone ; le lot 2b attend l'accès à n8n. Prochaine étape : recette, puis lot 2b dès que l'accès au flux est donné.
@@ -80,6 +80,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - [ ] Sources : robots.txt lus, CGU à lire par Bertrand, aucun domaine actif
 - Points d'étape :
   - 2026-10-21 fait : flux publiés et testés en production (enrichissement 17 s, cache 5 s, prix, suivi, refus de signature), données d'essai et clé de développement supprimées. Bloquant : clé `cle_app` et compte Tavily à créer par Bertrand. Prochaine étape : jeu d'essai.
+  - 2026-10-28 mise à jour : clé `cle_app` saisie par Bertrand (2026-10-26), Tavily remplacé par la recherche intégrée de Claude (T85). Flux 0.2.0 publié : signalements (T105), cache sans source ignoré (T103) ; /sante répond `{"version_flux":"0.2.0","version_contrat":"1.2","ok":true}`. Restent à Bertrand : photos du jeu d'essai, lecture des CGU des sites candidats (tant qu'aucun site marchand n'est actif, les prix restent « non trouvé »).
 - Mesures (taux par champ sur le jeu d'essai, durée moyenne, crédits et appels modèle par enrichissement) : sans recherche web, 2 appels au modèle, environ 8 000 jetons pour l'agent, 17 s ; avec le cache du vin, 1 appel, 5 s. Jeu d'essai à faire.
 - Recette Bertrand :
 
@@ -96,6 +97,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - [x] PRX-06 : rafraîchissement mensuel au lancement, désactivé par défaut
 - Points d'étape :
   - 2026-10-25 fait : périmètre du lot. Bloquant : clé `cle_app` à saisir dans n8n et dans l'app par Bertrand ; sans elle l'app reste sur le flux de démonstration. Prochaine étape : recette sur téléphone (20 bouteilles par photo).
+  - 2026-10-28 : blocage levé, la clé est saisie et l'app parle au vrai flux depuis le 2026-10-26.
 - Mesures : à faire sur téléphone avec le vrai flux.
 - Recette Bertrand :
   - 2026-10-26, premiers essais sur téléphone avec le vrai flux. Retours traités le jour même :

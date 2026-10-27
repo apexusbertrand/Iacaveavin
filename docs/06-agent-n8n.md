@@ -18,7 +18,7 @@ Décision D4 : un nouveau flux dans l'instance n8n actuelle, isolé des flux exi
 | /webhook/iacave/enrichissement | POST | requete-enrichissement.schema.json | reponse-job.schema.json, statut en_attente (202) ou termine si cache |
 | /webhook/iacave/prix | POST | requete-prix.schema.json | idem |
 | /webhook/iacave/jobs?job_id=… | GET | aucun (signature sur le chemin avec la requête) | reponse-job.schema.json, 404 si job inconnu |
-| /webhook/iacave/sante | GET | aucun | `{"version_flux": "...", "version_contrat": "1.1", "ok": true}` |
+| /webhook/iacave/sante | GET | aucun | `{"version_flux": "...", "version_contrat": "1.2", "ok": true}` |
 
 POST /enrichissement et POST /prix partagent les nœuds de contrôle d'entrée ; le type vient du webhook qui reçoit la requête (T65). Le webhook répond immédiatement avec le job_id (nœud Respond to Webhook), puis le traitement continue. L'app interroge /jobs toutes les 3 secondes pendant 30 secondes, puis toutes les 10 secondes, jusqu'à 3 minutes.
 
@@ -37,7 +37,7 @@ Tables n8n (Data Tables) si la version de l'instance les propose, sinon une base
 | iacave_signalements | job, champ, valeur signalée comme fausse, date | 24 mois |
 | (pas de table de photos) | les photos passent du webhook au sous-flux en mémoire, elles ne sont écrites nulle part ; les exécutions réussies ne sont pas conservées (T61) | aucune |
 
-Clé de cache d'un vin : domaine, appellation, cuvée et millésime normalisés (minuscules, sans accents, espaces et ponctuation en tirets), séparés par `|`. Le cache intervient après la lecture d'étiquette : il économise les recherches web, pas la lecture. Un signalement d'erreur sur un champ invalide l'entrée de cache correspondante.
+Clé de cache d'un vin : domaine, appellation, cuvée et millésime normalisés (minuscules, sans accents, espaces et ponctuation en tirets), séparés par `|`. Le cache intervient après la lecture d'étiquette : il économise les recherches web, pas la lecture. Un signalement d'erreur sur un champ invalide l'entrée de cache correspondante : la requête porte alors `signalements` (contrat 1.2, PRV-R4), le flux les écrit dans iacave_signalements, relance l'agent au lieu de servir le cache, et lui demande de ne pas reproposer ces valeurs sans source nouvelle (T105). Une entrée de cache sans aucune source web n'est jamais resservie (T103).
 
 ## Étapes de l'agent d'enrichissement
 
