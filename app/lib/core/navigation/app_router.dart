@@ -6,6 +6,7 @@ import '../../features/add/capture_screen.dart';
 import '../../features/add/enrichment_screen.dart';
 import '../../features/add/validation_screen.dart';
 import '../../features/backup/backup_screen.dart';
+import '../../features/import_export/import_export_screen.dart';
 import '../../features/locations/locations_screen.dart';
 import '../../features/settings/reference_screens.dart';
 import '../../features/placeholder/placeholder_screen.dart';
@@ -102,5 +103,6 @@ Widget _screenFor(AppDestination d) => switch (d) {
   AppDestination.locations => const LocationsScreen(),
   AppDestination.backup => const BackupScreen(),
   AppDestination.about => const AboutScreen(),
+  AppDestination.importExport => const ImportExportScreen(),
   _ => PlaceholderScreen(destination: d),
 };

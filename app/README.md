@@ -36,10 +36,12 @@ Le code généré (drift, l10n, jetons) est commité : un `git clone` puis `flut
 | `lib/data/demo/` | jeu de démonstration CMP-07 (générateur déterministe, dépôt drift) |
 | `lib/data/referentiels/` | chargement des listes au premier lancement |
 | `lib/domain/` | entités et interfaces sans Flutter ni réseau |
-| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `placeholder`, `add` (photo, identification, validation) |
+| `lib/features/` | un dossier par écran : `wine_list`, `wine_detail`, `wine_edit`, `locations`, `settings`, `backup`, `about`, `placeholder`, `add` (photo, identification, validation), `photos` (galerie, recadrage, bibliothèque), `import_export` (Excel et catalogue PDF), `statistics` |
 | `assets/referentiels/` | pays, régions, sous-régions, appellations, cépages, accords, listes du dictionnaire |
 | `lib/data/enrichment/` | contrat n8n : validation, `EnrichmentGateway` et `FakeGateway`, file d'attente, application des propositions |
-| `lib/data/files/` | photos : compression, contrôle qualité, miniatures, répertoire privé |
+| `lib/data/files/` | photos : compression, contrôle qualité, miniatures, recadrage, répertoire privé ; classeur xlsx (lecture et écriture) |
+| `lib/data/excel/`, `lib/data/pdf/` | export, simulation et import Excel (XLS) ; mise en page PDF dans un isolate (PDF) |
+| `assets/fonts/` | Roboto, embarquée dans les PDF (accents, « œ », « € ») |
 | `assets/contrat/` | copie de specs/contrat-n8n (schémas et exemples rejoués par `FakeGateway`) |
 | `assets/regles/` | copie de specs/regles-garde.yaml (un test vérifie qu'elle est identique) |
 | `drift_schemas/` | instantanés du schéma, un par version, pour les tests de migration |
@@ -77,6 +79,9 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | flutter_secure_storage 11.2 | clé du flux dans le Keystore Android et le Trousseau iOS, jamais dans les préférences (PAR-05, règle Flutter) | oui | oui |
 | mobile_scanner 7.4 | lecture du code-barres EAN en direct et sur une photo, décodage sur l'appareil sans réseau (AJO-10, T82) | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
+| pdf 3.13 | fiche et catalogue PDF (PDF-01 à PDF-05), QR code compris, en Dart pur dans un isolate ; polices Roboto embarquées (assets/fonts, Apache 2.0) | oui | oui |
+| xml 7.0 | lecture des classeurs xlsx à l'import (XLS-04), déjà tirée par pdf ; l'écriture du xlsx est faite à la main (T89) | oui | oui |
+| fl_chart 1.3 | graphiques des statistiques : donut, barres, barres empilées, courbe (STA-01, STA-02) | oui | oui |
 
 Police : système (Roboto sur Android) au lot 0, repli prévu par specs/design-tokens.json. Inter (OFL) sera embarquée quand les fichiers de police seront ajoutés au dépôt.
 

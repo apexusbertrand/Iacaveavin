@@ -10,7 +10,7 @@ enum AppDestination {
   locations('/emplacements', Icons.grid_view_outlined, null),
   statistics('/statistiques', Icons.pie_chart_outline, '3'),
   shoppingList('/liste-achats', Icons.shopping_cart_outlined, '4'),
-  importExport('/import-export', Icons.import_export, '3'),
+  importExport('/import-export', Icons.import_export, null),
   backup('/sauvegarde', Icons.backup_outlined, null),
   settings('/parametres', Icons.settings_outlined, null),
   about('/a-propos', Icons.info_outline, null);

@@ -2587,7 +2587,7 @@ abstract class AppLocalizations {
   /// No description provided for @addExcelHint.
   ///
   /// In fr, this message translates to:
-  /// **'Disponible au lot 3.'**
+  /// **'Classeur xlsx, avec simulation avant import.'**
   String get addExcelHint;
 
   /// No description provided for @unidentifiedWine.
@@ -3723,6 +3723,504 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'La photo d\'origine est gardée jusqu\'à la validation de la fiche.'**
   String get cropOriginalNote;
+
+  /// No description provided for @excelListName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Liste'**
+  String get excelListName;
+
+  /// No description provided for @excelListValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur autorisée'**
+  String get excelListValue;
+
+  /// No description provided for @excelListParent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattachée à'**
+  String get excelListParent;
+
+  /// No description provided for @excelNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règles d\'import du classeur IA cave à vin\n\nOnglet Vins : une ligne par fiche (domaine, cuvée, millésime).\n- Colonne id remplie : la fiche existante est mise à jour. id vide : une fiche est créée.\n- Action = SUPPRIMER (avec l\'id) : la fiche est supprimée de la cave, ses mouvements restent dans l\'historique.\n- Domaine, Pays, Couleur et Millésime sont obligatoires. Millésime : une année ou NM pour un non millésimé.\n- Les listes (pays, région, appellation, cépages, accords…) prennent les valeurs de l\'onglet Listes. Plusieurs valeurs dans une cellule : séparées par un point-virgule.\n- Cépages : « Merlot 80 %; Cabernet Franc 20 % », total de 100 % au plus.\n- Les colonnes Origine garde, Statut garde, Statut enrichissement, Note Parker, Meilleure note, Stock total et Photo principale sont calculées : elles sont ignorées à l\'import.\n\nOnglet Lots : une ligne par lot (même fiche, format, propriétaire, emplacement, prix).\n- id lot rempli : mise à jour ; vide : création. Action = SUPPRIMER : suppression du lot.\n- id fiche : l\'id d\'une fiche de l\'onglet Vins, ou #numéro de ligne pour une fiche créée par le même import (exemple : #12).\n- Quantité : quantité cible. L\'app crée un mouvement d\'ajustement de l\'écart, motif « import Excel ». Cellule vide : stock inchangé.\n- Emplacement : chemin complet, par exemple « Cave > Armoire 1 > Casier A ».\n\nOnglet Mouvements : lecture seule, ignoré à l\'import.\n\nPhotos : joignez un zip de photos ; une photo dont le nom figure dans la colonne Photo principale est rattachée à la fiche.\n\nAvant tout import, l\'app simule et affiche un rapport. Une sauvegarde automatique est faite juste avant, et l\'import se fait en entier ou pas du tout.'**
+  String get excelNotice;
+
+  /// No description provided for @ieExcelSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Excel'**
+  String get ieExcelSection;
+
+  /// No description provided for @ieExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter la cave'**
+  String get ieExport;
+
+  /// No description provided for @ieExportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classeur xlsx : vins, lots, mouvements, listes autorisées et notice.'**
+  String get ieExportHint;
+
+  /// No description provided for @ieTemplate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle vierge'**
+  String get ieTemplate;
+
+  /// No description provided for @ieTemplateHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Même classeur sans données, pour saisir une cave sur ordinateur.'**
+  String get ieTemplateHint;
+
+  /// No description provided for @ieImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un classeur'**
+  String get ieImport;
+
+  /// No description provided for @ieImportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulation et rapport avant toute modification.'**
+  String get ieImportHint;
+
+  /// No description provided for @iePhotosTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joindre des photos ?'**
+  String get iePhotosTitle;
+
+  /// No description provided for @iePhotosBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un zip de photos peut accompagner le classeur : chaque photo citée dans la colonne Photo principale est rattachée à sa fiche.'**
+  String get iePhotosBody;
+
+  /// No description provided for @iePhotosPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un zip'**
+  String get iePhotosPick;
+
+  /// No description provided for @iePhotosSkip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans photos'**
+  String get iePhotosSkip;
+
+  /// No description provided for @ieReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier prêt'**
+  String get ieReady;
+
+  /// No description provided for @importReportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulation de l\'import'**
+  String get importReportTitle;
+
+  /// No description provided for @importWinesCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches créées : {n}'**
+  String importWinesCreated(int n);
+
+  /// No description provided for @importWinesUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches mises à jour : {n}'**
+  String importWinesUpdated(int n);
+
+  /// No description provided for @importWinesDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches supprimées : {n}'**
+  String importWinesDeleted(int n);
+
+  /// No description provided for @importLotsCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots créés : {n}'**
+  String importLotsCreated(int n);
+
+  /// No description provided for @importLotsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots mis à jour : {n}'**
+  String importLotsUpdated(int n);
+
+  /// No description provided for @importLotsDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots supprimés : {n}'**
+  String importLotsDeleted(int n);
+
+  /// No description provided for @importStockChanges.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stocks ajustés : {n}'**
+  String importStockChanges(int n);
+
+  /// No description provided for @importPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos rattachées : {n}'**
+  String importPhotos(int n);
+
+  /// No description provided for @importNoChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune différence avec la cave.'**
+  String get importNoChange;
+
+  /// No description provided for @importUnknownTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeurs absentes de l\'app'**
+  String get importUnknownTitle;
+
+  /// No description provided for @importCreateUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les créer pendant l\'import'**
+  String get importCreateUnknown;
+
+  /// No description provided for @importIssuesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreurs à corriger ({n})'**
+  String importIssuesTitle(int n);
+
+  /// No description provided for @importIssueWhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'{sheet}, ligne {row}, colonne {column}'**
+  String importIssueWhere(String sheet, int row, String column);
+
+  /// No description provided for @importApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer'**
+  String get importApply;
+
+  /// No description provided for @importBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corrigez le classeur puis relancez l\'import : rien n\'est modifié tant qu\'il reste une erreur.'**
+  String get importBlocked;
+
+  /// No description provided for @importBackupNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une sauvegarde automatique est faite juste avant l\'import, qui se fait en entier ou pas du tout.'**
+  String get importBackupNote;
+
+  /// No description provided for @importEnrich.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enrichir les fiches créées'**
+  String get importEnrich;
+
+  /// No description provided for @importEnrichHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} fiches créées avec une photo, soit {n} appels au flux. Quota restant ce mois : {left}.'**
+  String importEnrichHint(int n, String left);
+
+  /// No description provided for @importEnrichUnknownQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'inconnu'**
+  String get importEnrichUnknownQuota;
+
+  /// No description provided for @importEnrichStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} enrichissements en file d\'attente'**
+  String importEnrichStarted(int n);
+
+  /// No description provided for @importOwnerList.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get importOwnerList;
+
+  /// No description provided for @issueMissingSheet.
+  ///
+  /// In fr, this message translates to:
+  /// **'onglet absent'**
+  String get issueMissingSheet;
+
+  /// No description provided for @issueMissingColumn.
+  ///
+  /// In fr, this message translates to:
+  /// **'colonne absente'**
+  String get issueMissingColumn;
+
+  /// No description provided for @issueRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'valeur obligatoire'**
+  String get issueRequired;
+
+  /// No description provided for @issueUnknownId.
+  ///
+  /// In fr, this message translates to:
+  /// **'identifiant inconnu'**
+  String get issueUnknownId;
+
+  /// No description provided for @issueDuplicateId.
+  ///
+  /// In fr, this message translates to:
+  /// **'identifiant présent deux fois'**
+  String get issueDuplicateId;
+
+  /// No description provided for @issueInvalidNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'nombre attendu'**
+  String get issueInvalidNumber;
+
+  /// No description provided for @issueInvalidVintage.
+  ///
+  /// In fr, this message translates to:
+  /// **'millésime attendu : une année jusqu\'à l\'année en cours, ou NM'**
+  String get issueInvalidVintage;
+
+  /// No description provided for @issueOutOfRange.
+  ///
+  /// In fr, this message translates to:
+  /// **'valeur hors des bornes'**
+  String get issueOutOfRange;
+
+  /// No description provided for @issueGardeOrder.
+  ///
+  /// In fr, this message translates to:
+  /// **'garde incohérente : début après le millésime, début avant l\'apogée, apogée avant la fin'**
+  String get issueGardeOrder;
+
+  /// No description provided for @issueInvalidEan.
+  ///
+  /// In fr, this message translates to:
+  /// **'code-barres invalide : 13 chiffres et clé de contrôle'**
+  String get issueInvalidEan;
+
+  /// No description provided for @issueInvalidBoolean.
+  ///
+  /// In fr, this message translates to:
+  /// **'oui ou non attendu'**
+  String get issueInvalidBoolean;
+
+  /// No description provided for @issueInvalidDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'date attendue'**
+  String get issueInvalidDate;
+
+  /// No description provided for @issueInvalidGrapes.
+  ///
+  /// In fr, this message translates to:
+  /// **'cépages illisibles : « Merlot 80 %; Cabernet Franc 20 % »'**
+  String get issueInvalidGrapes;
+
+  /// No description provided for @issueInvalidAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'action inconnue : vide ou SUPPRIMER, avec l\'identifiant'**
+  String get issueInvalidAction;
+
+  /// No description provided for @issueUnknownValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'valeur absente de la liste'**
+  String get issueUnknownValue;
+
+  /// No description provided for @issueUnknownLocation.
+  ///
+  /// In fr, this message translates to:
+  /// **'emplacement inconnu'**
+  String get issueUnknownLocation;
+
+  /// No description provided for @issueUnknownWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'fiche inconnue'**
+  String get issueUnknownWine;
+
+  /// No description provided for @issueDeletedWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'fiche supprimée par ce même import'**
+  String get issueDeletedWine;
+
+  /// No description provided for @issueLotWineChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'un lot ne change pas de fiche : créez un nouveau lot'**
+  String get issueLotWineChange;
+
+  /// No description provided for @importFinished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import terminé'**
+  String get importFinished;
+
+  /// No description provided for @pdfGardeRange.
+  ///
+  /// In fr, this message translates to:
+  /// **'de {start} à {end}'**
+  String pdfGardeRange(String start, String end);
+
+  /// No description provided for @pdfGardePeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'apogée {year}'**
+  String pdfGardePeak(String year);
+
+  /// No description provided for @pdfAlcohol.
+  ///
+  /// In fr, this message translates to:
+  /// **'{value} %'**
+  String pdfAlcohol(String value);
+
+  /// No description provided for @pdfGardeSource.
+  ///
+  /// In fr, this message translates to:
+  /// **'Origine de la garde'**
+  String get pdfGardeSource;
+
+  /// No description provided for @pdfGardeStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut de garde'**
+  String get pdfGardeStatus;
+
+  /// No description provided for @pdfParker.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note Parker'**
+  String get pdfParker;
+
+  /// No description provided for @pdfStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'En stock'**
+  String get pdfStock;
+
+  /// No description provided for @pdfBottles.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =0{aucune bouteille} =1{1 bouteille} other{{n} bouteilles}}'**
+  String pdfBottles(int n);
+
+  /// No description provided for @pdfCitedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'citée par {site}'**
+  String pdfCitedBy(String site);
+
+  /// No description provided for @pdfPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'{price} l\'unité'**
+  String pdfPrice(String price);
+
+  /// No description provided for @pdfEditedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Édité le {date}'**
+  String pdfEditedOn(String date);
+
+  /// No description provided for @pdfCatalogueTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue de la cave'**
+  String get pdfCatalogueTitle;
+
+  /// No description provided for @pdfCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 fiche} other{{n} fiches}}'**
+  String pdfCount(int n);
+
+  /// No description provided for @pdfFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres appliqués'**
+  String get pdfFilters;
+
+  /// No description provided for @pdfNoFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun filtre : toutes les fiches.'**
+  String get pdfNoFilter;
+
+  /// No description provided for @pdfPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {n} / {total}'**
+  String pdfPage(String n, String total);
+
+  /// No description provided for @issueWithValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{reason} : « {value} »'**
+  String issueWithValue(String reason, String value);
+
+  /// No description provided for @filterLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} : {value}'**
+  String filterLine(String label, String value);
+
+  /// No description provided for @catalogueSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue PDF'**
+  String get catalogueSection;
+
+  /// No description provided for @catalogueHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux fiches par page A4. Les filtres et le tri de la liste sont repris ; vous pouvez les changer ici sans toucher à la liste.'**
+  String get catalogueHint;
+
+  /// No description provided for @catalogueFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres ({n})'**
+  String catalogueFilters(int n);
+
+  /// No description provided for @catalogueCover.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page de garde (date, filtres, nombre de fiches)'**
+  String get catalogueCover;
+
+  /// No description provided for @catalogueGenerate.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =0{Aucune fiche à imprimer} =1{Générer le catalogue (1 fiche)} other{Générer le catalogue ({n} fiches)}}'**
+  String catalogueGenerate(int n);
+
+  /// No description provided for @winePdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiche PDF'**
+  String get winePdf;
+
+  /// No description provided for @pdfPreparing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation du PDF…'**
+  String get pdfPreparing;
 }
 
 class _AppLocalizationsDelegate

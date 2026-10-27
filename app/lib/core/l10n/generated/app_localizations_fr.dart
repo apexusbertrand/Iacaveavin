@@ -1520,7 +1520,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addExcel => 'Import Excel';
 
   @override
-  String get addExcelHint => 'Disponible au lot 3.';
+  String get addExcelHint => 'Classeur xlsx, avec simulation avant import.';
 
   @override
   String get unidentifiedWine => 'Vin à identifier';
@@ -2202,4 +2202,337 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get cropOriginalNote =>
       'La photo d\'origine est gardée jusqu\'à la validation de la fiche.';
+
+  @override
+  String get excelListName => 'Liste';
+
+  @override
+  String get excelListValue => 'Valeur autorisée';
+
+  @override
+  String get excelListParent => 'Rattachée à';
+
+  @override
+  String get excelNotice =>
+      'Règles d\'import du classeur IA cave à vin\n\nOnglet Vins : une ligne par fiche (domaine, cuvée, millésime).\n- Colonne id remplie : la fiche existante est mise à jour. id vide : une fiche est créée.\n- Action = SUPPRIMER (avec l\'id) : la fiche est supprimée de la cave, ses mouvements restent dans l\'historique.\n- Domaine, Pays, Couleur et Millésime sont obligatoires. Millésime : une année ou NM pour un non millésimé.\n- Les listes (pays, région, appellation, cépages, accords…) prennent les valeurs de l\'onglet Listes. Plusieurs valeurs dans une cellule : séparées par un point-virgule.\n- Cépages : « Merlot 80 %; Cabernet Franc 20 % », total de 100 % au plus.\n- Les colonnes Origine garde, Statut garde, Statut enrichissement, Note Parker, Meilleure note, Stock total et Photo principale sont calculées : elles sont ignorées à l\'import.\n\nOnglet Lots : une ligne par lot (même fiche, format, propriétaire, emplacement, prix).\n- id lot rempli : mise à jour ; vide : création. Action = SUPPRIMER : suppression du lot.\n- id fiche : l\'id d\'une fiche de l\'onglet Vins, ou #numéro de ligne pour une fiche créée par le même import (exemple : #12).\n- Quantité : quantité cible. L\'app crée un mouvement d\'ajustement de l\'écart, motif « import Excel ». Cellule vide : stock inchangé.\n- Emplacement : chemin complet, par exemple « Cave > Armoire 1 > Casier A ».\n\nOnglet Mouvements : lecture seule, ignoré à l\'import.\n\nPhotos : joignez un zip de photos ; une photo dont le nom figure dans la colonne Photo principale est rattachée à la fiche.\n\nAvant tout import, l\'app simule et affiche un rapport. Une sauvegarde automatique est faite juste avant, et l\'import se fait en entier ou pas du tout.';
+
+  @override
+  String get ieExcelSection => 'Excel';
+
+  @override
+  String get ieExport => 'Exporter la cave';
+
+  @override
+  String get ieExportHint =>
+      'Classeur xlsx : vins, lots, mouvements, listes autorisées et notice.';
+
+  @override
+  String get ieTemplate => 'Modèle vierge';
+
+  @override
+  String get ieTemplateHint =>
+      'Même classeur sans données, pour saisir une cave sur ordinateur.';
+
+  @override
+  String get ieImport => 'Importer un classeur';
+
+  @override
+  String get ieImportHint => 'Simulation et rapport avant toute modification.';
+
+  @override
+  String get iePhotosTitle => 'Joindre des photos ?';
+
+  @override
+  String get iePhotosBody =>
+      'Un zip de photos peut accompagner le classeur : chaque photo citée dans la colonne Photo principale est rattachée à sa fiche.';
+
+  @override
+  String get iePhotosPick => 'Choisir un zip';
+
+  @override
+  String get iePhotosSkip => 'Sans photos';
+
+  @override
+  String get ieReady => 'Fichier prêt';
+
+  @override
+  String get importReportTitle => 'Simulation de l\'import';
+
+  @override
+  String importWinesCreated(int n) {
+    return 'Fiches créées : $n';
+  }
+
+  @override
+  String importWinesUpdated(int n) {
+    return 'Fiches mises à jour : $n';
+  }
+
+  @override
+  String importWinesDeleted(int n) {
+    return 'Fiches supprimées : $n';
+  }
+
+  @override
+  String importLotsCreated(int n) {
+    return 'Lots créés : $n';
+  }
+
+  @override
+  String importLotsUpdated(int n) {
+    return 'Lots mis à jour : $n';
+  }
+
+  @override
+  String importLotsDeleted(int n) {
+    return 'Lots supprimés : $n';
+  }
+
+  @override
+  String importStockChanges(int n) {
+    return 'Stocks ajustés : $n';
+  }
+
+  @override
+  String importPhotos(int n) {
+    return 'Photos rattachées : $n';
+  }
+
+  @override
+  String get importNoChange => 'Aucune différence avec la cave.';
+
+  @override
+  String get importUnknownTitle => 'Valeurs absentes de l\'app';
+
+  @override
+  String get importCreateUnknown => 'Les créer pendant l\'import';
+
+  @override
+  String importIssuesTitle(int n) {
+    return 'Erreurs à corriger ($n)';
+  }
+
+  @override
+  String importIssueWhere(String sheet, int row, String column) {
+    return '$sheet, ligne $row, colonne $column';
+  }
+
+  @override
+  String get importApply => 'Importer';
+
+  @override
+  String get importBlocked =>
+      'Corrigez le classeur puis relancez l\'import : rien n\'est modifié tant qu\'il reste une erreur.';
+
+  @override
+  String get importBackupNote =>
+      'Une sauvegarde automatique est faite juste avant l\'import, qui se fait en entier ou pas du tout.';
+
+  @override
+  String get importEnrich => 'Enrichir les fiches créées';
+
+  @override
+  String importEnrichHint(int n, String left) {
+    return '$n fiches créées avec une photo, soit $n appels au flux. Quota restant ce mois : $left.';
+  }
+
+  @override
+  String get importEnrichUnknownQuota => 'inconnu';
+
+  @override
+  String importEnrichStarted(int n) {
+    return '$n enrichissements en file d\'attente';
+  }
+
+  @override
+  String get importOwnerList => 'Propriétaire';
+
+  @override
+  String get issueMissingSheet => 'onglet absent';
+
+  @override
+  String get issueMissingColumn => 'colonne absente';
+
+  @override
+  String get issueRequired => 'valeur obligatoire';
+
+  @override
+  String get issueUnknownId => 'identifiant inconnu';
+
+  @override
+  String get issueDuplicateId => 'identifiant présent deux fois';
+
+  @override
+  String get issueInvalidNumber => 'nombre attendu';
+
+  @override
+  String get issueInvalidVintage =>
+      'millésime attendu : une année jusqu\'à l\'année en cours, ou NM';
+
+  @override
+  String get issueOutOfRange => 'valeur hors des bornes';
+
+  @override
+  String get issueGardeOrder =>
+      'garde incohérente : début après le millésime, début avant l\'apogée, apogée avant la fin';
+
+  @override
+  String get issueInvalidEan =>
+      'code-barres invalide : 13 chiffres et clé de contrôle';
+
+  @override
+  String get issueInvalidBoolean => 'oui ou non attendu';
+
+  @override
+  String get issueInvalidDate => 'date attendue';
+
+  @override
+  String get issueInvalidGrapes =>
+      'cépages illisibles : « Merlot 80 %; Cabernet Franc 20 % »';
+
+  @override
+  String get issueInvalidAction =>
+      'action inconnue : vide ou SUPPRIMER, avec l\'identifiant';
+
+  @override
+  String get issueUnknownValue => 'valeur absente de la liste';
+
+  @override
+  String get issueUnknownLocation => 'emplacement inconnu';
+
+  @override
+  String get issueUnknownWine => 'fiche inconnue';
+
+  @override
+  String get issueDeletedWine => 'fiche supprimée par ce même import';
+
+  @override
+  String get issueLotWineChange =>
+      'un lot ne change pas de fiche : créez un nouveau lot';
+
+  @override
+  String get importFinished => 'Import terminé';
+
+  @override
+  String pdfGardeRange(String start, String end) {
+    return 'de $start à $end';
+  }
+
+  @override
+  String pdfGardePeak(String year) {
+    return 'apogée $year';
+  }
+
+  @override
+  String pdfAlcohol(String value) {
+    return '$value %';
+  }
+
+  @override
+  String get pdfGardeSource => 'Origine de la garde';
+
+  @override
+  String get pdfGardeStatus => 'Statut de garde';
+
+  @override
+  String get pdfParker => 'Note Parker';
+
+  @override
+  String get pdfStock => 'En stock';
+
+  @override
+  String pdfBottles(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n bouteilles',
+      one: '1 bouteille',
+      zero: 'aucune bouteille',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pdfCitedBy(String site) {
+    return 'citée par $site';
+  }
+
+  @override
+  String pdfPrice(String price) {
+    return '$price l\'unité';
+  }
+
+  @override
+  String pdfEditedOn(String date) {
+    return 'Édité le $date';
+  }
+
+  @override
+  String get pdfCatalogueTitle => 'Catalogue de la cave';
+
+  @override
+  String pdfCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n fiches',
+      one: '1 fiche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pdfFilters => 'Filtres appliqués';
+
+  @override
+  String get pdfNoFilter => 'Aucun filtre : toutes les fiches.';
+
+  @override
+  String pdfPage(String n, String total) {
+    return 'Page $n / $total';
+  }
+
+  @override
+  String issueWithValue(String reason, String value) {
+    return '$reason : « $value »';
+  }
+
+  @override
+  String filterLine(String label, String value) {
+    return '$label : $value';
+  }
+
+  @override
+  String get catalogueSection => 'Catalogue PDF';
+
+  @override
+  String get catalogueHint =>
+      'Deux fiches par page A4. Les filtres et le tri de la liste sont repris ; vous pouvez les changer ici sans toucher à la liste.';
+
+  @override
+  String catalogueFilters(int n) {
+    return 'Filtres ($n)';
+  }
+
+  @override
+  String get catalogueCover =>
+      'Page de garde (date, filtres, nombre de fiches)';
+
+  @override
+  String catalogueGenerate(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Générer le catalogue ($n fiches)',
+      one: 'Générer le catalogue (1 fiche)',
+      zero: 'Aucune fiche à imprimer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get winePdf => 'Fiche PDF';
+
+  @override
+  String get pdfPreparing => 'Préparation du PDF…';
 }

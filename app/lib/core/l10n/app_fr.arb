@@ -844,7 +844,7 @@
   "addManual": "Saisie manuelle",
   "addManualHint": "Remplir la fiche soi-même.",
   "addExcel": "Import Excel",
-  "addExcelHint": "Disponible au lot 3.",
+  "addExcelHint": "Classeur xlsx, avec simulation avant import.",
   "unidentifiedWine": "Vin à identifier",
   "captureTitle": "Photos de la bouteille",
   "captureHint": "Cadrez l'étiquette entière, bien droite, sans reflet. Ajoutez la contre-étiquette si elle porte le degré ou les cépages.",
@@ -1224,5 +1224,284 @@
   "cropHint": "Faites glisser le cadre ou ses coins sur l'étiquette.",
   "cropWhole": "Photo entière",
   "cropSaved": "Cadre enregistré",
-  "cropOriginalNote": "La photo d'origine est gardée jusqu'à la validation de la fiche."
+  "cropOriginalNote": "La photo d'origine est gardée jusqu'à la validation de la fiche.",
+  "excelListName": "Liste",
+  "excelListValue": "Valeur autorisée",
+  "excelListParent": "Rattachée à",
+  "excelNotice": "Règles d'import du classeur IA cave à vin\n\nOnglet Vins : une ligne par fiche (domaine, cuvée, millésime).\n- Colonne id remplie : la fiche existante est mise à jour. id vide : une fiche est créée.\n- Action = SUPPRIMER (avec l'id) : la fiche est supprimée de la cave, ses mouvements restent dans l'historique.\n- Domaine, Pays, Couleur et Millésime sont obligatoires. Millésime : une année ou NM pour un non millésimé.\n- Les listes (pays, région, appellation, cépages, accords…) prennent les valeurs de l'onglet Listes. Plusieurs valeurs dans une cellule : séparées par un point-virgule.\n- Cépages : « Merlot 80 %; Cabernet Franc 20 % », total de 100 % au plus.\n- Les colonnes Origine garde, Statut garde, Statut enrichissement, Note Parker, Meilleure note, Stock total et Photo principale sont calculées : elles sont ignorées à l'import.\n\nOnglet Lots : une ligne par lot (même fiche, format, propriétaire, emplacement, prix).\n- id lot rempli : mise à jour ; vide : création. Action = SUPPRIMER : suppression du lot.\n- id fiche : l'id d'une fiche de l'onglet Vins, ou #numéro de ligne pour une fiche créée par le même import (exemple : #12).\n- Quantité : quantité cible. L'app crée un mouvement d'ajustement de l'écart, motif « import Excel ». Cellule vide : stock inchangé.\n- Emplacement : chemin complet, par exemple « Cave > Armoire 1 > Casier A ».\n\nOnglet Mouvements : lecture seule, ignoré à l'import.\n\nPhotos : joignez un zip de photos ; une photo dont le nom figure dans la colonne Photo principale est rattachée à la fiche.\n\nAvant tout import, l'app simule et affiche un rapport. Une sauvegarde automatique est faite juste avant, et l'import se fait en entier ou pas du tout.",
+  "ieExcelSection": "Excel",
+  "ieExport": "Exporter la cave",
+  "ieExportHint": "Classeur xlsx : vins, lots, mouvements, listes autorisées et notice.",
+  "ieTemplate": "Modèle vierge",
+  "ieTemplateHint": "Même classeur sans données, pour saisir une cave sur ordinateur.",
+  "ieImport": "Importer un classeur",
+  "ieImportHint": "Simulation et rapport avant toute modification.",
+  "iePhotosTitle": "Joindre des photos ?",
+  "iePhotosBody": "Un zip de photos peut accompagner le classeur : chaque photo citée dans la colonne Photo principale est rattachée à sa fiche.",
+  "iePhotosPick": "Choisir un zip",
+  "iePhotosSkip": "Sans photos",
+  "ieReady": "Fichier prêt",
+  "importReportTitle": "Simulation de l'import",
+  "importWinesCreated": "Fiches créées : {n}",
+  "@importWinesCreated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importWinesUpdated": "Fiches mises à jour : {n}",
+  "@importWinesUpdated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importWinesDeleted": "Fiches supprimées : {n}",
+  "@importWinesDeleted": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importLotsCreated": "Lots créés : {n}",
+  "@importLotsCreated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importLotsUpdated": "Lots mis à jour : {n}",
+  "@importLotsUpdated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importLotsDeleted": "Lots supprimés : {n}",
+  "@importLotsDeleted": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importStockChanges": "Stocks ajustés : {n}",
+  "@importStockChanges": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importPhotos": "Photos rattachées : {n}",
+  "@importPhotos": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importNoChange": "Aucune différence avec la cave.",
+  "importUnknownTitle": "Valeurs absentes de l'app",
+  "importCreateUnknown": "Les créer pendant l'import",
+  "importIssuesTitle": "Erreurs à corriger ({n})",
+  "@importIssuesTitle": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importIssueWhere": "{sheet}, ligne {row}, colonne {column}",
+  "@importIssueWhere": {
+    "placeholders": {
+      "sheet": {
+        "type": "String"
+      },
+      "row": {
+        "type": "int"
+      },
+      "column": {
+        "type": "String"
+      }
+    }
+  },
+  "importApply": "Importer",
+  "importBlocked": "Corrigez le classeur puis relancez l'import : rien n'est modifié tant qu'il reste une erreur.",
+  "importBackupNote": "Une sauvegarde automatique est faite juste avant l'import, qui se fait en entier ou pas du tout.",
+  "importEnrich": "Enrichir les fiches créées",
+  "importEnrichHint": "{n} fiches créées avec une photo, soit {n} appels au flux. Quota restant ce mois : {left}.",
+  "@importEnrichHint": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "left": {
+        "type": "String"
+      }
+    }
+  },
+  "importEnrichUnknownQuota": "inconnu",
+  "importEnrichStarted": "{n} enrichissements en file d'attente",
+  "@importEnrichStarted": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importOwnerList": "Propriétaire",
+  "issueMissingSheet": "onglet absent",
+  "issueMissingColumn": "colonne absente",
+  "issueRequired": "valeur obligatoire",
+  "issueUnknownId": "identifiant inconnu",
+  "issueDuplicateId": "identifiant présent deux fois",
+  "issueInvalidNumber": "nombre attendu",
+  "issueInvalidVintage": "millésime attendu : une année jusqu'à l'année en cours, ou NM",
+  "issueOutOfRange": "valeur hors des bornes",
+  "issueGardeOrder": "garde incohérente : début après le millésime, début avant l'apogée, apogée avant la fin",
+  "issueInvalidEan": "code-barres invalide : 13 chiffres et clé de contrôle",
+  "issueInvalidBoolean": "oui ou non attendu",
+  "issueInvalidDate": "date attendue",
+  "issueInvalidGrapes": "cépages illisibles : « Merlot 80 %; Cabernet Franc 20 % »",
+  "issueInvalidAction": "action inconnue : vide ou SUPPRIMER, avec l'identifiant",
+  "issueUnknownValue": "valeur absente de la liste",
+  "issueUnknownLocation": "emplacement inconnu",
+  "issueUnknownWine": "fiche inconnue",
+  "issueDeletedWine": "fiche supprimée par ce même import",
+  "issueLotWineChange": "un lot ne change pas de fiche : créez un nouveau lot",
+  "importFinished": "Import terminé",
+  "pdfGardeRange": "de {start} à {end}",
+  "@pdfGardeRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfGardePeak": "apogée {year}",
+  "@pdfGardePeak": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfAlcohol": "{value} %",
+  "@pdfAlcohol": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfGardeSource": "Origine de la garde",
+  "pdfGardeStatus": "Statut de garde",
+  "pdfParker": "Note Parker",
+  "pdfStock": "En stock",
+  "pdfBottles": "{n, plural, =0{aucune bouteille} =1{1 bouteille} other{{n} bouteilles}}",
+  "@pdfBottles": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfCitedBy": "citée par {site}",
+  "@pdfCitedBy": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfPrice": "{price} l'unité",
+  "@pdfPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfEditedOn": "Édité le {date}",
+  "@pdfEditedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfCatalogueTitle": "Catalogue de la cave",
+  "pdfCount": "{n, plural, =1{1 fiche} other{{n} fiches}}",
+  "@pdfCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfFilters": "Filtres appliqués",
+  "pdfNoFilter": "Aucun filtre : toutes les fiches.",
+  "pdfPage": "Page {n} / {total}",
+  "@pdfPage": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "issueWithValue": "{reason} : « {value} »",
+  "@issueWithValue": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "filterLine": "{label} : {value}",
+  "@filterLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogueSection": "Catalogue PDF",
+  "catalogueHint": "Deux fiches par page A4. Les filtres et le tri de la liste sont repris ; vous pouvez les changer ici sans toucher à la liste.",
+  "catalogueFilters": "Filtres ({n})",
+  "@catalogueFilters": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogueCover": "Page de garde (date, filtres, nombre de fiches)",
+  "catalogueGenerate": "{n, plural, =0{Aucune fiche à imprimer} =1{Générer le catalogue (1 fiche)} other{Générer le catalogue ({n} fiches)}}",
+  "@catalogueGenerate": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "winePdf": "Fiche PDF",
+  "pdfPreparing": "Préparation du PDF…"
 }

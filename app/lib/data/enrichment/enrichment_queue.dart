@@ -544,6 +544,21 @@ class EnrichmentQueue {
     }
   }
 
+  /// XLS-09 : dernier quota d'enrichissements connu.
+  Future<int?> lastKnownEnrichmentsLeft() async {
+    final rows =
+        await (_db.select(_db.jobs)
+              ..where(
+                (j) =>
+                    j.reponse.isNotNull() &
+                    j.typeJob.equals(JobType.enrichment),
+              )
+              ..orderBy([(j) => OrderingTerm.desc(j.updatedAt)])
+              ..limit(1))
+            .get();
+    return rows.isEmpty ? null : lastResponse(rows.first)?.enrichmentsLeft;
+  }
+
   /// Dernier quota de prix connu, d'après la réponse la plus récente.
   Future<int?> lastKnownPricesLeft() async {
     final rows =

@@ -18,6 +18,7 @@ import '../../domain/wine_detail.dart';
 import '../photos/photo_gallery.dart';
 import '../photos/photo_library_tab.dart';
 import '../wine_list/wine_card.dart';
+import 'pdf_actions.dart';
 import 'price_actions.dart';
 import 'price_chart.dart';
 import 'provenance_sheet.dart';
@@ -112,6 +113,7 @@ class _Detail extends ConsumerWidget {
                   child: Text(l.duplicateVintage),
                 ),
                 PopupMenuItem(value: 'reenrich', child: Text(l.reEnrich)),
+                PopupMenuItem(value: 'pdf', child: Text(l.winePdf)),
                 PopupMenuItem(value: 'delete', child: Text(l.delete)),
               ],
             ),
@@ -166,6 +168,8 @@ class _Detail extends ConsumerWidget {
         await duplicateVintageDialog(context, ref, wine);
       case 'reenrich':
         await reEnrich(context, ref, wine);
+      case 'pdf':
+        await shareWinePdf(context, ref, wine.id);
       case 'delete':
         final ok = await confirm(
           context,
