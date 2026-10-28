@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../domain/enrichment.dart';
+import '../../domain/feedback.dart';
 import 'contract_validator.dart';
 
 /// Le flux est injoignable (mode avion, serveur arrêté) : le job attend.
@@ -27,6 +28,9 @@ abstract interface class EnrichmentGateway {
   Future<JobResponse> requestPrice(PriceRequest request);
   Future<JobResponse> followJob(String jobId);
   Future<FluxHealth> health();
+
+  /// RET-01 : remontée d'information envoyée par mail par le flux.
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request);
 }
 
 /// Scénarios rejoués par [FakeGateway].
@@ -91,6 +95,27 @@ class FakeGateway implements EnrichmentGateway {
   void _checkOnline() {
     calls++;
     if (!online) throw const OfflineException();
+  }
+
+  /// Dernière remontée reçue (RET-01).
+  FeedbackRequest? lastFeedback;
+
+  /// Remontée en mode démonstration : rien ne part. La réponse est celle de
+  /// l'exemple du contrat, validée comme une vraie, et marquée simulée pour
+  /// que l'écran dise que le message n'est pas parti.
+  @override
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request) async {
+    _checkOnline();
+    lastFeedback = request;
+    if (delay > Duration.zero) await Future<void>.delayed(delay);
+    final e = await _example('reponse-remontee.json');
+    final body = jsonEncode({...e, 'request_id': request.requestId});
+    final r = FeedbackResult.fromJson(validator.checkFeedbackResponse(body));
+    return FeedbackResult(
+      sent: r.sent,
+      remainingToday: r.remainingToday,
+      simulated: true,
+    );
   }
 
   @override

@@ -219,7 +219,7 @@ class Photos extends Table with TechnicalColumns, CellarScoped {
   /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
   TextColumn get cadre => text().nullable()();
 
-  /// CMP-07 : dégustation pendant laquelle la photo a été prise.
+  /// CMP-08 : dégustation pendant laquelle la photo a été prise.
   TextColumn get degustationId => text().nullable().references(Tastings, #id)();
 }
 

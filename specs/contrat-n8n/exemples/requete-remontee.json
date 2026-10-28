@@ -1,0 +1,14 @@
+{
+  "version_contrat": "1.3",
+  "request_id": "7e1c2a4b-5d6f-4a8b-9c0d-1e2f3a4b5c6d",
+  "titre": "Millésime mal lu",
+  "commentaire": "Sur la Bergeronnelle 2022, le millésime proposé était 2012.",
+  "email_contact": "bertrand.exemple@exemple.fr",
+  "piece_jointe": {
+    "nom": "capture.pdf",
+    "mime": "application/pdf",
+    "base64": "JVBERi0xLjQKJSBleGVtcGxlCg=="
+  },
+  "version_app": "0.4.0+4",
+  "date_client": "2026-10-28"
+}

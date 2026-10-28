@@ -8,10 +8,10 @@ import '../../data/files/photo_service.dart';
 import '../add/capture_screen.dart' show imagePickerProvider;
 import 'photo_gallery.dart';
 
-/// CMP-07 : au plus 6 photos par dégustation.
+/// CMP-08 : au plus 6 photos par dégustation.
 const maxTastingPhotos = 6;
 
-/// CMP-07 : photos d'une dégustation, dans l'ordre de prise.
+/// CMP-08 : photos d'une dégustation, dans l'ordre de prise.
 final tastingPhotosProvider = FutureProvider.family<List<GalleryPhoto>, String>(
   (ref, tastingId) async {
     final service = ref.watch(photoServiceProvider);
@@ -26,7 +26,7 @@ final tastingPhotosProvider = FutureProvider.family<List<GalleryPhoto>, String>(
   },
 );
 
-/// CMP-07 : miniatures d'une dégustation ; un tap ouvre le plein écran.
+/// CMP-08 : miniatures d'une dégustation ; un tap ouvre le plein écran.
 class TastingPhotoStrip extends ConsumerWidget {
   const TastingPhotoStrip({super.key, required this.tastingId});
 
@@ -66,7 +66,7 @@ class TastingPhotoStrip extends ConsumerWidget {
   }
 }
 
-/// CMP-07 : photos prises dans le formulaire de dégustation, gardées en
+/// CMP-08 : photos prises dans le formulaire de dégustation, gardées en
 /// mémoire (déjà réduites) jusqu'à l'enregistrement.
 class TastingPhotoPicker extends ConsumerStatefulWidget {
   const TastingPhotoPicker({super.key, required this.photos});

@@ -11,6 +11,8 @@ ContractValidator validator() => ContractValidator(
       .readAsStringSync(),
   requestSchema: File('assets/contrat/requete-enrichissement.schema.json')
       .readAsStringSync(),
+  feedbackResponseSchema: File('assets/contrat/reponse-remontee.schema.json')
+      .readAsStringSync(),
 );
 
 Future<String> readExample(String name) =>
@@ -151,7 +153,7 @@ void main() {
       clientDate: '2026-10-28',
     );
     final json = req.toJson();
-    expect(json['version_contrat'], '1.2');
+    expect(json['version_contrat'], '1.3');
     expect(v.requestErrors(json), isEmpty);
     expect(json['signalements'], [
       {'champ': 'cepages', 'valeur': 'Pinot noir 100 %'},

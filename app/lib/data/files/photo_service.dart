@@ -16,7 +16,7 @@ const sentLongSide = 1500;
 const thumbLongSide = 320;
 const jpegQuality = 80;
 
-/// CMP-07 : photos de dégustation ramenées à un écran de smartphone (Full HD,
+/// CMP-08 : photos de dégustation ramenées à un écran de smartphone (Full HD,
 /// 1 080 × 1 920 au plus dans leur sens), environ 200 à 400 Ko.
 const screenShortSide = 1080;
 const screenLongSide = 1920;
@@ -140,7 +140,7 @@ img.Image fitScreen(img.Image src) {
   );
 }
 
-/// CMP-07 : photo de dégustation à la taille d'un écran, miniature 320 px.
+/// CMP-08 : photo de dégustation à la taille d'un écran, miniature 320 px.
 ProcessedPhoto processScreenPhoto(Uint8List bytes) {
   final decoded = img.decodeImage(bytes);
   if (decoded == null) throw const FormatException('image illisible');
@@ -205,7 +205,7 @@ class PhotoService {
   Future<ProcessedPhoto> process(Uint8List bytes) =>
       Isolate.run(() => processPhoto(bytes));
 
-  /// CMP-07 : photo de dégustation, traitée dans un isolate.
+  /// CMP-08 : photo de dégustation, traitée dans un isolate.
   Future<ProcessedPhoto> processForScreen(Uint8List bytes) =>
       Isolate.run(() => processScreenPhoto(bytes));
 
@@ -274,7 +274,7 @@ class PhotoService {
       if (isLibraryPhoto(ph.typePhoto)) ph,
   ];
 
-  /// CMP-07 : photos prises en notant une dégustation, dans l'ordre de prise.
+  /// CMP-08 : photos prises en notant une dégustation, dans l'ordre de prise.
   Future<List<Photo>> tastingPhotosOf(String tastingId) =>
       (_db.select(_db.photos)
             ..where(

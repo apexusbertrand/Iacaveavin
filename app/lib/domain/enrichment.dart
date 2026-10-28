@@ -12,7 +12,8 @@ import 'photo_frame.dart';
 /// 1.1 : cadre de l'étiquette par photo (`resultat.cadrages`, AJO-13).
 /// 1.2 : valeurs signalées fausses jointes à la requête (`signalements`,
 /// PRV-R4).
-const contractVersion = '1.2';
+/// 1.3 : POST /remontee, remontée d'information par mail (RET-01).
+const contractVersion = '1.3';
 
 enum JobStatus {
   pending('en_attente'),

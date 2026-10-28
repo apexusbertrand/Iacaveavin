@@ -144,7 +144,7 @@ test('PRV-R4 signalements (contrat 1.2) : enregistrés, cache contourné, rappel
 
 test('NFR-06 nœud santé : autotest de signature dans le bac à sable', async () => {
   const [s] = await executer('sante', { 'Config santé': config }, {});
-  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.2', ok: true });
+  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.3', ok: true });
 });
 
 test('AJO-05 T111 lecture de l\'étiquette renvoyée en résultat partiel pendant l\'enrichissement', async () => {

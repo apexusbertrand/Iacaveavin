@@ -199,6 +199,41 @@
       "alwaysOutputData": true
     },
     {
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PIiO4KNKOsm0MGNS",
+          "cachedResultName": "iacave_remontees"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "createdAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ days: 30 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "id": "befaf92b-6961-4581-8b35-18077e481af6",
+      "name": "Remontées de plus de 30 jours",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        0
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
       "id": "d19852df-d130-4b7e-9490-a955503434e4",
       "name": "Sticky Note 549e414e",
       "type": "n8n-nodes-base.stickyNote",
@@ -270,6 +305,17 @@
           }
         ]
       ]
+    },
+    "Signalements de plus de 24 mois": {
+      "main": [
+        [
+          {
+            "node": "Remontées de plus de 30 jours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -282,6 +328,6 @@
   "meta": {
     "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
     "idN8n": "2MMx8azV92NVEEEE",
-    "versionId": "a984b23a-b7fb-4ae6-8111-1ba0849254da"
+    "versionId": "d428dc7e-7bb9-493c-a4a3-5ca3afefb125"
   }
 }

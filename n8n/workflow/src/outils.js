@@ -8,6 +8,7 @@ const TABLES = {
   cache_prix: ['nnNm6j6kXtECZxrn', 'iacave_cache_prix'],
   quotas: ['1ip3UBzHPzShXuiU', 'iacave_quotas'],
   signalements: ['HcfygIuRGsBxv9vG', 'iacave_signalements'],
+  remontees: ['PIiO4KNKOsm0MGNS', 'iacave_remontees'],
 };
 
 const IDENTIFIANTS = {

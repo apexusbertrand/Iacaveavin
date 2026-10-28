@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/about/about_screen.dart';
+import '../../features/feedback/feedback_screen.dart';
 import '../../features/add/capture_screen.dart';
 import '../../features/add/enrichment_screen.dart';
 import '../../features/add/validation_screen.dart';
@@ -105,6 +106,7 @@ Widget _screenFor(AppDestination d) => switch (d) {
   AppDestination.locations => const LocationsScreen(),
   AppDestination.backup => const BackupScreen(),
   AppDestination.about => const AboutScreen(),
+  AppDestination.feedback => const FeedbackScreen(),
   AppDestination.importExport => const ImportExportScreen(),
   AppDestination.statistics => const StatisticsScreen(),
   AppDestination.toDrink => const ToDrinkScreen(),

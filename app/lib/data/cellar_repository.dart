@@ -698,7 +698,7 @@ class CellarRepository {
   }
 
   /// FIC-04 : note de dégustation, proposée à l'ouverture, jamais imposée.
-  /// Renvoie l'identifiant de la dégustation (photos de CMP-07).
+  /// Renvoie l'identifiant de la dégustation (photos de CMP-08).
   Future<String> addTasting({
     required String wineId,
     required String cellarId,

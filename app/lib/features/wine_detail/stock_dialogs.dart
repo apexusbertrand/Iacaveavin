@@ -649,7 +649,7 @@ class _LotFormState extends ConsumerState<LotForm> {
 }
 
 /// FIC-04 : note personnelle, sur l'échelle des réglages (20 ou 100).
-/// CMP-07 : photos prises pendant la dégustation, réduites à un écran.
+/// CMP-08 : photos prises pendant la dégustation, réduites à un écran.
 Future<void> tastingDialog(
   BuildContext context,
   WidgetRef ref,

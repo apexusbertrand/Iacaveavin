@@ -12,6 +12,7 @@
   "navImportExport": "Import et export",
   "navBackup": "Sauvegarde",
   "navSettings": "Paramètres",
+  "navFeedback": "Remontée d'information",
   "navAbout": "À propos",
   "placeholderTitle": "Bientôt disponible",
   "placeholderBody": "Cet écran arrive avec le lot {lot}.",
@@ -1805,5 +1806,49 @@
         "type": "int"
       }
     }
-  }
+  },
+  "feedbackIntro": "Un bug, une idée, une fiche fausse ? Écrivez-nous. Le message part par mail à l'équipe, avec une copie à votre adresse.",
+  "feedbackTitle": "Titre",
+  "feedbackComment": "Commentaire",
+  "feedbackEmail": "Votre adresse mail",
+  "feedbackEmailHelp": "Reçoit la copie et la réponse.",
+  "feedbackEmailInvalid": "Adresse mail invalide (exemple : prenom.nom@exemple.fr).",
+  "feedbackRequired": "Champ obligatoire.",
+  "feedbackAttachment": "Pièce jointe (facultative)",
+  "feedbackAttachmentHelp": "Une seule : un PDF ou une image, 5 Mo au plus.",
+  "feedbackAttachFile": "Joindre un fichier",
+  "feedbackReplaceFile": "Remplacer le fichier",
+  "feedbackAttachmentRemove": "Retirer la pièce jointe",
+  "feedbackAttachmentSize": "{size} Ko",
+  "@feedbackAttachmentSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackAttachmentType": "Seuls les PDF et les images sont acceptés.",
+  "feedbackAttachmentTooBig": "Fichier trop lourd : 5 Mo au plus.",
+  "feedbackSend": "Envoyer",
+  "feedbackSent": "Message envoyé. Une copie part à {email}.",
+  "@feedbackSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackQuota": "Limite de 5 messages par jour atteinte. Réessayez demain.",
+  "feedbackRefused": "Envoi refusé : {detail}",
+  "@feedbackRefused": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackOffline": "Pas de réseau. Votre message reste ici, réessayez une fois connecté.",
+  "feedbackAuth": "Le flux refuse la clé de l'application. Vérifiez-la dans les paramètres.",
+  "feedbackPrivacy": "Votre adresse sert seulement à vous répondre. Elle n'est pas enregistrée sur le téléphone.",
+  "feedbackSimulated": "Flux non connecté : le message n'est pas parti. Renseignez la clé du flux dans les Paramètres, puis renvoyez-le."
 }

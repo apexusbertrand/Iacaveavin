@@ -24,6 +24,9 @@ final contractValidatorProvider = FutureProvider<ContractValidator>((
       ContractValidator.responseAsset,
     ),
     requestSchema: await rootBundle.loadString(ContractValidator.requestAsset),
+    feedbackResponseSchema: await rootBundle.loadString(
+      ContractValidator.feedbackResponseAsset,
+    ),
   );
 });
 

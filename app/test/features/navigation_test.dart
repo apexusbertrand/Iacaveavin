@@ -24,6 +24,7 @@ void main() {
         'Import et export',
         'Sauvegarde',
         'Paramètres',
+        "Remontée d'information",
         'À propos',
       ];
       final tiles = tester
@@ -36,7 +37,7 @@ void main() {
           .map((t) => (t.title! as Text).data)
           .toList();
       expect(tiles, attendues);
-      expect(AppDestination.values, hasLength(9));
+      expect(AppDestination.values, hasLength(10));
     },
   );
 

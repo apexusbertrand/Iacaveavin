@@ -8598,7 +8598,7 @@ class Photo extends DataClass implements Insertable<Photo> {
   /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
   final String? cadre;
 
-  /// CMP-07 : dégustation pendant laquelle la photo a été prise.
+  /// CMP-08 : dégustation pendant laquelle la photo a été prise.
   final String? degustationId;
   const Photo({
     required this.id,

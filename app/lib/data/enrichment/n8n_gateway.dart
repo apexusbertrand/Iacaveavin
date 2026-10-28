@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../../domain/enrichment.dart';
+import '../../domain/feedback.dart';
 import 'contract_validator.dart';
 import 'enrichment_gateway.dart';
 import 'request_signer.dart';
@@ -129,6 +130,20 @@ class N8nGateway implements EnrichmentGateway {
       '$_prefix/jobs?job_id=${Uri.encodeQueryComponent(jobId)}',
     );
     return _job(status, body);
+  }
+
+  /// RET-01 : POST /remontee, réponse validée contre le contrat 1.3. Un
+  /// refus de signature devient [AuthException], comme pour les jobs.
+  @override
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request) async {
+    final (status, body) = await _send(
+      'POST',
+      '$_prefix/remontee',
+      request.toJson(),
+    );
+    final r = FeedbackResult.fromJson(validator.checkFeedbackResponse(body));
+    if (status == 401 && !r.sent) throw AuthException(r.message ?? '');
+    return r;
   }
 
   /// GET /sante : `{version_flux, version_contrat, ok}`. `ok` faux tant que la

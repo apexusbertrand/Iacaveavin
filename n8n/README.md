@@ -20,7 +20,8 @@ Ce dossier contient tout ce qu'il faut pour construire et faire évoluer le flux
 5. Webhook GET `iacave/jobs?job_id=…` : lecture du job (paramètre de requête, voir T63).
 6. Webhook POST `iacave/prix` : mêmes contrôles d'entrée, sous-flux `IA_CAVE_Prix`, cache de 24 heures.
 7. Webhook GET `iacave/sante` : version du flux et du contrat.
-8. Flux d'erreur : mail d'alerte avec le job_id, sans les photos.
+8. Webhook POST `iacave/remontee` (flux `IA_CAVE_Remontee`, RET-01) : mêmes contrôles de signature, schéma, pièce jointe vérifiée, 5 envois par jour et par installation, mail à apexus.claude@gmail.com avec le contact en copie et en réponse.
+9. Flux d'erreur : mail d'alerte avec le job_id, sans les photos.
 
 ## Flux et tables en ligne (instance apexus.app.n8n.cloud)
 
@@ -30,11 +31,12 @@ Ce dossier contient tout ce qu'il faut pour construire et faire évoluer le flux
 | IA_CAVE_Enrichissement | 5z197yDZlge7nrpM | lecture d'étiquette, cache, agent, contrôles, clôture |
 | IA_CAVE_Prix | PeGDu6KX9n4SDml1 | relevé de prix, seul (POST /prix) ou appelé par l'enrichissement |
 | IA_CAVE_Erreurs | DBnqjEW2q6d4YeOh | flux d'erreur : job en erreur, mail à apexus.bertrand@gmail.com |
+| IA_CAVE_Remontee | F8HcTU0BuXS1dNas | webhook /remontee : remontée d'information de l'app par mail (T118) |
 | IA_CAVE_Purge | 2MMx8azV92NVEEEE | purge chaque nuit à 3 h 17 (durées de docs/06) |
 | iacave_config | wZNVTkGzqgeu2smf | clés, quotas, destinataire des alertes |
-| iacave_jobs, iacave_cache_vins, iacave_cache_prix, iacave_quotas, iacave_signalements | voir n8n/workflow/src/outils.js | données du flux |
+| iacave_jobs, iacave_cache_vins, iacave_cache_prix, iacave_quotas, iacave_signalements, iacave_remontees | voir n8n/workflow/src/outils.js | données du flux |
 
-URL de l'app : `https://apexus.app.n8n.cloud/webhook/iacave/...` (sante, enrichissement, prix, `jobs?job_id=…`).
+URL de l'app : `https://apexus.app.n8n.cloud/webhook/iacave/...` (sante, enrichissement, prix, `jobs?job_id=…`, remontee).
 
 ## Mise en service par Bertrand
 
@@ -62,6 +64,7 @@ Les identifiants « Claude AI Cave » (Anthropic) et « Gmail Claude » sont ceu
 | quota_prix | 120 | par mois |
 | seuil_alerte | 0.8 | mail d'alerte de quota |
 | email_alerte | apexus.bertrand@gmail.com | destinataire des alertes |
+| remontees_par_jour | 5 (valeur prise si la ligne manque) | remontées par jour et par installation |
 
 ## Avant chaque mise en production du flux
 

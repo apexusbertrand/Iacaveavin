@@ -127,7 +127,7 @@ void main() {
   });
 
   test(
-    'NFR-05 CMP-07 migration v4 vers v5 : photos gardées, sans dégustation',
+    'NFR-05 CMP-08 migration v4 vers v5 : photos gardées, sans dégustation',
     () async {
       final schema = await verifier.schemaAt(4);
       final old = v4.DatabaseAtV4(schema.newConnection());

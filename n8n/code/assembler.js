@@ -4,7 +4,7 @@
 // - n8n/code/noeuds/<nom>.js : script d'un nœud Code. Une ligne
 //   « // @inclure <fichier> » est remplacée par n8n/code/lib/<fichier> ;
 //   __VERSION_FLUX__, __SCHEMA_REPONSE__, __SCHEMA_ENRICHISSEMENT__,
-//   __SCHEMA_PRIX__, __VECTEUR__, __SOURCES__ et __ACCORDS__ par leurs valeurs.
+//   __SCHEMA_PRIX__, __SCHEMA_REMONTEE__, __SCHEMA_REPONSE_REMONTEE__, __VECTEUR__, __SOURCES__ et __ACCORDS__ par leurs valeurs.
 // - n8n/workflow/src/<flux>.sdk.js : source SDK du flux ; CODE('<nom>') y
 //   est remplacé par le script assemblé du nœud, en chaîne JSON.
 //
@@ -14,7 +14,7 @@ const path = require('path');
 
 const ici = __dirname;
 const racine = path.resolve(ici, '../..');
-const VERSION_FLUX = '0.3.0';
+const VERSION_FLUX = '0.4.0';
 
 const lire = (p) => fs.readFileSync(path.join(racine, p), 'utf8');
 
@@ -76,6 +76,8 @@ function noeud(nom) {
     .replace(/__SCHEMA_REPONSE__/g, () => json('specs/contrat-n8n/reponse-job.schema.json'))
     .replace(/__SCHEMA_ENRICHISSEMENT__/g, () => json('specs/contrat-n8n/requete-enrichissement.schema.json'))
     .replace(/__SCHEMA_PRIX__/g, () => json('specs/contrat-n8n/requete-prix.schema.json'))
+    .replace(/__SCHEMA_REMONTEE__/g, () => json('specs/contrat-n8n/requete-remontee.schema.json'))
+    .replace(/__SCHEMA_REPONSE_REMONTEE__/g, () => json('specs/contrat-n8n/reponse-remontee.schema.json'))
     .replace(/__VECTEUR__/g, () => json('specs/contrat-n8n/vecteur-signature.json'))
     .replace(/__PROMPT_ENRICHISSEMENT__/g, () => JSON.stringify(prompt('prompt-agent-enrichissement.md')))
     .replace(/__PROMPT_PRIX__/g, () => JSON.stringify(prompt('prompt-agent-prix.md')))

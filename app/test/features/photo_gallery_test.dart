@@ -117,7 +117,7 @@ void main() {
   );
 
   testWidgets(
-    'CMP-07 photos prises en notant une dégustation, visibles dans l\'historique',
+    'CMP-08 photos prises en notant une dégustation, visibles dans l\'historique',
     (tester) async {
       late String wine;
       final db = await pumpRealApp(

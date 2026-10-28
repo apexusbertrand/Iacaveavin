@@ -37,6 +37,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navSettings => 'Paramètres';
 
   @override
+  String get navFeedback => 'Remontée d\'information';
+
+  @override
   String get navAbout => 'À propos';
 
   @override
@@ -3077,4 +3080,88 @@ class AppLocalizationsFr extends AppLocalizations {
   String tastingScoreValue(String score, int scale) {
     return '$score / $scale';
   }
+
+  @override
+  String get feedbackIntro =>
+      'Un bug, une idée, une fiche fausse ? Écrivez-nous. Le message part par mail à l\'équipe, avec une copie à votre adresse.';
+
+  @override
+  String get feedbackTitle => 'Titre';
+
+  @override
+  String get feedbackComment => 'Commentaire';
+
+  @override
+  String get feedbackEmail => 'Votre adresse mail';
+
+  @override
+  String get feedbackEmailHelp => 'Reçoit la copie et la réponse.';
+
+  @override
+  String get feedbackEmailInvalid =>
+      'Adresse mail invalide (exemple : prenom.nom@exemple.fr).';
+
+  @override
+  String get feedbackRequired => 'Champ obligatoire.';
+
+  @override
+  String get feedbackAttachment => 'Pièce jointe (facultative)';
+
+  @override
+  String get feedbackAttachmentHelp =>
+      'Une seule : un PDF ou une image, 5 Mo au plus.';
+
+  @override
+  String get feedbackAttachFile => 'Joindre un fichier';
+
+  @override
+  String get feedbackReplaceFile => 'Remplacer le fichier';
+
+  @override
+  String get feedbackAttachmentRemove => 'Retirer la pièce jointe';
+
+  @override
+  String feedbackAttachmentSize(String size) {
+    return '$size Ko';
+  }
+
+  @override
+  String get feedbackAttachmentType =>
+      'Seuls les PDF et les images sont acceptés.';
+
+  @override
+  String get feedbackAttachmentTooBig => 'Fichier trop lourd : 5 Mo au plus.';
+
+  @override
+  String get feedbackSend => 'Envoyer';
+
+  @override
+  String feedbackSent(String email) {
+    return 'Message envoyé. Une copie part à $email.';
+  }
+
+  @override
+  String get feedbackQuota =>
+      'Limite de 5 messages par jour atteinte. Réessayez demain.';
+
+  @override
+  String feedbackRefused(String detail) {
+    return 'Envoi refusé : $detail';
+  }
+
+  @override
+  String get feedbackOffline =>
+      'Pas de réseau. Votre message reste ici, réessayez une fois connecté.';
+
+  @override
+  String get feedbackAuth =>
+      'Le flux refuse la clé de l\'application. Vérifiez-la dans les paramètres.';
+
+  @override
+  String get feedbackPrivacy =>
+      'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.';
+
+  @override
+  String get feedbackSimulated =>
+      'Flux non connecté : le message n\'est pas parti. Renseignez la clé du flux dans les Paramètres, puis renvoyez-le.';
 }

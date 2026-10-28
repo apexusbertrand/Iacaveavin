@@ -13,6 +13,7 @@ enum AppDestination {
   importExport('/import-export', Icons.import_export, null),
   backup('/sauvegarde', Icons.backup_outlined, null),
   settings('/parametres', Icons.settings_outlined, null),
+  feedback('/remontee', Icons.feedback_outlined, null),
   about('/a-propos', Icons.info_outline, null);
 
   const AppDestination(this.path, this.icon, this.lot);
@@ -30,6 +31,7 @@ enum AppDestination {
     importExport => l.navImportExport,
     backup => l.navBackup,
     settings => l.navSettings,
+    feedback => l.navFeedback,
     about => l.navAbout,
   };
 }

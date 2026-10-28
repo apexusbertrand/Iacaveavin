@@ -101,7 +101,7 @@ void main() {
     },
   );
 
-  test('CMP-07 photo de dégustation ramenée à un écran de smartphone', () {
+  test('CMP-08 photo de dégustation ramenée à un écran de smartphone', () {
     // 4 000 × 3 000 (paysage) : tient dans 1 920 × 1 080.
     final landscape = processScreenPhoto(sharpLabel(w: 4000, h: 3000));
     expect([landscape.width, landscape.height], [1440, 1080]);
@@ -119,7 +119,7 @@ void main() {
   });
 
   test(
-    'CMP-07 photos rattachées à la dégustation et dans la bibliothèque',
+    'CMP-08 photos rattachées à la dégustation et dans la bibliothèque',
     () async {
       final f = Fixture();
       await f.setUp();

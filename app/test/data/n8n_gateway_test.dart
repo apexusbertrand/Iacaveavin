@@ -8,6 +8,7 @@ import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
 import 'package:iacaveavin/data/enrichment/n8n_gateway.dart';
 import 'package:iacaveavin/data/enrichment/request_signer.dart';
 import 'package:iacaveavin/domain/enrichment.dart';
+import 'package:iacaveavin/domain/feedback.dart';
 
 import 'contract_test.dart' show example, validator;
 
@@ -200,6 +201,44 @@ void main() {
         expect((await gatewayFor(s).check()).status, ConnectionStatus.notReady);
       },
     );
+
+    test('RET-01 remontée signée sur /remontee, quota lu', () async {
+      const request = FeedbackRequest(
+        requestId: '5f0c2a8e-3b1d-4c6e-9a7f-2d4b6c8e0a1b',
+        title: 'Fiche fausse',
+        comment: 'Le millésime lu est faux.',
+        email: 'bertrand@exemple.fr',
+        clientDate: '2026-10-28',
+      );
+      s.answer = (m, p, b) => (
+        200,
+        {...example('reponse-remontee.json'), 'request_id': request.requestId},
+      );
+      final r = await gatewayFor(s).sendFeedback(request);
+      final sent = s.requests.single;
+      expect(sent.method, 'POST');
+      expect(sent.path, '/webhook/iacave/remontee');
+      expect(jsonDecode(sent.body)['email_contact'], 'bertrand@exemple.fr');
+      expect(r.sent, isTrue);
+
+      s.answer = (m, p, b) => (
+        429,
+        {
+          'version_contrat': '1.3',
+          'request_id': request.requestId,
+          'statut': 'erreur',
+          'envoi_restants_jour': 0,
+          'erreur': {
+            'code': 'quota_depasse',
+            'message': '5 remontées par jour au plus : réessayez demain.',
+            'reessayable': false,
+          },
+        },
+      );
+      final q = await gatewayFor(s).sendFeedback(request);
+      expect(q.sent, isFalse);
+      expect(q.errorCode, 'quota_depasse');
+    });
 
     test('NFR-03 flux injoignable : OfflineException, le job attend', () async {
       final url = s.url;

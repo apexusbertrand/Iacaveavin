@@ -59,7 +59,7 @@ class AppDatabase extends _$AppDatabase {
       from3To4: (m, schema) async {
         await m.createTable(schema.listeAchat);
       },
-      // v5 : photos rattachées à une dégustation (CMP-07).
+      // v5 : photos rattachées à une dégustation (CMP-08).
       from4To5: (m, schema) async {
         await m.addColumn(schema.photo, schema.photo.degustationId);
         await m.create(schema.idxPhotoDegustation);

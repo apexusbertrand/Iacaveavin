@@ -157,5 +157,9 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - CMP-04. Accords inversés : je choisis un plat, l'app propose les vins de la cave compatibles et à boire.
 - CMP-05. Historique des dégustations : date, plat, note, commentaire.
 - CMP-06. Favoris et partage d'une fiche en image ou en PDF.
-- CMP-07. Photos de dégustation : en notant une dégustation, ajout de 6 photos au plus (appareil ou galerie), ramenées à la taille d'un écran de smartphone (1 080 × 1 920 au plus), rattachées à la dégustation, visibles dans son historique et dans la bibliothèque de la bouteille, jamais envoyées au flux (2026-10-28, T114).
 - CMP-07. [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés, toutes couleurs, millésimes 2005 à 2024, plusieurs propriétaires et emplacements), activable et effaçable dans les Réglages. Il sert aux tests de performance et aux captures.
+- CMP-08. Photos de dégustation : en notant une dégustation, ajout de 6 photos au plus (appareil ou galerie), ramenées à la taille d'un écran de smartphone (1 080 × 1 920 au plus), rattachées à la dégustation, visibles dans son historique et dans la bibliothèque de la bouteille, jamais envoyées au flux (2026-10-28, T114).
+
+## RET. Remontée d'information [lot 4]
+
+- RET-01. Formulaire « Remontée d'information » du menu : titre (120 caractères), commentaire (5 000 caractères) et adresse mail de contact, tous obligatoires, adresse au format contrôlé (exemple : prenom.nom@exemple.fr). Une pièce jointe au plus, PDF ou image (JPEG, PNG, WebP), type vérifié sur le contenu du fichier et non sur l'extension, 5 Mo au plus ; une image est ramenée à la taille d'un écran (CMP-08) et envoyée en JPEG. L'envoi passe par le flux (POST /remontee, contrat 1.3) : mail à apexus.claude@gmail.com, copie à l'adresse de contact, réponse à cette adresse. 5 envois par jour et par installation. Hors ligne ou en erreur, la saisie reste à l'écran. Rien n'est enregistré sur le téléphone (2026-10-28, T118).

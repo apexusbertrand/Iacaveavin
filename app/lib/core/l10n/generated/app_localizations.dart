@@ -148,6 +148,12 @@ abstract class AppLocalizations {
   /// **'Paramètres'**
   String get navSettings;
 
+  /// No description provided for @navFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remontée d\'information'**
+  String get navFeedback;
+
   /// No description provided for @navAbout.
   ///
   /// In fr, this message translates to:
@@ -5127,6 +5133,144 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{score} / {scale}'**
   String tastingScoreValue(String score, int scale);
+
+  /// No description provided for @feedbackIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un bug, une idée, une fiche fausse ? Écrivez-nous. Le message part par mail à l\'équipe, avec une copie à votre adresse.'**
+  String get feedbackIntro;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackComment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commentaire'**
+  String get feedbackComment;
+
+  /// No description provided for @feedbackEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre adresse mail'**
+  String get feedbackEmail;
+
+  /// No description provided for @feedbackEmailHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçoit la copie et la réponse.'**
+  String get feedbackEmailHelp;
+
+  /// No description provided for @feedbackEmailInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse mail invalide (exemple : prenom.nom@exemple.fr).'**
+  String get feedbackEmailInvalid;
+
+  /// No description provided for @feedbackRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Champ obligatoire.'**
+  String get feedbackRequired;
+
+  /// No description provided for @feedbackAttachment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pièce jointe (facultative)'**
+  String get feedbackAttachment;
+
+  /// No description provided for @feedbackAttachmentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une seule : un PDF ou une image, 5 Mo au plus.'**
+  String get feedbackAttachmentHelp;
+
+  /// No description provided for @feedbackAttachFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joindre un fichier'**
+  String get feedbackAttachFile;
+
+  /// No description provided for @feedbackReplaceFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplacer le fichier'**
+  String get feedbackReplaceFile;
+
+  /// No description provided for @feedbackAttachmentRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer la pièce jointe'**
+  String get feedbackAttachmentRemove;
+
+  /// No description provided for @feedbackAttachmentSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} Ko'**
+  String feedbackAttachmentSize(String size);
+
+  /// No description provided for @feedbackAttachmentType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuls les PDF et les images sont acceptés.'**
+  String get feedbackAttachmentType;
+
+  /// No description provided for @feedbackAttachmentTooBig.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier trop lourd : 5 Mo au plus.'**
+  String get feedbackAttachmentTooBig;
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message envoyé. Une copie part à {email}.'**
+  String feedbackSent(String email);
+
+  /// No description provided for @feedbackQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite de 5 messages par jour atteinte. Réessayez demain.'**
+  String get feedbackQuota;
+
+  /// No description provided for @feedbackRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi refusé : {detail}'**
+  String feedbackRefused(String detail);
+
+  /// No description provided for @feedbackOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de réseau. Votre message reste ici, réessayez une fois connecté.'**
+  String get feedbackOffline;
+
+  /// No description provided for @feedbackAuth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le flux refuse la clé de l\'application. Vérifiez-la dans les paramètres.'**
+  String get feedbackAuth;
+
+  /// No description provided for @feedbackPrivacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.'**
+  String get feedbackPrivacy;
+
+  /// No description provided for @feedbackSimulated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux non connecté : le message n\'est pas parti. Renseignez la clé du flux dans les Paramètres, puis renvoyez-le.'**
+  String get feedbackSimulated;
 }
 
 class _AppLocalizationsDelegate
