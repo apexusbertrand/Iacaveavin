@@ -21,3 +21,4 @@ Seuils mesurés sur un téléphone Android milieu de gamme avec le jeu de démon
 | NFR-15 | Industrialisation | `flutter analyze` sans avertissement, formatage `dart format`, CI GitHub Actions qui lance analyse, tests, validation du contrat et build de l'APK à chaque push |
 | NFR-16 | Contenu IA | tout texte rédigé par l'agent est marqué comme tel (FIC-07) et peut être signalé (PRV-R4) |
 | NFR-17 | Modération | aucune incitation à boire dans l'app ; mention « L'abus d'alcool est dangereux pour la santé, à consommer avec modération » dans l'écran À propos |
+| NFR-18 | Conformité store | l'app publiée ne montre aucun écran « à venir » ni « arrive avec le lot N », aucun contenu ni flux de démonstration. Sans connexion au flux, les fiches restent « à enrichir » et l'écran le dit (T122). Un test parcourt tous les écrans et les textes |

@@ -7,36 +7,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_providers.dart';
 import 'package:iacaveavin/data/export_providers.dart';
-import 'package:iacaveavin/domain/feedback.dart';
 import 'package:iacaveavin/features/add/capture_screen.dart';
 
 import '../data/contract_test.dart' show readExample, validator;
 import '../data/photo_test.dart' show sharpLabel;
 import '../fakes.dart';
 
-/// Flux connecté : la remontée part vraiment (réponse non simulée).
-class ConnectedGateway extends FakeGateway {
-  ConnectedGateway({required super.validator, required super.readExample});
-
-  @override
-  Future<FeedbackResult> sendFeedback(FeedbackRequest request) async {
-    final r = await super.sendFeedback(request);
-    return FeedbackResult(sent: r.sent, remainingToday: r.remainingToday);
-  }
-}
-
 void main() {
   late Directory root;
   late FakeGateway gateway;
+  var connected = true;
   ({String name, Uint8List bytes})? file;
 
   setUp(() {
     root = Directory.systemTemp.createTempSync('iacav-remontee-');
-    gateway = ConnectedGateway(
-      validator: validator(),
-      readExample: readExample,
-    );
+    gateway = FakeGateway(validator: validator(), readExample: readExample);
     file = null;
+    connected = true;
   });
   tearDown(() => root.deleteSync(recursive: true));
 
@@ -45,7 +32,9 @@ void main() {
     location: '/remontee',
     appDir: root,
     extra: [
-      gatewayProvider.overrideWith((ref) => gateway),
+      gatewayProvider.overrideWith(
+        (ref) => connected ? gateway : const NotConnectedGateway(),
+      ),
       bytesPickerProvider.overrideWithValue((extensions) async => file),
       imagePickerProvider.overrideWithValue(
         ({required bool camera}) async => sharpLabel(w: 3000, h: 2000),
@@ -171,12 +160,12 @@ void main() {
   testWidgets('RET-01 flux non connecté : rien ne part, la saisie reste', (
     tester,
   ) async {
-    gateway = FakeGateway(validator: validator(), readExample: readExample);
+    connected = false;
     await start(tester);
     await fill(tester);
     await tapKey(tester, 'feedback-send');
-    await pumpUntil(tester, () => gateway.lastFeedback != null);
     expect(find.textContaining('Flux non connecté'), findsOneWidget);
+    expect(gateway.lastFeedback, isNull);
     expect(find.textContaining('Message envoyé'), findsNothing);
     final title = tester.widget<TextField>(
       find.descendant(

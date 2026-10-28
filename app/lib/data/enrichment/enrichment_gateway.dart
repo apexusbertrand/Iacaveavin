@@ -12,6 +12,16 @@ class OfflineException implements Exception {
   String toString() => 'OfflineException';
 }
 
+/// Aucune connexion au flux n'est enregistrée (PAR-05) : la fiche reste
+/// « à enrichir » et partira une fois la connexion faite dans les Paramètres.
+/// Traitée comme une absence de réseau par la file d'attente.
+class NotConnectedException extends OfflineException {
+  const NotConnectedException();
+
+  @override
+  String toString() => 'NotConnectedException';
+}
+
 class FluxHealth {
   const FluxHealth({required this.ok, this.contractVersion});
 
@@ -31,6 +41,31 @@ abstract interface class EnrichmentGateway {
 
   /// RET-01 : remontée d'information envoyée par mail par le flux.
   Future<FeedbackResult> sendFeedback(FeedbackRequest request);
+}
+
+/// App publiée sans connexion enregistrée : pas de flux de démonstration,
+/// chaque appel signale l'absence de connexion.
+class NotConnectedGateway implements EnrichmentGateway {
+  const NotConnectedGateway();
+
+  @override
+  Future<JobResponse> requestEnrichment(EnrichmentRequest request) =>
+      Future.error(const NotConnectedException());
+
+  @override
+  Future<JobResponse> requestPrice(PriceRequest request) =>
+      Future.error(const NotConnectedException());
+
+  @override
+  Future<JobResponse> followJob(String jobId) =>
+      Future.error(const NotConnectedException());
+
+  @override
+  Future<FluxHealth> health() => Future.error(const NotConnectedException());
+
+  @override
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request) =>
+      Future.error(const NotConnectedException());
 }
 
 /// Scénarios rejoués par [FakeGateway].
@@ -100,9 +135,8 @@ class FakeGateway implements EnrichmentGateway {
   /// Dernière remontée reçue (RET-01).
   FeedbackRequest? lastFeedback;
 
-  /// Remontée en mode démonstration : rien ne part. La réponse est celle de
-  /// l'exemple du contrat, validée comme une vraie, et marquée simulée pour
-  /// que l'écran dise que le message n'est pas parti.
+  /// Remontée rejouée pour les tests : rien ne part, la réponse est celle de
+  /// l'exemple du contrat, validée comme une vraie.
   @override
   Future<FeedbackResult> sendFeedback(FeedbackRequest request) async {
     _checkOnline();
@@ -110,12 +144,7 @@ class FakeGateway implements EnrichmentGateway {
     if (delay > Duration.zero) await Future<void>.delayed(delay);
     final e = await _example('reponse-remontee.json');
     final body = jsonEncode({...e, 'request_id': request.requestId});
-    final r = FeedbackResult.fromJson(validator.checkFeedbackResponse(body));
-    return FeedbackResult(
-      sent: r.sent,
-      remainingToday: r.remainingToday,
-      simulated: true,
-    );
+    return FeedbackResult.fromJson(validator.checkFeedbackResponse(body));
   }
 
   @override

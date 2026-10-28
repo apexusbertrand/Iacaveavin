@@ -123,6 +123,7 @@ class EnrichmentScreen extends ConsumerWidget {
               job: job,
               last: last,
               offline: report?.offline == true,
+              notConnected: report?.notConnected == true,
             ),
             if (status == WineStatus.running && last?.result != null)
               _LabelPreview(result: last!.result!),
@@ -194,12 +195,14 @@ class _Progress extends StatelessWidget {
     required this.job,
     required this.last,
     required this.offline,
+    this.notConnected = false,
   });
 
   final String status;
   final Job? job;
   final JobResponse? last;
   final bool offline;
+  final bool notConnected;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +226,9 @@ class _Progress extends StatelessWidget {
       case 'brouillon':
         text = l.consentRefused;
       default:
-        text = offline && job?.jobIdDistant == null
+        text = notConnected
+            ? l.enrichNotConnected
+            : offline && job?.jobIdDistant == null
             ? l.enrichOffline
             : l.stepLabel(job?.jobIdDistant == null ? null : last?.step);
         leading = offline

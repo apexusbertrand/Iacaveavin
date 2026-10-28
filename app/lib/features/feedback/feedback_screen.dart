@@ -122,9 +122,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         ),
       );
       if (!mounted) return;
-      if (r.simulated) {
-        _snack(l.feedbackSimulated);
-      } else if (r.sent) {
+      if (r.sent) {
         _title.clear();
         _comment.clear();
         setState(() => _attachment = null);
@@ -136,6 +134,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
               : l.feedbackRefused(r.message ?? ''),
         );
       }
+    } on NotConnectedException {
+      _snack(l.feedbackNotConnected);
     } on OfflineException {
       _snack(l.feedbackOffline);
     } on AuthException {

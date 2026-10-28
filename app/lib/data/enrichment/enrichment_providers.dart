@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../domain/app_settings.dart';
 import '../../domain/garde_rules.dart';
 import '../backup_providers.dart';
 import '../files/photo_service.dart';
@@ -30,8 +31,17 @@ final contractValidatorProvider = FutureProvider<ContractValidator>((
   );
 });
 
+/// Passerelle sans connexion enregistrée. L'app publiée n'a pas de flux de
+/// démonstration (T122) : l'enrichissement attend la connexion. Les tests la
+/// remplacent par [FakeGateway], qui rejoue les exemples du contrat.
+final unconnectedGatewayProvider =
+    Provider<EnrichmentGateway Function(ContractValidator, AppSettings)>(
+      (ref) =>
+          (validator, settings) => const NotConnectedGateway(),
+    );
+
 /// Vrai flux n8n dès qu'une adresse et une clé sont enregistrées (PAR-05),
-/// sinon faux flux du lot 2a qui rejoue les exemples du contrat.
+/// sinon [unconnectedGatewayProvider].
 final gatewayProvider = FutureProvider<EnrichmentGateway>((ref) async {
   final settings = ref.watch(settingsProvider);
   final validator = await ref.watch(contractValidatorProvider.future);
@@ -49,17 +59,7 @@ final gatewayProvider = FutureProvider<EnrichmentGateway>((ref) async {
       return gateway;
     }
   }
-  return FakeGateway(
-    validator: validator,
-    readExample: (name) =>
-        rootBundle.loadString('assets/contrat/exemples/$name'),
-    scenario: FakeScenario.values.firstWhere(
-      (s) => s.name == settings.fakeScenario,
-      orElse: () => FakeScenario.done,
-    ),
-    online: !settings.simulateOffline,
-    delay: const Duration(milliseconds: 600),
-  );
+  return ref.watch(unconnectedGatewayProvider)(validator, settings);
 });
 
 final photoServiceProvider = Provider<PhotoService>(

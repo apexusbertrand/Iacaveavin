@@ -157,7 +157,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - CMP-04. Accords inversés : je choisis un plat, l'app propose les vins de la cave compatibles et à boire.
 - CMP-05. Historique des dégustations : date, plat, note, commentaire.
 - CMP-06. Favoris et partage d'une fiche en image ou en PDF.
-- CMP-07. [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés, toutes couleurs, millésimes 2005 à 2024, plusieurs propriétaires et emplacements), activable et effaçable dans les Réglages. Il sert aux tests de performance et aux captures.
+- CMP-07. [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés, toutes couleurs, millésimes 2005 à 2024, plusieurs propriétaires et emplacements). Il sert aux tests de performance et aux captures. ~~Activable et effaçable dans les Réglages~~ : retiré de l'app publiée le 2026-10-28 (T122, Google Play refuse le contenu de démonstration) ; le jeu reste chargeable par le test d'intégration.
 - CMP-08. Photos de dégustation : en notant une dégustation, ajout de 6 photos au plus (appareil ou galerie), ramenées à la taille d'un écran de smartphone (1 080 × 1 920 au plus), rattachées à la dégustation, visibles dans son historique et dans la bibliothèque de la bouteille, jamais envoyées au flux (2026-10-28, T114).
 - CMP-09. Vins passés : sur l'écran À boire, un onglet Passés liste à part les vins en stock dont la fenêtre de garde est dépassée (année en cours après la fin de garde), fin la plus ancienne en tête. Ils n'apparaissent ni dans l'onglet À boire ni dans les accords inversés (2026-10-28, T121).
 

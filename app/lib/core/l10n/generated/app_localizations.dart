@@ -160,18 +160,6 @@ abstract class AppLocalizations {
   /// **'À propos'**
   String get navAbout;
 
-  /// No description provided for @placeholderTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Bientôt disponible'**
-  String get placeholderTitle;
-
-  /// No description provided for @placeholderBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Cet écran arrive avec le lot {lot}.'**
-  String placeholderBody(String lot);
-
   /// No description provided for @wineListTitle.
   ///
   /// In fr, this message translates to:
@@ -193,7 +181,7 @@ abstract class AppLocalizations {
   /// No description provided for @wineListEmptyBody.
   ///
   /// In fr, this message translates to:
-  /// **'Photographiez votre première étiquette, ou chargez le jeu de démonstration pour découvrir l\'application.'**
+  /// **'Photographiez votre première étiquette avec le bouton +, ou saisissez une bouteille à la main.'**
   String get wineListEmptyBody;
 
   /// No description provided for @wineListLoading.
@@ -226,12 +214,6 @@ abstract class AppLocalizations {
   /// **'Ajouter une bouteille'**
   String get addBottle;
 
-  /// No description provided for @addBottleLater.
-  ///
-  /// In fr, this message translates to:
-  /// **'L\'ajout d\'une bouteille arrive au lot 1 (saisie) et au lot 2a (photo).'**
-  String get addBottleLater;
-
   /// No description provided for @nonVintage.
   ///
   /// In fr, this message translates to:
@@ -261,72 +243,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Haut de la page'**
   String get backToTop;
-
-  /// No description provided for @settingsDemoSection.
-  ///
-  /// In fr, this message translates to:
-  /// **'Jeu de démonstration'**
-  String get settingsDemoSection;
-
-  /// No description provided for @settingsDemoDescription.
-  ///
-  /// In fr, this message translates to:
-  /// **'200 fiches fictives (domaines inventés) pour essayer l\'application et vérifier la fluidité. Vos propres vins ne sont jamais touchés.'**
-  String get settingsDemoDescription;
-
-  /// No description provided for @settingsDemoLoaded.
-  ///
-  /// In fr, this message translates to:
-  /// **'{count, plural, =1{Démonstration chargée : 1 fiche} other{Démonstration chargée : {count} fiches}}'**
-  String settingsDemoLoaded(int count);
-
-  /// No description provided for @settingsDemoNotLoaded.
-  ///
-  /// In fr, this message translates to:
-  /// **'Démonstration non chargée'**
-  String get settingsDemoNotLoaded;
-
-  /// No description provided for @settingsDemoLoad.
-  ///
-  /// In fr, this message translates to:
-  /// **'Charger la démonstration'**
-  String get settingsDemoLoad;
-
-  /// No description provided for @settingsDemoErase.
-  ///
-  /// In fr, this message translates to:
-  /// **'Effacer la démonstration'**
-  String get settingsDemoErase;
-
-  /// No description provided for @settingsDemoEraseTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Effacer la démonstration ?'**
-  String get settingsDemoEraseTitle;
-
-  /// No description provided for @settingsDemoEraseBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les fiches de démonstration, leurs lots et leurs mouvements seront supprimés. Vos propres vins ne sont pas touchés.'**
-  String get settingsDemoEraseBody;
-
-  /// No description provided for @settingsDemoLoadedSnack.
-  ///
-  /// In fr, this message translates to:
-  /// **'Démonstration chargée.'**
-  String get settingsDemoLoadedSnack;
-
-  /// No description provided for @settingsDemoErasedSnack.
-  ///
-  /// In fr, this message translates to:
-  /// **'Démonstration effacée.'**
-  String get settingsDemoErasedSnack;
-
-  /// No description provided for @settingsMoreLater.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les autres réglages (connexion au flux, devise, thème, listes) arrivent au lot 1.'**
-  String get settingsMoreLater;
 
   /// No description provided for @operationFailed.
   ///
@@ -369,12 +285,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Référentiels : pays selon ISO 3166-1. Appellations, régions et cépages : listes provisoires, à remplacer par les données ouvertes de l\'INAO.'**
   String get aboutReferenceData;
-
-  /// No description provided for @aboutDemoNotice.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les domaines du jeu de démonstration sont inventés.'**
-  String get aboutDemoNotice;
 
   /// No description provided for @search.
   ///
@@ -849,24 +759,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count, plural, =1{1 fiche mise à jour} other{{count} fiches mises à jour}}'**
   String selectionDone(int count);
-
-  /// No description provided for @laterPdf.
-  ///
-  /// In fr, this message translates to:
-  /// **'PDF (lot 3)'**
-  String get laterPdf;
-
-  /// No description provided for @laterExcel.
-  ///
-  /// In fr, this message translates to:
-  /// **'Export Excel (lot 3)'**
-  String get laterExcel;
-
-  /// No description provided for @laterEnrich.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ré-enrichir (lot 2a)'**
-  String get laterEnrich;
 
   /// No description provided for @openOneBottle.
   ///
@@ -2962,6 +2854,12 @@ abstract class AppLocalizations {
   /// **'Hors ligne : la fiche reste « à enrichir », l\'envoi partira au retour du réseau.'**
   String get enrichOffline;
 
+  /// No description provided for @enrichNotConnected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux non connecté : la fiche reste « à enrichir ». Renseignez l\'adresse et la clé du flux dans les Paramètres, l\'envoi partira ensuite.'**
+  String get enrichNotConnected;
+
   /// No description provided for @enrichReady.
   ///
   /// In fr, this message translates to:
@@ -3400,66 +3298,6 @@ abstract class AppLocalizations {
   /// **'Champ déverrouillé : il pourra être proposé à nouveau.'**
   String get unlocked;
 
-  /// No description provided for @settingsFakeFlux.
-  ///
-  /// In fr, this message translates to:
-  /// **'Flux de démonstration'**
-  String get settingsFakeFlux;
-
-  /// No description provided for @settingsFakeFluxHint.
-  ///
-  /// In fr, this message translates to:
-  /// **'Utilisé tant qu\'aucune adresse de flux n\'est enregistrée : l\'app rejoue les exemples du contrat.'**
-  String get settingsFakeFluxHint;
-
-  /// No description provided for @fakeScenario.
-  ///
-  /// In fr, this message translates to:
-  /// **'Scénario rejoué'**
-  String get fakeScenario;
-
-  /// No description provided for @scenarioDone.
-  ///
-  /// In fr, this message translates to:
-  /// **'Identification complète'**
-  String get scenarioDone;
-
-  /// No description provided for @scenarioPartial.
-  ///
-  /// In fr, this message translates to:
-  /// **'Résultat partiel avec désaccord'**
-  String get scenarioPartial;
-
-  /// No description provided for @scenarioCacheHit.
-  ///
-  /// In fr, this message translates to:
-  /// **'Vin déjà connu (cache)'**
-  String get scenarioCacheHit;
-
-  /// No description provided for @scenarioQuota.
-  ///
-  /// In fr, this message translates to:
-  /// **'Quota épuisé'**
-  String get scenarioQuota;
-
-  /// No description provided for @scenarioInvalid.
-  ///
-  /// In fr, this message translates to:
-  /// **'Réponse non conforme'**
-  String get scenarioInvalid;
-
-  /// No description provided for @scenarioNever.
-  ///
-  /// In fr, this message translates to:
-  /// **'Pas de réponse (délai)'**
-  String get scenarioNever;
-
-  /// No description provided for @simulateOffline.
-  ///
-  /// In fr, this message translates to:
-  /// **'Simuler le mode avion'**
-  String get simulateOffline;
-
   /// No description provided for @fluxUrl.
   ///
   /// In fr, this message translates to:
@@ -3529,7 +3367,7 @@ abstract class AppLocalizations {
   /// No description provided for @fluxUsingFake.
   ///
   /// In fr, this message translates to:
-  /// **'Pas de connexion enregistrée : le flux de démonstration est utilisé.'**
+  /// **'Pas de connexion enregistrée : l\'identification par photo et les prix attendent la connexion au flux. Le reste de l\'application fonctionne.'**
   String get fluxUsingFake;
 
   /// No description provided for @fluxTestOk.
@@ -3577,7 +3415,7 @@ abstract class AppLocalizations {
   /// No description provided for @fluxForgotten.
   ///
   /// In fr, this message translates to:
-  /// **'Connexion oubliée : retour au flux de démonstration.'**
+  /// **'Connexion oubliée : l\'identification par photo attend une nouvelle connexion.'**
   String get fluxForgotten;
 
   /// No description provided for @pricesAllTitle.
@@ -5278,6 +5116,12 @@ abstract class AppLocalizations {
   /// **'Pas de réseau. Votre message reste ici, réessayez une fois connecté.'**
   String get feedbackOffline;
 
+  /// No description provided for @feedbackNotConnected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux non connecté : le message n\'est pas parti. Renseignez l\'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.'**
+  String get feedbackNotConnected;
+
   /// No description provided for @feedbackAuth.
   ///
   /// In fr, this message translates to:
@@ -5289,12 +5133,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.'**
   String get feedbackPrivacy;
-
-  /// No description provided for @feedbackSimulated.
-  ///
-  /// In fr, this message translates to:
-  /// **'Flux non connecté : le message n\'est pas parti. Renseignez la clé du flux dans les Paramètres, puis renvoyez-le.'**
-  String get feedbackSimulated;
 }
 
 class _AppLocalizationsDelegate

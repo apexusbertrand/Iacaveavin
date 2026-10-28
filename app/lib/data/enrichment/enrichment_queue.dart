@@ -65,6 +65,7 @@ class QueueReport {
     required this.finished,
     required this.failed,
     required this.offline,
+    this.notConnected = false,
     this.enrichmentsLeft,
     this.pricesLeft,
   });
@@ -75,6 +76,10 @@ class QueueReport {
 
   /// Le flux était injoignable : les jobs restants repartiront plus tard.
   final bool offline;
+
+  /// Aucune connexion au flux enregistrée (T122) : cas particulier de
+  /// [offline], expliqué autrement à l'écran.
+  final bool notConnected;
   final int? enrichmentsLeft;
 
   /// Quota de relevés de prix restant ce mois, d'après la dernière réponse.
@@ -444,13 +449,14 @@ class EnrichmentQueue {
           finished++;
         }
         if (r.status == JobStatus.error) failed++;
-      } on OfflineException {
+      } on OfflineException catch (e) {
         // La fiche reste à enrichir ; on réessaiera au retour du réseau.
         return QueueReport(
           sent: sent,
           finished: finished,
           failed: failed,
           offline: true,
+          notConnected: e is NotConnectedException,
           enrichmentsLeft: left,
           pricesLeft: pricesLeft,
         );

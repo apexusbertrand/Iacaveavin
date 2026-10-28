@@ -64,13 +64,15 @@ class AppSettings {
   /// NFR-08 : consentement explicite avant le premier envoi de photos.
   final bool photoConsent;
 
-  /// Lot 2a : scénario rejoué par le faux flux (nom de FakeScenario).
+  /// Tests seulement : scénario rejoué par FakeGateway (nom de FakeScenario).
+  /// L'app publiée n'a pas de faux flux (T122).
   final String fakeScenario;
 
-  /// Lot 2a : le faux flux se comporte comme en mode avion.
+  /// Tests seulement : FakeGateway se comporte comme en mode avion.
   final bool simulateOffline;
 
-  /// PAR-05 : adresse de l'instance n8n. Vide : faux flux du lot 2a.
+  /// PAR-05 : adresse de l'instance n8n. Vide : pas de connexion, les fiches
+  /// restent « à enrichir ».
   final String fluxUrl;
 
   /// UUID de l'installation (en-tête X-IACAV-Installation), généré une fois.

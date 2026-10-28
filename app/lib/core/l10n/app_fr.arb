@@ -14,15 +14,6 @@
   "navSettings": "Paramètres",
   "navFeedback": "Remontée d'information",
   "navAbout": "À propos",
-  "placeholderTitle": "Bientôt disponible",
-  "placeholderBody": "Cet écran arrive avec le lot {lot}.",
-  "@placeholderBody": {
-    "placeholders": {
-      "lot": {
-        "type": "String"
-      }
-    }
-  },
   "wineListTitle": "Mes vins",
   "wineListSummary": "{wines, plural, =0{Aucun vin} =1{1 vin} other{{wines} vins}} · {bottles, plural, =0{0 bouteille} =1{1 bouteille} other{{bottles} bouteilles}}",
   "@wineListSummary": {
@@ -36,7 +27,7 @@
     }
   },
   "wineListEmptyTitle": "Aucun vin.",
-  "wineListEmptyBody": "Photographiez votre première étiquette, ou chargez le jeu de démonstration pour découvrir l'application.",
+  "wineListEmptyBody": "Photographiez votre première étiquette avec le bouton +, ou saisissez une bouteille à la main.",
   "wineListLoading": "Chargement de la cave",
   "wineListErrorTitle": "La cave n'a pas pu être lue.",
   "wineListErrorDetail": "Détail : {detail}",
@@ -49,7 +40,6 @@
   },
   "retry": "Réessayer",
   "addBottle": "Ajouter une bouteille",
-  "addBottleLater": "L'ajout d'une bouteille arrive au lot 1 (saisie) et au lot 2a (photo).",
   "nonVintage": "NM",
   "bottleCount": "{count, plural, =0{Épuisé} =1{1 bouteille} other{{count} bouteilles}}",
   "@bottleCount": {
@@ -75,24 +65,6 @@
     }
   },
   "backToTop": "Haut de la page",
-  "settingsDemoSection": "Jeu de démonstration",
-  "settingsDemoDescription": "200 fiches fictives (domaines inventés) pour essayer l'application et vérifier la fluidité. Vos propres vins ne sont jamais touchés.",
-  "settingsDemoLoaded": "{count, plural, =1{Démonstration chargée : 1 fiche} other{Démonstration chargée : {count} fiches}}",
-  "@settingsDemoLoaded": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "settingsDemoNotLoaded": "Démonstration non chargée",
-  "settingsDemoLoad": "Charger la démonstration",
-  "settingsDemoErase": "Effacer la démonstration",
-  "settingsDemoEraseTitle": "Effacer la démonstration ?",
-  "settingsDemoEraseBody": "Les fiches de démonstration, leurs lots et leurs mouvements seront supprimés. Vos propres vins ne sont pas touchés.",
-  "settingsDemoLoadedSnack": "Démonstration chargée.",
-  "settingsDemoErasedSnack": "Démonstration effacée.",
-  "settingsMoreLater": "Les autres réglages (connexion au flux, devise, thème, listes) arrivent au lot 1.",
   "operationFailed": "L'opération a échoué : {detail}",
   "@operationFailed": {
     "placeholders": {
@@ -114,7 +86,6 @@
   },
   "aboutHealthWarning": "L'abus d'alcool est dangereux pour la santé, à consommer avec modération.",
   "aboutReferenceData": "Référentiels : pays selon ISO 3166-1. Appellations, régions et cépages : listes provisoires, à remplacer par les données ouvertes de l'INAO.",
-  "aboutDemoNotice": "Les domaines du jeu de démonstration sont inventés.",
   "search": "Rechercher",
   "searchHint": "Nom, domaine, appellation, cépage…",
   "closeSearch": "Fermer la recherche",
@@ -238,9 +209,6 @@
       }
     }
   },
-  "laterPdf": "PDF (lot 3)",
-  "laterExcel": "Export Excel (lot 3)",
-  "laterEnrich": "Ré-enrichir (lot 2a)",
   "openOneBottle": "Ouvrir 1 bouteille",
   "bottleOpened": "1 bouteille ouverte : {name}",
   "@bottleOpened": {
@@ -935,6 +903,7 @@
   "stepControles": "Contrôles",
   "stepTermine": "Terminé",
   "enrichOffline": "Hors ligne : la fiche reste « à enrichir », l'envoi partira au retour du réseau.",
+  "enrichNotConnected": "Flux non connecté : la fiche reste « à enrichir ». Renseignez l'adresse et la clé du flux dans les Paramètres, l'envoi partira ensuite.",
   "enrichReady": "Propositions prêtes",
   "labelPreviewTitle": "Lu sur l'étiquette, en attendant",
   "labelPreviewLine": "{field} : {value}",
@@ -1122,16 +1091,6 @@
   "reEnrichNoPhoto": "Aucune photo sur cette fiche : ré-enrichissement impossible.",
   "unlockField": "Déverrouiller",
   "unlocked": "Champ déverrouillé : il pourra être proposé à nouveau.",
-  "settingsFakeFlux": "Flux de démonstration",
-  "settingsFakeFluxHint": "Utilisé tant qu'aucune adresse de flux n'est enregistrée : l'app rejoue les exemples du contrat.",
-  "fakeScenario": "Scénario rejoué",
-  "scenarioDone": "Identification complète",
-  "scenarioPartial": "Résultat partiel avec désaccord",
-  "scenarioCacheHit": "Vin déjà connu (cache)",
-  "scenarioQuota": "Quota épuisé",
-  "scenarioInvalid": "Réponse non conforme",
-  "scenarioNever": "Pas de réponse (délai)",
-  "simulateOffline": "Simuler le mode avion",
   "fluxUrl": "Adresse du flux",
   "fluxUrlHint": "https://votre-instance.app.n8n.cloud",
   "fluxKey": "Clé secrète",
@@ -1143,7 +1102,7 @@
   "fluxTest": "Tester la connexion",
   "fluxTesting": "Test en cours…",
   "fluxUsingReal": "Vrai flux utilisé pour les enrichissements et les prix.",
-  "fluxUsingFake": "Pas de connexion enregistrée : le flux de démonstration est utilisé.",
+  "fluxUsingFake": "Pas de connexion enregistrée : l'identification par photo et les prix attendent la connexion au flux. Le reste de l'application fonctionne.",
   "fluxTestOk": "Connexion réussie : flux joignable, clé acceptée (contrat {version}).",
   "@fluxTestOk": {
     "placeholders": {
@@ -1165,7 +1124,7 @@
   "fluxTestInvalid": "Réponse inattendue du flux : vérifiez l'adresse.",
   "fluxUrlInvalid": "Adresse invalide : elle doit commencer par https://",
   "fluxSaved": "Connexion enregistrée.",
-  "fluxForgotten": "Connexion oubliée : retour au flux de démonstration.",
+  "fluxForgotten": "Connexion oubliée : l'identification par photo attend une nouvelle connexion.",
   "pricesAllTitle": "Relever les prix de toute la cave",
   "pricesAllHint": "Fiches sans relevé depuis 24 heures.",
   "pricesAllConfirm": "{count, plural, =0{Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.} =1{1 relevé sera envoyé au flux.} other{{count} relevés seront envoyés au flux.}}",
@@ -1859,7 +1818,7 @@
     }
   },
   "feedbackOffline": "Pas de réseau. Votre message reste ici, réessayez une fois connecté.",
+  "feedbackNotConnected": "Flux non connecté : le message n'est pas parti. Renseignez l'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.",
   "feedbackAuth": "Le flux refuse la clé de l'application. Vérifiez-la dans les paramètres.",
-  "feedbackPrivacy": "Votre adresse sert seulement à vous répondre. Elle n'est pas enregistrée sur le téléphone.",
-  "feedbackSimulated": "Flux non connecté : le message n'est pas parti. Renseignez la clé du flux dans les Paramètres, puis renvoyez-le."
+  "feedbackPrivacy": "Votre adresse sert seulement à vous répondre. Elle n'est pas enregistrée sur le téléphone."
 }

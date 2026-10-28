@@ -100,7 +100,6 @@ class FeedbackResult {
     this.errorCode,
     this.message,
     this.retryable = true,
-    this.simulated = false,
   });
 
   factory FeedbackResult.fromJson(Map<String, dynamic> j) {
@@ -119,7 +118,4 @@ class FeedbackResult {
   final String? errorCode;
   final String? message;
   final bool retryable;
-
-  /// Réponse du mode simulation (flux non connecté) : aucun mail n'est parti.
-  final bool simulated;
 }

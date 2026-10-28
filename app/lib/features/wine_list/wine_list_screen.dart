@@ -185,10 +185,6 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         icon: Icons.wine_bar_outlined,
         title: l.wineListEmptyTitle,
         body: l.wineListEmptyBody,
-        action: FilledButton(
-          onPressed: _loadDemo,
-          child: Text(l.settingsDemoLoad),
-        ),
       );
     }
     final labels = ref.watch(labelsProvider).value ?? const {};
@@ -415,12 +411,6 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
           if (mounted) setState(_selected.clear);
         },
       ),
-      PopupMenuButton<void>(
-        itemBuilder: (_) => [
-          for (final label in [l.laterPdf, l.laterExcel, l.laterEnrich])
-            PopupMenuItem<void>(enabled: false, child: Text(label)),
-        ],
-      ),
     ],
   );
 
@@ -477,17 +467,6 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       builder: (_) => FiltersSheet(initial: current.filters),
     );
     if (result != null) _updateQuery((q) => q.copyWith(filters: result));
-  }
-
-  Future<void> _loadDemo() async {
-    final l = AppLocalizations.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    try {
-      await ref.read(demoRepositoryProvider).load();
-      ref.invalidate(demoCountProvider);
-    } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(l.operationFailed('$e'))));
-    }
   }
 }
 

@@ -1,67 +1,50 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/core/navigation/destinations.dart';
 
 import '../fakes.dart';
 
-/// La section démo est en bas des Paramètres : on fait défiler jusqu'au bout.
-Future<void> toDemo(WidgetTester tester) async {
-  await tester.scrollUntilVisible(
-    find.byKey(const ValueKey('demo-status')),
-    300,
-    scrollable: find.byType(Scrollable).first,
-  );
-  await tester.drag(find.byType(Scrollable).first, const Offset(0, -400));
-  await tester.pumpAndSettle();
-}
+/// Ce que Google Play refuse : écran « à venir », contenu de démonstration.
+final _interdit = RegExp(
+  r'arrive (avec|au) le lot|\blot \d|bientôt disponible|démonstration|\bdémo\b',
+  caseSensitive: false,
+);
 
 void main() {
-  testWidgets('CMP-07 Paramètres : charger la démonstration', (tester) async {
-    final repo = await pumpApp(tester, location: '/parametres');
-    await toDemo(tester);
-    expect(find.text('Démonstration non chargée'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('demo-load')));
-    await tester.pumpAndSettle();
-    expect(repo.loads, 1);
-    expect(find.text('Démonstration chargée : 200 fiches'), findsOneWidget);
-    expect(find.text('Démonstration chargée.'), findsOneWidget);
+  test('NFR-18 aucun texte de l\'app ne parle de lot à venir ni de démo', () {
+    final arb = jsonDecode(
+      File('lib/core/l10n/app_fr.arb').readAsStringSync(),
+    ) as Map<String, dynamic>;
+    final fautifs = [
+      for (final e in arb.entries)
+        if (!e.key.startsWith('@') && _interdit.hasMatch('${e.value}')) e.key,
+    ];
+    expect(fautifs, isEmpty);
   });
 
-  testWidgets('CMP-07 Paramètres : effacer demande confirmation', (
-    tester,
-  ) async {
-    final repo = await pumpApp(
+  for (final d in AppDestination.values) {
+    testWidgets('NFR-18 écran ${d.name} sans contenu à venir ni démo', (
       tester,
-      location: '/parametres',
-      demo: FakeDemoRepository(count: 200),
-    );
-    await toDemo(tester);
-    await tester.tap(find.byKey(const ValueKey('demo-erase')));
-    await tester.pumpAndSettle();
-    expect(find.text('Effacer la démonstration ?'), findsOneWidget);
-
-    await tester.tap(find.text('Annuler'));
-    await tester.pumpAndSettle();
-    expect(repo.erases, 0);
-
-    await tester.tap(find.byKey(const ValueKey('demo-erase')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('demo-erase-confirm')));
-    await tester.pumpAndSettle();
-    expect(repo.erases, 1);
-    expect(find.text('Démonstration non chargée'), findsOneWidget);
-  });
-
-  testWidgets('CMP-07 Paramètres : un échec de chargement est expliqué', (
-    tester,
-  ) async {
-    await pumpApp(
-      tester,
-      location: '/parametres',
-      demo: FakeDemoRepository(failWith: StateError('disque plein')),
-    );
-    await toDemo(tester);
-    await tester.tap(find.byKey(const ValueKey('demo-load')));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('disque plein'), findsOneWidget);
-  });
+    ) async {
+      await pumpApp(tester, location: d.path);
+      final scrollables = find.byType(Scrollable);
+      // Tout l'écran, y compris le bas des listes longues (Paramètres).
+      for (var i = 0; i < 12 && scrollables.evaluate().isNotEmpty; i++) {
+        final textes = [
+          for (final w in tester.widgetList<Text>(find.byType(Text)))
+            w.data ?? w.textSpan?.toPlainText() ?? '',
+        ];
+        for (final t in textes) {
+          expect(_interdit.hasMatch(t), isFalse, reason: t);
+        }
+        await tester.drag(scrollables.first, const Offset(0, -500));
+        await tester.pumpAndSettle();
+      }
+      expect(find.byKey(const ValueKey('demo-load')), findsNothing);
+      expect(find.byKey(const ValueKey('fake-scenario')), findsNothing);
+    });
+  }
 }

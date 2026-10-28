@@ -25,7 +25,7 @@ void main() {
       expect(find.text('Aucune clé enregistrée'), findsOneWidget);
       expect(
         find.text(
-          'Pas de connexion enregistrée : le flux de démonstration est utilisé.',
+          "Pas de connexion enregistrée : l'identification par photo et les prix attendent la connexion au flux. Le reste de l'application fonctionne.",
         ),
         findsOneWidget,
       );

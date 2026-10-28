@@ -53,24 +53,6 @@ void main() {
     expect(tile.selected, isTrue);
   });
 
-  for (final d in AppDestination.values.where((d) => d.lot != null)) {
-    testWidgets('NAV-01 ${d.name} ouvre un écran « lot ${d.lot} »', (
-      tester,
-    ) async {
-      await pumpApp(tester);
-      await openDrawer(tester);
-      await tester.tap(find.byKey(ValueKey('drawer-${d.name}')));
-      await tester.pumpAndSettle();
-      expect(find.text('Bientôt disponible'), findsOneWidget);
-      expect(
-        find.text('Cet écran arrive avec le lot ${d.lot}.'),
-        findsOneWidget,
-      );
-      // Le tiroir reste accessible depuis chaque écran.
-      expect(find.byIcon(Icons.menu), findsOneWidget);
-    });
-  }
-
   testWidgets('NAV-01 Paramètres puis retour à Mes vins', (tester) async {
     await pumpApp(tester);
     await openDrawer(tester);
@@ -92,6 +74,6 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(find.text('Version 0.1.0'), findsOneWidget);
+    expect(find.text('Version 1.0.0'), findsOneWidget);
   });
 }
