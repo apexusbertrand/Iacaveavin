@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/core/navigation/destinations.dart';
+
+import '../fakes.dart';
+
+Future<void> openDrawer(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.menu));
+  await tester.pumpAndSettle();
+}
+
+void main() {
+  testWidgets(
+    'NAV-01 le tiroir liste les 9 entrées dans l\'ordre des captures',
+    (tester) async {
+      await pumpApp(tester);
+      await openDrawer(tester);
+      const attendues = [
+        'Mes vins',
+        'À boire',
+        'Emplacements',
+        'Statistiques',
+        "Liste d'achats",
+        'Import et export',
+        'Sauvegarde',
+        'Paramètres',
+        'À propos',
+      ];
+      final tiles = tester
+          .widgetList<ListTile>(
+            find.descendant(
+              of: find.byType(Drawer),
+              matching: find.byType(ListTile),
+            ),
+          )
+          .map((t) => (t.title! as Text).data)
+          .toList();
+      expect(tiles, attendues);
+      expect(AppDestination.values, hasLength(9));
+    },
+  );
+
+  testWidgets('NAV-01 Mes vins est l\'accueil et l\'entrée active', (
+    tester,
+  ) async {
+    await pumpApp(tester);
+    expect(find.text('Mes vins'), findsOneWidget);
+    await openDrawer(tester);
+    final tile = tester.widget<ListTile>(
+      find.byKey(const ValueKey('drawer-myWines')),
+    );
+    expect(tile.selected, isTrue);
+  });
+
+  for (final d in AppDestination.values.where((d) => d.lot != null)) {
+    testWidgets('NAV-01 ${d.name} ouvre un écran « lot ${d.lot} »', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+      await openDrawer(tester);
+      await tester.tap(find.byKey(ValueKey('drawer-${d.name}')));
+      await tester.pumpAndSettle();
+      expect(find.text('Bientôt disponible'), findsOneWidget);
+      expect(
+        find.text('Cet écran arrive avec le lot ${d.lot}.'),
+        findsOneWidget,
+      );
+      // Le tiroir reste accessible depuis chaque écran.
+      expect(find.byIcon(Icons.menu), findsOneWidget);
+    });
+  }
+
+  testWidgets('NAV-01 Paramètres puis retour à Mes vins', (tester) async {
+    await pumpApp(tester);
+    await openDrawer(tester);
+    await tester.tap(find.byKey(const ValueKey('drawer-settings')));
+    await tester.pumpAndSettle();
+    expect(find.text('Jeu de démonstration'), findsOneWidget);
+    await openDrawer(tester);
+    await tester.tap(find.byKey(const ValueKey('drawer-myWines')));
+    await tester.pumpAndSettle();
+    expect(find.text('Château Bralmac · Les Terrasses'), findsOneWidget);
+  });
+
+  testWidgets('NFR-17 À propos affiche la mention sanitaire', (tester) async {
+    await pumpApp(tester, location: '/a-propos');
+    expect(
+      find.text(
+        "L'abus d'alcool est dangereux pour la santé, "
+        'à consommer avec modération.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Version 0.1.0'), findsOneWidget);
+  });
+}
