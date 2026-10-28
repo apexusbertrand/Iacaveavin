@@ -210,3 +210,34 @@ test('docs/06 quota mensuel au fuseau de Paris', () => {
   assert.equal(m.moisQuota(new Date('2026-10-31T23:30:00Z')), '2026-11');
   assert.equal(m.jourParis(new Date('2026-10-21T22:30:00Z')), '2026-10-22');
 });
+
+test('T108 page citée non vue : valeur retirée, étiquette gardée, diagnostic', () => {
+  const v = require('../lib/verification.js');
+  const message = {
+    stop_reason: 'end_turn',
+    usage: { server_tool_use: { web_search_requests: 2 } },
+    content: [
+      { type: 'web_search_tool_result', content: [{ type: 'web_search_result', url: 'https://vu.fr/a' }] },
+      { type: 'text', text: 'x', citations: [{ type: 'web_search_result_location', url: 'https://cite.fr/b' }] },
+    ],
+  };
+  const vues = v.vuesEtCitations(message);
+  assert.deepEqual(vues, ['https://vu.fr/a', 'https://cite.fr/b']);
+  const texte = JSON.stringify({
+    fiche: {
+      cepages: { valeur: [{ cepage: 'Altesse' }], source: 'marchand', url: 'https://inconnu.fr/c', confiance: 0.8 },
+      region: { valeur: 'Savoie', source: 'tiers', url: 'https://vu.fr/a', confiance: 0.9 },
+      domaine: { valeur: 'Quenard', source: 'etiquette', url: 'https://inconnu.fr/d', confiance: 1 },
+    },
+    notes_critiques: [{ url: 'https://inconnu.fr/e' }, { url: 'https://cite.fr/b' }],
+    sources_consultees: [{ url: 'https://vu.fr/a' }, { url: 'https://cite.fr/b' }],
+  });
+  const r = JSON.parse(v.retirerNonVues(texte, v.diagnosticRecherche(message, vues)));
+  assert.equal(r.fiche.cepages.valeur, null);
+  assert.equal(r.fiche.region.valeur, 'Savoie');
+  assert.equal(r.fiche.domaine.valeur, 'Quenard');
+  assert.equal(r.fiche.domaine.url, undefined);
+  assert.deepEqual(r.notes_critiques.map((n) => n.url), ['https://cite.fr/b']);
+  assert.match(r.alertes[0].message, /^3 valeur\(s\) retirée\(s\).*arrêt end_turn, 2 recherche\(s\), 2 résultat\(s\) vu\(s\)/);
+  assert.equal(v.retirerNonVues('pas du json', 'x'), 'pas du json');
+});

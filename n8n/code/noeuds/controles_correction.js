@@ -7,11 +7,13 @@
 // @inclure modele.js
 // @inclure agent.js
 // @inclure recherche.js
+// @inclure verification.js
 const envoi = $('Déclencheur enrichissement').first().json;
 const l = $('Lecture étiquette').first().json;
 // L'agent de correction ne cherche pas : il garde les URL vues au premier passage.
-const vues = urlsVues($('Agent enrichissement').first().json);
-const texte = completerSources(texteDe($input.first().json), vues, jourParis(new Date()));
+const premier = $('Agent enrichissement').first().json;
+const vues = vuesEtCitations(premier);
+const texte = retirerNonVues(completerSources(texteDe($input.first().json), vues, jourParis(new Date())), diagnosticRecherche(premier, vues));
 const a = analyserSortieAgent(texte, {
   schemaReponse: __SCHEMA_REPONSE__, transcription: l.transcription,
   anneeCourante: new Date().getFullYear(), champsVerrouilles: envoi.requete.champs_verrouilles || [],

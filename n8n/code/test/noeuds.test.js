@@ -67,8 +67,12 @@ test('NFR-07 parcours des nœuds du sous-flux avec données simulées', async ()
   assert.equal(c.json.cout.credits_recherche, 1);
   const [faux] = await executer('controles_agent', { 'Déclencheur enrichissement': envoi, 'Lecture étiquette': l.json },
     message(JSON.stringify(r), ['https://autre-site.fr/page']));
-  assert.equal(faux.json.ok, false, 'URL citée sans résultat de recherche');
-  assert.match(faux.json.erreurs.join(' | '), /absente de sources_consultees/);
+  // T108 : la valeur dont la page n'a pas été vue est retirée, la fiche passe.
+  assert.equal(faux.json.ok, true, faux.json.erreurs.join(' | '));
+  assert.equal(faux.json.resultat.fiche.commentaire_millesime.valeur, null);
+  assert.equal(faux.json.resultat.fiche.commentaire_millesime.motif, 'page citée absente des résultats de recherche');
+  assert.match(faux.json.resultat.alertes.map((a) => a.message).join(' | '),
+    /valeur\(s\) retirée\(s\).*arrêt \?, 1 recherche\(s\), 1 résultat\(s\) vu\(s\)/);
   const [corr] = await executer('controles_correction', {
     'Déclencheur enrichissement': envoi, 'Lecture étiquette': l.json, 'Contrôles de sortie': faux.json,
     'Agent enrichissement': message('{}', ['https://exemple-interprofession.fr/millesime-2024']),
