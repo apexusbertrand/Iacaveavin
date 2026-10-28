@@ -10,6 +10,7 @@ import 'package:iacaveavin/data/enrichment/enrichment_providers.dart';
 import 'package:iacaveavin/data/reference_repository.dart';
 import 'package:iacaveavin/features/add/barcode_reader.dart';
 import 'package:iacaveavin/features/add/capture_screen.dart';
+import 'package:iacaveavin/features/add/vintage_reader.dart';
 
 import '../data/contract_test.dart' show readExample, validator;
 import '../data/photo_test.dart' show sharpLabel;
@@ -34,6 +35,21 @@ class FakeBarcodeReader implements BarcodeReader {
       photo ?? const BarcodeResult.cancelled();
 }
 
+class FakeVintageReader implements VintageReader {
+  FakeVintageReader({this.live, this.photo});
+
+  final VintageResult? live;
+  final VintageResult? photo;
+
+  @override
+  Future<VintageResult> scanLive(BuildContext context) async =>
+      live ?? const VintageResult.cancelled();
+
+  @override
+  Future<VintageResult> fromPhoto() async =>
+      photo ?? const VintageResult.cancelled();
+}
+
 Future<void> seedOwner(AppDatabase db, String cellar) async {
   await ReferenceRepository(db)
       .saveOwner(cellarId: cellar, name: 'Bertrand', isDefault: true);
@@ -51,6 +67,7 @@ void main() {
     WidgetTester tester, {
     Map<String, Object> prefs = const {},
     BarcodeReader? barcode,
+    VintageReader? vintage,
     EnrichmentGateway? gateway,
   }) => pumpRealApp(
     tester,
@@ -63,6 +80,7 @@ void main() {
       ),
       if (barcode != null) barcodeReaderProvider.overrideWithValue(barcode),
       if (gateway != null) gatewayProvider.overrideWith((ref) => gateway),
+      if (vintage != null) vintageReaderProvider.overrideWithValue(vintage),
     ],
   );
 
@@ -218,6 +236,40 @@ void main() {
         findsOneWidget,
       );
       expect(field.controller!.text, '3760256272183', reason: 'EAN conservé');
+    },
+  );
+
+  testWidgets(
+    'AJO-14 millésime lu à la volée ou sur une photo, champ complété',
+    (tester) async {
+      await start(
+        tester,
+        vintage: FakeVintageReader(
+          live: const VintageResult.found(2015),
+          photo: const VintageResult.notFound(),
+        ),
+      );
+      await tester.tap(find.byTooltip('Ajouter une bouteille'));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('add-photo')));
+      await settle(tester);
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('vintage-scan-live')),
+      );
+      await tester.tap(find.byKey(const ValueKey('vintage-scan-live')));
+      await settle(tester);
+      final field = tester.widget<TextField>(
+        find.byKey(const ValueKey('capture-vintage')),
+      );
+      expect(field.controller!.text, '2015');
+      expect(find.text('Millésime lu : 2015'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('vintage-scan-photo')));
+      await settle(tester);
+      expect(
+        find.text('Aucun millésime lisible sur cette photo.'),
+        findsOneWidget,
+      );
+      expect(field.controller!.text, '2015', reason: 'millésime conservé');
     },
   );
 

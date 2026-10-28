@@ -889,6 +889,29 @@
   "scanPermissionDenied": "Accès à l'appareil photo refusé",
   "scanUnavailable": "Lecteur de code-barres indisponible sur cet appareil",
   "scanUseField": "Saisissez les 13 chiffres dans le champ.",
+  "vintageScanLive": "Lire le millésime avec l'appareil photo",
+  "vintageScanFromPhoto": "Lire le millésime sur une photo",
+  "vintageScanTitle": "Millésime",
+  "vintageScanHint": "Cadrez l'année inscrite sur l'étiquette ou la collerette : elle est lue toute seule.",
+  "vintageScanSeen": "Lu : {year}, gardez la bouteille immobile…",
+  "@vintageScanSeen": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "vintageScanFound": "Millésime lu : {year}",
+  "@vintageScanFound": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "vintageScanNotFound": "Aucun millésime lisible sur cette photo.",
+  "vintageScanUnavailable": "Lecture du millésime indisponible sur cet appareil",
+  "vintageScanUseField": "Saisissez les 4 chiffres dans le champ.",
   "vintageHintField": "Millésime si vous le connaissez (facultatif)",
   "continueToEnrichment": "Lancer l'identification",
   "needOnePhoto": "Ajoutez au moins une photo de l'étiquette.",

@@ -2770,6 +2770,60 @@ abstract class AppLocalizations {
   /// **'Saisissez les 13 chiffres dans le champ.'**
   String get scanUseField;
 
+  /// No description provided for @vintageScanLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le millésime avec l\'appareil photo'**
+  String get vintageScanLive;
+
+  /// No description provided for @vintageScanFromPhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le millésime sur une photo'**
+  String get vintageScanFromPhoto;
+
+  /// No description provided for @vintageScanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime'**
+  String get vintageScanTitle;
+
+  /// No description provided for @vintageScanHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrez l\'année inscrite sur l\'étiquette ou la collerette : elle est lue toute seule.'**
+  String get vintageScanHint;
+
+  /// No description provided for @vintageScanSeen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu : {year}, gardez la bouteille immobile…'**
+  String vintageScanSeen(String year);
+
+  /// No description provided for @vintageScanFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime lu : {year}'**
+  String vintageScanFound(String year);
+
+  /// No description provided for @vintageScanNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun millésime lisible sur cette photo.'**
+  String get vintageScanNotFound;
+
+  /// No description provided for @vintageScanUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture du millésime indisponible sur cet appareil'**
+  String get vintageScanUnavailable;
+
+  /// No description provided for @vintageScanUseField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez les 4 chiffres dans le champ.'**
+  String get vintageScanUseField;
+
   /// No description provided for @vintageHintField.
   ///
   /// In fr, this message translates to:

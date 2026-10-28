@@ -78,6 +78,8 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | crypto 3.0 | SHA-256 et HMAC de la signature des requêtes au flux (docs/02), paquet Dart de l'équipe Dart, sans code natif | oui | oui |
 | flutter_secure_storage 11.2 | clé du flux dans le Keystore Android et le Trousseau iOS, jamais dans les préférences (PAR-05, règle Flutter) | oui | oui |
 | mobile_scanner 7.4 | lecture du code-barres EAN en direct et sur une photo, décodage sur l'appareil sans réseau (AJO-10, T82) | oui | oui |
+| camera 0.12 | images de la caméra en direct pour lire le millésime (AJO-14), plugin officiel de l'équipe Flutter | oui | oui |
+| google_mlkit_text_recognition 0.17 | reconnaissance de texte sur l'appareil, alphabet latin, sans réseau ni envoi d'image (AJO-14, T116). iOS 15.5 au moins ; règles R8 dans android/app/proguard-rules.pro | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
 | pdf 3.13 | fiche et catalogue PDF (PDF-01 à PDF-05), QR code compris, en Dart pur dans un isolate ; polices Roboto embarquées (assets/fonts, Apache 2.0) | oui | oui |
 | xml 7.0 | lecture des classeurs xlsx à l'import (XLS-04), déjà tirée par pdf ; l'écriture du xlsx est faite à la main (T89) | oui | oui |

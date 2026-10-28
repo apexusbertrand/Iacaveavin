@@ -1622,6 +1622,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String get scanUseField => 'Saisissez les 13 chiffres dans le champ.';
 
   @override
+  String get vintageScanLive => 'Lire le millésime avec l\'appareil photo';
+
+  @override
+  String get vintageScanFromPhoto => 'Lire le millésime sur une photo';
+
+  @override
+  String get vintageScanTitle => 'Millésime';
+
+  @override
+  String get vintageScanHint =>
+      'Cadrez l\'année inscrite sur l\'étiquette ou la collerette : elle est lue toute seule.';
+
+  @override
+  String vintageScanSeen(String year) {
+    return 'Lu : $year, gardez la bouteille immobile…';
+  }
+
+  @override
+  String vintageScanFound(String year) {
+    return 'Millésime lu : $year';
+  }
+
+  @override
+  String get vintageScanNotFound => 'Aucun millésime lisible sur cette photo.';
+
+  @override
+  String get vintageScanUnavailable =>
+      'Lecture du millésime indisponible sur cet appareil';
+
+  @override
+  String get vintageScanUseField => 'Saisissez les 4 chiffres dans le champ.';
+
+  @override
   String get vintageHintField => 'Millésime si vous le connaissez (facultatif)';
 
   @override
