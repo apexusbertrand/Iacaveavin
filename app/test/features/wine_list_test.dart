@@ -17,7 +17,7 @@ List<WineListItem> manyWines(int n) => [
       countryCode: 'FR',
       countryLabel: 'France',
       region: 'Bordeaux',
-      bottles: i % 7,
+      bottles: 1 + i % 7,
     ),
 ];
 
@@ -26,13 +26,14 @@ void main() {
     tester,
   ) async {
     await pumpApp(tester);
-    expect(find.text('3 vins · 18 bouteilles'), findsOneWidget);
+    expect(find.text('3 vins · 20 bouteilles'), findsOneWidget);
     expect(find.byType(WineCard), findsNWidgets(3));
     expect(find.text('Château Bralmac · Les Terrasses'), findsOneWidget);
     expect(find.text('Bordeaux · Médoc'), findsOneWidget);
     expect(find.text('Pauillac'), findsOneWidget);
-    expect(find.text('2019'), findsOneWidget);
-    expect(find.text('NM'), findsOneWidget);
+    // En-tête de groupe (tri par millésime, LST-03) et carte.
+    expect(find.text('2019'), findsNWidgets(2));
+    expect(find.text('NM'), findsNWidgets(2));
     expect(find.textContaining('42,50'), findsOneWidget);
     expect(find.text('À valider'), findsOneWidget);
     expect(find.textContaining('France'), findsNWidgets(3));
@@ -71,7 +72,7 @@ void main() {
     tester,
   ) async {
     await pumpApp(tester, wines: Stream.value(manyWines(200)));
-    expect(find.text('200 vins · 594 bouteilles'), findsOneWidget);
+    expect(find.text('200 vins · 794 bouteilles'), findsOneWidget);
     // ListView.builder : seules les cartes visibles sont construites.
     expect(find.byType(WineCard).evaluate().length, lessThan(20));
     expect(find.byTooltip('Haut de la page'), findsNothing);
@@ -83,7 +84,7 @@ void main() {
     expect(find.byTooltip('Haut de la page'), findsOneWidget);
     await tester.tap(find.byTooltip('Haut de la page'));
     await tester.pumpAndSettle();
-    expect(find.text('Domaine 0'), findsOneWidget);
+    expect(find.text('2024'), findsWidgets);
   });
 
   testWidgets('NFR-10 police à 200 % : aucune carte tronquée en erreur', (

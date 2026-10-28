@@ -46,6 +46,28 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T23 | Flutter figé à 3.47.7 stable dans la CI | builds reproductibles ; montée de version par décision |
 | T24 | Dépôt GitHub réel : `apexusbertrand/Iacaveavin` (et non `IA-cave-a-vin` comme écrit dans D1 et PROMPT_DEMARRAGE.md) | dépôt créé par Bertrand sous ce nom |
 
+## Décisions techniques proposées au lot 1 (2026-10-21), à valider par Bertrand
+
+| Id | Décision | Raison |
+| --- | --- | --- |
+| T25 | Lot 1 démarré avant la recette du lot 0, sur une branche issue de `lot-0-socle` | demande de Bertrand le 2026-10-21 (« avancer les prochains lots ») ; le lot 2b reste bloqué sans accès à n8n |
+| T26 | Tri, filtres, groupes et recherche calculés en mémoire par des fonctions pures du domaine | testable sans base, 5 000 fiches tiennent en mémoire ; mesure de NFR-01 à confirmer au lot 5 |
+| T27 | Toute valeur absente se range en fin de liste, quel que soit le critère et le sens | généralisation de NOT-R4 (note Parker) aux autres critères |
+| T28 | « Année d'apogée » ajoutée aux critères de tri | LST-03 la cite comme groupable alors que LST-01 ne la listait pas ; un groupe suit le tri 1 |
+| T29 | Changer de critère de tri garde le sens choisi | évite un saut de liste ; le sens se bascule d'un tap |
+| T30 | Dans les groupes propriétaire et emplacement, un vin se range sous le propriétaire ou l'emplacement qui a le plus de bouteilles | une fiche n'apparaît qu'une fois |
+| T31 | Déplacer ou changer de propriétaire une sélection (LST-08) transfère chaque lot en entier par mouvements (STK-R5) | le stock ne change que par des mouvements (règle 4) |
+| T32 | Annulation de 5 s : les mouvements créés sont supprimés physiquement, ainsi que le lot cible d'un transfert | prévu par STK-R4 tant que l'action n'est pas confirmée |
+| T33 | Inventaire (STK-04) : une étape par emplacement qui contient directement des lots, écart enregistré avec le motif « inventaire » | parcours emplacement par emplacement sans doublon |
+| T34 | Sauvegarde hebdomadaire (SAV-03) faite au lancement de l'app si elle est due, sans photos, sans tâche de fond | pas de dépendance workmanager au lot 1 ; les photos sont déjà sur le téléphone |
+| T35 | Restauration (SAV-04) : l'archive est migrée à part, puis copiée table par table dans une seule transaction | en cas d'échec, la cave actuelle reste intacte |
+| T36 | SAV-05 : `android:allowBackup="false"` | évite qu'Android restaure une base partielle ou ancienne à la réinstallation |
+| T37 | FIC-05 : historique des prix marché en liste chronologique au lot 1 ; la courbe arrive avec les prix réels (lot 2c) ou les graphiques (lot 3) | aucun prix marché ne peut exister avant le lot 2c |
+| T38 | PRO-03 : filtre par propriétaire et valeur d'achat par propriétaire livrés ; la dimension statistique arrive avec les statistiques (lot 3) | STA est au lot 3 |
+| T39 | PAR-05 : connexion au flux n8n et rafraîchissement automatique des prix affichés mais inactifs jusqu'au lot 2c ; langue française seule | ces réglages pilotent des fonctions des lots 2c et suivants |
+| T40 | Un motif de mouvement déjà utilisé ne se fusionne pas | les mouvements sont immuables ; on peut le renommer ou le désactiver |
+| T41 | Tous les écrans de premier niveau gardent le tiroir ; « Emplacements » et « Sauvegarde » quittent l'écran « à venir » | livrés au lot 1 |
+
 ## À compléter
 
 | Id | Sujet | Quand |

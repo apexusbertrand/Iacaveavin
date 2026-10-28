@@ -280,3 +280,22 @@ abstract final class AppTheme {
 extension AppThemeContext on BuildContext {
   AppPalette get palette => Theme.of(this).extension<AppPalette>()!;
 }
+
+/// Couleur de la pastille de statut de garde.
+Color cellarStatusColor(String code) => switch (code) {
+  'trop_jeune' => CellarStatusTokens.trop_jeune,
+  'a_boire' => CellarStatusTokens.a_boire,
+  'apogee' => CellarStatusTokens.apogee,
+  'a_boire_vite' => CellarStatusTokens.a_boire_vite,
+  'passe' => CellarStatusTokens.passe,
+  _ => CellarStatusTokens.inconnu,
+};
+
+/// Couleurs du badge de note selon la note sur 100 (design-tokens.json).
+({Color fill, Color onFill}) scoreBadgeColors(double scoreOn100) {
+  for (final s in ScoreBadgeTokens.seuils) {
+    if (scoreOn100 >= s.min) return (fill: s.fond, onFill: s.texte);
+  }
+  final last = ScoreBadgeTokens.seuils.last;
+  return (fill: last.fond, onFill: last.texte);
+}

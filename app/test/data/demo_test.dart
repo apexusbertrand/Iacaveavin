@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:drift/drift.dart' hide isNotNull;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/data/cellar_repository.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/demo/demo_generator.dart';
 import 'package:iacaveavin/data/demo/drift_demo_repository.dart';
 import 'package:iacaveavin/data/referentiels/referentiel_loader.dart';
+import 'package:iacaveavin/domain/wine_query.dart';
 
 import '../helpers.dart';
 
@@ -122,7 +124,7 @@ void main() {
       expect(await repo.demoWineCount(), 0);
       final chrono = Stopwatch()..start();
       await repo.load();
-      final list = await db.wineList();
+      final list = await CellarRepository(db).wineItems();
       chrono.stop();
       // Mesure notée dans docs/journal-lots.md (machine de CI, pas le téléphone).
       // ignore: avoid_print
@@ -131,8 +133,13 @@ void main() {
       );
       expect(await repo.demoWineCount(), 200);
       expect(list, hasLength(200));
-      expect(list.first.vintage, '2024');
-      expect(list.last.vintage, '2005');
+      final sorted = const WineQuery(
+        filters: WineFilters(stock: StockFilter.all),
+      ).apply(list, year: 2026);
+      expect(sorted.first.vintage, '2024');
+      expect(sorted.last.vintage, '2005');
+      expect(list.where((w) => w.owners.isNotEmpty), hasLength(200));
+      expect(list.where((w) => w.locationPath != null), isNotEmpty);
       final withLabels = list.where((w) => w.appellation != null);
       expect(withLabels, isNotEmpty);
       expect(withLabels.first.appellation, isNot(contains('-')));
@@ -140,7 +147,9 @@ void main() {
 
     test('CMP-07 STK-R3 stock de la liste = somme des mouvements', () async {
       await repo.load();
-      final total = (await db.wineList()).fold<int>(0, (s, w) => s + w.bottles);
+      final total = (await CellarRepository(
+        db,
+      ).wineItems()).fold<int>(0, (s, w) => s + w.bottles);
       final sum = db.stockMovements.quantite.sum();
       final row = await (db.selectOnly(
         db.stockMovements,
@@ -161,7 +170,7 @@ void main() {
         final listsBefore = await db.select(db.listValues).get();
         await repo.erase();
         expect(await repo.demoWineCount(), 0);
-        expect(await db.wineList(), isEmpty);
+        expect(await CellarRepository(db).wineItems(), isEmpty);
         expect(await db.select(db.stockMovements).get(), isEmpty);
         expect(await db.select(db.owners).get(), isEmpty);
         final cellars = await db.select(db.cellars).get();
@@ -220,7 +229,7 @@ void main() {
             );
         await repo.load();
         await repo.erase();
-        final list = await db.wineList();
+        final list = await CellarRepository(db).wineItems();
         expect(list.map((w) => w.id), ['w1']);
         expect(list.single.bottles, 0);
         expect(list.single.countryLabel, 'France');

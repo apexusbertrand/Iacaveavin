@@ -103,24 +103,28 @@ void main() {
     expect(codesParListe['appellation']!.where(interdits.hasMatch), isEmpty);
   });
 
-  test('référentiels : chargés une seule fois au premier lancement', () async {
-    final db = memoryDatabase();
-    addTearDown(db.close);
-    final bootstrap = CellarBootstrap(db, readAssetFromDisk);
-    final id1 = await bootstrap.ensureInitialized();
-    final count1 = (await db.select(db.listValues).get()).length;
-    final id2 = await bootstrap.ensureInitialized();
-    final count2 = (await db.select(db.listValues).get()).length;
-    expect(id2, id1);
-    expect(count1, greaterThan(500));
-    expect(count2, count1);
-    final rose =
-        await (db.select(db.listValues)
-              ..where((v) => v.liste.equals('couleur') & v.code.equals('rose')))
-            .getSingle();
-    expect(rose.libelle, 'Rosé');
-    expect(await db.select(db.cellars).get(), hasLength(1));
-  });
+  test(
+    'PAR-03 référentiels chargés une seule fois au premier lancement',
+    () async {
+      final db = memoryDatabase();
+      addTearDown(db.close);
+      final bootstrap = CellarBootstrap(db, readAssetFromDisk);
+      final id1 = await bootstrap.ensureInitialized();
+      final count1 = (await db.select(db.listValues).get()).length;
+      final id2 = await bootstrap.ensureInitialized();
+      final count2 = (await db.select(db.listValues).get()).length;
+      expect(id2, id1);
+      expect(count1, greaterThan(500));
+      expect(count2, count1);
+      final rose =
+          await (db.select(db.listValues)..where(
+                (v) => v.liste.equals('couleur') & v.code.equals('rose'),
+              ))
+              .getSingle();
+      expect(rose.libelle, 'Rosé');
+      expect(await db.select(db.cellars).get(), hasLength(1));
+    },
+  );
 
   test('règles de garde : la copie embarquée est identique à specs/', () {
     expect(
