@@ -12,6 +12,7 @@ import 'package:iacaveavin/data/demo/demo_generator.dart';
 import 'generated/schema.dart';
 import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
+import 'generated/schema_v4.dart' as v4;
 
 /// Insère des lignes « actuelles » dans une base d'une version précédente,
 /// colonne par colonne, sans passer par les classes générées de la version.
@@ -62,7 +63,7 @@ void main() {
 
     final db = AppDatabase(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 4);
+    await verifier.migrateAndValidate(db, 5);
     final items = await CellarRepository(db).wineItems();
     expect(items, hasLength(200));
     final stock = items.fold<int>(0, (s, w) => s + w.bottles);
@@ -125,6 +126,42 @@ void main() {
     expect(await db.select(db.shoppingItems).get(), isEmpty);
   });
 
+  test(
+    'NFR-05 CMP-07 migration v4 vers v5 : photos gardées, sans dégustation',
+    () async {
+      final schema = await verifier.schemaAt(4);
+      final old = v4.DatabaseAtV4(schema.newConnection());
+      final data = buildDemoDataSet(now: DateTime.utc(2026, 10, 21));
+      await _insertRaw(old, 'cave', [data.cellar]);
+      await _insertRaw(old, 'domaine', data.producers);
+      await _insertRaw(old, 'cuvee', data.cuvees);
+      await _insertRaw(old, 'fiche_vin', data.wines);
+      final wineId = data.wines.first.id.value;
+      await old.customStatement(
+        'INSERT INTO photo (id, cave_id, created_at, updated_at, fiche_id, '
+        'chemin, type_photo, principale) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+          'p1',
+          data.cellar.id.value,
+          '2026-10-21T00:00:00.000Z',
+          '2026-10-21T00:00:00.000Z',
+          wineId,
+          'photos/$wineId/p1.jpg',
+          'degustation',
+          0,
+        ],
+      );
+      await old.close();
+
+      final db = AppDatabase(schema.newConnection());
+      addTearDown(db.close);
+      await verifier.migrateAndValidate(db, 5);
+      final photo = await db.select(db.photos).getSingle();
+      expect(photo.chemin, 'photos/$wineId/p1.jpg');
+      expect(photo.degustationId, isNull);
+    },
+  );
+
   test('NFR-05 la version de schéma courante a son instantané figé', () {
     final db = AppDatabase(
       DatabaseConnection(
@@ -134,6 +171,6 @@ void main() {
     );
     addTearDown(db.close);
     expect(GeneratedHelper.versions, contains(db.schemaVersion));
-    expect(db.schemaVersion, 4);
+    expect(db.schemaVersion, 5);
   });
 }

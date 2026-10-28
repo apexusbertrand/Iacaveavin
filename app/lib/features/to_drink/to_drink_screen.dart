@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../photos/tasting_photos.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -13,6 +14,7 @@ import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
 import '../../domain/comfort.dart';
+import '../photos/tasting_photos.dart';
 import '../wine_list/wine_card.dart';
 import 'comfort_providers.dart';
 import 'monthly_alert_banner.dart';
@@ -198,18 +200,23 @@ class _TastingsTab extends ConsumerWidget {
                           t.vintage == 'NM' ? l.nonVintage : t.vintage,
                         ].join(' · '),
                       ),
-                      subtitle: Text(
-                        [
-                          [
-                            day == null ? t.date : date.format(day),
-                            ?t.dish,
-                            if (t.score != null)
-                              l.tastingScoreValue(_n(t.score!), scale),
-                          ].join(' · '),
-                          ?t.comment,
-                        ].join('\n'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            [
+                              [
+                                day == null ? t.date : date.format(day),
+                                ?t.dish,
+                                if (t.score != null)
+                                  l.tastingScoreValue(_n(t.score!), scale),
+                              ].join(' · '),
+                              ?t.comment,
+                            ].join('\n'),
+                          ),
+                          TastingPhotoStrip(tastingId: t.id),
+                        ],
                       ),
-                      isThreeLine: t.comment != null,
                       onTap: () => context.push('/fiche/${t.wineId}'),
                     );
                   },

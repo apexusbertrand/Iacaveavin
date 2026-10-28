@@ -230,6 +230,7 @@ entites:
       - {cle: octets, libelle: "Taille (octets)", type: entier}
       - {cle: chemin_original, libelle: "Photo d'origine", type: texte, regle: "relatif ; photo entière gardée tant que la fiche n'est pas validée, quand la photo a été recadrée sur l'étiquette (AJO-13) ; vide après validation"}
       - {cle: cadre, libelle: "Cadre de l'étiquette", type: texte, regle: "JSON {x, y, largeur, hauteur} en fractions de la photo d'origine (contrat 1.1, cadrages) ; vide si la photo est entière et après validation"}
+      - {cle: degustation_id, libelle: "Dégustation", type: reference, regle: "photo prise en notant une dégustation (CMP-07), type degustation ; vide sinon"}
 
   provenance:
     role: "origine de chaque valeur enrichie"

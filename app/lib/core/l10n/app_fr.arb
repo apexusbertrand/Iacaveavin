@@ -432,6 +432,16 @@
   },
   "tastingDish": "Plat servi",
   "tastingComment": "Commentaire",
+  "tastingPhotos": "Photos de la dégustation",
+  "tastingPhotoRemove": "Retirer la photo",
+  "tastingPhotosMax": "{count} photos au plus par dégustation.",
+  "@tastingPhotosMax": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tastingPrompt": "Noter cette dégustation ?",
   "later": "Plus tard",
   "save": "Enregistrer",

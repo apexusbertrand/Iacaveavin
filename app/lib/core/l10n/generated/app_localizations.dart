@@ -1396,6 +1396,24 @@ abstract class AppLocalizations {
   /// **'Commentaire'**
   String get tastingComment;
 
+  /// No description provided for @tastingPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos de la dégustation'**
+  String get tastingPhotos;
+
+  /// No description provided for @tastingPhotoRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer la photo'**
+  String get tastingPhotoRemove;
+
+  /// No description provided for @tastingPhotosMax.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} photos au plus par dégustation.'**
+  String tastingPhotosMax(int count);
+
   /// No description provided for @tastingPrompt.
   ///
   /// In fr, this message translates to:

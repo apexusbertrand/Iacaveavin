@@ -8347,6 +8347,20 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _degustationIdMeta = const VerificationMeta(
+    'degustationId',
+  );
+  @override
+  late final GeneratedColumn<String> degustationId = GeneratedColumn<String>(
+    'degustation_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES degustation (id)',
+    ),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -8363,6 +8377,7 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     octets,
     cheminOriginal,
     cadre,
+    degustationId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -8476,6 +8491,15 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         cadre.isAcceptableOrUnknown(data['cadre']!, _cadreMeta),
       );
     }
+    if (data.containsKey('degustation_id')) {
+      context.handle(
+        _degustationIdMeta,
+        degustationId.isAcceptableOrUnknown(
+          data['degustation_id']!,
+          _degustationIdMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -8541,6 +8565,10 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         DriftSqlType.string,
         data['${effectivePrefix}cadre'],
       ),
+      degustationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}degustation_id'],
+      ),
     );
   }
 
@@ -8569,6 +8597,9 @@ class Photo extends DataClass implements Insertable<Photo> {
 
   /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
   final String? cadre;
+
+  /// CMP-07 : dégustation pendant laquelle la photo a été prise.
+  final String? degustationId;
   const Photo({
     required this.id,
     required this.createdAt,
@@ -8584,6 +8615,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     this.octets,
     this.cheminOriginal,
     this.cadre,
+    this.degustationId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -8613,6 +8645,9 @@ class Photo extends DataClass implements Insertable<Photo> {
     }
     if (!nullToAbsent || cadre != null) {
       map['cadre'] = Variable<String>(cadre);
+    }
+    if (!nullToAbsent || degustationId != null) {
+      map['degustation_id'] = Variable<String>(degustationId);
     }
     return map;
   }
@@ -8645,6 +8680,9 @@ class Photo extends DataClass implements Insertable<Photo> {
       cadre: cadre == null && nullToAbsent
           ? const Value.absent()
           : Value(cadre),
+      degustationId: degustationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(degustationId),
     );
   }
 
@@ -8668,6 +8706,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       octets: serializer.fromJson<int?>(json['octets']),
       cheminOriginal: serializer.fromJson<String?>(json['cheminOriginal']),
       cadre: serializer.fromJson<String?>(json['cadre']),
+      degustationId: serializer.fromJson<String?>(json['degustationId']),
     );
   }
   @override
@@ -8688,6 +8727,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       'octets': serializer.toJson<int?>(octets),
       'cheminOriginal': serializer.toJson<String?>(cheminOriginal),
       'cadre': serializer.toJson<String?>(cadre),
+      'degustationId': serializer.toJson<String?>(degustationId),
     };
   }
 
@@ -8706,6 +8746,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     Value<int?> octets = const Value.absent(),
     Value<String?> cheminOriginal = const Value.absent(),
     Value<String?> cadre = const Value.absent(),
+    Value<String?> degustationId = const Value.absent(),
   }) => Photo(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
@@ -8723,6 +8764,9 @@ class Photo extends DataClass implements Insertable<Photo> {
         ? cheminOriginal.value
         : this.cheminOriginal,
     cadre: cadre.present ? cadre.value : this.cadre,
+    degustationId: degustationId.present
+        ? degustationId.value
+        : this.degustationId,
   );
   Photo copyWithCompanion(PhotosCompanion data) {
     return Photo(
@@ -8744,6 +8788,9 @@ class Photo extends DataClass implements Insertable<Photo> {
           ? data.cheminOriginal.value
           : this.cheminOriginal,
       cadre: data.cadre.present ? data.cadre.value : this.cadre,
+      degustationId: data.degustationId.present
+          ? data.degustationId.value
+          : this.degustationId,
     );
   }
 
@@ -8763,7 +8810,8 @@ class Photo extends DataClass implements Insertable<Photo> {
           ..write('hauteur: $hauteur, ')
           ..write('octets: $octets, ')
           ..write('cheminOriginal: $cheminOriginal, ')
-          ..write('cadre: $cadre')
+          ..write('cadre: $cadre, ')
+          ..write('degustationId: $degustationId')
           ..write(')'))
         .toString();
   }
@@ -8784,6 +8832,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     octets,
     cheminOriginal,
     cadre,
+    degustationId,
   );
   @override
   bool operator ==(Object other) =>
@@ -8802,7 +8851,8 @@ class Photo extends DataClass implements Insertable<Photo> {
           other.hauteur == this.hauteur &&
           other.octets == this.octets &&
           other.cheminOriginal == this.cheminOriginal &&
-          other.cadre == this.cadre);
+          other.cadre == this.cadre &&
+          other.degustationId == this.degustationId);
 }
 
 class PhotosCompanion extends UpdateCompanion<Photo> {
@@ -8820,6 +8870,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
   final Value<int?> octets;
   final Value<String?> cheminOriginal;
   final Value<String?> cadre;
+  final Value<String?> degustationId;
   final Value<int> rowid;
   const PhotosCompanion({
     this.id = const Value.absent(),
@@ -8836,6 +8887,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     this.octets = const Value.absent(),
     this.cheminOriginal = const Value.absent(),
     this.cadre = const Value.absent(),
+    this.degustationId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PhotosCompanion.insert({
@@ -8853,6 +8905,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     this.octets = const Value.absent(),
     this.cheminOriginal = const Value.absent(),
     this.cadre = const Value.absent(),
+    this.degustationId = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        createdAt = Value(createdAt),
@@ -8877,6 +8930,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Expression<int>? octets,
     Expression<String>? cheminOriginal,
     Expression<String>? cadre,
+    Expression<String>? degustationId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -8894,6 +8948,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       if (octets != null) 'octets': octets,
       if (cheminOriginal != null) 'chemin_original': cheminOriginal,
       if (cadre != null) 'cadre': cadre,
+      if (degustationId != null) 'degustation_id': degustationId,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -8913,6 +8968,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Value<int?>? octets,
     Value<String?>? cheminOriginal,
     Value<String?>? cadre,
+    Value<String?>? degustationId,
     Value<int>? rowid,
   }) {
     return PhotosCompanion(
@@ -8930,6 +8986,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       octets: octets ?? this.octets,
       cheminOriginal: cheminOriginal ?? this.cheminOriginal,
       cadre: cadre ?? this.cadre,
+      degustationId: degustationId ?? this.degustationId,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -8979,6 +9036,9 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     if (cadre.present) {
       map['cadre'] = Variable<String>(cadre.value);
     }
+    if (degustationId.present) {
+      map['degustation_id'] = Variable<String>(degustationId.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -9002,6 +9062,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
           ..write('octets: $octets, ')
           ..write('cheminOriginal: $cheminOriginal, ')
           ..write('cadre: $cadre, ')
+          ..write('degustationId: $degustationId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -12724,6 +12785,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_photo_fiche',
     'CREATE INDEX idx_photo_fiche ON photo (fiche_id)',
   );
+  late final Index idxPhotoDegustation = Index(
+    'idx_photo_degustation',
+    'CREATE INDEX idx_photo_degustation ON photo (degustation_id)',
+  );
   late final Index idxProvenanceEntite = Index(
     'idx_provenance_entite',
     'CREATE INDEX idx_provenance_entite ON provenance (entite, entite_id)',
@@ -12791,6 +12856,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     idxMouvementType,
     idxPrixFiche,
     idxPhotoFiche,
+    idxPhotoDegustation,
     idxProvenanceEntite,
     idxEmplacementParent,
     idxValeurListe,

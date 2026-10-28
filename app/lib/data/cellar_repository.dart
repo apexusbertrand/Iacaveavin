@@ -698,7 +698,8 @@ class CellarRepository {
   }
 
   /// FIC-04 : note de dégustation, proposée à l'ouverture, jamais imposée.
-  Future<void> addTasting({
+  /// Renvoie l'identifiant de la dégustation (photos de CMP-07).
+  Future<String> addTasting({
     required String wineId,
     required String cellarId,
     double? score,
@@ -706,22 +707,26 @@ class CellarRepository {
     String? dish,
     String? movementId,
     String? date,
-  }) => _db
-      .into(_db.tastings)
-      .insert(
-        TastingsCompanion.insert(
-          id: _uuid.v4(),
-          caveId: cellarId,
-          createdAt: _now,
-          updatedAt: _now,
-          ficheId: wineId,
-          dateDegustation: date ?? _today,
-          notePerso: Value(score),
-          commentaire: Value(_blank(comment)),
-          plat: Value(_blank(dish)),
-          mouvementId: Value(movementId),
-        ),
-      );
+  }) async {
+    final id = _uuid.v4();
+    await _db
+        .into(_db.tastings)
+        .insert(
+          TastingsCompanion.insert(
+            id: id,
+            caveId: cellarId,
+            createdAt: _now,
+            updatedAt: _now,
+            ficheId: wineId,
+            dateDegustation: date ?? _today,
+            notePerso: Value(score),
+            commentaire: Value(_blank(comment)),
+            plat: Value(_blank(dish)),
+            mouvementId: Value(movementId),
+          ),
+        );
+    return id;
+  }
 
   /// Nouveau lot sur une fiche existante (réapprovisionnement, STK-06).
   Future<String> addLot(String wineId, LotDraft lot) async {

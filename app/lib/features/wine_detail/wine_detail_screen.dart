@@ -17,6 +17,7 @@ import '../../domain/scores.dart';
 import '../../domain/wine_detail.dart';
 import '../photos/photo_gallery.dart';
 import '../photos/photo_library_tab.dart';
+import '../photos/tasting_photos.dart';
 import '../wine_list/wine_card.dart';
 import 'pdf_actions.dart';
 import 'price_actions.dart';
@@ -865,7 +866,13 @@ class _TastingsTab extends ConsumerWidget {
                 if (t.score != null) '${_num(t.score!)} / $scale',
               ].join(' · '),
             ),
-            subtitle: Text([t.dish, t.comment].whereType<String>().join('\n')),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text([t.dish, t.comment].whereType<String>().join('\n')),
+                TastingPhotoStrip(tastingId: t.id),
+              ],
+            ),
           ),
       ],
     );

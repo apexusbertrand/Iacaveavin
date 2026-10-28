@@ -16,6 +16,11 @@ const sentLongSide = 1500;
 const thumbLongSide = 320;
 const jpegQuality = 80;
 
+/// CMP-07 : photos de dégustation ramenées à un écran de smartphone (Full HD,
+/// 1 080 × 1 920 au plus dans leur sens), environ 200 à 400 Ko.
+const screenShortSide = 1080;
+const screenLongSide = 1920;
+
 /// AJO-02 : seuils de détection (variance du laplacien sur 400 px, part de
 /// pixels quasi blancs). Heuristique courante, à recaler sur de vraies photos
 /// pendant la recette : la détection invite à reprendre, sans bloquer.
@@ -117,6 +122,40 @@ ProcessedPhoto processPhoto(Uint8List bytes) {
   );
 }
 
+/// Réduit [src] pour tenir dans un écran de smartphone, portrait ou paysage.
+img.Image fitScreen(img.Image src) {
+  final long = src.width >= src.height ? src.width : src.height;
+  final short = src.width >= src.height ? src.height : src.width;
+  final scale = [
+    1.0,
+    screenLongSide / long,
+    screenShortSide / short,
+  ].reduce((a, b) => a < b ? a : b);
+  if (scale >= 1) return src;
+  return img.copyResize(
+    src,
+    width: (src.width * scale).round(),
+    height: (src.height * scale).round(),
+    interpolation: img.Interpolation.average,
+  );
+}
+
+/// CMP-07 : photo de dégustation à la taille d'un écran, miniature 320 px.
+ProcessedPhoto processScreenPhoto(Uint8List bytes) {
+  final decoded = img.decodeImage(bytes);
+  if (decoded == null) throw const FormatException('image illisible');
+  final stored = fitScreen(img.bakeOrientation(decoded));
+  return ProcessedPhoto(
+    stored: Uint8List.fromList(img.encodeJpg(stored, quality: jpegQuality)),
+    thumb: Uint8List.fromList(
+      img.encodeJpg(_resize(stored, thumbLongSide), quality: jpegQuality),
+    ),
+    width: stored.width,
+    height: stored.height,
+    quality: measureQuality(stored),
+  );
+}
+
 /// AJO-13 : photo rognée sur le cadre de l'étiquette, mêmes tailles que
 /// [processPhoto].
 ProcessedPhoto cropPhoto(Uint8List bytes, PhotoFrame frame) {
@@ -166,6 +205,10 @@ class PhotoService {
   Future<ProcessedPhoto> process(Uint8List bytes) =>
       Isolate.run(() => processPhoto(bytes));
 
+  /// CMP-07 : photo de dégustation, traitée dans un isolate.
+  Future<ProcessedPhoto> processForScreen(Uint8List bytes) =>
+      Isolate.run(() => processScreenPhoto(bytes));
+
   Future<String> _abs(String relative) async =>
       p.join((await appDir()).path, relative);
 
@@ -180,6 +223,7 @@ class PhotoService {
     required String cellarId,
     required ProcessedPhoto photo,
     required String type,
+    String? tastingId,
   }) async {
     final id = _uuid.v4();
     final relative = p.posix.join('photos', wineId, '$id.jpg');
@@ -205,6 +249,7 @@ class PhotoService {
             largeur: Value(photo.width),
             hauteur: Value(photo.height),
             octets: Value(photo.stored.length),
+            degustationId: Value(tastingId),
           ),
         );
     return id;
@@ -228,6 +273,15 @@ class PhotoService {
     for (final ph in await photosOf(wineId))
       if (isLibraryPhoto(ph.typePhoto)) ph,
   ];
+
+  /// CMP-07 : photos prises en notant une dégustation, dans l'ordre de prise.
+  Future<List<Photo>> tastingPhotosOf(String tastingId) =>
+      (_db.select(_db.photos)
+            ..where(
+              (x) => x.degustationId.equals(tastingId) & x.deletedAt.isNull(),
+            )
+            ..orderBy([(x) => OrderingTerm.asc(x.createdAt)]))
+          .get();
 
   Future<File> fileOf(Photo photo) async => File(await _abs(photo.chemin));
 

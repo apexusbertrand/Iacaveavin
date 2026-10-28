@@ -808,6 +808,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tastingComment => 'Commentaire';
 
   @override
+  String get tastingPhotos => 'Photos de la dégustation';
+
+  @override
+  String get tastingPhotoRemove => 'Retirer la photo';
+
+  @override
+  String tastingPhotosMax(int count) {
+    return '$count photos au plus par dégustation.';
+  }
+
+  @override
   String get tastingPrompt => 'Noter cette dégustation ?';
 
   @override

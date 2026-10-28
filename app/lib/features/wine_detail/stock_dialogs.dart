@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/design_tokens.g.dart';
+import '../../data/enrichment/enrichment_providers.dart';
+import '../../data/files/photo_service.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../data/stock_service.dart';
 import '../../domain/stock_rules.dart';
 import '../../domain/wine_detail.dart';
 import '../../domain/wine_validation.dart';
+import '../photos/photo_gallery.dart' show libraryPhotosProvider;
+import '../photos/tasting_photos.dart';
 import '../to_drink/comfort_providers.dart';
 import '../wine_list/selection_actions.dart';
 
@@ -645,6 +649,7 @@ class _LotFormState extends ConsumerState<LotForm> {
 }
 
 /// FIC-04 : note personnelle, sur l'échelle des réglages (20 ou 100).
+/// CMP-07 : photos prises pendant la dégustation, réduites à un écran.
 Future<void> tastingDialog(
   BuildContext context,
   WidgetRef ref,
@@ -656,6 +661,7 @@ Future<void> tastingDialog(
   final score = TextEditingController();
   final dish = TextEditingController();
   final comment = TextEditingController();
+  final photos = <ProcessedPhoto>[];
   final ok = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
@@ -681,6 +687,7 @@ Future<void> tastingDialog(
               maxLines: 3,
               decoration: InputDecoration(labelText: l.tastingComment),
             ),
+            TastingPhotoPicker(photos: photos),
           ],
         ),
       ),
@@ -700,7 +707,7 @@ Future<void> tastingDialog(
   if (ok == true) {
     final value = double.tryParse(score.text.trim().replaceAll(',', '.'));
     final cellarId = await ref.read(bootstrapProvider.future);
-    await ref
+    final tastingId = await ref
         .read(cellarRepositoryProvider)
         .addTasting(
           wineId: wine.id,
@@ -710,6 +717,20 @@ Future<void> tastingDialog(
           comment: comment.text,
           movementId: movementId,
         );
+    if (photos.isNotEmpty) {
+      final service = ref.read(photoServiceProvider);
+      for (final photo in photos) {
+        await service.save(
+          wineId: wine.id,
+          cellarId: cellarId,
+          photo: photo,
+          type: 'degustation',
+          tastingId: tastingId,
+        );
+      }
+      ref.invalidate(tastingPhotosProvider(tastingId));
+      ref.invalidate(libraryPhotosProvider(wine.id));
+    }
     if (context.mounted) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(l.tastingSaved)));

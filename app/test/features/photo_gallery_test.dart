@@ -115,4 +115,92 @@ void main() {
       );
     },
   );
+
+  testWidgets(
+    'CMP-07 photos prises en notant une dégustation, visibles dans l\'historique',
+    (tester) async {
+      late String wine;
+      final db = await pumpRealApp(
+        tester,
+        appDir: root,
+        extra: [
+          imagePickerProvider.overrideWithValue(
+            ({required bool camera}) async => label,
+          ),
+        ],
+        seed: (db, cellar) async {
+          wine = await CellarRepository(db).createWine(
+            const WineDraft(
+              producer: 'Château Bralmac',
+              country: 'FR',
+              color: 'rouge',
+              vintage: '2015',
+            ),
+            cellarId: cellar,
+          );
+        },
+      );
+      GoRouter.of(tester.element(find.byType(Scaffold).first))
+          .push('/fiche/$wine');
+      await settle(tester);
+      await tester.ensureVisible(find.text('Dégustations'));
+      await settle(tester);
+      await tester.tap(find.text('Dégustations'));
+      await settle(tester);
+      await tester.ensureVisible(find.text('Noter une dégustation'));
+      await settle(tester);
+      await tester.tap(find.text('Noter une dégustation'));
+      await settle(tester);
+      expect(find.text('Photos de la dégustation'), findsOneWidget);
+      for (final source in ['tasting-photo-camera', 'tasting-photo-gallery']) {
+        await tester.tap(find.byKey(ValueKey(source)));
+        await pumpUntil(
+          tester,
+          () =>
+              find
+                  .byKey(const ValueKey('tasting-photo-camera'))
+                  .hitTestable()
+                  .evaluate()
+                  .isNotEmpty &&
+              tester
+                      .widget<TextButton>(
+                        find.byKey(const ValueKey('tasting-photo-camera')),
+                      )
+                      .onPressed !=
+                  null,
+        );
+      }
+      expect(find.byKey(const ValueKey('tasting-new-photo-1')), findsOneWidget);
+      // Une photo retirée avant l'enregistrement n'est pas gardée.
+      await tester.tap(find.byKey(const ValueKey('tasting-photo-remove-1')));
+      await settle(tester);
+      expect(find.byKey(const ValueKey('tasting-new-photo-1')), findsNothing);
+      await tester.tap(find.byKey(const ValueKey('tasting-save')));
+      await pumpUntil(
+        tester,
+        () => find
+            .byWidgetPredicate(
+              (w) =>
+                  w.key is ValueKey<String> &&
+                  (w.key! as ValueKey<String>).value.startsWith(
+                    'tasting-photos-',
+                  ),
+            )
+            .evaluate()
+            .isNotEmpty,
+      );
+      final tasting = await tester.runAsync(
+        () => db.select(db.tastings).getSingle(),
+      );
+      final photos = await tester.runAsync(() => db.select(db.photos).get());
+      expect(photos, hasLength(1));
+      expect(photos!.single.degustationId, tasting!.id);
+      expect(photos.single.typePhoto, 'degustation');
+      expect(photos.single.largeur, 1200, reason: 'déjà sous la taille écran');
+      expect(
+        find.byKey(ValueKey('tasting-photos-${tasting.id}')),
+        findsOneWidget,
+      );
+    },
+  );
 }

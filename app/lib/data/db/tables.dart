@@ -200,6 +200,7 @@ class MarketPrices extends Table with TechnicalColumns, CellarScoped {
 
 @DataClassName('Photo')
 @TableIndex(name: 'idx_photo_fiche', columns: {#ficheId})
+@TableIndex(name: 'idx_photo_degustation', columns: {#degustationId})
 class Photos extends Table with TechnicalColumns, CellarScoped {
   @override
   String get tableName => 'photo';
@@ -217,6 +218,9 @@ class Photos extends Table with TechnicalColumns, CellarScoped {
 
   /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
   TextColumn get cadre => text().nullable()();
+
+  /// CMP-07 : dégustation pendant laquelle la photo a été prise.
+  TextColumn get degustationId => text().nullable().references(Tastings, #id)();
 }
 
 @DataClassName('Provenance')
