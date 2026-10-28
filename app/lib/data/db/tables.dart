@@ -285,6 +285,12 @@ class Jobs extends Table with TechnicalColumns, CellarScoped {
   TextColumn get statut => text()();
   IntColumn get tentatives => integer().nullable()();
   TextColumn get erreur => text().nullable()();
+
+  /// Ajouté en version 2 du schéma.
+  TextColumn get envoyeLe => text().nullable()();
+
+  /// Ajouté en version 2 du schéma.
+  TextColumn get reponse => text().nullable()();
 }
 
 @DataClassName('SavedStatView')

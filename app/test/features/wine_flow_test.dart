@@ -49,31 +49,40 @@ Future<void> seedTwo(AppDatabase db, String cellar) async {
 }
 
 void main() {
-  testWidgets('FIC-01 PRX-01 saisie manuelle d\'un vin avec son premier lot', (
-    tester,
-  ) async {
-    await pumpRealApp(tester, seed: seedTwo);
-    await tester.tap(find.byTooltip('Ajouter une bouteille'));
-    await settle(tester);
-    expect(find.text('Nouveau vin'), findsOneWidget);
-    await tester.enterText(
-      find.byKey(const ValueKey('field-producer')),
-      'Mas Talvombe',
-    );
-    await tester.enterText(find.byKey(const ValueKey('field-vintage')), '2019');
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('lot-price')),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.enterText(find.byKey(const ValueKey('lot-quantity')), '4');
-    await tester.enterText(find.byKey(const ValueKey('lot-price')), '18,50');
-    await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('save-wine')));
-    await settle(tester);
-    expect(find.text('MAS TALVOMBE'), findsOneWidget);
-    expect(find.text('4 restantes · 0 consommée'), findsOneWidget);
-  });
+  testWidgets(
+    'AJO-01 FIC-01 PRX-01 saisie manuelle d\'un vin avec son premier lot',
+    (tester) async {
+      await pumpRealApp(tester, seed: seedTwo);
+      await tester.tap(find.byTooltip('Ajouter une bouteille'));
+      await settle(tester);
+      // AJO-01 : photo, code-barres, saisie manuelle, import Excel.
+      expect(find.text("Photographier l'étiquette"), findsOneWidget);
+      expect(find.text('Import Excel'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('add-manual')));
+      await settle(tester);
+      expect(find.text('Nouveau vin'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const ValueKey('field-producer')),
+        'Mas Talvombe',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('field-vintage')),
+        '2019',
+      );
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('lot-price')),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(find.byKey(const ValueKey('lot-quantity')), '4');
+      await tester.enterText(find.byKey(const ValueKey('lot-price')), '18,50');
+      await tester.pump();
+      await tester.tap(find.byKey(const ValueKey('save-wine')));
+      await settle(tester);
+      expect(find.text('MAS TALVOMBE'), findsOneWidget);
+      expect(find.text('4 restantes · 0 consommée'), findsOneWidget);
+    },
+  );
 
   testWidgets('FIC-01 contrôle de saisie : millésime invalide refusé', (
     tester,

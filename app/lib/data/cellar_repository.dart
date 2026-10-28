@@ -114,6 +114,15 @@ class CellarRepository {
       if (p.prix != null) market[(p.ficheId, p.formatCl)] = p.prix!;
     }
 
+    final thumbs = <String, String>{};
+    for (final ph in await (_db.select(
+      _db.photos,
+    )..where((x) => x.deletedAt.isNull() & x.principale.equals(true))).get()) {
+      thumbs[ph.ficheId] = ph.chemin.replaceFirst(
+        RegExp(r'\.jpg$'),
+        '_mini.jpg',
+      );
+    }
     final items = <WineListItem>[];
     for (final f in await (_db.select(
       _db.wines,
@@ -201,6 +210,7 @@ class CellarRepository {
           grapes: grapes.map((g) => g.code).toList(),
           favorite: f.favori ?? false,
           primaryLotId: primaryLot,
+          thumbPath: thumbs[f.id],
           searchText: buildSearchText([
             p.nom,
             c.nom,
@@ -286,6 +296,29 @@ class CellarRepository {
               ..where((s) => s.ficheId.equals(id) & s.deletedAt.isNull())
               ..orderBy([(s) => OrderingTerm.asc(s.dateReleve)]))
             .get();
+    final provenances = <String, ProvenanceView>{};
+    for (final p
+        in await (_db.select(_db.provenances)
+              ..where(
+                (p) =>
+                    p.entite.equals('fiche_vin') &
+                    p.entiteId.equals(id) &
+                    p.deletedAt.isNull() &
+                    p.statut.isIn(['valide', 'manuel', 'verrouille']),
+              )
+              ..orderBy([(p) => OrderingTerm.asc(p.updatedAt)]))
+            .get()) {
+      provenances[p.champ] = ProvenanceView(
+        id: p.id,
+        field: p.champ,
+        source: p.source,
+        date: p.dateCollecte,
+        status: p.statut,
+        url: p.url,
+        confidence: p.confiance,
+        reported: p.signale ?? false,
+      );
+    }
     final grapes = _grapes(f.cepages);
     final pairings = f.accords == null || f.accords!.isEmpty
         ? const <String>[]
@@ -297,6 +330,7 @@ class CellarRepository {
       producerId: p.id,
       enrichmentStatus: f.statutEnrichissement ?? 'brouillon',
       gardeSource: f.gardeSource,
+      provenances: provenances,
       labels: ctx.labels,
       draft: WineDraft(
         producer: p.nom,
@@ -514,6 +548,109 @@ class CellarRepository {
       );
     });
   }
+
+  /// Fiche gardée en brouillon (photos sans envoi, consentement refusé).
+  Future<void> markDraft(String id) =>
+      (_db.update(_db.wines)..where((w) => w.id.equals(id))).write(
+        WinesCompanion(
+          statutEnrichissement: const Value('brouillon'),
+          updatedAt: Value(_now),
+        ),
+      );
+
+  /// PRV-R4 : la valeur reste affichée barrée, le signalement part avec le
+  /// prochain enrichissement.
+  Future<void> reportProvenance(String provenanceId) =>
+      (_db.update(
+        _db.provenances,
+      )..where((p) => p.id.equals(provenanceId))).write(
+        ProvenancesCompanion(
+          signale: const Value(true),
+          updatedAt: Value(_now),
+        ),
+      );
+
+  /// PRV-R3 : déverrouiller un champ saisi à la main (appui long).
+  Future<void> unlockField(String provenanceId) =>
+      (_db.update(
+        _db.provenances,
+      )..where((p) => p.id.equals(provenanceId))).write(
+        ProvenancesCompanion(
+          statut: const Value('valide'),
+          updatedAt: Value(_now),
+        ),
+      );
+
+  /// FIC-08 : nouvelle fiche sur la même cuvée pour un autre millésime. Les
+  /// photos sont reprises ; seuls les champs du millésime restent à enrichir.
+  Future<String> duplicateForVintage(String id, String vintage) =>
+      _db.transaction(() async {
+        final f = await (_db.select(
+          _db.wines,
+        )..where((w) => w.id.equals(id))).getSingle();
+        final newId = _uuid.v4();
+        await _db
+            .into(_db.wines)
+            .insert(
+              WinesCompanion.insert(
+                id: newId,
+                caveId: f.caveId,
+                createdAt: _now,
+                updatedAt: _now,
+                cuveeId: f.cuveeId,
+                millesime: vintage,
+              ).copyWith(
+                cepages: Value(f.cepages),
+                accords: Value(f.accords),
+                statutEnrichissement: const Value('a_enrichir'),
+              ),
+            );
+        for (final ph in await (_db.select(
+          _db.photos,
+        )..where((p) => p.ficheId.equals(id) & p.deletedAt.isNull())).get()) {
+          await _db
+              .into(_db.photos)
+              .insert(
+                ph
+                    .toCompanion(true)
+                    .copyWith(
+                      id: Value(_uuid.v4()),
+                      ficheId: Value(newId),
+                      createdAt: Value(_now),
+                      updatedAt: Value(_now),
+                    ),
+              );
+        }
+        // Champs de la cuvée et millésime : saisis, donc verrouillés (PRV-R2).
+        for (final field in const [
+          'domaine',
+          'cuvee',
+          'pays',
+          'region',
+          'sous_region',
+          'appellation',
+          'couleur',
+          'millesime',
+        ]) {
+          await _db
+              .into(_db.provenances)
+              .insert(
+                ProvenancesCompanion.insert(
+                  id: _uuid.v4(),
+                  caveId: f.caveId,
+                  createdAt: _now,
+                  updatedAt: _now,
+                  entite: 'fiche_vin',
+                  entiteId: newId,
+                  champ: field,
+                  source: 'manuel',
+                  dateCollecte: _today,
+                  statut: 'verrouille',
+                ),
+              );
+        }
+        return newId;
+      });
 
   Future<void> setFavorite(String id, bool favorite) =>
       (_db.update(_db.wines)..where((w) => w.id.equals(id))).write(

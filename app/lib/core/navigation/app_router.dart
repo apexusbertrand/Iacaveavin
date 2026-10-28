@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/about/about_screen.dart';
+import '../../features/add/capture_screen.dart';
+import '../../features/add/enrichment_screen.dart';
+import '../../features/add/validation_screen.dart';
 import '../../features/backup/backup_screen.dart';
 import '../../features/locations/locations_screen.dart';
 import '../../features/settings/reference_screens.dart';
@@ -59,6 +62,11 @@ GoRouter buildRouter({String initialLocation = '/'}) => GoRouter(
       builder: (context, state) => const GardeRulesScreen(),
     ),
     GoRoute(
+      path: '/ajout/photo',
+      builder: (context, state) =>
+          CaptureScreen(focusEan: state.uri.queryParameters['ean'] == '1'),
+    ),
+    GoRoute(
       path: '/fiche/nouvelle',
       builder: (context, state) => const WineEditScreen(),
     ),
@@ -72,6 +80,16 @@ GoRouter buildRouter({String initialLocation = '/'}) => GoRouter(
           path: 'modifier',
           builder: (context, state) =>
               WineEditScreen(wineId: state.pathParameters['id']),
+        ),
+        GoRoute(
+          path: 'identification',
+          builder: (context, state) =>
+              EnrichmentScreen(wineId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: 'validation',
+          builder: (context, state) =>
+              ValidationScreen(wineId: state.pathParameters['id']!),
         ),
       ],
     ),

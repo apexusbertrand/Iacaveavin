@@ -16,6 +16,8 @@ import '../../domain/app_settings.dart';
 import '../../domain/stock_rules.dart';
 import '../../domain/wine_list_item.dart';
 import '../../domain/wine_query.dart';
+import '../../data/enrichment/enrichment_providers.dart';
+import '../add/add_menu.dart';
 import '../backup/backup_screen.dart';
 import 'list_filters_sheet.dart';
 import 'list_state.dart';
@@ -48,7 +50,10 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       if (ref.read(settingsProvider).firstLaunch == null) {
         await settings.update((s) => s.copyWith(firstLaunch: DateTime.now()));
       }
-      if (mounted) await runAutoBackupIfDue(ref);
+      if (!mounted) return;
+      // AJO-09 : les jobs en attente repartent au lancement.
+      ref.read(enrichmentRunnerProvider.notifier).kick();
+      await runAutoBackupIfDue(ref);
     });
   }
 
@@ -86,6 +91,14 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
     final query = settings.listQuery;
     final summary = wines.whenData(CellarSummary.of).value;
     final selecting = _selected.isNotEmpty;
+    // AJO-09 : avis quand une identification se termine pendant l'usage.
+    ref.listen(enrichmentRunnerProvider, (previous, next) {
+      final visible = ModalRoute.of(context)?.isCurrent ?? true;
+      if (next != null && next.finished > 0 && visible) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l.enrichReady)));
+      }
+    });
 
     return PopScope(
       canPop: !selecting && !_searching,
@@ -298,6 +311,17 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         ],
       ),
       actions: [
+        // NFR-03 : compteur des identifications en file d'attente.
+        if ((ref.watch(pendingJobsProvider).value ?? 0) > 0)
+          IconButton(
+            key: const ValueKey('pending-jobs'),
+            tooltip: l.pendingJobs(ref.watch(pendingJobsProvider).value!),
+            icon: Badge(
+              label: Text('${ref.watch(pendingJobsProvider).value}'),
+              child: const Icon(Icons.cloud_upload_outlined),
+            ),
+            onPressed: () => ref.read(enrichmentRunnerProvider.notifier).kick(),
+          ),
         IconButton(
           tooltip: l.search,
           icon: const Icon(Icons.search),
@@ -413,7 +437,7 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       FloatingActionButton(
         heroTag: 'add',
         tooltip: l.addBottle,
-        onPressed: () => context.push('/fiche/nouvelle'),
+        onPressed: () => showAddMenu(context),
         child: const Icon(Icons.add),
       ),
     ],

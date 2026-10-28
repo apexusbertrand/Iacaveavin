@@ -1,0 +1,9 @@
+{
+  "version_contrat": "1.0",
+  "job_id": "00000000-0000-4000-8000-000000000000",
+  "request_id": "5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60",
+  "type": "enrichissement",
+  "statut": "erreur",
+  "quota": { "enrichissements_restants_mois": 0, "prix_restants_mois": 40 },
+  "erreur": { "code": "quota_depasse", "message": "Quota mensuel d'enrichissements atteint. La fiche reste en brouillon, relance possible le 1er du mois.", "reessayable": false }
+}

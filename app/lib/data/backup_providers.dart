@@ -40,3 +40,8 @@ final photoSpaceProvider = FutureProvider<int>((ref) async {
 final autoBackupsProvider = FutureProvider<List<File>>(
   (ref) => ref.watch(backupServiceProvider).autoBackups(),
 );
+
+/// Chemin du répertoire privé, pour afficher les miniatures.
+final appDirPathProvider = FutureProvider<String>(
+  (ref) async => (await ref.watch(appDirProvider)()).path,
+);

@@ -22,6 +22,9 @@ class AppSettings {
     this.lastAutoBackup,
     this.lastExternalBackup,
     this.firstLaunch,
+    this.photoConsent = false,
+    this.fakeScenario = 'done',
+    this.simulateOffline = false,
   });
 
   /// Code ISO 4217.
@@ -50,6 +53,15 @@ class AppSettings {
   /// Premier lancement, point de départ du rappel d'export (SAV-03).
   final DateTime? firstLaunch;
 
+  /// NFR-08 : consentement explicite avant le premier envoi de photos.
+  final bool photoConsent;
+
+  /// Lot 2a : scénario rejoué par le faux flux (nom de FakeScenario).
+  final String fakeScenario;
+
+  /// Lot 2a : le faux flux se comporte comme en mode avion.
+  final bool simulateOffline;
+
   AppSettings copyWith({
     String? currency,
     AppThemeMode? themeMode,
@@ -65,6 +77,9 @@ class AppSettings {
     DateTime? lastAutoBackup,
     DateTime? lastExternalBackup,
     DateTime? firstLaunch,
+    bool? photoConsent,
+    String? fakeScenario,
+    bool? simulateOffline,
   }) => AppSettings(
     currency: currency ?? this.currency,
     themeMode: themeMode ?? this.themeMode,
@@ -84,6 +99,9 @@ class AppSettings {
     lastAutoBackup: lastAutoBackup ?? this.lastAutoBackup,
     lastExternalBackup: lastExternalBackup ?? this.lastExternalBackup,
     firstLaunch: firstLaunch ?? this.firstLaunch,
+    photoConsent: photoConsent ?? this.photoConsent,
+    fakeScenario: fakeScenario ?? this.fakeScenario,
+    simulateOffline: simulateOffline ?? this.simulateOffline,
   );
 
   static Map<String, Object?> _query(WineQuery q) => {
@@ -116,6 +134,9 @@ class AppSettings {
     'lastAutoBackup': lastAutoBackup?.toIso8601String(),
     'lastExternalBackup': lastExternalBackup?.toIso8601String(),
     'firstLaunch': firstLaunch?.toIso8601String(),
+    'photoConsent': photoConsent,
+    'fakeScenario': fakeScenario,
+    'simulateOffline': simulateOffline,
   };
 
   static AppSettings fromJson(Map<String, Object?> json) => AppSettings(
@@ -138,5 +159,8 @@ class AppSettings {
     lastAutoBackup: DateTime.tryParse('${json['lastAutoBackup']}'),
     lastExternalBackup: DateTime.tryParse('${json['lastExternalBackup']}'),
     firstLaunch: DateTime.tryParse('${json['firstLaunch']}'),
+    photoConsent: json['photoConsent'] == true,
+    fakeScenario: json['fakeScenario'] as String? ?? 'done',
+    simulateOffline: json['simulateOffline'] == true,
   );
 }

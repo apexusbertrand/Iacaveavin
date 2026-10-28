@@ -59,10 +59,11 @@ jobs:
       - name: Tests unitaires et widgets
         working-directory: app
         run: flutter test --coverage
-      - name: Matrice des exigences (lots 0 et 1 couverts)
+      - name: Matrice des exigences (lots 0, 1 et 2a couverts)
         run: |
           python3 scripts/matrice_exigences.py --lot 0
           python3 scripts/matrice_exigences.py --lot 1
+          python3 scripts/matrice_exigences.py --lot 2a
       - name: Build APK de contrôle (debug, non diffusable)
         working-directory: app
         run: flutter build apk --debug

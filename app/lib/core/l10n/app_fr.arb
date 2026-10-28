@@ -838,5 +838,235 @@
         "type": "int"
       }
     }
-  }
+  },
+  "addMenuTitle": "Ajouter un vin",
+  "addByPhoto": "Photographier l'étiquette",
+  "addByPhotoHint": "1 à 4 photos, la fiche se remplit presque seule.",
+  "addByBarcode": "Avec le code-barres",
+  "addByBarcodeHint": "Saisir l'EAN puis photographier : il aide l'identification.",
+  "addManual": "Saisie manuelle",
+  "addManualHint": "Remplir la fiche soi-même.",
+  "addExcel": "Import Excel",
+  "addExcelHint": "Disponible au lot 3.",
+  "unidentifiedWine": "Vin à identifier",
+  "captureTitle": "Photos de la bouteille",
+  "captureHint": "Cadrez l'étiquette entière, bien droite, sans reflet. Ajoutez la contre-étiquette si elle porte le degré ou les cépages.",
+  "photoTypeEtiquette": "Étiquette",
+  "photoTypeContreEtiquette": "Contre-étiquette",
+  "photoTypeCapsule": "Capsule",
+  "photoTypeCollerette": "Collerette",
+  "photoTypeAutre": "Autre",
+  "takePhoto": "Appareil photo",
+  "fromGallery": "Galerie",
+  "removePhoto": "Retirer la photo",
+  "retakePhoto": "Reprendre",
+  "keepPhoto": "Garder",
+  "photoBlurry": "Photo floue : reprenez-la pour une meilleure lecture.",
+  "photoGlare": "Reflet sur l'étiquette : changez d'angle ou évitez le flash.",
+  "photoProcessing": "Traitement de la photo…",
+  "photoUnreadable": "Image illisible.",
+  "eanField": "Code-barres EAN (facultatif)",
+  "vintageHintField": "Millésime si vous le connaissez (facultatif)",
+  "continueToEnrichment": "Lancer l'identification",
+  "needOnePhoto": "Ajoutez au moins une photo de l'étiquette.",
+  "consentTitle": "Envoi des photos",
+  "consentBody": "Pour identifier le vin, les photos d'étiquettes sont envoyées au flux d'enrichissement d'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n'est envoyée.",
+  "consentAccept": "J'accepte",
+  "consentRefuse": "Refuser",
+  "consentRefused": "Photos gardées sur le téléphone, fiche à compléter à la main.",
+  "enrichTitle": "Identification",
+  "enrichLotTitle": "Pendant ce temps, le lot",
+  "saveLot": "Enregistrer le lot",
+  "lotSaved": "Lot enregistré.",
+  "stepWaiting": "En attente d'envoi",
+  "stepLecture": "Lecture de l'étiquette",
+  "stepNormalisation": "Mise en forme",
+  "stepIdentification": "Identification du vin",
+  "stepEnrichissement": "Recherche des informations",
+  "stepNotes": "Recherche des notes",
+  "stepPrix": "Recherche des prix",
+  "stepControles": "Contrôles",
+  "stepTermine": "Terminé",
+  "enrichOffline": "Hors ligne : la fiche reste « à enrichir », l'envoi partira au retour du réseau.",
+  "enrichReady": "Propositions prêtes",
+  "reviewProposals": "Vérifier les propositions",
+  "enrichFailed": "L'identification a échoué : {reason}",
+  "@enrichFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "enrichRetry": "Relancer",
+  "enrichFinishedSnack": "Identification terminée : {name}",
+  "@enrichFinishedSnack": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quotaLeft": "{count, plural, =0{Quota du mois épuisé} =1{Plus qu'1 identification ce mois-ci} other{Plus que {count} identifications ce mois-ci}}",
+  "@quotaLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pendingJobs": "{count, plural, =1{1 identification en attente} other{{count} identifications en attente}}",
+  "@pendingJobs": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorTimeout": "pas de réponse en 3 minutes",
+  "errorInvalid": "réponse non conforme du flux",
+  "validationTitle": "Propositions",
+  "acceptAll": "Tout accepter et enregistrer",
+  "saveValidation": "Enregistrer",
+  "accept": "Accepter",
+  "modify": "Corriger",
+  "reject": "Rejeter",
+  "accepted": "Accepté",
+  "rejected": "Rejeté",
+  "modified": "Corrigé : {value}",
+  "@modified": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "currentValue": "Actuel : {value}",
+  "@currentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "proposedValue": "Proposé : {value}",
+  "@proposedValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "confidence": "confiance {percent} %",
+  "@confidence": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "lowConfidence": "Confiance faible : vérifiez",
+  "notFound": "Non trouvé : {reason}",
+  "@notFound": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "lockedField": "Saisi à la main : conservé",
+  "disagreement": "Désaccord entre l'étiquette et une source",
+  "duplicateFound": "Ce vin est déjà dans la cave.",
+  "duplicateMerge": "Ajouter ces bouteilles à la fiche existante",
+  "scoresSection": "Notes critiques",
+  "pricesSection": "Prix marché",
+  "alertsSection": "À savoir",
+  "includePrices": "Enregistrer les prix relevés",
+  "keepScore": "Garder cette note",
+  "priceFound": "{price} · {offers} offres · {date}",
+  "@priceFound": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "offers": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "validationSaved": "Fiche validée.",
+  "srcEtiquette": "Étiquette",
+  "srcSiteOfficiel": "Site officiel",
+  "srcOrganismeOfficiel": "Organisme officiel",
+  "srcInterprofession": "Interprofession",
+  "srcCritique": "Critique",
+  "srcMarchand": "Marchand",
+  "srcTiers": "Autre site",
+  "srcEstimation": "Estimation",
+  "srcManuel": "Saisie manuelle",
+  "srcImport": "Import",
+  "provenanceTitle": "Provenance",
+  "provenanceSource": "Source : {source}",
+  "@provenanceSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "provenanceDate": "Collecté le {date}",
+  "@provenanceDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "provenanceUrl": "Lien : {url}",
+  "@provenanceUrl": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "copyLink": "Copier le lien",
+  "linkCopied": "Lien copié.",
+  "reportError": "Signaler une erreur",
+  "reported": "Signalé comme faux, à corriger",
+  "reportedSnack": "Erreur signalée : la valeur reste barrée jusqu'à correction.",
+  "provenanceBadge": "Voir la provenance",
+  "aiWritten": "Rédigé par IA à partir de {site}",
+  "@aiWritten": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "toValidateBanner": "Propositions à valider",
+  "enrichingBanner": "Identification en cours",
+  "toEnrichBanner": "En attente d'identification",
+  "errorBanner": "Identification en échec",
+  "duplicateVintage": "Dupliquer pour un autre millésime",
+  "duplicateVintageTitle": "Nouveau millésime",
+  "duplicateVintageDone": "Fiche créée : seuls les champs du millésime sont à enrichir.",
+  "reEnrich": "Ré-enrichir",
+  "reEnrichStarted": "Ré-enrichissement lancé sur les champs non verrouillés.",
+  "reEnrichNoPhoto": "Aucune photo sur cette fiche : ré-enrichissement impossible.",
+  "unlockField": "Déverrouiller",
+  "unlocked": "Champ déverrouillé : il pourra être proposé à nouveau.",
+  "settingsFakeFlux": "Flux de démonstration (lot 2a)",
+  "settingsFakeFluxHint": "Le vrai flux n8n arrive au lot 2c. En attendant, l'app rejoue les exemples du contrat.",
+  "fakeScenario": "Scénario rejoué",
+  "scenarioDone": "Identification complète",
+  "scenarioPartial": "Résultat partiel avec désaccord",
+  "scenarioCacheHit": "Vin déjà connu (cache)",
+  "scenarioQuota": "Quota épuisé",
+  "scenarioInvalid": "Réponse non conforme",
+  "scenarioNever": "Pas de réponse (délai)",
+  "simulateOffline": "Simuler le mode avion"
 }

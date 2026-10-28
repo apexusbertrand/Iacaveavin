@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
+import 'app_database.steps.dart';
 import 'tables.dart';
 
 part 'app_database.g.dart';
@@ -37,15 +38,18 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase.open() => AppDatabase(driftDatabase(name: 'iacaveavin'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) => m.createAll(),
-    onUpgrade: (m, from, to) async {
-      // Les étapes numérotées arriveront ici (stepByStep généré par drift_dev).
-      throw UnsupportedError('Migration $from -> $to non prévue');
-    },
+    onUpgrade: stepByStep(
+      // v2 (lot 2a) : suivi des jobs d'enrichissement (dictionnaire, job).
+      from1To2: (m, schema) async {
+        await m.addColumn(schema.job, schema.job.envoyeLe);
+        await m.addColumn(schema.job, schema.job.reponse);
+      },
+    ),
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     },

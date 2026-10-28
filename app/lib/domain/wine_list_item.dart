@@ -49,6 +49,7 @@ class WineListItem {
     this.favorite = false,
     this.searchText = '',
     this.primaryLotId,
+    this.thumbPath,
   });
 
   final String id;
@@ -111,6 +112,12 @@ class WineListItem {
 
   /// Lot le mieux fourni, utilisé par le geste « ouvrir une bouteille ».
   final String? primaryLotId;
+
+  /// Miniature de la photo principale, relative au répertoire de l'app.
+  final String? thumbPath;
+
+  /// Fiche créée par photo, pas encore identifiée (domaine vide).
+  bool get isUnidentified => producer.isEmpty;
 
   bool get isNonVintage => vintage == 'NM';
 
