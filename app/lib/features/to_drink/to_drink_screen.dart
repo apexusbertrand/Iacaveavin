@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../photos/tasting_photos.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';

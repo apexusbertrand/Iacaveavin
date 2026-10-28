@@ -57,7 +57,7 @@ class _ShareDialogState extends ConsumerState<_ShareDialog> {
       final data = await image.toByteData(format: ui.ImageByteFormat.png);
       await ref.read(fileSharerProvider)(
         data!.buffer.asUint8List(),
-        'fiche-${widget.wine.id}.png',
+        '${wineSharedName(widget.wine)}.png',
         'image/png',
       );
     } catch (e) {
@@ -86,7 +86,7 @@ class _ShareDialogState extends ConsumerState<_ShareDialog> {
               ? null
               : () async {
                   final navigator = Navigator.of(context);
-                  await shareWinePdf(context, ref, widget.wine.id);
+                  await shareWinePdf(context, ref, widget.wine);
                   navigator.pop();
                 },
           child: Text(l.shareAsPdf),

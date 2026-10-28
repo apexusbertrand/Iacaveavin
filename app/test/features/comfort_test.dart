@@ -249,6 +249,7 @@ void main() {
     );
     await tester.tap(find.byKey(const ValueKey('share-image')));
     await pumpUntil(tester, () => shared.isNotEmpty);
-    expect(shared.single, ('fiche-$apogeeId.png', 'image/png'));
+    // PDF-01 : fichier au nom du vin, pas à son identifiant.
+    expect(shared.single, ('Mas Apogee - 2018.png', 'image/png'));
   });
 }

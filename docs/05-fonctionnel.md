@@ -111,7 +111,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 
 ## PDF [lot 3]
 
-- PDF-01. Fiche unitaire depuis la fiche vin, A4 portrait.
+- PDF-01. Fiche unitaire depuis la fiche vin, A4 portrait. Le fichier partagé porte le nom du vin, « Domaine - Cuvée - Millésime.pdf », comme l'image de CMP-06 (2026-10-28, T115).
 - PDF-02. Catalogue : 2 fiches par page A4 (moitié haute, moitié basse). Filtres optionnels : millésime, couleur, région, pays, année de consommation idéale, propriétaire, emplacement, en stock seulement. Tri au choix.
 - PDF-03. Page de garde optionnelle (date, filtres appliqués, nombre de fiches), numéros de page.
 - PDF-04. Contenu d'une fiche : champs marqués `pdf: true` dans le dictionnaire, photo d'étiquette, QR code vers la fiche, date d'édition. Commentaires tronqués à la phrase entière la plus proche.

@@ -177,7 +177,7 @@ class _Detail extends ConsumerWidget {
       case 'reenrich':
         await reEnrich(context, ref, wine);
       case 'pdf':
-        await shareWinePdf(context, ref, wine.id);
+        await shareWinePdf(context, ref, wine);
       case 'share':
         await showShareSheet(context, ref, wine);
       case 'delete':
