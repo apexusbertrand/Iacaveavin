@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Lot 2c : appels au flux n8n (N8nGateway). -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="IA cave à vin"
         android:allowBackup="false"

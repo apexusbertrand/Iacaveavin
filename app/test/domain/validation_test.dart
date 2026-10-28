@@ -62,6 +62,17 @@ void main() {
     );
   });
 
+  test('AJO-10 code-barres lu : premier EAN valide, UPC-A complété', () {
+    expect(eanFromScan(['3 760256 272183']), '3760256272183');
+    expect(
+      eanFromScan([null, 'https://masonesime.com', '3017620422003']),
+      '3017620422003',
+    );
+    expect(eanFromScan(['036000291452']), '0036000291452');
+    expect(eanFromScan(['3017620422004', '12345']), isNull);
+    expect(eanFromScan(const []), isNull);
+  });
+
   test('FIC-01 EAN 13 chiffres avec clé de contrôle, cépages à 100 %', () {
     expect(isValidEan13('3017620422003'), isTrue);
     expect(isValidEan13('3017620422004'), isFalse);

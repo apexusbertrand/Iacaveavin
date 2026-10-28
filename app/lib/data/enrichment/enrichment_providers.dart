@@ -4,14 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../domain/app_settings.dart';
 import '../../domain/garde_rules.dart';
 import '../backup_providers.dart';
 import '../files/photo_service.dart';
+import '../flux_credentials.dart';
 import '../providers.dart';
 import '../settings_store.dart';
 import 'contract_validator.dart';
 import 'enrichment_gateway.dart';
 import 'enrichment_queue.dart';
+import 'n8n_gateway.dart';
 import 'validation_service.dart';
 
 final contractValidatorProvider = FutureProvider<ContractValidator>((
@@ -22,24 +25,41 @@ final contractValidatorProvider = FutureProvider<ContractValidator>((
       ContractValidator.responseAsset,
     ),
     requestSchema: await rootBundle.loadString(ContractValidator.requestAsset),
+    feedbackResponseSchema: await rootBundle.loadString(
+      ContractValidator.feedbackResponseAsset,
+    ),
   );
 });
 
-/// Lot 2a : faux flux qui rejoue les exemples du contrat. Le vrai flux
-/// (N8nGateway) le remplace au lot 2c, derrière la même interface.
+/// Passerelle sans connexion enregistrée. L'app publiée n'a pas de flux de
+/// démonstration (T122) : l'enrichissement attend la connexion. Les tests la
+/// remplacent par [FakeGateway], qui rejoue les exemples du contrat.
+final unconnectedGatewayProvider =
+    Provider<EnrichmentGateway Function(ContractValidator, AppSettings)>(
+      (ref) =>
+          (validator, settings) => const NotConnectedGateway(),
+    );
+
+/// Vrai flux n8n dès qu'une adresse et une clé sont enregistrées (PAR-05),
+/// sinon [unconnectedGatewayProvider].
 final gatewayProvider = FutureProvider<EnrichmentGateway>((ref) async {
   final settings = ref.watch(settingsProvider);
-  return FakeGateway(
-    validator: await ref.watch(contractValidatorProvider.future),
-    readExample: (name) =>
-        rootBundle.loadString('assets/contrat/exemples/$name'),
-    scenario: FakeScenario.values.firstWhere(
-      (s) => s.name == settings.fakeScenario,
-      orElse: () => FakeScenario.done,
-    ),
-    online: !settings.simulateOffline,
-    delay: const Duration(milliseconds: 600),
-  );
+  final validator = await ref.watch(contractValidatorProvider.future);
+  if (settings.usesRealFlux && settings.installationId != null) {
+    await ref.watch(fluxKeyPresentProvider.future);
+    final key = await ref.read(secretStoreProvider).read();
+    if (key != null && key.isNotEmpty) {
+      final gateway = N8nGateway(
+        baseUrl: settings.fluxUrl,
+        key: key,
+        installationId: settings.installationId!,
+        validator: validator,
+      );
+      ref.onDispose(gateway.close);
+      return gateway;
+    }
+  }
+  return ref.watch(unconnectedGatewayProvider)(validator, settings);
 });
 
 final photoServiceProvider = Provider<PhotoService>(
@@ -75,6 +95,7 @@ final validationServiceProvider = FutureProvider<ValidationService>((
     cellar: ref.watch(cellarRepositoryProvider),
     reference: ref.watch(referenceRepositoryProvider),
     rules: await ref.watch(gardeRulesListProvider.future),
+    photos: ref.watch(photoServiceProvider),
   );
 });
 
@@ -85,7 +106,7 @@ final pendingJobsProvider = StreamProvider<int>((ref) async* {
   yield* queue.watchPendingCount();
 });
 
-/// Fait tourner la file : envoi, puis suivi toutes les 3 s pendant 30 s,
+/// Fait tourner la file : envoi, puis suivi toutes les 3 s pendant 90 s,
 /// puis toutes les 10 s (docs/02), tant qu'un job attend.
 class EnrichmentRunner extends Notifier<QueueReport?> {
   Timer? _timer;
@@ -106,7 +127,9 @@ class EnrichmentRunner extends Notifier<QueueReport?> {
     _startedAt ??= DateTime.now();
     try {
       final queue = await ref.read(enrichmentQueueProvider.future);
-      state = await queue.process();
+      state = await queue.process(
+        currency: ref.read(settingsProvider).currency,
+      );
       final pending = (await queue.pendingJobs()).length;
       if (pending == 0) {
         _startedAt = null;

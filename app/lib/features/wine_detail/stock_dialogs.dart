@@ -3,12 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/design_tokens.g.dart';
+import '../../data/enrichment/enrichment_providers.dart';
+import '../../data/files/photo_service.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../data/stock_service.dart';
 import '../../domain/stock_rules.dart';
 import '../../domain/wine_detail.dart';
 import '../../domain/wine_validation.dart';
+import '../photos/photo_gallery.dart' show libraryPhotosProvider;
+import '../photos/tasting_photos.dart';
+import '../to_drink/comfort_providers.dart';
 import '../wine_list/selection_actions.dart';
 
 /// Dernier lot utilisé par fiche, proposé en premier (STK-01).
@@ -161,6 +166,10 @@ Future<bool> openBottles(
         wine,
         movementId: action.movementIds.single,
       );
+    }
+    // CMP-03 : la dernière bouteille ouverte, proposer de racheter.
+    if (wine.bottles - count <= 0 && context.mounted) {
+      await proposeShopping(context, ref, wine);
     }
     return true;
   } catch (e) {
@@ -379,17 +388,15 @@ Future<bool> addLotDialog(
     useSafeArea: true,
     builder: (context) => Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(SpacingTokens.l),
-        child: LotForm(
-          title: l.newLot,
-          initial: LotDraft(
-            ownerId: defaultOwner,
-            quantity: quantity,
-            locationId: settings.defaultLocationId,
-          ),
-          onSubmit: (d) => Navigator.of(context).pop(d),
+      child: LotForm(
+        title: l.newLot,
+        scrollable: true,
+        initial: LotDraft(
+          ownerId: defaultOwner,
+          quantity: quantity,
+          locationId: settings.defaultLocationId,
         ),
+        onSubmit: (d) => Navigator.of(context).pop(d),
       ),
     ),
   );
@@ -403,7 +410,8 @@ Future<bool> addLotDialog(
 }
 
 /// Saisie d'un lot : propriétaire, emplacement, positions, quantité, format,
-/// prix d'achat unitaire TTC (PRX-01), date, fournisseur.
+/// prix d'achat unitaire TTC (PRX-01), date. Le fournisseur n'est plus saisi
+/// ici (décision T79) ; celui d'un lot existant est conservé.
 class LotForm extends ConsumerStatefulWidget {
   const LotForm({
     super.key,
@@ -411,10 +419,15 @@ class LotForm extends ConsumerStatefulWidget {
     this.onSubmit,
     this.onChanged,
     this.title,
+    this.scrollable = false,
   });
 
   final LotDraft initial;
   final String? title;
+
+  /// Feuille modale : les champs défilent et « Enregistrer » reste visible en
+  /// bas, au-dessus de la barre de navigation et du clavier.
+  final bool scrollable;
   final ValueChanged<LotDraft>? onSubmit;
 
   /// Utilisé dans le formulaire de fiche : chaque modification remonte.
@@ -440,7 +453,6 @@ class _LotFormState extends ConsumerState<LotForm> {
         widget.initial.purchaseDate ??
         DateTime.now().toIso8601String().substring(0, 10),
   );
-  late final _supplier = TextEditingController(text: widget.initial.supplier);
   String? _positionsError;
 
   @override
@@ -451,7 +463,7 @@ class _LotFormState extends ConsumerState<LotForm> {
 
   @override
   void dispose() {
-    for (final c in [_qty, _price, _positions, _date, _supplier]) {
+    for (final c in [_qty, _price, _positions, _date]) {
       c.dispose();
     }
     super.dispose();
@@ -483,7 +495,7 @@ class _LotFormState extends ConsumerState<LotForm> {
       positions: cells.isEmpty ? null : cells.join(', '),
       unitPrice: p,
       purchaseDate: _date.text.trim().isEmpty ? null : _date.text.trim(),
-      supplier: _supplier.text.trim().isEmpty ? null : _supplier.text.trim(),
+      supplier: widget.initial.supplier,
     );
   }
 
@@ -501,7 +513,12 @@ class _LotFormState extends ConsumerState<LotForm> {
     final locations = ref.watch(locationsProvider).value ?? const [];
     final formats = ref.watch(listValuesProvider('format')).value ?? const [];
     final ownerIds = owners.map((o) => o.id).toSet();
-    return Column(
+    final save = FilledButton(
+      key: const ValueKey('lot-save'),
+      onPressed: _draft() == null ? null : () => widget.onSubmit!(_draft()!),
+      child: Text(l.save),
+    );
+    final fields = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -596,27 +613,43 @@ class _LotFormState extends ConsumerState<LotForm> {
           decoration: InputDecoration(labelText: l.fieldPurchaseDate),
           onChanged: (_) => _emit(),
         ),
-        TextField(
-          controller: _supplier,
-          decoration: InputDecoration(labelText: l.fieldSupplier),
-          onChanged: (_) => _emit(),
-        ),
-        if (widget.onSubmit != null) ...[
+        if (widget.onSubmit != null && !widget.scrollable) ...[
           const SizedBox(height: SpacingTokens.l),
-          FilledButton(
-            key: const ValueKey('lot-save'),
-            onPressed: _draft() == null
-                ? null
-                : () => widget.onSubmit!(_draft()!),
-            child: Text(l.save),
-          ),
+          save,
         ],
+      ],
+    );
+    if (!widget.scrollable) return fields;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Flexible(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(
+              SpacingTokens.l,
+              SpacingTokens.l,
+              SpacingTokens.l,
+              0,
+            ),
+            child: fields,
+          ),
+        ),
+        if (widget.onSubmit != null)
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(SpacingTokens.l),
+              child: save,
+            ),
+          ),
       ],
     );
   }
 }
 
 /// FIC-04 : note personnelle, sur l'échelle des réglages (20 ou 100).
+/// CMP-08 : photos prises pendant la dégustation, réduites à un écran.
 Future<void> tastingDialog(
   BuildContext context,
   WidgetRef ref,
@@ -628,6 +661,7 @@ Future<void> tastingDialog(
   final score = TextEditingController();
   final dish = TextEditingController();
   final comment = TextEditingController();
+  final photos = <ProcessedPhoto>[];
   final ok = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
@@ -653,6 +687,7 @@ Future<void> tastingDialog(
               maxLines: 3,
               decoration: InputDecoration(labelText: l.tastingComment),
             ),
+            TastingPhotoPicker(photos: photos),
           ],
         ),
       ),
@@ -672,7 +707,7 @@ Future<void> tastingDialog(
   if (ok == true) {
     final value = double.tryParse(score.text.trim().replaceAll(',', '.'));
     final cellarId = await ref.read(bootstrapProvider.future);
-    await ref
+    final tastingId = await ref
         .read(cellarRepositoryProvider)
         .addTasting(
           wineId: wine.id,
@@ -682,9 +717,53 @@ Future<void> tastingDialog(
           comment: comment.text,
           movementId: movementId,
         );
+    if (photos.isNotEmpty) {
+      final service = ref.read(photoServiceProvider);
+      for (final photo in photos) {
+        await service.save(
+          wineId: wine.id,
+          cellarId: cellarId,
+          photo: photo,
+          type: 'degustation',
+          tastingId: tastingId,
+        );
+      }
+      ref.invalidate(tastingPhotosProvider(tastingId));
+      ref.invalidate(libraryPhotosProvider(wine.id));
+    }
     if (context.mounted) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(l.tastingSaved)));
     }
   }
+}
+
+/// CMP-03 : une fiche tombe à 0 bouteille, l'app propose de la racheter.
+Future<void> proposeShopping(
+  BuildContext context,
+  WidgetRef ref,
+  WineDetail wine,
+) async {
+  final l = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final name = [
+    wine.draft.producer,
+    wine.draft.cuvee,
+    wine.draft.vintage == 'NM' ? l.nonVintage : wine.draft.vintage,
+  ].whereType<String>().where((s) => s.isNotEmpty).join(' · ');
+  final ok = await confirm(
+    context,
+    title: l.shoppingProposeTitle,
+    body: l.shoppingProposeBody(name),
+    action: l.shoppingProposeAction,
+  );
+  if (!ok) return;
+  await ref
+      .read(comfortRepositoryProvider)
+      .addShopping(
+        cellarId: await ref.read(bootstrapProvider.future),
+        label: name,
+        wineId: wine.id,
+      );
+  messenger.showSnackBar(SnackBar(content: Text(l.shoppingAdded)));
 }

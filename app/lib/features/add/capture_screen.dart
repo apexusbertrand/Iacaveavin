@@ -15,6 +15,8 @@ import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/wine_validation.dart';
 import '../wine_detail/stock_dialogs.dart' show confirm;
+import 'barcode_reader.dart';
+import 'vintage_reader.dart';
 
 /// Source d'images : appareil photo ou galerie. Remplacée dans les tests.
 typedef ImageSourcePicker = Future<Uint8List?> Function({required bool camera});
@@ -64,6 +66,52 @@ class _CaptureScreenState extends ConsumerState<CaptureScreen> {
   bool _processing = false;
   bool _saving = false;
   String? _eanError;
+
+  @override
+  void initState() {
+    super.initState();
+    // Entrée « Avec le code-barres » : le viseur s'ouvre directement.
+    if (widget.focusEan) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scan(live: true));
+    }
+  }
+
+  /// AJO-10 : EAN lu en direct ou sur une photo, jamais imposé.
+  Future<void> _scan({required bool live}) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final reader = ref.read(barcodeReaderProvider);
+    final r = live ? await reader.scanLive(context) : await reader.fromPhoto();
+    if (!mounted || r.cancelled) return;
+    messenger.hideCurrentSnackBar();
+    if (r.code == null) {
+      messenger.showSnackBar(SnackBar(content: Text(l.scanNotFound)));
+      return;
+    }
+    setState(() {
+      _ean.text = r.code!;
+      _eanError = null;
+    });
+    messenger.showSnackBar(SnackBar(content: Text(l.scanFound(r.code!))));
+  }
+
+  /// AJO-14 : millésime lu en direct ou sur une photo, modifiable ensuite.
+  Future<void> _readVintage({required bool live}) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final reader = ref.read(vintageReaderProvider);
+    final r = live ? await reader.scanLive(context) : await reader.fromPhoto();
+    if (!mounted || r.cancelled) return;
+    messenger.hideCurrentSnackBar();
+    if (r.year == null) {
+      messenger.showSnackBar(SnackBar(content: Text(l.vintageScanNotFound)));
+      return;
+    }
+    setState(() => _vintage.text = '${r.year}');
+    messenger.showSnackBar(
+      SnackBar(content: Text(l.vintageScanFound('${r.year}'))),
+    );
+  }
 
   @override
   void dispose() {
@@ -285,20 +333,56 @@ class _CaptureScreenState extends ConsumerState<CaptureScreen> {
           TextField(
             key: const ValueKey('capture-ean'),
             controller: _ean,
-            autofocus: widget.focusEan,
             keyboardType: TextInputType.number,
             maxLength: 13,
             decoration: InputDecoration(
               labelText: l.eanField,
               errorText: _eanError,
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    key: const ValueKey('scan-live'),
+                    tooltip: l.scanLive,
+                    icon: const Icon(Icons.qr_code_scanner),
+                    onPressed: () => _scan(live: true),
+                  ),
+                  IconButton(
+                    key: const ValueKey('scan-photo'),
+                    tooltip: l.scanFromPhoto,
+                    icon: const Icon(Icons.image_search),
+                    onPressed: () => _scan(live: false),
+                  ),
+                ],
+              ),
             ),
             onChanged: (_) => setState(() => _eanError = null),
           ),
           TextField(
+            key: const ValueKey('capture-vintage'),
             controller: _vintage,
             keyboardType: TextInputType.number,
             maxLength: 4,
-            decoration: InputDecoration(labelText: l.vintageHintField),
+            decoration: InputDecoration(
+              labelText: l.vintageHintField,
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    key: const ValueKey('vintage-scan-live'),
+                    tooltip: l.vintageScanLive,
+                    icon: const Icon(Icons.document_scanner_outlined),
+                    onPressed: () => _readVintage(live: true),
+                  ),
+                  IconButton(
+                    key: const ValueKey('vintage-scan-photo'),
+                    tooltip: l.vintageScanFromPhoto,
+                    icon: const Icon(Icons.image_search),
+                    onPressed: () => _readVintage(live: false),
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: SpacingTokens.l),
           if (_shots.isEmpty)

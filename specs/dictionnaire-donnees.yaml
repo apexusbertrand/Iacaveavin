@@ -91,7 +91,7 @@ enums:
   statut_enrichissement: [brouillon, a_enrichir, en_cours, a_valider, valide, erreur]
   statut_garde: [trop_jeune, a_boire, apogee, a_boire_vite, passe, inconnu]
   type_mouvement: [entree, ouverture, sortie_autre, ajustement, transfert_sortant, transfert_entrant]
-  type_photo: [etiquette, contre_etiquette, capsule, collerette, autre]
+  type_photo: [etiquette, contre_etiquette, capsule, collerette, autre, degustation, repas, evenement]
   type_emplacement: [cave, meuble, casier, clayette, autre]
   nature_prix: [offre, mediane, minimum, cote]
   statut_job: [en_attente, en_cours, termine, partiel, erreur]
@@ -228,6 +228,9 @@ entites:
       - {cle: largeur, libelle: "Largeur (px)", type: entier}
       - {cle: hauteur, libelle: "Hauteur (px)", type: entier}
       - {cle: octets, libelle: "Taille (octets)", type: entier}
+      - {cle: chemin_original, libelle: "Photo d'origine", type: texte, regle: "relatif ; photo entière gardée tant que la fiche n'est pas validée, quand la photo a été recadrée sur l'étiquette (AJO-13) ; vide après validation"}
+      - {cle: cadre, libelle: "Cadre de l'étiquette", type: texte, regle: "JSON {x, y, largeur, hauteur} en fractions de la photo d'origine (contrat 1.1, cadrages) ; vide si la photo est entière et après validation"}
+      - {cle: degustation_id, libelle: "Dégustation", type: reference, regle: "photo prise en notant une dégustation (CMP-08), type degustation ; vide sinon"}
 
   provenance:
     role: "origine de chaque valeur enrichie"
@@ -291,3 +294,12 @@ entites:
       - {cle: dimension_2, libelle: "Seconde dimension", type: texte}
       - {cle: filtres, libelle: "Filtres", type: json}
       - {cle: graphique, libelle: "Graphique", type: texte, oblig: true}
+
+  liste_achat:
+    role: "vin à racheter (proposé quand une fiche tombe à 0 bouteille) ou repéré ailleurs (CMP-03)"
+    champs:
+      - {cle: fiche_id, libelle: "Fiche", type: reference, regle: "renseignée pour un vin de la cave à racheter, vide pour un vin repéré ailleurs"}
+      - {cle: libelle, libelle: "Vin", type: texte, oblig: true}
+      - {cle: quantite, libelle: "Quantité souhaitée", type: entier}
+      - {cle: note, libelle: "Note", type: texte, regle: "où l'acheter, prix vu, occasion"}
+      - {cle: achete, libelle: "Acheté", type: booleen, oblig: true}

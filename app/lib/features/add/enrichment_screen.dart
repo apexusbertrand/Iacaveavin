@@ -18,6 +18,7 @@ import '../../domain/enrichment.dart';
 import '../../domain/wine_detail.dart';
 import '../wine_detail/stock_dialogs.dart';
 import '../wine_detail/wine_detail_screen.dart';
+import 'validation_screen.dart';
 
 final latestJobProvider = StreamProvider.family<Job?, String>((
   ref,
@@ -35,12 +36,19 @@ final winePhotosProvider = FutureProvider.family<List<File>, String>((
   ref.watch(latestJobProvider(wineId));
   final service = ref.watch(photoServiceProvider);
   return [
-    for (final p in await service.photosOf(wineId)) await service.thumbOf(p),
+    for (final p in await service.bottlePhotosOf(wineId))
+      await service.thumbOf(p),
   ];
 });
 
+/// AJO-15 : vrai dès que le job porte une proposition à montrer, la lecture
+/// de l'étiquette (en cours) ou le résultat final.
+bool hasProposals(JobResponse? r) =>
+    r?.result != null && r!.status != JobStatus.error;
+
 /// AJO-04, AJO-05, AJO-09, AJO-11 : pendant que l'agent travaille,
 /// l'utilisateur renseigne le lot ; l'avancement s'affiche en clair.
+/// AJO-15 : dès que l'étiquette est lue, l'écran passe à la validation.
 class EnrichmentScreen extends ConsumerWidget {
   const EnrichmentScreen({super.key, required this.wineId});
 
@@ -55,6 +63,14 @@ class EnrichmentScreen extends ConsumerWidget {
     final report = ref.watch(enrichmentRunnerProvider);
     final photos = ref.watch(winePhotosProvider(wineId)).value ?? const [];
     final last = EnrichmentQueue.lastResponse(job);
+    // AJO-15 : l'écran se reconstruit à chaque réponse du flux enregistrée.
+    if (hasProposals(last)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted && ModalRoute.of(context)?.isCurrent == true) {
+          context.pushReplacement('/fiche/$wineId/validation');
+        }
+      });
+    }
     final w = wine.value;
     if (w == null) {
       return Scaffold(
@@ -77,89 +93,97 @@ class EnrichmentScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(SpacingTokens.l),
-        children: [
-          if (photos.isNotEmpty)
-            SizedBox(
-              height: SpacingTokens.xxl * 3,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (final f in photos)
-                    Padding(
-                      padding: const EdgeInsets.only(right: SpacingTokens.s),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(RadiusTokens.badge),
-                        child: Image.file(f, fit: BoxFit.cover),
+      body: SafeArea(
+        top: false,
+        child: ListView(
+          padding: const EdgeInsets.all(SpacingTokens.l),
+          children: [
+            if (photos.isNotEmpty)
+              SizedBox(
+                height: SpacingTokens.xxl * 3,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (final f in photos)
+                      Padding(
+                        padding: const EdgeInsets.only(right: SpacingTokens.s),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            RadiusTokens.badge,
+                          ),
+                          child: Image.file(f, fit: BoxFit.cover),
+                        ),
                       ),
-                    ),
-                ],
-              ),
-            ),
-          const SizedBox(height: SpacingTokens.l),
-          _Progress(
-            status: status,
-            job: job,
-            last: last,
-            offline: report?.offline == true,
-          ),
-          if (quotaLow(left, monthlyEnrichmentQuota))
-            Padding(
-              padding: const EdgeInsets.only(top: SpacingTokens.s),
-              child: Text(
-                l.quotaLeft(left!),
-                key: const ValueKey('quota'),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.error,
+                  ],
                 ),
               ),
+            const SizedBox(height: SpacingTokens.l),
+            _Progress(
+              status: status,
+              job: job,
+              last: last,
+              offline: report?.offline == true,
+              notConnected: report?.notConnected == true,
             ),
-          const SizedBox(height: SpacingTokens.m),
-          if (status == WineStatus.toValidate)
-            FilledButton.icon(
-              key: const ValueKey('review-proposals'),
-              onPressed: () =>
-                  context.pushReplacement('/fiche/$wineId/validation'),
-              icon: const Icon(Icons.fact_check_outlined),
-              label: Text(l.reviewProposals),
-            ),
-          if (status == WineStatus.error)
-            OutlinedButton.icon(
-              key: const ValueKey('enrich-retry'),
-              onPressed: () async {
-                await (await ref.read(enrichmentQueueProvider.future))
-                    .retry(wineId);
-                ref.read(enrichmentRunnerProvider.notifier).kick();
-              },
-              icon: const Icon(Icons.refresh),
-              label: Text(l.enrichRetry),
-            ),
-          const SizedBox(height: SpacingTokens.xl),
-          Text(
-            l.enrichLotTitle,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: context.palette.primaryText,
-            ),
-          ),
-          const SizedBox(height: SpacingTokens.s),
-          if (w.lots.isEmpty)
-            _LotEditor(wine: w)
-          else
-            for (final lot in w.lots)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.inventory_2_outlined),
-                title: Text(
-                  l.lotLine(
-                    lot.ownerName,
-                    '${lot.formatCl.round()}',
-                    lot.bottles,
+            if (status == WineStatus.running && last?.result != null)
+              _LabelPreview(result: last!.result!),
+            if (quotaLow(left, monthlyEnrichmentQuota))
+              Padding(
+                padding: const EdgeInsets.only(top: SpacingTokens.s),
+                child: Text(
+                  l.quotaLeft(left!),
+                  key: const ValueKey('quota'),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.error,
                   ),
                 ),
-                subtitle: Text(lot.locationPath ?? l.noLocation),
               ),
-        ],
+            const SizedBox(height: SpacingTokens.m),
+            if (status == WineStatus.toValidate)
+              FilledButton.icon(
+                key: const ValueKey('review-proposals'),
+                onPressed: () =>
+                    context.pushReplacement('/fiche/$wineId/validation'),
+                icon: const Icon(Icons.fact_check_outlined),
+                label: Text(l.reviewProposals),
+              ),
+            if (status == WineStatus.error)
+              OutlinedButton.icon(
+                key: const ValueKey('enrich-retry'),
+                onPressed: () async {
+                  await (await ref.read(enrichmentQueueProvider.future))
+                      .retry(wineId);
+                  ref.read(enrichmentRunnerProvider.notifier).kick();
+                },
+                icon: const Icon(Icons.refresh),
+                label: Text(l.enrichRetry),
+              ),
+            const SizedBox(height: SpacingTokens.xl),
+            Text(
+              l.enrichLotTitle,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: context.palette.primaryText,
+              ),
+            ),
+            const SizedBox(height: SpacingTokens.s),
+            if (w.lots.isEmpty)
+              LotEditor(wine: w)
+            else
+              for (final lot in w.lots)
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(
+                    l.lotLine(
+                      lot.ownerName,
+                      '${lot.formatCl.round()}',
+                      lot.bottles,
+                    ),
+                  ),
+                  subtitle: Text(lot.locationPath ?? l.noLocation),
+                ),
+          ],
+        ),
       ),
     );
   }
@@ -171,12 +195,14 @@ class _Progress extends StatelessWidget {
     required this.job,
     required this.last,
     required this.offline,
+    this.notConnected = false,
   });
 
   final String status;
   final Job? job;
   final JobResponse? last;
   final bool offline;
+  final bool notConnected;
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +226,9 @@ class _Progress extends StatelessWidget {
       case 'brouillon':
         text = l.consentRefused;
       default:
-        text = offline && job?.jobIdDistant == null
+        text = notConnected
+            ? l.enrichNotConnected
+            : offline && job?.jobIdDistant == null
             ? l.enrichOffline
             : l.stepLabel(job?.jobIdDistant == null ? null : last?.step);
         leading = offline
@@ -226,17 +254,70 @@ class _Progress extends StatelessWidget {
   }
 }
 
+/// AJO-05, T111 : ce que la lecture a trouvé sur l'étiquette, affiché pendant
+/// que l'agent cherche. Rien n'est enregistré : les valeurs arrivent avec le
+/// résultat final, à valider.
+class _LabelPreview extends StatelessWidget {
+  const _LabelPreview({required this.result});
+
+  static const fields = [
+    'domaine',
+    'cuvee',
+    'appellation',
+    'millesime',
+    'couleur',
+    'degre',
+    'volume_cl',
+  ];
+
+  final EnrichmentResult result;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final read = [
+      for (final f in fields)
+        if (result.fields[f] case final v? when !v.isEmpty)
+          (f, formatProposed(v.value)),
+    ];
+    if (read.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      key: const ValueKey('label-preview'),
+      padding: const EdgeInsets.only(top: SpacingTokens.m),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.labelPreviewTitle,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: context.palette.primaryText,
+            ),
+          ),
+          const SizedBox(height: SpacingTokens.xs),
+          for (final (f, v) in read)
+            Text(
+              l.labelPreviewLine(l.contractFieldLabel(f), v),
+              key: ValueKey('label-preview-$f'),
+              style: theme.textTheme.bodyMedium,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// AJO-04 : lot pré-rempli avec les valeurs par défaut.
-class _LotEditor extends ConsumerStatefulWidget {
-  const _LotEditor({required this.wine});
+class LotEditor extends ConsumerStatefulWidget {
+  const LotEditor({super.key, required this.wine});
 
   final WineDetail wine;
 
   @override
-  ConsumerState<_LotEditor> createState() => _LotEditorState();
+  ConsumerState<LotEditor> createState() => _LotEditorState();
 }
 
-class _LotEditorState extends ConsumerState<_LotEditor> {
+class _LotEditorState extends ConsumerState<LotEditor> {
   String? _owner;
 
   @override

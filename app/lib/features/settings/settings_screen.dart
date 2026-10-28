@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
-import '../../core/widgets/state_views.dart';
 import '../../data/backup_providers.dart';
-import '../../data/enrichment/enrichment_gateway.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
+import '../wine_detail/price_actions.dart';
+import 'connection_section.dart';
 
 const _currencies = ['EUR', 'CHF', 'USD', 'GBP', 'CAD'];
 
-/// Paramètres : réglages (PAR-05), paramétrage (PRO-01, PAR-01, PAR-06) et
-/// jeu de démonstration (CMP-07).
+/// Paramètres : réglages (PAR-05) et paramétrage (PRO-01, PAR-01, PAR-06).
+/// Ni flux ni jeu de démonstration dans l'app publiée (T122).
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
@@ -27,8 +26,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  bool _busy = false;
-
   void _set(AppSettings Function(AppSettings) change) =>
       ref.read(settingsProvider.notifier).update(change);
 
@@ -37,7 +34,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final s = ref.watch(settingsProvider);
-    final count = ref.watch(demoCountProvider);
     final owners = ref.watch(ownersProvider).value ?? const [];
     final locations = ref.watch(locationsProvider).value ?? const [];
     final photoSpace = ref.watch(photoSpaceProvider);
@@ -210,42 +206,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onChanged: (v) => _set((x) => x.copyWith(notifications: v)),
           ),
           SwitchListTile(
+            key: const ValueKey('auto-prices'),
             title: Text(l.settingsAutoPrices),
             subtitle: Text(l.settingsAutoPricesHint),
             value: s.autoPriceRefresh,
-            onChanged: null,
-          ),
-          header(l.settingsFakeFlux),
-          padded(
-            Text(l.settingsFakeFluxHint, style: theme.textTheme.bodyMedium),
-          ),
-          padded(
-            DropdownButtonFormField<String>(
-              key: const ValueKey('fake-scenario'),
-              initialValue: s.fakeScenario,
-              isExpanded: true,
-              decoration: InputDecoration(labelText: l.fakeScenario),
-              items: [
-                for (final sc in FakeScenario.values)
-                  DropdownMenuItem(
-                    value: sc.name,
-                    child: Text(l.scenarioLabel(sc.name)),
-                  ),
-              ],
-              onChanged: (v) => _set((x) => x.copyWith(fakeScenario: v)),
-            ),
-          ),
-          SwitchListTile(
-            key: const ValueKey('simulate-offline'),
-            title: Text(l.simulateOffline),
-            value: s.simulateOffline,
-            onChanged: (v) => _set((x) => x.copyWith(simulateOffline: v)),
+            onChanged: (v) => _set((x) => x.copyWith(autoPriceRefresh: v)),
           ),
           ListTile(
-            title: Text(l.settingsConnection),
-            subtitle: Text(l.settingsConnectionHint),
-            leading: const Icon(Icons.cloud_off_outlined),
+            key: const ValueKey('prices-all'),
+            leading: const Icon(Icons.euro),
+            title: Text(l.pricesAllTitle),
+            subtitle: Text(l.pricesAllHint),
+            onTap: () => refreshAllPrices(context, ref),
           ),
+          header(l.settingsConnection),
+          const ConnectionSection(),
           ListTile(
             title: Text(l.settingsPhotoSpace),
             leading: const Icon(Icons.photo_outlined),
@@ -272,101 +247,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.push('/parametres/garde'),
           ),
-          header(l.settingsDemoSection),
-          padded(
-            Text(l.settingsDemoDescription, style: theme.textTheme.bodyLarge),
-          ),
-          padded(
-            count.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => MessageStateView(
-                icon: Icons.error_outline,
-                isError: true,
-                title: l.operationFailed('$e'),
-                action: FilledButton(
-                  onPressed: () => ref.invalidate(demoCountProvider),
-                  child: Text(l.retry),
-                ),
-              ),
-              data: (n) => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    n > 0 ? l.settingsDemoLoaded(n) : l.settingsDemoNotLoaded,
-                    key: const ValueKey('demo-status'),
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: SpacingTokens.m),
-                  if (_busy)
-                    const Center(child: CircularProgressIndicator())
-                  else if (n == 0)
-                    FilledButton.icon(
-                      key: const ValueKey('demo-load'),
-                      onPressed: _load,
-                      icon: const Icon(Icons.download_outlined),
-                      label: Text(l.settingsDemoLoad),
-                    )
-                  else
-                    OutlinedButton.icon(
-                      key: const ValueKey('demo-erase'),
-                      onPressed: _erase,
-                      icon: const Icon(Icons.delete_outline),
-                      label: Text(l.settingsDemoErase),
-                    ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
-  }
-
-  Future<void> _load() => _run(
-    () => ref.read(demoRepositoryProvider).load(),
-    AppLocalizations.of(context).settingsDemoLoadedSnack,
-  );
-
-  Future<void> _erase() async {
-    final l = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l.settingsDemoEraseTitle),
-        content: Text(l.settingsDemoEraseBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l.cancel),
-          ),
-          TextButton(
-            key: const ValueKey('demo-erase-confirm'),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l.erase),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true) return;
-    await _run(
-      () => ref.read(demoRepositoryProvider).erase(),
-      l.settingsDemoErasedSnack,
-    );
-  }
-
-  Future<void> _run(Future<void> Function() action, String done) async {
-    final l = AppLocalizations.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    setState(() => _busy = true);
-    try {
-      await action();
-      messenger.showSnackBar(SnackBar(content: Text(done)));
-    } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(l.operationFailed('$e'))));
-    } finally {
-      ref.invalidate(demoCountProvider);
-      if (mounted) setState(() => _busy = false);
-    }
   }
 }
 

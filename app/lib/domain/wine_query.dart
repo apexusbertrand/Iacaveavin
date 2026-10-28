@@ -247,8 +247,8 @@ class WineFilters {
 
   bool matches(WineListItem w, int year) {
     switch (stock) {
-      case StockFilter.inStock when w.bottles <= 0:
-      case StockFilter.empty when w.bottles > 0:
+      case StockFilter.inStock when w.bottles <= 0 && !w.neverStocked:
+      case StockFilter.empty when w.bottles > 0 || w.neverStocked:
         return false;
       default:
     }

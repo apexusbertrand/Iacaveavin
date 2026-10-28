@@ -12,11 +12,17 @@ import '../../core/widgets/state_views.dart';
 import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/garde.dart';
+import '../../domain/price_trend.dart';
 import '../../domain/scores.dart';
 import '../../domain/wine_detail.dart';
-import '../add/enrichment_screen.dart' show winePhotosProvider;
+import '../photos/photo_gallery.dart';
+import '../photos/tastings_photos_tab.dart';
 import '../wine_list/wine_card.dart';
+import 'pdf_actions.dart';
+import 'price_actions.dart';
+import 'price_chart.dart';
 import 'provenance_sheet.dart';
+import 'share_sheet.dart';
 import 'stock_dialogs.dart';
 
 final wineDetailProvider = StreamProvider.family<WineDetail?, String>((
@@ -80,12 +86,24 @@ class _Detail extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            wine.draft.producer.isEmpty
-                ? AppLocalizations.of(context).unidentifiedWine
-                : wine.draft.producer,
+            wine.draft.producer.isNotEmpty
+                ? wine.draft.producer
+                : (wine.draft.cuvee ?? '').isNotEmpty
+                ? wine.draft.cuvee!
+                : AppLocalizations.of(context).unidentifiedWine,
             overflow: TextOverflow.ellipsis,
           ),
           actions: [
+            IconButton(
+              key: const ValueKey('favorite-toggle'),
+              tooltip: wine.draft.favorite ? l.favoriteOff : l.favoriteOn,
+              isSelected: wine.draft.favorite,
+              icon: const Icon(Icons.star_border),
+              selectedIcon: const Icon(Icons.star),
+              onPressed: () => ref
+                  .read(cellarRepositoryProvider)
+                  .setFavorite(wine.id, !wine.draft.favorite),
+            ),
             IconButton(
               tooltip: l.edit,
               icon: const Icon(Icons.edit_outlined),
@@ -95,7 +113,6 @@ class _Detail extends ConsumerWidget {
               key: const ValueKey('wine-menu'),
               onSelected: (v) => _menu(context, ref, v),
               itemBuilder: (_) => [
-                PopupMenuItem(value: 'favorite', child: Text(l.fieldFavorite)),
                 PopupMenuItem(value: 'restock', child: Text(l.restock)),
                 if (wine.lots.isNotEmpty) ...[
                   PopupMenuItem(value: 'adjust', child: Text(l.adjustStock)),
@@ -106,6 +123,8 @@ class _Detail extends ConsumerWidget {
                   child: Text(l.duplicateVintage),
                 ),
                 PopupMenuItem(value: 'reenrich', child: Text(l.reEnrich)),
+                PopupMenuItem(value: 'pdf', child: Text(l.winePdf)),
+                PopupMenuItem(value: 'share', child: Text(l.shareImage)),
                 PopupMenuItem(value: 'delete', child: Text(l.delete)),
               ],
             ),
@@ -118,7 +137,7 @@ class _Detail extends ConsumerWidget {
             tabs: [
               Tab(text: l.tabInfo),
               Tab(text: l.tabOperations),
-              Tab(text: l.tabTastings),
+              Tab(text: l.tabTastingsPhotos),
               Tab(text: l.tabPrices),
             ],
           ),
@@ -132,7 +151,7 @@ class _Detail extends ConsumerWidget {
             children: [
               _InfoTab(wine: wine),
               _OperationsTab(wine: wine),
-              _TastingsTab(wine: wine),
+              TastingsPhotosTab(wine: wine),
               _PricesTab(wine: wine),
             ],
           ),
@@ -144,10 +163,6 @@ class _Detail extends ConsumerWidget {
   Future<void> _menu(BuildContext context, WidgetRef ref, String action) async {
     final l = AppLocalizations.of(context);
     switch (action) {
-      case 'favorite':
-        await ref
-            .read(cellarRepositoryProvider)
-            .setFavorite(wine.id, !wine.draft.favorite);
       case 'restock':
         await addLotDialog(context, ref, wine);
       case 'adjust':
@@ -158,6 +173,10 @@ class _Detail extends ConsumerWidget {
         await duplicateVintageDialog(context, ref, wine);
       case 'reenrich':
         await reEnrich(context, ref, wine);
+      case 'pdf':
+        await shareWinePdf(context, ref, wine);
+      case 'share':
+        await showShareSheet(context, ref, wine);
       case 'delete':
         final ok = await confirm(
           context,
@@ -200,7 +219,7 @@ class _HeaderState extends ConsumerState<_Header> {
       name: ref.watch(settingsProvider.select((s) => s.currency)),
     );
     final formats = {for (final lot in w.lots) _cl(lot.formatCl)};
-    final photos = ref.watch(winePhotosProvider(w.id)).value ?? const [];
+    final photos = ref.watch(bottlePhotosProvider(w.id)).value ?? const [];
     final prices = w.lots.map((l) => l.unitPrice).whereType<double>();
     return Padding(
       padding: const EdgeInsets.all(SpacingTokens.l),
@@ -223,11 +242,9 @@ class _HeaderState extends ConsumerState<_Header> {
                             color: color.onFill,
                             size: SpacingTokens.xxl * 1.5,
                           )
-                        // Un tap ouvre la galerie plein écran (docs/03).
-                        : InkWell(
-                            onTap: () => showGallery(context, ref, w.id),
-                            child: Image.file(photos.first, fit: BoxFit.cover),
-                          ),
+                        // FIC-10 : toutes les photos, un tap ouvre le plein
+                        // écran (docs/03).
+                        : PhotoCarousel(photos: photos),
                   ),
                 ),
               ),
@@ -811,51 +828,6 @@ class _OperationsTab extends StatelessWidget {
   }
 }
 
-class _TastingsTab extends ConsumerWidget {
-  const _TastingsTab({required this.wine});
-
-  final WineDetail wine;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppLocalizations.of(context);
-    final scale = ref.watch(settingsProvider.select((s) => s.personalScale));
-    final add = Padding(
-      padding: const EdgeInsets.all(SpacingTokens.l),
-      child: OutlinedButton.icon(
-        onPressed: () => tastingDialog(context, ref, wine),
-        icon: const Icon(Icons.rate_review_outlined),
-        label: Text(l.addTasting),
-      ),
-    );
-    if (wine.tastings.isEmpty) {
-      return MessageStateView(
-        icon: Icons.rate_review_outlined,
-        title: l.noTastings,
-        action: add,
-      );
-    }
-    return ListView(
-      children: [
-        add,
-        for (final t in wine.tastings)
-          ListTile(
-            title: Text(
-              [
-                t.date,
-                if (t.score != null) '${_num(t.score!)} / $scale',
-              ].join(' · '),
-            ),
-            subtitle: Text([t.dish, t.comment].whereType<String>().join('\n')),
-          ),
-      ],
-    );
-  }
-}
-
-String _num(double v) =>
-    v == v.roundToDouble() ? v.toInt().toString() : '$v'.replaceAll('.', ',');
-
 class _PricesTab extends ConsumerWidget {
   const _PricesTab({required this.wine});
 
@@ -870,6 +842,11 @@ class _PricesTab extends ConsumerWidget {
       name: ref.watch(settingsProvider.select((s) => s.currency)),
     );
     final last = wine.marketPrices.lastOrNull;
+    final trend = priceTrend(wine.marketPrices);
+    final series = priceSeries(wine.marketPrices);
+    final percent = NumberFormat.percentPattern(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
     return ListView(
       padding: const EdgeInsets.only(bottom: SpacingTokens.xxl),
       children: [
@@ -890,15 +867,70 @@ class _PricesTab extends ConsumerWidget {
           rows: [
             Padding(
               padding: const EdgeInsets.all(SpacingTokens.l),
-              child: Text(
-                last == null
-                    ? l.noMarketPrice
-                    : last.found && last.price != null
-                    ? l.lastMarketPrice(currency.format(last.price), last.date)
-                    : l.priceNotFound(last.date),
-                style: theme.textTheme.bodyLarge,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    last == null
+                        ? l.noMarketPrice
+                        : last.found && last.price != null
+                        ? l.lastMarketPrice(
+                            currency.format(last.price),
+                            last.date,
+                          )
+                        : l.priceNotFound(last.date),
+                    key: const ValueKey('last-market-price'),
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  if (last != null && last.found)
+                    Text(
+                      l.priceOffers(last.offers ?? 0),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  if (trend != null)
+                    Text(
+                      trend.abs() < 0.005
+                          ? l.priceTrendFlat
+                          : trend > 0
+                          ? l.priceTrendUp(percent.format(trend.abs()))
+                          : l.priceTrendDown(percent.format(trend.abs())),
+                      key: const ValueKey('price-trend'),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  if (last != null && last.found && last.url != null)
+                    TextButton.icon(
+                      onPressed: () => openLink(last.url!),
+                      icon: const Icon(Icons.open_in_new),
+                      label: Text(
+                        l.priceOpenOffer(
+                          last.site ?? Uri.parse(last.url!).host,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
+            if (series.length >= 2)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpacingTokens.l,
+                ),
+                child: Semantics(
+                  label: l.priceChartLabel,
+                  child: SizedBox(
+                    height: 120,
+                    child: CustomPaint(
+                      key: const ValueKey('price-chart'),
+                      painter: PriceChartPainter(
+                        series,
+                        line: context.palette.primaryText,
+                        axis: context.palette.separator,
+                      ),
+                      size: Size.infinite,
+                    ),
+                  ),
+                ),
+              ),
             for (final p in wine.marketPrices.reversed.skip(1))
               _Row(
                 p.date,
@@ -909,8 +941,8 @@ class _PricesTab extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(SpacingTokens.l),
               child: OutlinedButton.icon(
-                onPressed: () => ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(l.refreshPriceLater))),
+                key: const ValueKey('refresh-price'),
+                onPressed: () => refreshWinePrice(context, ref, wine.id),
                 icon: const Icon(Icons.refresh),
                 label: Text(l.refreshPrice),
               ),

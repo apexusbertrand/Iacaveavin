@@ -5,7 +5,15 @@
 /// règles du schéma.
 library;
 
-const contractVersion = '1.0';
+import 'dart:convert';
+
+import 'photo_frame.dart';
+
+/// 1.1 : cadre de l'étiquette par photo (`resultat.cadrages`, AJO-13).
+/// 1.2 : valeurs signalées fausses jointes à la requête (`signalements`,
+/// PRV-R4).
+/// 1.3 : POST /remontee, remontée d'information par mail (RET-01).
+const contractVersion = '1.3';
 
 enum JobStatus {
   pending('en_attente'),
@@ -209,6 +217,7 @@ class EnrichmentResult {
     this.prices = const [],
     this.alerts = const [],
     this.cacheHit = false,
+    this.frames = const [],
   });
 
   factory EnrichmentResult.fromJson(Map<String, dynamic> j) => EnrichmentResult(
@@ -237,6 +246,11 @@ class EnrichmentResult {
         ),
     ],
     cacheHit: (j['cache'] as Map?)?['hit'] == true,
+    frames: [
+      for (final c
+          in (j['cadrages'] as List? ?? const []).cast<Map<String, dynamic>>())
+        LabelFrame.fromJson(c),
+    ],
   );
 
   final Map<String, ProposedValue> fields;
@@ -244,6 +258,9 @@ class EnrichmentResult {
   final List<ProposedPrice> prices;
   final List<EnrichmentAlert> alerts;
   final bool cacheHit;
+
+  /// AJO-13 : cadre de l'étiquette par photo envoyée (contrat 1.1).
+  final List<LabelFrame> frames;
 
   /// AJO-06 : champs en désaccord entre l'étiquette et une source.
   Set<String> get disagreements => {
@@ -277,6 +294,7 @@ class JobResponse {
     this.enrichmentsLeft,
     this.pricesLeft,
     this.result,
+    this.prices = const [],
     this.error,
   });
 
@@ -297,6 +315,14 @@ class JobResponse {
       result: type == 'enrichissement' && j['resultat'] is Map
           ? EnrichmentResult.fromJson(j['resultat'] as Map<String, dynamic>)
           : null,
+      prices: type == 'prix' && j['resultat'] is Map
+          ? [
+              for (final p
+                  in ((j['resultat'] as Map)['prix'] as List? ?? const [])
+                      .cast<Map<String, dynamic>>())
+                ProposedPrice.fromJson(p),
+            ]
+          : const [],
       error: err == null
           ? null
           : JobError(
@@ -317,8 +343,68 @@ class JobResponse {
   final int? enrichmentsLeft;
   final int? pricesLeft;
   final EnrichmentResult? result;
+
+  /// Relevé d'un job de type `prix` (resultat_prix).
+  final List<ProposedPrice> prices;
   final JobError? error;
   final Map<String, dynamic> raw;
+}
+
+/// POST /prix (requete-prix.schema.json) : identité déjà normalisée de la
+/// fiche, aucune photo.
+class PriceRequest {
+  const PriceRequest({
+    required this.requestId,
+    required this.wineId,
+    required this.domain,
+    required this.vintage,
+    required this.colour,
+    required this.formatCl,
+    required this.currency,
+    required this.clientDate,
+    this.cuvee,
+    this.appellation,
+    this.lwin,
+    this.ean,
+    this.force = false,
+  });
+
+  final String requestId;
+  final String wineId;
+  final String domain;
+
+  /// Année ou « NM ».
+  final Object vintage;
+  final String colour;
+  final double formatCl;
+  final String currency;
+  final String clientDate;
+  final String? cuvee;
+  final String? appellation;
+  final String? lwin;
+  final String? ean;
+
+  /// PRX-03 : ignorer le cache de 24 heures.
+  final bool force;
+
+  Map<String, Object?> toJson() => {
+    'version_contrat': contractVersion,
+    'request_id': requestId,
+    'fiche_id': wineId,
+    'identite': {
+      'domaine': domain,
+      'cuvee': cuvee,
+      'appellation': appellation,
+      'millesime': vintage,
+      'couleur': colour,
+      'lwin': lwin,
+      'ean': ean,
+    },
+    'format_cl': formatCl,
+    'devise': currency,
+    'forcer': force,
+    'date_client': clientDate,
+  };
 }
 
 /// AJO-11 : quota affiché quand il passe sous 20 % du quota mensuel (T10).
@@ -342,6 +428,44 @@ class RequestPhoto {
   final String mime;
 }
 
+/// PRV-R4 : une valeur signalée fausse, telle qu'affichée.
+class ReportedValue {
+  const ReportedValue(this.field, this.value);
+
+  /// Nom du champ dans le contrat (`cepages`, `region`...).
+  final String field;
+  final String value;
+
+  /// Texte lisible d'une valeur de provenance (JSON enregistré à
+  /// l'enrichissement), 500 caractères au plus ; null si vide.
+  static String? textOf(String? json) {
+    if (json == null) return null;
+    Object? v;
+    try {
+      v = jsonDecode(json);
+    } on FormatException {
+      v = json;
+    }
+    String part(Object? x) => switch (x) {
+      {'cepage': final String c, 'pourcentage': final num p} => '$c ${_n(p)} %',
+      {'cepage': final String c} => c,
+      {'debut': final Object d, 'fin': final Object f} => '$d-$f',
+      final List<Object?> l =>
+        l.map(part).where((s) => s.isNotEmpty).join(', '),
+      null => '',
+      _ => '$x',
+    };
+    final t = part(v).trim();
+    if (t.isEmpty) return null;
+    return t.length > 500 ? t.substring(0, 500) : t;
+  }
+
+  static String _n(num p) => p == p.roundToDouble() ? '${p.toInt()}' : '$p';
+}
+
+/// 20 signalements au plus par requête (contrat 1.2).
+const maxReports = 20;
+
 /// POST /enrichissement (requete-enrichissement.schema.json).
 class EnrichmentRequest {
   const EnrichmentRequest({
@@ -354,12 +478,16 @@ class EnrichmentRequest {
     this.formatCl,
     this.freeText,
     this.lockedFields = const [],
+    this.reports = const [],
     this.includePrices = true,
   });
 
   final String requestId;
   final String? wineId;
   final List<RequestPhoto> photos;
+
+  /// PRV-R4 : valeurs signalées fausses sur cette fiche (contrat 1.2).
+  final List<ReportedValue> reports;
 
   /// AJO-10 : indice d'identification, jamais une clé.
   final String? ean;
@@ -396,6 +524,11 @@ class EnrichmentRequest {
       ],
       if (indices.isNotEmpty) 'indices': indices,
       'champs_verrouilles': lockedFields.toSet().toList(),
+      if (reports.isNotEmpty)
+        'signalements': [
+          for (final r in reports.take(maxReports))
+            {'champ': r.field, 'valeur': r.value},
+        ],
       'inclure_prix': includePrices,
       'langue': 'fr',
       'date_client': clientDate,

@@ -37,15 +37,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navSettings => 'Paramètres';
 
   @override
+  String get navFeedback => 'Remontée d\'information';
+
+  @override
   String get navAbout => 'À propos';
-
-  @override
-  String get placeholderTitle => 'Bientôt disponible';
-
-  @override
-  String placeholderBody(String lot) {
-    return 'Cet écran arrive avec le lot $lot.';
-  }
 
   @override
   String get wineListTitle => 'Mes vins';
@@ -74,7 +69,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get wineListEmptyBody =>
-      'Photographiez votre première étiquette, ou chargez le jeu de démonstration pour découvrir l\'application.';
+      'Photographiez votre première étiquette avec le bouton +, ou saisissez une bouteille à la main.';
 
   @override
   String get wineListLoading => 'Chargement de la cave';
@@ -92,10 +87,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get addBottle => 'Ajouter une bouteille';
-
-  @override
-  String get addBottleLater =>
-      'L\'ajout d\'une bouteille arrive au lot 1 (saisie) et au lot 2a (photo).';
 
   @override
   String get nonVintage => 'NM';
@@ -124,50 +115,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backToTop => 'Haut de la page';
 
   @override
-  String get settingsDemoSection => 'Jeu de démonstration';
-
-  @override
-  String get settingsDemoDescription =>
-      '200 fiches fictives (domaines inventés) pour essayer l\'application et vérifier la fluidité. Vos propres vins ne sont jamais touchés.';
-
-  @override
-  String settingsDemoLoaded(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Démonstration chargée : $count fiches',
-      one: 'Démonstration chargée : 1 fiche',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get settingsDemoNotLoaded => 'Démonstration non chargée';
-
-  @override
-  String get settingsDemoLoad => 'Charger la démonstration';
-
-  @override
-  String get settingsDemoErase => 'Effacer la démonstration';
-
-  @override
-  String get settingsDemoEraseTitle => 'Effacer la démonstration ?';
-
-  @override
-  String get settingsDemoEraseBody =>
-      'Les fiches de démonstration, leurs lots et leurs mouvements seront supprimés. Vos propres vins ne sont pas touchés.';
-
-  @override
-  String get settingsDemoLoadedSnack => 'Démonstration chargée.';
-
-  @override
-  String get settingsDemoErasedSnack => 'Démonstration effacée.';
-
-  @override
-  String get settingsMoreLater =>
-      'Les autres réglages (connexion au flux, devise, thème, listes) arrivent au lot 1.';
-
-  @override
   String operationFailed(String detail) {
     return 'L\'opération a échoué : $detail';
   }
@@ -194,10 +141,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get aboutReferenceData =>
       'Référentiels : pays selon ISO 3166-1. Appellations, régions et cépages : listes provisoires, à remplacer par les données ouvertes de l\'INAO.';
-
-  @override
-  String get aboutDemoNotice =>
-      'Les domaines du jeu de démonstration sont inventés.';
 
   @override
   String get search => 'Rechercher';
@@ -478,18 +421,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get laterPdf => 'PDF (lot 3)';
-
-  @override
-  String get laterExcel => 'Export Excel (lot 3)';
-
-  @override
-  String get laterEnrich => 'Ré-enrichir (lot 2a)';
-
-  @override
-  String get laterPrices => 'Rafraîchir les prix (lot 2c)';
-
-  @override
   String get openOneBottle => 'Ouvrir 1 bouteille';
 
   @override
@@ -754,9 +685,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fieldPurchaseDate => 'Date d\'achat';
 
   @override
-  String get fieldSupplier => 'Fournisseur';
-
-  @override
   String get fieldFavorite => 'Favori';
 
   @override
@@ -814,6 +742,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tastingComment => 'Commentaire';
 
   @override
+  String get tastingPhotos => 'Photos de la dégustation';
+
+  @override
+  String get tastingPhotoRemove => 'Retirer la photo';
+
+  @override
+  String tastingPhotosMax(int count) {
+    return '$count photos au plus par dégustation.';
+  }
+
+  @override
   String get tastingPrompt => 'Noter cette dégustation ?';
 
   @override
@@ -835,8 +774,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noPurchasePrice => 'Prix d\'achat inconnu';
 
   @override
-  String get noMarketPrice =>
-      'Aucun prix marché relevé. Le relevé automatique arrive au lot 2c.';
+  String get noMarketPrice => 'Aucun prix marché relevé pour l\'instant.';
 
   @override
   String lastMarketPrice(String price, String date) {
@@ -849,10 +787,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get refreshPrice => 'Rafraîchir';
-
-  @override
-  String get refreshPriceLater => 'Le relevé des prix marché arrive au lot 2c.';
+  String get refreshPrice => 'Relever le prix';
 
   @override
   String get lots => 'Lots';
@@ -1249,13 +1184,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsAutoPricesHint =>
-      'Désactivé par défaut. Disponible au lot 2c.';
+      'Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.';
 
   @override
   String get settingsConnection => 'Connexion au flux d\'enrichissement';
 
   @override
-  String get settingsConnectionHint => 'Adresse et clé du flux n8n : lot 2c.';
+  String get settingsConnectionHint =>
+      'Adresse de l\'instance n8n et clé secrète partagée avec le flux.';
 
   @override
   String get settingsPhotoSpace => 'Espace occupé par les photos';
@@ -1517,7 +1453,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get addByBarcodeHint =>
-      'Saisir l\'EAN puis photographier : il aide l\'identification.';
+      'Scanner l\'EAN puis photographier : il aide l\'identification.';
 
   @override
   String get addManual => 'Saisie manuelle';
@@ -1529,7 +1465,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addExcel => 'Import Excel';
 
   @override
-  String get addExcelHint => 'Disponible au lot 3.';
+  String get addExcelHint => 'Classeur xlsx, avec simulation avant import.';
 
   @override
   String get unidentifiedWine => 'Vin à identifier';
@@ -1589,6 +1525,70 @@ class AppLocalizationsFr extends AppLocalizations {
   String get eanField => 'Code-barres EAN (facultatif)';
 
   @override
+  String get scanLive => 'Scanner le code-barres';
+
+  @override
+  String get scanFromPhoto => 'Lire le code-barres sur une photo';
+
+  @override
+  String get scanTitle => 'Code-barres';
+
+  @override
+  String get scanHint =>
+      'Cadrez le code-barres de la contre-étiquette : il est lu tout seul.';
+
+  @override
+  String scanFound(String code) {
+    return 'Code-barres lu : $code';
+  }
+
+  @override
+  String get scanNotFound => 'Aucun code-barres EAN lisible sur cette photo.';
+
+  @override
+  String get scanPermissionDenied => 'Accès à l\'appareil photo refusé';
+
+  @override
+  String get scanUnavailable =>
+      'Lecteur de code-barres indisponible sur cet appareil';
+
+  @override
+  String get scanUseField => 'Saisissez les 13 chiffres dans le champ.';
+
+  @override
+  String get vintageScanLive => 'Lire le millésime avec l\'appareil photo';
+
+  @override
+  String get vintageScanFromPhoto => 'Lire le millésime sur une photo';
+
+  @override
+  String get vintageScanTitle => 'Millésime';
+
+  @override
+  String get vintageScanHint =>
+      'Cadrez l\'année inscrite sur l\'étiquette ou la collerette : elle est lue toute seule.';
+
+  @override
+  String vintageScanSeen(String year) {
+    return 'Lu : $year, gardez la bouteille immobile…';
+  }
+
+  @override
+  String vintageScanFound(String year) {
+    return 'Millésime lu : $year';
+  }
+
+  @override
+  String get vintageScanNotFound => 'Aucun millésime lisible sur cette photo.';
+
+  @override
+  String get vintageScanUnavailable =>
+      'Lecture du millésime indisponible sur cet appareil';
+
+  @override
+  String get vintageScanUseField => 'Saisissez les 4 chiffres dans le champ.';
+
+  @override
   String get vintageHintField => 'Millésime si vous le connaissez (facultatif)';
 
   @override
@@ -1602,7 +1602,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get consentBody =>
-      'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement d\'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.';
+      'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement sur le serveur, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.';
 
   @override
   String get consentAccept => 'J\'accepte';
@@ -1658,10 +1658,37 @@ class AppLocalizationsFr extends AppLocalizations {
       'Hors ligne : la fiche reste « à enrichir », l\'envoi partira au retour du réseau.';
 
   @override
+  String get enrichNotConnected =>
+      'Flux non connecté : la fiche reste « à enrichir ». Renseignez l\'adresse et la clé du flux dans les Paramètres, l\'envoi partira ensuite.';
+
+  @override
   String get enrichReady => 'Propositions prêtes';
 
   @override
+  String get labelPreviewTitle => 'Lu sur l\'étiquette, en attendant';
+
+  @override
+  String labelPreviewLine(String field, String value) {
+    return '$field : $value';
+  }
+
+  @override
   String get reviewProposals => 'Vérifier les propositions';
+
+  @override
+  String get validationPendingBody =>
+      'Lu sur l\'étiquette pour l\'instant. Les autres informations s\'ajoutent dès que le serveur les trouve ; vous pouvez déjà corriger.';
+
+  @override
+  String get validationWaiting =>
+      'Validation possible à la fin de la recherche';
+
+  @override
+  String get validationSearchFailed => 'La recherche des informations a échoué';
+
+  @override
+  String get validationSearchFailedBody =>
+      'Ce qui a été lu sur l\'étiquette reste affiché. Relancez la recherche ou complétez la fiche à la main.';
 
   @override
   String enrichFailed(String reason) {
@@ -1854,7 +1881,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reportedSnack =>
-      'Erreur signalée : la valeur reste barrée jusqu\'à correction.';
+      'Erreur signalée : la valeur reste barrée jusqu\'à correction, et le signalement part avec le prochain enrichissement de la fiche.';
 
   @override
   String get provenanceBadge => 'Voir la provenance';
@@ -1905,33 +1932,1162 @@ class AppLocalizationsFr extends AppLocalizations {
       'Champ déverrouillé : il pourra être proposé à nouveau.';
 
   @override
-  String get settingsFakeFlux => 'Flux de démonstration (lot 2a)';
+  String get fluxUrl => 'Adresse du flux';
 
   @override
-  String get settingsFakeFluxHint =>
-      'Le vrai flux n8n arrive au lot 2c. En attendant, l\'app rejoue les exemples du contrat.';
+  String get fluxUrlHint => 'https://votre-instance.app.n8n.cloud';
 
   @override
-  String get fakeScenario => 'Scénario rejoué';
+  String get fluxKey => 'Clé secrète';
 
   @override
-  String get scenarioDone => 'Identification complète';
+  String get fluxKeyStored =>
+      'Clé enregistrée dans le stockage sécurisé du téléphone';
 
   @override
-  String get scenarioPartial => 'Résultat partiel avec désaccord';
+  String get fluxKeyMissing => 'Aucune clé enregistrée';
 
   @override
-  String get scenarioCacheHit => 'Vin déjà connu (cache)';
+  String get fluxKeyReplace => 'Nouvelle clé (remplace l\'ancienne)';
 
   @override
-  String get scenarioQuota => 'Quota épuisé';
+  String get fluxSave => 'Enregistrer';
 
   @override
-  String get scenarioInvalid => 'Réponse non conforme';
+  String get fluxForget => 'Oublier la connexion';
 
   @override
-  String get scenarioNever => 'Pas de réponse (délai)';
+  String get fluxTest => 'Tester la connexion';
 
   @override
-  String get simulateOffline => 'Simuler le mode avion';
+  String get fluxTesting => 'Test en cours…';
+
+  @override
+  String get fluxUsingReal =>
+      'Vrai flux utilisé pour les enrichissements et les prix.';
+
+  @override
+  String get fluxUsingFake =>
+      'Pas de connexion enregistrée : l\'identification par photo et les prix attendent la connexion au flux. Le reste de l\'application fonctionne.';
+
+  @override
+  String fluxTestOk(String version) {
+    return 'Connexion réussie : flux joignable, clé acceptée (contrat $version).';
+  }
+
+  @override
+  String get fluxTestNotReady =>
+      'Flux joignable, mais sa clé n\'est pas encore configurée côté n8n.';
+
+  @override
+  String fluxTestBadKey(String message) {
+    return 'Flux joignable, mais la clé est refusée : $message';
+  }
+
+  @override
+  String get fluxTestOffline =>
+      'Flux injoignable : vérifiez l\'adresse et le réseau.';
+
+  @override
+  String get fluxTestInvalid =>
+      'Réponse inattendue du flux : vérifiez l\'adresse.';
+
+  @override
+  String get fluxUrlInvalid =>
+      'Adresse invalide : elle doit commencer par https://';
+
+  @override
+  String get fluxSaved => 'Connexion enregistrée.';
+
+  @override
+  String get fluxForgotten =>
+      'Connexion oubliée : l\'identification par photo attend une nouvelle connexion.';
+
+  @override
+  String get pricesAllTitle => 'Relever les prix de toute la cave';
+
+  @override
+  String get pricesAllHint => 'Fiches sans relevé depuis 24 heures.';
+
+  @override
+  String pricesAllConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count relevés seront envoyés au flux.',
+      one: '1 relevé sera envoyé au flux.',
+      zero: 'Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pricesQuotaLeft(int left) {
+    return 'Quota restant ce mois : $left relevés.';
+  }
+
+  @override
+  String get pricesQuotaUnknown =>
+      'Quota restant inconnu : il s\'affichera après le premier relevé.';
+
+  @override
+  String pricesQueued(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count relevés mis en file.',
+      one: '1 relevé mis en file.',
+      zero: 'Aucun relevé ajouté.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get confirm => 'Confirmer';
+
+  @override
+  String get priceQueuedOne => 'Relevé du prix mis en file.';
+
+  @override
+  String get priceAlreadyQueued =>
+      'Un relevé est déjà en cours pour cette fiche.';
+
+  @override
+  String get priceTooRecentTitle => 'Relevé récent';
+
+  @override
+  String get priceTooRecent =>
+      'Le dernier relevé a moins de 24 heures. Forcer un nouveau relevé ?';
+
+  @override
+  String get priceForce => 'Forcer';
+
+  @override
+  String priceOffers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count offres',
+      one: '1 offre',
+      zero: 'aucune offre',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get priceNatureMedian => 'médiane';
+
+  @override
+  String get priceNatureOffer => 'offre unique';
+
+  @override
+  String priceTrendUp(String percent) {
+    return 'En hausse de $percent depuis le relevé précédent';
+  }
+
+  @override
+  String priceTrendDown(String percent) {
+    return 'En baisse de $percent depuis le relevé précédent';
+  }
+
+  @override
+  String get priceTrendFlat => 'Stable depuis le relevé précédent';
+
+  @override
+  String priceOpenOffer(String site) {
+    return 'Voir l\'offre sur $site';
+  }
+
+  @override
+  String get priceChartLabel => 'Courbe des prix relevés';
+
+  @override
+  String get priceHistory => 'Historique des relevés';
+
+  @override
+  String get photoTypeDegustation => 'Dégustation';
+
+  @override
+  String get photoTypeRepas => 'Repas';
+
+  @override
+  String get photoTypeEvenement => 'Événement';
+
+  @override
+  String get tabTastingsPhotos => 'Dégustations et photos';
+
+  @override
+  String get otherPhotos => 'Autres photos';
+
+  @override
+  String get libraryEmpty =>
+      'Aucune autre photo pour cette bouteille (repas, événement).';
+
+  @override
+  String get libraryAdd => 'Ajouter une photo';
+
+  @override
+  String get libraryTypeTitle => 'Type de photo';
+
+  @override
+  String get libraryAdded => 'Photo ajoutée';
+
+  @override
+  String get photoDelete => 'Supprimer la photo';
+
+  @override
+  String get photoDeleteBody => 'La photo est effacée de l\'appareil.';
+
+  @override
+  String get photoDeleted => 'Photo supprimée';
+
+  @override
+  String photoCounter(int index, int total) {
+    return '$index / $total';
+  }
+
+  @override
+  String photoOpen(int index) {
+    return 'Voir la photo $index';
+  }
+
+  @override
+  String get validationPhotos => 'Photos';
+
+  @override
+  String get photoCroppedLabel => 'Recadrée sur l\'étiquette';
+
+  @override
+  String get photoWholeLabel => 'Photo entière';
+
+  @override
+  String get cropAction => 'Recadrer';
+
+  @override
+  String get cropTitle => 'Recadrer l\'étiquette';
+
+  @override
+  String get cropHint =>
+      'Faites glisser le cadre ou ses coins sur l\'étiquette.';
+
+  @override
+  String get cropWhole => 'Photo entière';
+
+  @override
+  String get cropSaved => 'Cadre enregistré';
+
+  @override
+  String get cropOriginalNote =>
+      'La photo d\'origine est gardée jusqu\'à la validation de la fiche.';
+
+  @override
+  String get excelListName => 'Liste';
+
+  @override
+  String get excelListValue => 'Valeur autorisée';
+
+  @override
+  String get excelListParent => 'Rattachée à';
+
+  @override
+  String get excelNotice =>
+      'Règles d\'import du classeur IA cave à vin\n\nOnglet Vins : une ligne par fiche (domaine, cuvée, millésime).\n- Colonne id remplie : la fiche existante est mise à jour. id vide : une fiche est créée.\n- Action = SUPPRIMER (avec l\'id) : la fiche est supprimée de la cave, ses mouvements restent dans l\'historique.\n- Domaine, Pays, Couleur et Millésime sont obligatoires. Millésime : une année ou NM pour un non millésimé.\n- Les listes (pays, région, appellation, cépages, accords…) prennent les valeurs de l\'onglet Listes. Plusieurs valeurs dans une cellule : séparées par un point-virgule.\n- Cépages : « Merlot 80 %; Cabernet Franc 20 % », total de 100 % au plus.\n- Les colonnes Origine garde, Statut garde, Statut enrichissement, Note Parker, Meilleure note, Stock total et Photo principale sont calculées : elles sont ignorées à l\'import.\n\nOnglet Lots : une ligne par lot (même fiche, format, propriétaire, emplacement, prix).\n- id lot rempli : mise à jour ; vide : création. Action = SUPPRIMER : suppression du lot.\n- id fiche : l\'id d\'une fiche de l\'onglet Vins, ou #numéro de ligne pour une fiche créée par le même import (exemple : #12).\n- Quantité : quantité cible. L\'app crée un mouvement d\'ajustement de l\'écart, motif « import Excel ». Cellule vide : stock inchangé.\n- Emplacement : chemin complet, par exemple « Cave > Armoire 1 > Casier A ».\n\nOnglet Mouvements : lecture seule, ignoré à l\'import.\n\nPhotos : joignez un zip de photos ; une photo dont le nom figure dans la colonne Photo principale est rattachée à la fiche.\n\nAvant tout import, l\'app simule et affiche un rapport. Une sauvegarde automatique est faite juste avant, et l\'import se fait en entier ou pas du tout.';
+
+  @override
+  String get ieExcelSection => 'Excel';
+
+  @override
+  String get ieExport => 'Exporter la cave';
+
+  @override
+  String get ieExportHint =>
+      'Classeur xlsx : vins, lots, mouvements, listes autorisées et notice.';
+
+  @override
+  String get ieTemplate => 'Modèle vierge';
+
+  @override
+  String get ieTemplateHint =>
+      'Même classeur sans données, pour saisir une cave sur ordinateur.';
+
+  @override
+  String get ieImport => 'Importer un classeur';
+
+  @override
+  String get ieImportHint => 'Simulation et rapport avant toute modification.';
+
+  @override
+  String get iePhotosTitle => 'Joindre des photos ?';
+
+  @override
+  String get iePhotosBody =>
+      'Un zip de photos peut accompagner le classeur : chaque photo citée dans la colonne Photo principale est rattachée à sa fiche.';
+
+  @override
+  String get iePhotosPick => 'Choisir un zip';
+
+  @override
+  String get iePhotosSkip => 'Sans photos';
+
+  @override
+  String get ieReady => 'Fichier prêt';
+
+  @override
+  String get importReportTitle => 'Simulation de l\'import';
+
+  @override
+  String importWinesCreated(int n) {
+    return 'Fiches créées : $n';
+  }
+
+  @override
+  String importWinesUpdated(int n) {
+    return 'Fiches mises à jour : $n';
+  }
+
+  @override
+  String importWinesDeleted(int n) {
+    return 'Fiches supprimées : $n';
+  }
+
+  @override
+  String importLotsCreated(int n) {
+    return 'Lots créés : $n';
+  }
+
+  @override
+  String importLotsUpdated(int n) {
+    return 'Lots mis à jour : $n';
+  }
+
+  @override
+  String importLotsDeleted(int n) {
+    return 'Lots supprimés : $n';
+  }
+
+  @override
+  String importStockChanges(int n) {
+    return 'Stocks ajustés : $n';
+  }
+
+  @override
+  String importPhotos(int n) {
+    return 'Photos rattachées : $n';
+  }
+
+  @override
+  String get importNoChange => 'Aucune différence avec la cave.';
+
+  @override
+  String get importUnknownTitle => 'Valeurs absentes de l\'app';
+
+  @override
+  String get importCreateUnknown => 'Les créer pendant l\'import';
+
+  @override
+  String importIssuesTitle(int n) {
+    return 'Erreurs à corriger ($n)';
+  }
+
+  @override
+  String importIssueWhere(String sheet, int row, String column) {
+    return '$sheet, ligne $row, colonne $column';
+  }
+
+  @override
+  String get importApply => 'Importer';
+
+  @override
+  String get importBlocked =>
+      'Corrigez le classeur puis relancez l\'import : rien n\'est modifié tant qu\'il reste une erreur.';
+
+  @override
+  String get importBackupNote =>
+      'Une sauvegarde automatique est faite juste avant l\'import, qui se fait en entier ou pas du tout.';
+
+  @override
+  String get importEnrich => 'Enrichir les fiches créées';
+
+  @override
+  String importEnrichHint(int n, String left) {
+    return '$n fiches créées avec une photo, soit $n appels au flux. Quota restant ce mois : $left.';
+  }
+
+  @override
+  String get importEnrichUnknownQuota => 'inconnu';
+
+  @override
+  String importEnrichStarted(int n) {
+    return '$n enrichissements en file d\'attente';
+  }
+
+  @override
+  String get importOwnerList => 'Propriétaire';
+
+  @override
+  String get issueMissingSheet => 'onglet absent';
+
+  @override
+  String get issueMissingColumn => 'colonne absente';
+
+  @override
+  String get issueRequired => 'valeur obligatoire';
+
+  @override
+  String get issueUnknownId => 'identifiant inconnu';
+
+  @override
+  String get issueDuplicateId => 'identifiant présent deux fois';
+
+  @override
+  String get issueInvalidNumber => 'nombre attendu';
+
+  @override
+  String get issueInvalidVintage =>
+      'millésime attendu : une année jusqu\'à l\'année en cours, ou NM';
+
+  @override
+  String get issueOutOfRange => 'valeur hors des bornes';
+
+  @override
+  String get issueGardeOrder =>
+      'garde incohérente : début après le millésime, début avant l\'apogée, apogée avant la fin';
+
+  @override
+  String get issueInvalidEan =>
+      'code-barres invalide : 13 chiffres et clé de contrôle';
+
+  @override
+  String get issueInvalidBoolean => 'oui ou non attendu';
+
+  @override
+  String get issueInvalidDate => 'date attendue';
+
+  @override
+  String get issueInvalidGrapes =>
+      'cépages illisibles : « Merlot 80 %; Cabernet Franc 20 % »';
+
+  @override
+  String get issueInvalidAction =>
+      'action inconnue : vide ou SUPPRIMER, avec l\'identifiant';
+
+  @override
+  String get issueUnknownValue => 'valeur absente de la liste';
+
+  @override
+  String get issueUnknownLocation => 'emplacement inconnu';
+
+  @override
+  String get issueUnknownWine => 'fiche inconnue';
+
+  @override
+  String get issueDeletedWine => 'fiche supprimée par ce même import';
+
+  @override
+  String get issueLotWineChange =>
+      'un lot ne change pas de fiche : créez un nouveau lot';
+
+  @override
+  String get importFinished => 'Import terminé';
+
+  @override
+  String pdfGardeRange(String start, String end) {
+    return 'de $start à $end';
+  }
+
+  @override
+  String pdfGardePeak(String year) {
+    return 'apogée $year';
+  }
+
+  @override
+  String pdfAlcohol(String value) {
+    return '$value %';
+  }
+
+  @override
+  String get pdfGardeSource => 'Origine de la garde';
+
+  @override
+  String get pdfGardeStatus => 'Statut de garde';
+
+  @override
+  String get pdfParker => 'Note Parker';
+
+  @override
+  String get pdfStock => 'En stock';
+
+  @override
+  String pdfBottles(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n bouteilles',
+      one: '1 bouteille',
+      zero: 'aucune bouteille',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pdfCitedBy(String site) {
+    return 'citée par $site';
+  }
+
+  @override
+  String pdfPrice(String price) {
+    return '$price l\'unité';
+  }
+
+  @override
+  String pdfEditedOn(String date) {
+    return 'Édité le $date';
+  }
+
+  @override
+  String get pdfCatalogueTitle => 'Catalogue de la cave';
+
+  @override
+  String pdfCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n fiches',
+      one: '1 fiche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pdfFilters => 'Filtres appliqués';
+
+  @override
+  String get pdfNoFilter => 'Aucun filtre : toutes les fiches.';
+
+  @override
+  String pdfPage(String n, String total) {
+    return 'Page $n / $total';
+  }
+
+  @override
+  String issueWithValue(String reason, String value) {
+    return '$reason : « $value »';
+  }
+
+  @override
+  String filterLine(String label, String value) {
+    return '$label : $value';
+  }
+
+  @override
+  String get catalogueSection => 'Catalogue PDF';
+
+  @override
+  String get catalogueHint =>
+      'Deux fiches par page A4. Les filtres et le tri de la liste sont repris ; vous pouvez les changer ici sans toucher à la liste.';
+
+  @override
+  String catalogueFilters(int n) {
+    return 'Filtres ($n)';
+  }
+
+  @override
+  String get catalogueCover =>
+      'Page de garde (date, filtres, nombre de fiches)';
+
+  @override
+  String catalogueGenerate(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Générer le catalogue ($n fiches)',
+      one: 'Générer le catalogue (1 fiche)',
+      zero: 'Aucune fiche à imprimer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get winePdf => 'Fiche PDF';
+
+  @override
+  String get pdfPreparing => 'Préparation du PDF…';
+
+  @override
+  String get statsTabGeneral => 'Général';
+
+  @override
+  String get statsTabRegions => 'Régions';
+
+  @override
+  String get statsTabGarde => 'Garde';
+
+  @override
+  String get statsTabValue => 'Valeur';
+
+  @override
+  String get statsTabBuying => 'Aide à l\'achat';
+
+  @override
+  String get statsTabExplorer => 'Explorateur';
+
+  @override
+  String get statsEmpty =>
+      'Aucune bouteille en cave : ajoutez des vins pour voir les statistiques.';
+
+  @override
+  String get statNoData => 'Aucune donnée pour cette vue.';
+
+  @override
+  String get statMeasureBottles => 'Nombre de bouteilles';
+
+  @override
+  String get statMeasureReferences => 'Nombre de références';
+
+  @override
+  String get statMeasurePurchase => 'Valeur d\'achat';
+
+  @override
+  String get statMeasureMarket => 'Valeur marché';
+
+  @override
+  String get statMeasureGain => 'Plus-value latente';
+
+  @override
+  String get statMeasureAvgPrice => 'Prix moyen';
+
+  @override
+  String get statMeasureAvgScore => 'Note moyenne (/100)';
+
+  @override
+  String get statMeasureOpened => 'Bouteilles ouvertes (12 mois)';
+
+  @override
+  String get statMeasureYears => 'Années moyennes avant de boire';
+
+  @override
+  String get statDimColor => 'Couleur';
+
+  @override
+  String get statDimType => 'Type';
+
+  @override
+  String get statDimCountry => 'Pays';
+
+  @override
+  String get statDimRegion => 'Région';
+
+  @override
+  String get statDimSubRegion => 'Sous-région';
+
+  @override
+  String get statDimAppellation => 'Appellation';
+
+  @override
+  String get statDimProducer => 'Domaine';
+
+  @override
+  String get statDimVintage => 'Millésime';
+
+  @override
+  String get statDimVintageBand => 'Tranche de 5 millésimes';
+
+  @override
+  String get statDimGrape => 'Cépage principal';
+
+  @override
+  String get statDimOwner => 'Propriétaire';
+
+  @override
+  String get statDimLocation => 'Emplacement';
+
+  @override
+  String get statDimGardeStatus => 'Statut de garde';
+
+  @override
+  String get statDimGardeStart => 'Année de début de garde';
+
+  @override
+  String get statDimPeak => 'Année d\'apogée';
+
+  @override
+  String get statDimScoreBand => 'Tranche de note';
+
+  @override
+  String get statDimPriceBand => 'Tranche de prix';
+
+  @override
+  String get statDimSupplier => 'Fournisseur';
+
+  @override
+  String get statDimPurchaseMonth => 'Mois d\'achat';
+
+  @override
+  String get statDimOpeningMonth => 'Mois d\'ouverture';
+
+  @override
+  String get statChartDonut => 'Donut';
+
+  @override
+  String get statChartBarsV => 'Barres verticales';
+
+  @override
+  String get statChartBarsH => 'Barres horizontales';
+
+  @override
+  String get statChartStacked => 'Barres empilées';
+
+  @override
+  String get statChartLine => 'Courbe';
+
+  @override
+  String get statChartCross => 'Tableau croisé';
+
+  @override
+  String get statChartKpi => 'Indicateur seul';
+
+  @override
+  String get statNone => 'Non renseigné';
+
+  @override
+  String get statOther => 'Autres';
+
+  @override
+  String statBand(String from, String to) {
+    return '$from à $to';
+  }
+
+  @override
+  String statFrom(String from) {
+    return '$from et plus';
+  }
+
+  @override
+  String get statToDrinkThisYear => 'À boire cette année';
+
+  @override
+  String get statDrinkSoon => 'À boire vite';
+
+  @override
+  String get statPast => 'Passées';
+
+  @override
+  String get statGardeByYear =>
+      'Bouteilles par année d\'entrée dans la fenêtre de garde';
+
+  @override
+  String get statByColor => 'Bouteilles par couleur';
+
+  @override
+  String get statVintageColor => 'Millésime et couleur';
+
+  @override
+  String get statByOrigin => 'Bouteilles par origine';
+
+  @override
+  String get statDrillHint =>
+      'Touchez une barre pour descendre du pays à la région, puis à l\'appellation.';
+
+  @override
+  String get statDrillUp => 'Remonter';
+
+  @override
+  String get statPurchaseVsMarket => 'Achat et marché par couleur';
+
+  @override
+  String get statPurchaseVsMarketRegion => 'Achat et marché par région';
+
+  @override
+  String get statMarketHistory => 'Valeur marché du stock actuel, sur 24 mois';
+
+  @override
+  String get statOpenedVsStock =>
+      'Ouvertures des 12 derniers mois et stock, par couleur';
+
+  @override
+  String get statMonthsLeft => 'Mois de stock restant au rythme des ouvertures';
+
+  @override
+  String statMonthsValue(String n) {
+    return '$n mois';
+  }
+
+  @override
+  String get statNoOpening => 'aucune ouverture en 12 mois';
+
+  @override
+  String get statSeriesPurchase => 'Achat';
+
+  @override
+  String get statSeriesMarket => 'Marché';
+
+  @override
+  String get statSeriesOpened => 'Ouvertes';
+
+  @override
+  String get statSeriesStock => 'En stock';
+
+  @override
+  String statSeeWines(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Voir les $n vins',
+      one: 'Voir le vin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statWinesTitle => 'Vins de la sélection';
+
+  @override
+  String get statMeasure => 'Mesure';
+
+  @override
+  String get statDimension => 'Dimension';
+
+  @override
+  String get statDimension2 => 'Seconde dimension';
+
+  @override
+  String get statNoDimension2 => 'Aucune';
+
+  @override
+  String get statChartType => 'Graphique';
+
+  @override
+  String get statFilters => 'Filtres';
+
+  @override
+  String get statFilterAdd => 'Ajouter un filtre';
+
+  @override
+  String statFilterLine(String dimension, String values) {
+    return '$dimension : $values';
+  }
+
+  @override
+  String get statFavorites => 'Favoris';
+
+  @override
+  String get statNoFavorites => 'Aucune vue enregistrée.';
+
+  @override
+  String get statSave => 'Enregistrer en favori';
+
+  @override
+  String get statViewName => 'Nom de la vue';
+
+  @override
+  String get statSaved => 'Vue enregistrée';
+
+  @override
+  String get statDeleteView => 'Supprimer la vue';
+
+  @override
+  String get statExport => 'Exporter';
+
+  @override
+  String get statExportPng => 'Image PNG';
+
+  @override
+  String get statExportPdf => 'PDF';
+
+  @override
+  String get statExportCsv => 'Tableau CSV';
+
+  @override
+  String get statTotal => 'Total';
+
+  @override
+  String get statAverage => 'Moyenne';
+
+  @override
+  String get toDrinkTab => 'À boire';
+
+  @override
+  String get pastTab => 'Passés';
+
+  @override
+  String get pastEmpty =>
+      'Aucun vin en stock n\'a dépassé sa fenêtre de garde.';
+
+  @override
+  String pastHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count vins ont dépassé leur fenêtre de garde : à boire sans tarder ou à goûter avant de servir.',
+      one: '1 vin a dépassé sa fenêtre de garde : à boire sans tarder ou à goûter avant de servir.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tastingsTab => 'Dégustations';
+
+  @override
+  String get toDrinkEmpty => 'Aucun vin dans sa fenêtre de garde en ce moment.';
+
+  @override
+  String get toDrinkHint =>
+      'Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.';
+
+  @override
+  String get dishPick => 'Pour quel plat ?';
+
+  @override
+  String get dishAny => 'Tous les plats';
+
+  @override
+  String get dishNoWine => 'Aucun vin à boire ne s\'accorde avec ce plat.';
+
+  @override
+  String dishCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n vins pour ce plat',
+      one: '1 vin pour ce plat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tastingsEmpty =>
+      'Aucune dégustation notée. Elles sont proposées à chaque ouverture de bouteille.';
+
+  @override
+  String get alertTitle => 'Ce mois-ci dans la cave';
+
+  @override
+  String alertBody(int peak, int ending) {
+    String _temp0 = intl.Intl.pluralLogic(
+      peak,
+      locale: localeName,
+      other: '$peak vins entrent en apogée. ',
+      one: '1 vin entre en apogée. ',
+      zero: '',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      ending,
+      locale: localeName,
+      other: '$ending vins arrivent en fin de fenêtre.',
+      one: '1 vin arrive en fin de fenêtre.',
+      zero: '',
+    );
+    return '$_temp0$_temp1';
+  }
+
+  @override
+  String get alertSee => 'Voir les vins';
+
+  @override
+  String get alertDismiss => 'Fermer';
+
+  @override
+  String get alertWinesTitle => 'Apogée et fin de fenêtre';
+
+  @override
+  String get shoppingEmpty =>
+      'Rien à acheter. Un vin qui n\'a plus de bouteille vous est proposé ici, et vous pouvez noter un vin repéré ailleurs.';
+
+  @override
+  String get shoppingAdd => 'Ajouter un vin repéré';
+
+  @override
+  String get shoppingLabel => 'Vin';
+
+  @override
+  String get shoppingQuantity => 'Quantité souhaitée';
+
+  @override
+  String get shoppingNote => 'Note (où l\'acheter, prix vu)';
+
+  @override
+  String get shoppingBought => 'Acheté';
+
+  @override
+  String get shoppingDelete => 'Retirer de la liste';
+
+  @override
+  String get shoppingAdded => 'Ajouté à la liste d\'achats';
+
+  @override
+  String get shoppingProposeTitle => 'Plus aucune bouteille';
+
+  @override
+  String shoppingProposeBody(String wine) {
+    return '$wine : l\'ajouter à la liste d\'achats ?';
+  }
+
+  @override
+  String get shoppingProposeAction => 'Ajouter à la liste';
+
+  @override
+  String shoppingQuantityValue(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n bouteilles',
+      one: '1 bouteille',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareImage => 'Partager en image';
+
+  @override
+  String get sharePreviewTitle => 'Partager la fiche';
+
+  @override
+  String get shareAsImage => 'Image';
+
+  @override
+  String get shareAsPdf => 'PDF';
+
+  @override
+  String get favoriteOn => 'Ajouter aux favoris';
+
+  @override
+  String get favoriteOff => 'Retirer des favoris';
+
+  @override
+  String get gridTitle => 'Vue casier';
+
+  @override
+  String get gridHint =>
+      'Un tap sur une case occupée ouvre la fiche. Un appui long sur une case vide y range une bouteille.';
+
+  @override
+  String gridCell(String cell) {
+    return 'Case $cell';
+  }
+
+  @override
+  String gridCellWine(String cell, String wine) {
+    return 'Case $cell : $wine';
+  }
+
+  @override
+  String gridPlaceTitle(String cell) {
+    return 'Ranger en $cell';
+  }
+
+  @override
+  String get gridHere => 'Déjà dans ce casier, sans case';
+
+  @override
+  String get gridElsewhere => 'Venant d\'un autre emplacement';
+
+  @override
+  String get gridNoCandidate => 'Aucune bouteille à ranger.';
+
+  @override
+  String gridPlaced(String cell) {
+    return 'Bouteille rangée en $cell';
+  }
+
+  @override
+  String gridUnplaced(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n bouteilles sans case',
+      one: '1 bouteille sans case',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tastingScoreValue(String score, int scale) {
+    return '$score / $scale';
+  }
+
+  @override
+  String get feedbackIntro =>
+      'Un bug, une idée, une fiche fausse ? Écrivez-nous. Le message part par mail à l\'équipe, avec une copie à votre adresse.';
+
+  @override
+  String get feedbackTitle => 'Titre';
+
+  @override
+  String get feedbackComment => 'Commentaire';
+
+  @override
+  String get feedbackEmail => 'Votre adresse mail';
+
+  @override
+  String get feedbackEmailHelp => 'Reçoit la copie et la réponse.';
+
+  @override
+  String get feedbackEmailInvalid =>
+      'Adresse mail invalide (exemple : prenom.nom@exemple.fr).';
+
+  @override
+  String get feedbackRequired => 'Champ obligatoire.';
+
+  @override
+  String get feedbackAttachment => 'Pièce jointe (facultative)';
+
+  @override
+  String get feedbackAttachmentHelp =>
+      'Une seule : un PDF ou une image, 5 Mo au plus.';
+
+  @override
+  String get feedbackAttachFile => 'Joindre un fichier';
+
+  @override
+  String get feedbackReplaceFile => 'Remplacer le fichier';
+
+  @override
+  String get feedbackAttachmentRemove => 'Retirer la pièce jointe';
+
+  @override
+  String feedbackAttachmentSize(String size) {
+    return '$size Ko';
+  }
+
+  @override
+  String get feedbackAttachmentType =>
+      'Seuls les PDF et les images sont acceptés.';
+
+  @override
+  String get feedbackAttachmentTooBig => 'Fichier trop lourd : 5 Mo au plus.';
+
+  @override
+  String get feedbackSend => 'Envoyer';
+
+  @override
+  String feedbackSent(String email) {
+    return 'Message envoyé. Une copie part à $email.';
+  }
+
+  @override
+  String get feedbackQuota =>
+      'Limite de 5 messages par jour atteinte. Réessayez demain.';
+
+  @override
+  String feedbackRefused(String detail) {
+    return 'Envoi refusé : $detail';
+  }
+
+  @override
+  String get feedbackOffline =>
+      'Pas de réseau. Votre message reste ici, réessayez une fois connecté.';
+
+  @override
+  String get feedbackNotConnected =>
+      'Flux non connecté : le message n\'est pas parti. Renseignez l\'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.';
+
+  @override
+  String get feedbackAuth =>
+      'Le flux refuse la clé de l\'application. Vérifiez-la dans les paramètres.';
+
+  @override
+  String get feedbackPrivacy =>
+      'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.';
 }

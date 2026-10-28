@@ -48,6 +48,7 @@ class DriftDemoRepository implements DemoDataRepository {
       // Ordre inverse des dépendances, pour respecter les clés étrangères.
       final scoped = <TableInfo<Table, dynamic>>[
         _db.jobs,
+        _db.shoppingItems,
         _db.provenances,
         _db.photos,
         _db.marketPrices,

@@ -1,0 +1,2 @@
+Roboto (Regular, Bold), Google. Licence Apache 2.0 : https://www.apache.org/licenses/LICENSE-2.0
+Polices embarquées pour l'impression des fiches et du catalogue PDF (PDF-01 à PDF-05).

@@ -140,6 +140,8 @@ class CellarRepository {
       StockLot? lastPriced;
       String? primaryLot;
       var primaryLotBottles = 0;
+      // Un lot sans aucun mouvement n'a pas de ligne dans [stocks].
+      final neverStocked = !lots.any((l) => stocks.containsKey(l.id));
       for (final l in lots) {
         final q = stocks[l.id] ?? 0;
         bottles += q;
@@ -208,9 +210,13 @@ class CellarRepository {
           gardePeak: f.gardeApogee,
           gardeEnd: f.gardeFin,
           grapes: grapes.map((g) => g.code).toList(),
+          pairings: f.accords == null || f.accords!.isEmpty
+              ? const []
+              : (jsonDecode(f.accords!) as List).cast<String>(),
           favorite: f.favori ?? false,
           primaryLotId: primaryLot,
           thumbPath: thumbs[f.id],
+          neverStocked: neverStocked,
           searchText: buildSearchText([
             p.nom,
             c.nom,
@@ -420,11 +426,20 @@ class CellarRepository {
   /// Lots en stock rangés dans [locationIds], triés par nom de vin.
   Future<List<LocationLot>> lotsIn(Set<String> locationIds) async {
     if (locationIds.isEmpty) return const [];
+    return _locationLots(locationIds);
+  }
+
+  /// EMP-03 : tous les lots en stock de la cave, rangés ou non.
+  Future<List<LocationLot>> stockedLots() => _locationLots(null);
+
+  Future<List<LocationLot>> _locationLots(Set<String>? locationIds) async {
     final ctx = await _context();
     final stocks = await _lotStocks();
     final lots =
         await (_db.select(_db.stockLots)..where(
-              (l) => l.emplacementId.isIn(locationIds) & l.deletedAt.isNull(),
+              (l) => locationIds == null
+                  ? l.deletedAt.isNull()
+                  : l.emplacementId.isIn(locationIds) & l.deletedAt.isNull(),
             ))
             .get();
     final items = {for (final w in await wineItems()) w.id: w};
@@ -440,7 +455,8 @@ class CellarRepository {
           wineName: w.displayName,
           vintage: w.vintage,
           colorCode: w.colorCode,
-          locationId: l.emplacementId!,
+          locationId: l.emplacementId,
+          ownerId: l.proprietaireId,
           ownerName: ctx.owners[l.proprietaireId]?.nom ?? '',
           bottles: q,
           positions: l.positions,
@@ -459,6 +475,16 @@ class CellarRepository {
       yield await lotsIn(locationIds);
     }
   }
+
+  /// EMP-03 : range une bouteille d'un lot dans une case. Les positions ne
+  /// touchent pas au stock : aucun mouvement.
+  Future<void> setLotPositions(String lotId, String? positions) =>
+      (_db.update(_db.stockLots)..where((l) => l.id.equals(lotId))).write(
+        StockLotsCompanion(
+          updatedAt: Value(_now),
+          positions: Value(_blank(positions)),
+        ),
+      );
 
   // ---------------------------------------------------------- Écritures
 
@@ -672,7 +698,8 @@ class CellarRepository {
   }
 
   /// FIC-04 : note de dégustation, proposée à l'ouverture, jamais imposée.
-  Future<void> addTasting({
+  /// Renvoie l'identifiant de la dégustation (photos de CMP-08).
+  Future<String> addTasting({
     required String wineId,
     required String cellarId,
     double? score,
@@ -680,22 +707,26 @@ class CellarRepository {
     String? dish,
     String? movementId,
     String? date,
-  }) => _db
-      .into(_db.tastings)
-      .insert(
-        TastingsCompanion.insert(
-          id: _uuid.v4(),
-          caveId: cellarId,
-          createdAt: _now,
-          updatedAt: _now,
-          ficheId: wineId,
-          dateDegustation: date ?? _today,
-          notePerso: Value(score),
-          commentaire: Value(_blank(comment)),
-          plat: Value(_blank(dish)),
-          mouvementId: Value(movementId),
-        ),
-      );
+  }) async {
+    final id = _uuid.v4();
+    await _db
+        .into(_db.tastings)
+        .insert(
+          TastingsCompanion.insert(
+            id: id,
+            caveId: cellarId,
+            createdAt: _now,
+            updatedAt: _now,
+            ficheId: wineId,
+            dateDegustation: date ?? _today,
+            notePerso: Value(score),
+            commentaire: Value(_blank(comment)),
+            plat: Value(_blank(dish)),
+            mouvementId: Value(movementId),
+          ),
+        );
+    return id;
+  }
 
   /// Nouveau lot sur une fiche existante (réapprovisionnement, STK-06).
   Future<String> addLot(String wineId, LotDraft lot) async {

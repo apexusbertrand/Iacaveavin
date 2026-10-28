@@ -5,16 +5,19 @@ Code retour 1 si un cas échoue : utilisé par la CI et par le flux n8n avant to
 import json, sys, pathlib
 from jsonschema import Draft202012Validator, FormatChecker
 base = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else pathlib.Path(__file__).resolve().parent.parent / "specs" / "contrat-n8n"
-schemas = {n: json.loads((base / n).read_text()) for n in ["requete-enrichissement.schema.json","requete-prix.schema.json","reponse-job.schema.json"]}
+schemas = {n: json.loads((base / n).read_text()) for n in ["requete-enrichissement.schema.json","requete-prix.schema.json","reponse-job.schema.json","requete-remontee.schema.json","reponse-remontee.schema.json"]}
 for s in schemas.values(): Draft202012Validator.check_schema(s)
 cas = {
  "requete-enrichissement.json": ("requete-enrichissement.schema.json", True),
  "requete-prix.json": ("requete-prix.schema.json", True),
  "job-en-cours.json": ("reponse-job.schema.json", True),
+ "job-en-cours-lecture.json": ("reponse-job.schema.json", True),
  "enrichissement-termine.json": ("reponse-job.schema.json", True),
  "enrichissement-partiel.json": ("reponse-job.schema.json", True),
  "prix-termine.json": ("reponse-job.schema.json", True),
  "erreur-quota.json": ("reponse-job.schema.json", True),
+ "requete-remontee.json": ("requete-remontee.schema.json", True),
+ "reponse-remontee.json": ("reponse-remontee.schema.json", True),
 }
 ok = True
 for f,(s,attendu) in cas.items():
@@ -36,10 +39,43 @@ m = copy.deepcopy(neg); m["statut"]="termine"; m.pop("resultat"); mut["termine s
 m = copy.deepcopy(neg); m["resultat"]["fiche"]["garde"] = {"valeur":{"debut":2026,"fin":2032},"source":"estimation","confiance":0.5}; mut["garde estimée par l'agent"] = m
 m = copy.deepcopy(neg); m["resultat"]["champ_inconnu"] = 1; mut["propriété inconnue dans resultat"] = m
 m = copy.deepcopy(neg); m["resultat"]["fiche"]["millesime"]["valeur"] = 1850; mut["millésime hors bornes"] = m
+m = copy.deepcopy(neg); m["resultat"]["cadrages"][0]["cadre"]["largeur"] = 1.4; mut["cadre d'étiquette hors de l'image"] = m
+m = copy.deepcopy(neg); m["resultat"]["cadrages"][0]["cadre"].pop("hauteur"); mut["cadre d'étiquette incomplet"] = m
 v = Draft202012Validator(schemas["reponse-job.schema.json"], format_checker=FormatChecker())
 for k,doc in mut.items():
     rejete = any(True for _ in v.iter_errors(doc))
     print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
     ok &= rejete
+# Requête : un signalement incomplet ou trop long doit être REJETÉ (contrat 1.2)
+req = json.loads((base/"exemples"/"requete-enrichissement.json").read_text())
+vr = Draft202012Validator(schemas["requete-enrichissement.schema.json"], format_checker=FormatChecker())
+mreq = {}
+m = copy.deepcopy(req); m["signalements"][0].pop("valeur"); mreq["signalement sans valeur"] = m
+m = copy.deepcopy(req); m["signalements"][0]["champ"] = "Cépages"; mreq["signalement sur un nom de champ invalide"] = m
+m = copy.deepcopy(req); m["signalements"] = m["signalements"] * 21; mreq["plus de 20 signalements"] = m
+for k,doc in mreq.items():
+    rejete = any(True for _ in vr.iter_errors(doc))
+    print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
+    ok &= rejete
+# Remontée (contrat 1.3) : mail mal formé, pièce jointe d'un autre type,
+# champ manquant ou erreur sans détail doivent être REJETÉS
+rem = json.loads((base/"exemples"/"requete-remontee.json").read_text())
+vm = Draft202012Validator(schemas["requete-remontee.schema.json"], format_checker=FormatChecker())
+mrem = {}
+for mauvais in ["bertrand", "bertrand@", "@exemple.fr", "b@exemple", "b b@exemple.fr", "b@exemple.f"]:
+    m = copy.deepcopy(rem); m["email_contact"] = mauvais; mrem["mail mal formé " + mauvais] = m
+m = copy.deepcopy(rem); m["piece_jointe"]["mime"] = "application/zip"; mrem["pièce jointe zip"] = m
+m = copy.deepcopy(rem); m["piece_jointe"] = [m["piece_jointe"], m["piece_jointe"]]; mrem["deux pièces jointes"] = m
+m = copy.deepcopy(rem); m.pop("titre"); mrem["remontée sans titre"] = m
+m = copy.deepcopy(rem); m["commentaire"] = ""; mrem["commentaire vide"] = m
+for k,doc in mrem.items():
+    rejete = any(True for _ in vm.iter_errors(doc))
+    print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
+    ok &= rejete
+vrr = Draft202012Validator(schemas["reponse-remontee.schema.json"], format_checker=FormatChecker())
+m = {"version_contrat": "1.3", "request_id": rem["request_id"], "statut": "erreur"}
+rejete = any(True for _ in vrr.iter_errors(m))
+print(("OK " if rejete else "KO ") + "rejet attendu : erreur de remontée sans détail")
+ok &= rejete
 print("TOUT EST CONFORME" if ok else "ÉCHECS")
 sys.exit(0 if ok else 1)

@@ -29,7 +29,7 @@ flowchart TB
   end
   Q -- "POST photos + contexte" --> WH
   JOBS -- "GET /jobs : résultat JSON" --> Q
-  AG -- "recherche web (Tavily)" --> SRC
+  AG -- "recherche web intégrée de Claude" --> SRC
 ```
 
 ## Stack
@@ -103,8 +103,8 @@ sequenceDiagram
     N-->>F: statut termine + résultat
   else nouveau vin
     N-->>F: 202 statut en_attente + job_id
-    loop toutes les 3 s pendant 30 s, puis toutes les 10 s, 3 min au plus
-      F->>N: GET /jobs/{job_id}
+    loop toutes les 3 s pendant 90 s (T110), puis toutes les 10 s, 3 min au plus
+      F->>N: GET /jobs?job_id=…
       N-->>F: en_cours (étape) ou termine / partiel / erreur
     end
   end
@@ -140,6 +140,8 @@ Chaque requête porte trois en-têtes :
 | X-IACAV-Installation | UUID de l'installation, généré au premier lancement |
 | X-IACAV-Horodatage | secondes Unix |
 | X-IACAV-Signature | hex(HMAC-SHA256(clé, horodatage + "\n" + méthode + "\n" + chemin + "\n" + sha256_hex(corps))) |
+
+Le chemin signé est celui de l'URL après l'hôte, chaîne de requête comprise : `/webhook/iacave/jobs?job_id=…` pour le suivi. Un GET a un corps vide, dont l'empreinte est le sha256 de zéro octet. Le vecteur de test est dans `specs/contrat-n8n/vecteur-signature.json`.
 
 Le flux refuse une requête à plus de 300 secondes d'écart, une signature fausse, ou un request_id déjà traité (il renvoie alors le job existant). Révocation : changer la clé côté n8n. Le jour d'une publication, ce schéma cède la place aux comptes (docs/10-evolutions.md).
 

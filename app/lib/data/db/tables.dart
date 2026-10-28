@@ -200,6 +200,7 @@ class MarketPrices extends Table with TechnicalColumns, CellarScoped {
 
 @DataClassName('Photo')
 @TableIndex(name: 'idx_photo_fiche', columns: {#ficheId})
+@TableIndex(name: 'idx_photo_degustation', columns: {#degustationId})
 class Photos extends Table with TechnicalColumns, CellarScoped {
   @override
   String get tableName => 'photo';
@@ -211,6 +212,15 @@ class Photos extends Table with TechnicalColumns, CellarScoped {
   IntColumn get largeur => integer().nullable()();
   IntColumn get hauteur => integer().nullable()();
   IntColumn get octets => integer().nullable()();
+
+  /// AJO-13 : photo entière gardée jusqu'à la validation de la fiche.
+  TextColumn get cheminOriginal => text().nullable()();
+
+  /// AJO-13 : cadre de l'étiquette en fractions de la photo d'origine (JSON).
+  TextColumn get cadre => text().nullable()();
+
+  /// CMP-08 : dégustation pendant laquelle la photo a été prise.
+  TextColumn get degustationId => text().nullable().references(Tastings, #id)();
 }
 
 @DataClassName('Provenance')
@@ -304,4 +314,17 @@ class SavedStatViews extends Table with TechnicalColumns, CellarScoped {
   TextColumn get dimension2 => text().named('dimension_2').nullable()();
   TextColumn get filtres => text().nullable()();
   TextColumn get graphique => text()();
+}
+
+/// CMP-03 : liste d'achats.
+@DataClassName('ShoppingItem')
+class ShoppingItems extends Table with TechnicalColumns, CellarScoped {
+  @override
+  String get tableName => 'liste_achat';
+
+  TextColumn get ficheId => text().nullable().references(Wines, #id)();
+  TextColumn get libelle => text()();
+  IntColumn get quantite => integer().nullable()();
+  TextColumn get note => text().nullable()();
+  BoolColumn get achete => boolean()();
 }

@@ -33,6 +33,8 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 - FIC-07. Les commentaires rédigés par l'agent portent la mention « rédigé par IA à partir de [site] ».
 - FIC-08. Dupliquer pour un autre millésime : nouvelle fiche sur la même cuvée, seuls les champs liés au millésime sont à enrichir.
 - FIC-09. Ré-enrichir : relance le flux sur les champs non verrouillés et montre les différences avant de les appliquer.
+- FIC-10. Toutes les photos de la bouteille sont visibles : carrousel sur la fiche, plein écran avec zoom et balayage d'une photo à l'autre (2026-10-26, évolution 1).
+- FIC-11. Bibliothèque de photos par bouteille, ajoutées à tout moment (dégustation, repas, événement) depuis l'appareil photo ou la galerie, supprimables. Ces photos ne sont jamais envoyées au flux et ne deviennent pas la photo principale (2026-10-26, évolution 1 bis, T88). Elles sont dans l'onglet Dégustations et photos de la fiche, sous les dégustations ; une photo prise en notant une dégustation s'affiche sous celle-ci et n'est pas répétée (2026-10-28, T120).
 
 ## AJO. Ajout d'une bouteille par photo [lot 2a côté app, 2b côté n8n]
 
@@ -41,7 +43,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - AJO-01. Le FAB « + » propose : photo (par défaut), scan du code-barres, saisie manuelle, import Excel.
 - AJO-02. Prise de vue de 1 à 4 photos (étiquette, contre-étiquette, capsule, collerette) avec guide de cadrage. Détection de flou et de reflet, invitation à reprendre. Import depuis la galerie possible.
 - AJO-03. Compression locale (1 600 px stockés, 1 500 px envoyés, qualité 80, miniature 320 px) et enregistrement immédiat de la fiche en `a_enrichir`.
-- AJO-04. Pendant le travail de l'agent, l'utilisateur renseigne le lot : quantité, format, prix d'achat, date, fournisseur, propriétaire, emplacement, valeurs par défaut pré-remplies.
+- AJO-04. Pendant le travail de l'agent, l'utilisateur renseigne le lot : quantité, format, prix d'achat, date, propriétaire, emplacement, valeurs par défaut pré-remplies. Le fournisseur n'est plus saisi (2026-10-26, T79). Le lot reste facultatif : la fiche s'enregistre même à 0 bouteille (T78).
 - AJO-05. Avancement en clair à partir du champ `etape` : lecture de l'étiquette, identification, enrichissement, notes, prix.
 - AJO-06. Écran de validation : chaque champ proposé avec valeur, source et confiance. Confiance sous 0,6 surlignée. Tout accepter, ou accepter, modifier, rejeter champ par champ. Un désaccord étiquette/source s'affiche côte à côte (alerte `desaccord_etiquette_source`).
 - AJO-07. Doublon : même domaine, cuvée et millésime déjà en cave, l'app propose d'ajouter un lot à la fiche existante.
@@ -50,6 +52,9 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - AJO-10. Le code-barres EAN accompagne les photos comme indice, jamais comme identifiant (certains producteurs gardent le même EAN d'un millésime à l'autre).
 - AJO-11. Quota restant affiché (champ `quota` de la réponse) quand il passe sous 20 %.
 - AJO-12. Toute réponse du flux est validée contre specs/contrat-n8n/reponse-job.schema.json. Une réponse invalide est traitée comme une erreur, journalisée, et la fiche reste éditable à la main.
+- AJO-13. Recadrage sur l'étiquette : la lecture du flux renvoie le cadre de l'étiquette de chaque photo (contrat 1.1) ; l'app rogne la photo à la réception, garde la photo entière quand aucune étiquette n'est identifiable, et permet de retoucher le cadre ou de revenir à la photo entière à l'écran de validation. La photo d'origine est conservée jusqu'à la validation de la fiche, puis supprimée (2026-10-26, évolution 1, T86, T87).
+- AJO-14. Millésime lu par l'appareil photo, comme le code-barres : lecture à la volée dans un viseur (la même année lue seule sur deux images de suite) ou sur une photo de la galerie. Lecture sur le téléphone, sans réseau. Les dates de fondation (« depuis 1919 ») sont écartées. Le champ reste modifiable (2026-10-28, T116).
+- AJO-15. Validation progressive : dès que l'étiquette est lue, l'écran Identification passe seul à l'écran de validation, rempli avec la lecture ; les champs trouvés par le serveur s'y ajoutent à chaque retour du flux. On peut corriger ou rejeter un champ pendant l'attente ; l'enregistrement s'ouvre à la fin de la recherche. Le lot se saisit sur le même écran tant qu'il n'existe pas. En cas d'échec, la lecture reste affichée avec une relance (2026-10-28, T117).
 
 ## STK. Stock et corrections [lot 1]
 
@@ -108,7 +113,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 
 ## PDF [lot 3]
 
-- PDF-01. Fiche unitaire depuis la fiche vin, A4 portrait.
+- PDF-01. Fiche unitaire depuis la fiche vin, A4 portrait. Le fichier partagé porte le nom du vin, « Domaine - Cuvée - Millésime.pdf », comme l'image de CMP-06 (2026-10-28, T115).
 - PDF-02. Catalogue : 2 fiches par page A4 (moitié haute, moitié basse). Filtres optionnels : millésime, couleur, région, pays, année de consommation idéale, propriétaire, emplacement, en stock seulement. Tri au choix.
 - PDF-03. Page de garde optionnelle (date, filtres appliqués, nombre de fiches), numéros de page.
 - PDF-04. Contenu d'une fiche : champs marqués `pdf: true` dans le dictionnaire, photo d'étiquette, QR code vers la fiche, date d'édition. Commentaires tronqués à la phrase entière la plus proche.
@@ -152,4 +157,10 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - CMP-04. Accords inversés : je choisis un plat, l'app propose les vins de la cave compatibles et à boire.
 - CMP-05. Historique des dégustations : date, plat, note, commentaire.
 - CMP-06. Favoris et partage d'une fiche en image ou en PDF.
-- CMP-07. [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés, toutes couleurs, millésimes 2005 à 2024, plusieurs propriétaires et emplacements), activable et effaçable dans les Réglages. Il sert aux tests de performance et aux captures.
+- CMP-07. [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés, toutes couleurs, millésimes 2005 à 2024, plusieurs propriétaires et emplacements). Il sert aux tests de performance et aux captures. ~~Activable et effaçable dans les Réglages~~ : retiré de l'app publiée le 2026-10-28 (T122, Google Play refuse le contenu de démonstration) ; le jeu reste chargeable par le test d'intégration.
+- CMP-08. Photos de dégustation : en notant une dégustation, ajout de 6 photos au plus (appareil ou galerie), ramenées à la taille d'un écran de smartphone (1 080 × 1 920 au plus), rattachées à la dégustation, visibles dans son historique et dans la bibliothèque de la bouteille, jamais envoyées au flux (2026-10-28, T114).
+- CMP-09. Vins passés : sur l'écran À boire, un onglet Passés liste à part les vins en stock dont la fenêtre de garde est dépassée (année en cours après la fin de garde), fin la plus ancienne en tête. Ils n'apparaissent ni dans l'onglet À boire ni dans les accords inversés (2026-10-28, T121).
+
+## RET. Remontée d'information [lot 4]
+
+- RET-01. Formulaire « Remontée d'information » du menu : titre (120 caractères), commentaire (5 000 caractères) et adresse mail de contact, tous obligatoires, adresse au format contrôlé (exemple : prenom.nom@exemple.fr). Une pièce jointe au plus, PDF ou image (JPEG, PNG, WebP), type vérifié sur le contenu du fichier et non sur l'extension, 5 Mo au plus ; une image est ramenée à la taille d'un écran (CMP-08) et envoyée en JPEG. L'envoi passe par le flux (POST /remontee, contrat 1.3) : mail à apexus.claude@gmail.com, copie à l'adresse de contact, réponse à cette adresse. 5 envois par jour et par installation. Hors ligne ou en erreur, la saisie reste à l'écran. Rien n'est enregistré sur le téléphone (2026-10-28, T118).

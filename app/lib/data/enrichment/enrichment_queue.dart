@@ -12,11 +12,43 @@ import 'enrichment_gateway.dart';
 /// Délai maximal d'un job (docs/02 : 3 min au plus).
 const jobTimeout = Duration(minutes: 3);
 
-/// Rythme de suivi : toutes les 3 s pendant 30 s, puis toutes les 10 s.
+/// Rythme de suivi : toutes les 3 s pendant 90 s, puis toutes les 10 s
+/// (T110 : un enrichissement dure de 40 à 80 s, le résultat s'affiche moins
+/// de 3 s après la fin).
 Duration pollDelay(Duration sinceSent) =>
-    sinceSent < const Duration(seconds: 30)
+    sinceSent < const Duration(seconds: 90)
     ? const Duration(seconds: 3)
     : const Duration(seconds: 10);
+
+/// PRX-03 : un relevé par fiche et par 24 heures, sauf « forcer ».
+const priceMinInterval = Duration(hours: 24);
+
+/// PRX-06 : rafraîchissement automatique mensuel.
+const autoPriceInterval = Duration(days: 30);
+
+/// PRX-06 : vrai si le rafraîchissement mensuel doit partir maintenant.
+bool autoPriceRefreshDue({
+  required bool enabled,
+  required DateTime? last,
+  required DateTime now,
+}) => enabled && (last == null || now.difference(last) >= autoPriceInterval);
+
+/// Types de job du dictionnaire (job.type_job).
+abstract final class JobType {
+  static const enrichment = 'enrichissement';
+  static const price = 'prix';
+}
+
+/// Issue d'une demande de relevé de prix.
+enum PriceEnqueue {
+  queued,
+
+  /// Relevé de moins de 24 heures : il faut « forcer » (PRX-03).
+  tooRecent,
+
+  /// Un relevé est déjà en file pour cette fiche.
+  alreadyQueued,
+}
 
 /// Statuts de fiche du dictionnaire (statut_enrichissement).
 abstract final class WineStatus {
@@ -33,7 +65,9 @@ class QueueReport {
     required this.finished,
     required this.failed,
     required this.offline,
+    this.notConnected = false,
     this.enrichmentsLeft,
+    this.pricesLeft,
   });
 
   final int sent;
@@ -42,7 +76,14 @@ class QueueReport {
 
   /// Le flux était injoignable : les jobs restants repartiront plus tard.
   final bool offline;
+
+  /// Aucune connexion au flux enregistrée (T122) : cas particulier de
+  /// [offline], expliqué autrement à l'écran.
+  final bool notConnected;
   final int? enrichmentsLeft;
+
+  /// Quota de relevés de prix restant ce mois, d'après la dernière réponse.
+  final int? pricesLeft;
 }
 
 /// File d'attente des enrichissements (AJO-09, NFR-03).
@@ -82,7 +123,7 @@ class EnrichmentQueue {
               createdAt: _now,
               updatedAt: _now,
               ficheId: wineId,
-              typeJob: 'enrichissement',
+              typeJob: JobType.enrichment,
               requestId: _uuid.v4(),
               statut: JobStatus.pending.code,
             ).copyWith(tentatives: const Value(0)),
@@ -90,6 +131,80 @@ class EnrichmentQueue {
       await _setWineStatus(wineId, WineStatus.toEnrich);
     });
     return id;
+  }
+
+  /// PRX-02, PRX-03 : met en file le relevé du prix marché d'une fiche.
+  Future<PriceEnqueue> enqueuePrice(String wineId, {bool force = false}) async {
+    final pending =
+        await (_db.select(_db.jobs)..where(
+              (j) =>
+                  j.ficheId.equals(wineId) &
+                  j.typeJob.equals(JobType.price) &
+                  j.statut.isIn([
+                    JobStatus.pending.code,
+                    JobStatus.running.code,
+                  ]) &
+                  j.deletedAt.isNull(),
+            ))
+            .get();
+    if (pending.isNotEmpty) return PriceEnqueue.alreadyQueued;
+    if (!force && await priceIsRecent(wineId)) return PriceEnqueue.tooRecent;
+    final wine = await (_db.select(
+      _db.wines,
+    )..where((w) => w.id.equals(wineId))).getSingle();
+    await _db
+        .into(_db.jobs)
+        .insert(
+          JobsCompanion.insert(
+            id: _uuid.v4(),
+            caveId: wine.caveId,
+            createdAt: _now,
+            updatedAt: _now,
+            ficheId: wineId,
+            typeJob: JobType.price,
+            requestId: _uuid.v4(),
+            statut: JobStatus.pending.code,
+          ).copyWith(tentatives: const Value(0)),
+        );
+    return PriceEnqueue.queued;
+  }
+
+  /// Vrai si la fiche a un relevé de moins de 24 heures (PRX-03).
+  Future<bool> priceIsRecent(String wineId) async {
+    final last =
+        await (_db.select(_db.marketPrices)
+              ..where((p) => p.ficheId.equals(wineId) & p.deletedAt.isNull())
+              ..orderBy([(p) => OrderingTerm.desc(p.createdAt)])
+              ..limit(1))
+            .getSingleOrNull();
+    return last != null && _now.difference(last.createdAt) < priceMinInterval;
+  }
+
+  /// Fiches dont le prix peut être relevé (avec domaine et millésime).
+  Future<List<String>> priceableWines() async {
+    final rows = await (_db.select(
+      _db.wines,
+    )..where((w) => w.deletedAt.isNull())).get();
+    return [for (final w in rows) w.id];
+  }
+
+  /// PRX-02 « toute la cave » et PRX-06 : met en file toutes les fiches sans
+  /// relevé récent. Renvoie le nombre de relevés ajoutés.
+  Future<int> enqueueAllPrices({List<String>? wineIds}) async {
+    var n = 0;
+    for (final id in wineIds ?? await priceableWines()) {
+      if (await enqueuePrice(id) == PriceEnqueue.queued) n++;
+    }
+    return n;
+  }
+
+  /// Nombre de relevés qu'un « toute la cave » enverrait (PRX-02).
+  Future<int> countPricesToRefresh({List<String>? wineIds}) async {
+    var n = 0;
+    for (final id in wineIds ?? await priceableWines()) {
+      if (!await priceIsRecent(id)) n++;
+    }
+    return n;
   }
 
   Future<void> _setWineStatus(String wineId, String status) =>
@@ -127,14 +242,24 @@ class EnrichmentQueue {
 
   Future<Job?> latestJobFor(String wineId) =>
       (_db.select(_db.jobs)
-            ..where((j) => j.ficheId.equals(wineId) & j.deletedAt.isNull())
+            ..where(
+              (j) =>
+                  j.ficheId.equals(wineId) &
+                  j.typeJob.equals(JobType.enrichment) &
+                  j.deletedAt.isNull(),
+            )
             ..orderBy([(j) => OrderingTerm.desc(j.createdAt)])
             ..limit(1))
           .getSingleOrNull();
 
   Stream<Job?> watchLatestJob(String wineId) =>
       (_db.select(_db.jobs)
-            ..where((j) => j.ficheId.equals(wineId) & j.deletedAt.isNull())
+            ..where(
+              (j) =>
+                  j.ficheId.equals(wineId) &
+                  j.typeJob.equals(JobType.enrichment) &
+                  j.deletedAt.isNull(),
+            )
             ..orderBy([(j) => OrderingTerm.desc(j.createdAt)])
             ..limit(1))
           .watchSingleOrNull();
@@ -152,6 +277,32 @@ class EnrichmentQueue {
             ))
             .get();
     return {for (final r in rows) r.champ}.toList();
+  }
+
+  /// PRV-R4 : valeurs signalées fausses et pas encore corrigées, c'est-à-dire
+  /// dont la provenance la plus récente du champ reste signalée. Elles partent
+  /// avec chaque enrichissement de la fiche jusqu'à correction.
+  Future<List<ReportedValue>> reports(String wineId) async {
+    final rows =
+        await (_db.select(_db.provenances)
+              ..where(
+                (p) =>
+                    p.deletedAt.isNull() &
+                    p.entite.equals('fiche_vin') &
+                    p.entiteId.equals(wineId),
+              )
+              ..orderBy([(p) => OrderingTerm.desc(p.createdAt)]))
+            .get();
+    final latest = <String, Provenance>{};
+    for (final r in rows) {
+      latest.putIfAbsent(r.champ, () => r);
+    }
+    return [
+      for (final r in latest.values)
+        if (r.signale == true && RegExp(r'^[a-z_]{1,40}$').hasMatch(r.champ))
+          if (ReportedValue.textOf(r.valeur) case final String text)
+            ReportedValue(r.champ, text),
+    ].take(maxReports).toList();
   }
 
   Future<EnrichmentRequest> _request(Job job) async {
@@ -175,6 +326,66 @@ class EnrichmentQueue {
       vintageHint: year ?? (wine.millesime == 'NM' ? null : wine.millesime),
       formatCl: lot?.formatCl,
       lockedFields: await lockedFields(job.ficheId),
+      reports: await reports(job.ficheId),
+      clientDate: _clock().toIso8601String().substring(0, 10),
+    );
+  }
+
+  static const _colours = {
+    'rouge',
+    'blanc',
+    'rose',
+    'champagne',
+    'effervescent',
+    'liquoreux',
+    'orange',
+    'autre',
+  };
+
+  Future<PriceRequest> _priceRequest(Job job, String currency) async {
+    final wine = await (_db.select(
+      _db.wines,
+    )..where((w) => w.id.equals(job.ficheId))).getSingle();
+    final cuvee = await (_db.select(
+      _db.cuvees,
+    )..where((c) => c.id.equals(wine.cuveeId))).getSingle();
+    final producer = await (_db.select(
+      _db.producers,
+    )..where((d) => d.id.equals(cuvee.domaineId))).getSingle();
+    final lot =
+        await (_db.select(_db.stockLots)
+              ..where((l) => l.ficheId.equals(job.ficheId))
+              ..limit(1))
+            .getSingleOrNull();
+    // Un relevé en file alors qu'un autre a moins de 24 h a été forcé.
+    final forced = await priceIsRecent(job.ficheId);
+    // L'appellation est rangée en code de liste : le flux attend le libellé.
+    final appellation = cuvee.appellation == null
+        ? null
+        : (await (_db.select(_db.listValues)
+                        ..where(
+                          (v) =>
+                              v.liste.equals('appellation') &
+                              v.code.equals(cuvee.appellation!) &
+                              v.deletedAt.isNull(),
+                        )
+                        ..limit(1))
+                      .getSingleOrNull())
+                  ?.libelle ??
+              cuvee.appellation;
+    return PriceRequest(
+      requestId: job.requestId,
+      wineId: job.ficheId,
+      domain: producer.nom,
+      cuvee: cuvee.nom,
+      appellation: appellation,
+      vintage: int.tryParse(wine.millesime) ?? 'NM',
+      colour: _colours.contains(cuvee.couleur) ? cuvee.couleur : 'autre',
+      formatCl: lot?.formatCl ?? 75,
+      currency: currency,
+      lwin: wine.lwin,
+      ean: wine.ean,
+      force: forced,
       clientDate: _clock().toIso8601String().substring(0, 10),
     );
   }
@@ -192,14 +403,16 @@ class EnrichmentQueue {
         erreur: Value(message),
       ),
     );
-    await _setWineStatus(job.ficheId, WineStatus.error);
+    if (job.typeJob != JobType.price) {
+      await _setWineStatus(job.ficheId, WineStatus.error);
+    }
   }
 
   /// Traite tous les jobs en attente. À appeler au retour du réseau et à
   /// intervalle régulier pendant qu'un job tourne ([pollDelay]).
-  Future<QueueReport> process() async {
+  Future<QueueReport> process({String currency = 'EUR'}) async {
     var sent = 0, finished = 0, failed = 0;
-    int? left;
+    int? left, pricesLeft;
     for (final job in await pendingJobs()) {
       // AJO-09 : sans réponse finale en 3 minutes, le job passe en erreur.
       final sentAt = job.envoyeLe == null
@@ -213,7 +426,9 @@ class EnrichmentQueue {
       try {
         final JobResponse r;
         if (job.jobIdDistant == null) {
-          r = await gateway.requestEnrichment(await _request(job));
+          r = job.typeJob == JobType.price
+              ? await gateway.requestPrice(await _priceRequest(job, currency))
+              : await gateway.requestEnrichment(await _request(job));
           sent++;
           await _update(
             job,
@@ -227,16 +442,23 @@ class EnrichmentQueue {
           r = await gateway.followJob(job.jobIdDistant!);
         }
         left = r.enrichmentsLeft ?? left;
-        if (await _apply(job, r)) finished++;
+        pricesLeft = r.pricesLeft ?? pricesLeft;
+        if (job.typeJob == JobType.price
+            ? await _applyPrice(job, r)
+            : await _apply(job, r)) {
+          finished++;
+        }
         if (r.status == JobStatus.error) failed++;
-      } on OfflineException {
+      } on OfflineException catch (e) {
         // La fiche reste à enrichir ; on réessaiera au retour du réseau.
         return QueueReport(
           sent: sent,
           finished: finished,
           failed: failed,
           offline: true,
+          notConnected: e is NotConnectedException,
           enrichmentsLeft: left,
+          pricesLeft: pricesLeft,
         );
       } on ContractException catch (e) {
         // AJO-12 : réponse hors contrat = erreur journalisée, fiche éditable.
@@ -250,6 +472,7 @@ class EnrichmentQueue {
       failed: failed,
       offline: false,
       enrichmentsLeft: left,
+      pricesLeft: pricesLeft,
     );
   }
 
@@ -272,6 +495,14 @@ class EnrichmentQueue {
         await _fail(job, r.error?.message ?? 'erreur');
         return false;
       case JobStatus.done || JobStatus.partial:
+        // AJO-13 : rognage sur l'étiquette avant d'annoncer le résultat, pour
+        // que l'écran de validation montre déjà les photos rognées. Un échec
+        // laisse la photo entière sans bloquer la validation.
+        try {
+          await photos.applyFrames(job.ficheId, r.result?.frames ?? const []);
+        } on Object {
+          // Photo illisible ou absente : rien à rogner.
+        }
         await _db.transaction(() async {
           await _update(
             job,
@@ -285,6 +516,93 @@ class EnrichmentQueue {
         });
         return true;
     }
+  }
+
+  /// PRX-03, PRX-04 : un relevé terminé ajoute une ligne d'historique par
+  /// format, « non trouvé » compris ; rien n'est écrasé ni estimé.
+  Future<bool> _applyPrice(Job job, JobResponse r) async {
+    switch (r.status) {
+      case JobStatus.pending || JobStatus.running:
+        await _update(
+          job,
+          JobsCompanion(
+            statut: Value(JobStatus.running.code),
+            reponse: Value(jsonEncode(r.raw)),
+          ),
+        );
+        return false;
+      case JobStatus.error:
+        await _fail(job, r.error?.message ?? 'erreur');
+        return false;
+      case JobStatus.done || JobStatus.partial:
+        // AJO-13 : rognage sur l'étiquette avant d'annoncer le résultat, pour
+        // que l'écran de validation montre déjà les photos rognées. Un échec
+        // laisse la photo entière sans bloquer la validation.
+        try {
+          await photos.applyFrames(job.ficheId, r.result?.frames ?? const []);
+        } on Object {
+          // Photo illisible ou absente : rien à rogner.
+        }
+        await _db.transaction(() async {
+          await _update(
+            job,
+            JobsCompanion(
+              statut: Value(r.status.code),
+              reponse: Value(jsonEncode(r.raw)),
+            ),
+          );
+          for (final p in r.prices) {
+            await _db
+                .into(_db.marketPrices)
+                .insert(
+                  MarketPricesCompanion.insert(
+                    id: _uuid.v4(),
+                    caveId: job.caveId,
+                    createdAt: _now,
+                    updatedAt: _now,
+                    ficheId: job.ficheId,
+                    formatCl: p.formatCl,
+                    dateReleve: p.date,
+                    devise: p.currency,
+                    trouve: p.found && p.price != null,
+                  ).copyWith(
+                    prix: Value(p.found ? p.price : null),
+                    nature: Value(p.found ? p.nature : null),
+                    nbOffres: Value(p.found ? p.offerCount : 0),
+                    site: Value(p.site ?? p.offers.firstOrNull?.site),
+                    url: Value(p.url ?? p.offers.firstOrNull?.url),
+                  ),
+                );
+          }
+        });
+        return true;
+    }
+  }
+
+  /// XLS-09 : dernier quota d'enrichissements connu.
+  Future<int?> lastKnownEnrichmentsLeft() async {
+    final rows =
+        await (_db.select(_db.jobs)
+              ..where(
+                (j) =>
+                    j.reponse.isNotNull() &
+                    j.typeJob.equals(JobType.enrichment),
+              )
+              ..orderBy([(j) => OrderingTerm.desc(j.updatedAt)])
+              ..limit(1))
+            .get();
+    return rows.isEmpty ? null : lastResponse(rows.first)?.enrichmentsLeft;
+  }
+
+  /// Dernier quota de prix connu, d'après la réponse la plus récente.
+  Future<int?> lastKnownPricesLeft() async {
+    final rows =
+        await (_db.select(_db.jobs)
+              ..where((j) => j.reponse.isNotNull())
+              ..orderBy([(j) => OrderingTerm.desc(j.updatedAt)])
+              ..limit(1))
+            .get();
+    return rows.isEmpty ? null : lastResponse(rows.first)?.pricesLeft;
   }
 
   /// PRV-R1 : toute valeur proposée par l'agent crée une ligne de provenance

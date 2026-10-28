@@ -1,5 +1,5 @@
 {
-  "version_contrat": "1.0",
+  "version_contrat": "1.2",
   "request_id": "5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60",
   "fiche_id": "0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10",
   "photos": [
@@ -8,6 +8,7 @@
   ],
   "indices": { "format_cl": 75 },
   "champs_verrouilles": [],
+  "signalements": [{ "champ": "cepages", "valeur": "Pinot noir 100 %" }],
   "inclure_prix": true,
   "langue": "fr",
   "date_client": "2026-10-20"

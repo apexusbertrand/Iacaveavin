@@ -128,16 +128,10 @@ extension DomainLabels on AppLocalizations {
     'contre_etiquette' => photoTypeContreEtiquette,
     'capsule' => photoTypeCapsule,
     'collerette' => photoTypeCollerette,
+    'degustation' => photoTypeDegustation,
+    'repas' => photoTypeRepas,
+    'evenement' => photoTypeEvenement,
     _ => photoTypeAutre,
-  };
-
-  String scenarioLabel(String name) => switch (name) {
-    'partial' => scenarioPartial,
-    'cacheHit' => scenarioCacheHit,
-    'quota' => scenarioQuota,
-    'invalid' => scenarioInvalid,
-    'never' => scenarioNever,
-    _ => scenarioDone,
   };
 
   /// Libellé d'un champ du contrat pour l'écran de validation.

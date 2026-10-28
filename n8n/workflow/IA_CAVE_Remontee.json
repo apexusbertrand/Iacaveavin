@@ -1,0 +1,590 @@
+{
+  "name": "IA_CAVE_Remontee",
+  "nodes": [
+    {
+      "id": "54832c06-9089-40ab-8f02-b0d3c76da3e4",
+      "name": "Webhook remontée",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "iacave/remontee",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "webhookId": "7101b03f-9ea3-49d7-981f-04cd4ec8e7ed"
+    },
+    {
+      "id": "8b7bf144-d8af-425e-8d7b-1a94b84b2a69",
+      "name": "Empreinte remontée",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Juste après le webhook : empreinte SHA-256 des octets exacts reçus (pour la\n// signature) et lecture du corps. Les données épinglées d'un test n'ont pas\n// de corps brut : le corps analysé est alors réencodé.\nconst K256 = [\n  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,\n  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,\n  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,\n  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,\n  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,\n  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,\n  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,\n  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,\n];\nfunction utf8(text) {\n  return new TextEncoder().encode(String(text));\n}\nfunction toHex(bytes) {\n  let s = '';\n  for (const b of bytes) s += b.toString(16).padStart(2, '0');\n  return s;\n}\nfunction sha256(bytes) {\n  const len = bytes.length;\n  const total = ((len + 9 + 63) >> 6) << 6;\n  const m = new Uint8Array(total);\n  m.set(bytes);\n  m[len] = 0x80;\n  const bits = len * 8;\n  const view = new DataView(m.buffer);\n  view.setUint32(total - 8, Math.floor(bits / 0x100000000));\n  view.setUint32(total - 4, bits >>> 0);\n  const h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  const w = new Uint32Array(64);\n  const rotr = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let off = 0; off < total; off += 64) {\n    for (let i = 0; i < 16; i++) w[i] = view.getUint32(off + i * 4);\n    for (let i = 16; i < 64; i++) {\n      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);\n      const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);\n      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;\n    }\n    let [a, b, c, d, e, f, g, hh] = h;\n    for (let i = 0; i < 64; i++) {\n      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);\n      const ch = (e & f) ^ (~e & g);\n      const t1 = (hh + S1 + ch + K256[i] + w[i]) >>> 0;\n      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);\n      const maj = (a & b) ^ (a & c) ^ (b & c);\n      const t2 = (S0 + maj) >>> 0;\n      hh = g; g = f; f = e; e = (d + t1) >>> 0;\n      d = c; c = b; b = a; a = (t1 + t2) >>> 0;\n    }\n    h[0] = (h[0] + a) >>> 0; h[1] = (h[1] + b) >>> 0; h[2] = (h[2] + c) >>> 0; h[3] = (h[3] + d) >>> 0;\n    h[4] = (h[4] + e) >>> 0; h[5] = (h[5] + f) >>> 0; h[6] = (h[6] + g) >>> 0; h[7] = (h[7] + hh) >>> 0;\n  }\n  const out = new Uint8Array(32);\n  const ov = new DataView(out.buffer);\n  h.forEach((x, i) => ov.setUint32(i * 4, x));\n  return out;\n}\nfunction hmacSha256(key, message) {\n  let k = key.length > 64 ? sha256(key) : key;\n  const block = new Uint8Array(64);\n  block.set(k);\n  const inner = new Uint8Array(64 + message.length);\n  const outer = new Uint8Array(64 + 32);\n  for (let i = 0; i < 64; i++) {\n    inner[i] = block[i] ^ 0x36;\n    outer[i] = block[i] ^ 0x5c;\n  }\n  inner.set(message, 64);\n  outer.set(sha256(inner), 64);\n  return sha256(outer);\n}\nfunction signatureAttendue(cle, horodatage, methode, chemin, corps) {\n  const empreinte = typeof corps === 'string' ? corps : toHex(sha256(corps));\n  const texte = horodatage + '\\n' + methode.toUpperCase() + '\\n' + chemin + '\\n' + empreinte;\n  return toHex(hmacSha256(utf8(cle), utf8(texte)));\n}\nfunction egalConstant(a, b) {\n  if (a.length !== b.length) return false;\n  let diff = 0;\n  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);\n  return diff === 0;\n}\nfunction verifierRequete({ entetes, methode, chemin, corps, cle, maintenant, fenetre = 300 }) {\n  const h = {};\n  for (const [k, v] of Object.entries(entetes || {})) h[k.toLowerCase()] = Array.isArray(v) ? v[0] : v;\n  const installation = h['x-iacav-installation'];\n  const horodatage = h['x-iacav-horodatage'];\n  const signature = (h['x-iacav-signature'] || '').toLowerCase();\n  if (!installation || !horodatage || !signature) {\n    return { ok: false, code: 'auth_invalide', message: 'En-têtes de sécurité absents.' };\n  }\n  if (!cle) return { ok: false, code: 'auth_invalide', message: 'Clé du flux non configurée.' };\n  if (!/^\\d{1,12}$/.test(horodatage) || Math.abs(maintenant - Number(horodatage)) > fenetre) {\n    return { ok: false, code: 'signature_expiree', message: \"Horodatage hors de la fenêtre de 300 secondes : vérifiez l'heure du téléphone.\" };\n  }\n  const attendue = signatureAttendue(cle, horodatage, methode, chemin, corps);\n  if (!egalConstant(attendue, signature)) {\n    return { ok: false, code: 'auth_invalide', message: 'Signature invalide.' };\n  }\n  return { ok: true, installation };\n}\nconst item = $input.first();\nlet octets;\nif (item.binary && item.binary.data) {\n  octets = new Uint8Array(await this.helpers.getBinaryDataBuffer(0, 'data'));\n} else {\n  const b = item.json.body;\n  octets = utf8(b && typeof b === 'object' && Object.keys(b).length ? JSON.stringify(b) : typeof b === 'string' ? b : '');\n}\nconst texteCorps = new TextDecoder().decode(octets);\nlet requestId = 'aucun';\ntry {\n  const c = JSON.parse(texteCorps);\n  if (c && typeof c.request_id === 'string') requestId = c.request_id;\n} catch (e) {\n  // Corps illisible : le refus est décidé aux contrôles d'entrée.\n}\nreturn [{ json: { empreinte: toHex(sha256(octets)), texteCorps, requestId, entetes: item.json.headers || {}, params: item.json.params || {} } }];\n"
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "54062ad3-a653-468c-b74c-ace797b381cc",
+      "name": "Config remontée",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "wZNVTkGzqgeu2smf",
+          "cachedResultName": "iacave_config"
+        },
+        "returnAll": true
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "68e8a357-489e-43d7-9bfc-fded86effc55",
+      "name": "Remontées du jour",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PIiO4KNKOsm0MGNS",
+          "cachedResultName": "iacave_remontees"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "jour",
+              "condition": "eq",
+              "keyValue": "={{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd') }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "0109ff50-8882-445d-b293-4edb2f0822c3",
+      "name": "Contrôles remontée",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// POST /iacave/remontee (RET-01) : contrôles (signature, contrat, 5 envois\n// par jour et par installation) puis mail à composer. La pièce jointe passe\n// en binaire pour le nœud Gmail, sans rester dans le JSON.\nconst K256 = [\n  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,\n  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,\n  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,\n  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,\n  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,\n  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,\n  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,\n  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,\n];\nfunction utf8(text) {\n  return new TextEncoder().encode(String(text));\n}\nfunction toHex(bytes) {\n  let s = '';\n  for (const b of bytes) s += b.toString(16).padStart(2, '0');\n  return s;\n}\nfunction sha256(bytes) {\n  const len = bytes.length;\n  const total = ((len + 9 + 63) >> 6) << 6;\n  const m = new Uint8Array(total);\n  m.set(bytes);\n  m[len] = 0x80;\n  const bits = len * 8;\n  const view = new DataView(m.buffer);\n  view.setUint32(total - 8, Math.floor(bits / 0x100000000));\n  view.setUint32(total - 4, bits >>> 0);\n  const h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  const w = new Uint32Array(64);\n  const rotr = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let off = 0; off < total; off += 64) {\n    for (let i = 0; i < 16; i++) w[i] = view.getUint32(off + i * 4);\n    for (let i = 16; i < 64; i++) {\n      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);\n      const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);\n      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;\n    }\n    let [a, b, c, d, e, f, g, hh] = h;\n    for (let i = 0; i < 64; i++) {\n      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);\n      const ch = (e & f) ^ (~e & g);\n      const t1 = (hh + S1 + ch + K256[i] + w[i]) >>> 0;\n      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);\n      const maj = (a & b) ^ (a & c) ^ (b & c);\n      const t2 = (S0 + maj) >>> 0;\n      hh = g; g = f; f = e; e = (d + t1) >>> 0;\n      d = c; c = b; b = a; a = (t1 + t2) >>> 0;\n    }\n    h[0] = (h[0] + a) >>> 0; h[1] = (h[1] + b) >>> 0; h[2] = (h[2] + c) >>> 0; h[3] = (h[3] + d) >>> 0;\n    h[4] = (h[4] + e) >>> 0; h[5] = (h[5] + f) >>> 0; h[6] = (h[6] + g) >>> 0; h[7] = (h[7] + hh) >>> 0;\n  }\n  const out = new Uint8Array(32);\n  const ov = new DataView(out.buffer);\n  h.forEach((x, i) => ov.setUint32(i * 4, x));\n  return out;\n}\nfunction hmacSha256(key, message) {\n  let k = key.length > 64 ? sha256(key) : key;\n  const block = new Uint8Array(64);\n  block.set(k);\n  const inner = new Uint8Array(64 + message.length);\n  const outer = new Uint8Array(64 + 32);\n  for (let i = 0; i < 64; i++) {\n    inner[i] = block[i] ^ 0x36;\n    outer[i] = block[i] ^ 0x5c;\n  }\n  inner.set(message, 64);\n  outer.set(sha256(inner), 64);\n  return sha256(outer);\n}\nfunction signatureAttendue(cle, horodatage, methode, chemin, corps) {\n  const empreinte = typeof corps === 'string' ? corps : toHex(sha256(corps));\n  const texte = horodatage + '\\n' + methode.toUpperCase() + '\\n' + chemin + '\\n' + empreinte;\n  return toHex(hmacSha256(utf8(cle), utf8(texte)));\n}\nfunction egalConstant(a, b) {\n  if (a.length !== b.length) return false;\n  let diff = 0;\n  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);\n  return diff === 0;\n}\nfunction verifierRequete({ entetes, methode, chemin, corps, cle, maintenant, fenetre = 300 }) {\n  const h = {};\n  for (const [k, v] of Object.entries(entetes || {})) h[k.toLowerCase()] = Array.isArray(v) ? v[0] : v;\n  const installation = h['x-iacav-installation'];\n  const horodatage = h['x-iacav-horodatage'];\n  const signature = (h['x-iacav-signature'] || '').toLowerCase();\n  if (!installation || !horodatage || !signature) {\n    return { ok: false, code: 'auth_invalide', message: 'En-têtes de sécurité absents.' };\n  }\n  if (!cle) return { ok: false, code: 'auth_invalide', message: 'Clé du flux non configurée.' };\n  if (!/^\\d{1,12}$/.test(horodatage) || Math.abs(maintenant - Number(horodatage)) > fenetre) {\n    return { ok: false, code: 'signature_expiree', message: \"Horodatage hors de la fenêtre de 300 secondes : vérifiez l'heure du téléphone.\" };\n  }\n  const attendue = signatureAttendue(cle, horodatage, methode, chemin, corps);\n  if (!egalConstant(attendue, signature)) {\n    return { ok: false, code: 'auth_invalide', message: 'Signature invalide.' };\n  }\n  return { ok: true, installation };\n}\nconst FORMATS = {\n  uuid: (s) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s),\n  date: (s) => {\n    const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n    if (!m) return false;\n    const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));\n    return d.getUTCFullYear() === +m[1] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3];\n  },\n  'date-time': (s) => /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$/i.test(s) && !isNaN(Date.parse(s)),\n  uri: (s) => /^[a-z][a-z0-9+.-]*:[^\\s]*$/i.test(s),\n};\nfunction typeOf(v) {\n  if (v === null) return 'null';\n  if (Array.isArray(v)) return 'array';\n  if (typeof v === 'number') return Number.isInteger(v) ? 'integer' : 'number';\n  return typeof v;\n}\nfunction typeMatches(v, t) {\n  const actual = typeOf(v);\n  return actual === t || (t === 'number' && actual === 'integer');\n}\nfunction deepEqual(a, b) {\n  if (a === b) return true;\n  if (typeOf(a) !== typeOf(b) && !(typeof a === 'number' && typeof b === 'number')) return false;\n  if (Array.isArray(a)) return a.length === b.length && a.every((x, i) => deepEqual(x, b[i]));\n  if (a && typeof a === 'object') {\n    const ka = Object.keys(a);\n    const kb = Object.keys(b);\n    return ka.length === kb.length && ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && deepEqual(a[k], b[k]));\n  }\n  return false;\n}\nfunction resolveRef(root, ref) {\n  if (!ref.startsWith('#')) throw new Error('référence externe non prise en charge : ' + ref);\n  let node = root;\n  for (const part of ref.slice(1).split('/').filter(Boolean)) {\n    node = node[part.replace(/~1/g, '/').replace(/~0/g, '~')];\n    if (node === undefined) throw new Error('référence introuvable : ' + ref);\n  }\n  return node;\n}\nfunction check(schema, data, root, path) {\n  const errors = [];\n  const evaluated = new Set();\n  if (schema === true) return { errors, evaluated };\n  if (schema === false) return { errors: [path + ' : interdit'], evaluated };\n  const err = (m) => errors.push((path || '/') + ' : ' + m);\n  const sub = (s, d, p) => check(s, d, root, p);\n  const t = typeOf(data);\n  if (schema.$ref) {\n    const r = sub(resolveRef(root, schema.$ref), data, path);\n    errors.push(...r.errors);\n    r.evaluated.forEach((k) => evaluated.add(k));\n  }\n  if (schema.type !== undefined) {\n    const types = Array.isArray(schema.type) ? schema.type : [schema.type];\n    if (!types.some((x) => typeMatches(data, x))) err('type ' + t + ' au lieu de ' + types.join('|'));\n  }\n  if (schema.enum && !schema.enum.some((e) => deepEqual(e, data))) err('valeur hors liste : ' + JSON.stringify(data));\n  if ('const' in schema && !deepEqual(schema.const, data)) err('valeur attendue : ' + JSON.stringify(schema.const));\n  if (t === 'string') {\n    const len = [...data].length;\n    if (schema.minLength !== undefined && len < schema.minLength) err('moins de ' + schema.minLength + ' caractères');\n    if (schema.maxLength !== undefined && len > schema.maxLength) err('plus de ' + schema.maxLength + ' caractères');\n    if (schema.pattern && !new RegExp(schema.pattern, 'u').test(data)) err('motif non respecté : ' + schema.pattern);\n    if (schema.format && FORMATS[schema.format] && !FORMATS[schema.format](data)) err('format ' + schema.format + ' invalide');\n  }\n  if (typeof data === 'number') {\n    if (schema.minimum !== undefined && data < schema.minimum) err('inférieur à ' + schema.minimum);\n    if (schema.maximum !== undefined && data > schema.maximum) err('supérieur à ' + schema.maximum);\n    if (schema.exclusiveMinimum !== undefined && data <= schema.exclusiveMinimum) err('doit dépasser ' + schema.exclusiveMinimum);\n    if (schema.exclusiveMaximum !== undefined && data >= schema.exclusiveMaximum) err('doit rester sous ' + schema.exclusiveMaximum);\n  }\n  if (t === 'array') {\n    if (schema.minItems !== undefined && data.length < schema.minItems) err('moins de ' + schema.minItems + ' éléments');\n    if (schema.maxItems !== undefined && data.length > schema.maxItems) err('plus de ' + schema.maxItems + ' éléments');\n    if (schema.uniqueItems && data.some((x, i) => data.findIndex((y) => deepEqual(x, y)) !== i)) err('éléments en double');\n    if (schema.items !== undefined) {\n      data.forEach((x, i) => errors.push(...sub(schema.items, x, path + '/' + i).errors));\n    }\n  }\n  if (t === 'object') {\n    for (const k of schema.required || []) {\n      if (!Object.prototype.hasOwnProperty.call(data, k)) err('propriété obligatoire absente : ' + k);\n    }\n    const props = schema.properties || {};\n    for (const k of Object.keys(data)) {\n      if (Object.prototype.hasOwnProperty.call(props, k)) {\n        errors.push(...sub(props[k], data[k], path + '/' + k).errors);\n        evaluated.add(k);\n      }\n    }\n    if (schema.additionalProperties !== undefined) {\n      for (const k of Object.keys(data)) {\n        if (Object.prototype.hasOwnProperty.call(props, k)) continue;\n        if (schema.additionalProperties === false) err('propriété inconnue : ' + k);\n        else errors.push(...sub(schema.additionalProperties, data[k], path + '/' + k).errors);\n        evaluated.add(k);\n      }\n    }\n  }\n  const keep = (r) => r.evaluated.forEach((k) => evaluated.add(k));\n  if (schema.allOf) {\n    for (const s of schema.allOf) {\n      const r = sub(s, data, path);\n      errors.push(...r.errors);\n      if (!r.errors.length) keep(r);\n    }\n  }\n  if (schema.anyOf) {\n    const rs = schema.anyOf.map((s) => sub(s, data, path));\n    const ok = rs.filter((r) => !r.errors.length);\n    if (!ok.length) err('aucune des variantes ne convient (' + rs.map((r) => r.errors[0]).join(' ; ') + ')');\n    ok.forEach(keep);\n  }\n  if (schema.oneOf) {\n    const rs = schema.oneOf.map((s) => sub(s, data, path));\n    const ok = rs.filter((r) => !r.errors.length);\n    if (ok.length !== 1) err(ok.length ? 'plusieurs variantes conviennent' : 'aucune des variantes ne convient');\n    else keep(ok[0]);\n  }\n  if (schema.not !== undefined && !sub(schema.not, data, path).errors.length) err('forme interdite');\n  if (schema.if !== undefined) {\n    const cond = sub(schema.if, data, path);\n    const branch = cond.errors.length ? schema.else : schema.then;\n    if (!cond.errors.length) keep(cond);\n    if (branch !== undefined) {\n      const r = sub(branch, data, path);\n      errors.push(...r.errors);\n      if (!r.errors.length) keep(r);\n    }\n  }\n  if (t === 'object' && schema.unevaluatedProperties !== undefined) {\n    for (const k of Object.keys(data)) {\n      if (evaluated.has(k)) continue;\n      if (schema.unevaluatedProperties === false) err('propriété inconnue : ' + k);\n      else errors.push(...sub(schema.unevaluatedProperties, data[k], path + '/' + k).errors);\n      evaluated.add(k);\n    }\n  }\n  return { errors, evaluated };\n}\nfunction validateSchema(schema, data, root) {\n  return check(schema, data, root || schema, '').errors;\n}\nconst CHEMIN_REMONTEE = '/webhook/iacave/remontee';\nconst DESTINATAIRE_REMONTEE = 'apexus.claude@gmail.com';\nconst REMONTEES_PAR_JOUR = 5;\nconst VERSION_CONTRAT_REMONTEE = '1.3';\nconst HTTP_REMONTEE = { requete_invalide: 400, auth_invalide: 401, signature_expiree: 401, quota_depasse: 429, interne: 500 };\nconst UUID_NUL_REMONTEE = '00000000-0000-4000-8000-000000000000';\nfunction jourRemontee(date) {\n  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(date);\n}\nfunction uneLigne(texte) {\n  return String(texte).replace(/[\\u0000-\\u001f\\u007f]+/g, ' ').replace(/\\s+/g, ' ').trim();\n}\nfunction octetsBase64(b64) {\n  const s = String(b64).replace(/\\s/g, '');\n  const pad = s.endsWith('==') ? 2 : s.endsWith('=') ? 1 : 0;\n  return Math.floor((s.length * 3) / 4) - pad;\n}\nfunction signatureFichierOk(mime, b64) {\n  const debut = String(b64).replace(/\\s/g, '').slice(0, 24);\n  const prefixes = {\n    'application/pdf': ['JVBERi0'],\n    'image/jpeg': ['/9j/'],\n    'image/png': ['iVBORw0KGgo'],\n    'image/webp': ['UklGR'],\n  }[mime] || [];\n  return prefixes.some((p) => debut.startsWith(p));\n}\nfunction decisionRemontee({ entetes, empreinte, texteCorps, config, envoisDuJour, maintenant, schemaRequete, schemaReponse }) {\n  let corps = null;\n  try {\n    const v = JSON.parse(texteCorps);\n    corps = v && typeof v === 'object' && !Array.isArray(v) ? v : null;\n  } catch (e) {\n    corps = null;\n  }\n  const requestId = corps && /^[0-9a-f-]{36}$/i.test(corps.request_id || '') ? corps.request_id : UUID_NUL_REMONTEE;\n  const refus = (code, message, extra = {}) => ({\n    decision: 'refus',\n    http: HTTP_REMONTEE[code],\n    reponse: {\n      version_contrat: VERSION_CONTRAT_REMONTEE,\n      request_id: requestId,\n      statut: 'erreur',\n      ...extra,\n      erreur: { code, message, reessayable: !['requete_invalide', 'quota_depasse'].includes(code) },\n    },\n  });\n  const auth = verifierRequete({\n    entetes, methode: 'POST', chemin: CHEMIN_REMONTEE, corps: empreinte, cle: config.cle_app,\n    maintenant: Math.floor(maintenant / 1000), fenetre: parseInt(config.fenetre_secondes, 10) || 300,\n  });\n  if (!auth.ok) return refus(auth.code, auth.message);\n  if (!corps) return refus('requete_invalide', 'Corps JSON illisible.');\n  const erreurs = validateSchema(schemaRequete, corps);\n  if (erreurs.length) return refus('requete_invalide', 'Remontée hors contrat : ' + erreurs.slice(0, 3).join(' ; '));\n  const pj = corps.piece_jointe;\n  if (pj && octetsBase64(pj.base64) > 5 * 1024 * 1024) return refus('requete_invalide', 'Pièce jointe de plus de 5 Mo.');\n  if (pj && !signatureFichierOk(pj.mime, pj.base64)) return refus('requete_invalide', 'Pièce jointe : le contenu ne correspond pas à un PDF ou à une image.');\n  const jour = jourRemontee(new Date(maintenant));\n  const plafond = parseInt(config.remontees_par_jour, 10) || REMONTEES_PAR_JOUR;\n  const deja = (envoisDuJour || []).filter((r) => r && r.installation === auth.installation && r.jour === jour).length;\n  if (deja >= plafond) {\n    return refus('quota_depasse', `${plafond} remontées par jour au plus : réessayez demain.`, { envoi_restants_jour: 0 });\n  }\n  const titre = uneLigne(corps.titre);\n  const contact = corps.email_contact.trim();\n  const texte = [\n    'Remontée envoyée depuis l\\'application IA cave à vin.',\n    '',\n    'De : ' + contact,\n    'Titre : ' + titre,\n    'Version de l\\'app : ' + (corps.version_app ? uneLigne(corps.version_app) : 'inconnue'),\n    'Installation : ' + auth.installation,\n    'Date du téléphone : ' + corps.date_client,\n    pj ? 'Pièce jointe : ' + uneLigne(pj.nom) : 'Pièce jointe : aucune',\n    '',\n    '----',\n    String(corps.commentaire).replace(/\\r\\n?/g, '\\n'),\n    '----',\n    '',\n    'Répondre à ce mail écrit à ' + contact + '.',\n  ].join('\\n');\n  const reponse = {\n    version_contrat: VERSION_CONTRAT_REMONTEE,\n    request_id: corps.request_id,\n    statut: 'envoye',\n    envoi_restants_jour: Math.max(0, plafond - deja - 1),\n  };\n  const reponseEchec = {\n    version_contrat: VERSION_CONTRAT_REMONTEE,\n    request_id: corps.request_id,\n    statut: 'erreur',\n    erreur: { code: 'interne', message: 'Le mail n\\'est pas parti, réessayez plus tard.', reessayable: true },\n  };\n  const verif = [...validateSchema(schemaReponse, reponse), ...validateSchema(schemaReponse, reponseEchec)];\n  if (verif.length) throw new Error('Réponse hors contrat : ' + verif.join(' ; '));\n  return {\n    decision: 'envoi',\n    http: 200,\n    reponse,\n    reponse_echec: reponseEchec,\n    mail: {\n      a: DESTINATAIRE_REMONTEE,\n      cc: contact,\n      repondreA: contact,\n      nomExpediteur: 'IA cave à vin, de la part de ' + contact,\n      sujet: '[IA cave à vin] ' + titre,\n      texte,\n    },\n    piece: pj ? { nom: uneLigne(pj.nom), mime: pj.mime, base64: String(pj.base64).replace(/\\s/g, '') } : null,\n    ligne: {\n      request_id: corps.request_id, installation: auth.installation, jour, titre,\n      email_contact: contact, piece_jointe: pj ? uneLigne(pj.nom) : '',\n    },\n  };\n}\nconst e = $('Empreinte remontée').first().json;\nconst config = {};\nfor (const i of $('Config remontée').all()) {\n  if (i.json.cle) config[i.json.cle] = i.json.valeur == null ? '' : String(i.json.valeur);\n}\nconst d = decisionRemontee({\n  entetes: e.entetes, empreinte: e.empreinte, texteCorps: e.texteCorps, config,\n  envoisDuJour: $('Remontées du jour').all().map((i) => i.json),\n  maintenant: Date.now(),\n  schemaRequete: {\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"version_contrat\",\"request_id\",\"titre\",\"commentaire\",\"email_contact\",\"date_client\"],\"properties\":{\"version_contrat\":{\"type\":\"string\",\"pattern\":\"^1\\\\.[0-9]+$\"},\"request_id\":{\"type\":\"string\",\"format\":\"uuid\"},\"titre\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":120},\"commentaire\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":5000},\"email_contact\":{\"type\":\"string\",\"maxLength\":254,\"pattern\":\"^[A-Za-z0-9._%+'-]+@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*\\\\.[A-Za-z]{2,}$\"},\"piece_jointe\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"nom\",\"mime\",\"base64\"],\"properties\":{\"nom\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":120},\"mime\":{\"enum\":[\"application/pdf\",\"image/jpeg\",\"image/png\",\"image/webp\"]},\"base64\":{\"type\":\"string\",\"contentEncoding\":\"base64\",\"minLength\":4,\"maxLength\":7000000}}},\"version_app\":{\"type\":\"string\",\"maxLength\":40},\"date_client\":{\"type\":\"string\",\"format\":\"date\"}}}, schemaReponse: {\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"version_contrat\",\"request_id\",\"statut\"],\"properties\":{\"version_contrat\":{\"type\":\"string\",\"pattern\":\"^1\\\\.[0-9]+$\"},\"request_id\":{\"type\":\"string\",\"format\":\"uuid\"},\"statut\":{\"enum\":[\"envoye\",\"erreur\"]},\"envoi_restants_jour\":{\"type\":\"integer\",\"minimum\":0},\"erreur\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"code\",\"message\",\"reessayable\"],\"properties\":{\"code\":{\"enum\":[\"requete_invalide\",\"auth_invalide\",\"signature_expiree\",\"quota_depasse\",\"interne\"]},\"message\":{\"type\":\"string\"},\"reessayable\":{\"type\":\"boolean\"}}}},\"allOf\":[{\"if\":{\"properties\":{\"statut\":{\"const\":\"erreur\"}}},\"then\":{\"required\":[\"erreur\"]}}]},\n});\nconst item = { json: { ...d, avec_piece: !!d.piece } };\nif (d.piece) {\n  item.binary = {\n    piece_jointe: await this.helpers.prepareBinaryData(Buffer.from(d.piece.base64, 'base64'), d.piece.nom, d.piece.mime),\n  };\n  item.json.piece = { nom: d.piece.nom, mime: d.piece.mime };\n}\nreturn [item];\n"
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "3a60ef01-80f7-4dd5-9c01-ddc2bd2e96bf",
+      "name": "Remontée acceptée ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.decision === 'envoi' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "509db0ac-a961-409d-bd78-12eec7b4930e",
+      "name": "Pièce jointe ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1344,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.avec_piece }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "05a07037-a2de-47b4-8cfc-4bd7c03c84c1",
+      "name": "Mail avec pièce jointe",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Contrôles remontée').first().json.mail.a }}",
+        "subject": "={{ $('Contrôles remontée').first().json.mail.sujet }}",
+        "emailType": "text",
+        "message": "={{ $('Contrôles remontée').first().json.mail.texte }}",
+        "options": {
+          "appendAttribution": false,
+          "ccList": "={{ $('Contrôles remontée').first().json.mail.cc }}",
+          "replyTo": "={{ $('Contrôles remontée').first().json.mail.repondreA }}",
+          "senderName": "={{ $('Contrôles remontée').first().json.mail.nomExpediteur }}",
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "piece_jointe"
+              }
+            ]
+          }
+        }
+      },
+      "executeOnce": true,
+      "onError": "continueRegularOutput",
+      "webhookId": "e6679657-cea6-42bc-8d02-960330e150b7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Lvc7ImPNsOcz6WAu",
+          "name": "Gmail Claude"
+        }
+      }
+    },
+    {
+      "id": "dad918d9-8337-495d-8a8e-ba786cda9aea",
+      "name": "Mail parti ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1792,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ !$json.error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "721f0261-52a5-4329-a69e-802f4951afda",
+      "name": "Journal remontée",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2016,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PIiO4KNKOsm0MGNS",
+          "cachedResultName": "iacave_remontees"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request_id": "={{ $('Contrôles remontée').first().json.ligne.request_id }}",
+            "installation": "={{ $('Contrôles remontée').first().json.ligne.installation }}",
+            "jour": "={{ $('Contrôles remontée').first().json.ligne.jour }}",
+            "titre": "={{ $('Contrôles remontée').first().json.ligne.titre }}",
+            "email_contact": "={{ $('Contrôles remontée').first().json.ligne.email_contact }}",
+            "piece_jointe": "={{ $('Contrôles remontée').first().json.ligne.piece_jointe }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "installation",
+              "displayName": "installation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "jour",
+              "displayName": "jour",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "titre",
+              "displayName": "titre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email_contact",
+              "displayName": "email_contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "piece_jointe",
+              "displayName": "piece_jointe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "59d6b726-f543-4487-a25c-bc3eeeb7da4e",
+      "name": "Répondre envoyée",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2240,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $('Contrôles remontée').first().json.reponse }}",
+        "options": {
+          "responseCode": "={{ 200 }}"
+        }
+      }
+    },
+    {
+      "id": "2150fc10-34f9-4135-b567-f02d3a290cf7",
+      "name": "Répondre échec d'envoi",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2016,
+        192
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $('Contrôles remontée').first().json.reponse_echec }}",
+        "options": {
+          "responseCode": "={{ 502 }}"
+        }
+      }
+    },
+    {
+      "id": "c3fc04af-3b78-4c5d-8dad-958f796703ed",
+      "name": "Mail sans pièce jointe",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Contrôles remontée').first().json.mail.a }}",
+        "subject": "={{ $('Contrôles remontée').first().json.mail.sujet }}",
+        "emailType": "text",
+        "message": "={{ $('Contrôles remontée').first().json.mail.texte }}",
+        "options": {
+          "appendAttribution": false,
+          "ccList": "={{ $('Contrôles remontée').first().json.mail.cc }}",
+          "replyTo": "={{ $('Contrôles remontée').first().json.mail.repondreA }}",
+          "senderName": "={{ $('Contrôles remontée').first().json.mail.nomExpediteur }}"
+        }
+      },
+      "executeOnce": true,
+      "onError": "continueRegularOutput",
+      "webhookId": "61ba4d23-d3d2-4c76-bd07-8b68d5632f0a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Lvc7ImPNsOcz6WAu",
+          "name": "Gmail Claude"
+        }
+      }
+    },
+    {
+      "id": "a18f7b99-5ae3-4312-9a45-eae45683e43c",
+      "name": "Répondre refus",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1344,
+        288
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $('Contrôles remontée').first().json.reponse }}",
+        "options": {
+          "responseCode": "={{ $('Contrôles remontée').first().json.http }}"
+        }
+      }
+    },
+    {
+      "id": "830e89df-e0e7-4824-884b-b51c417d919a",
+      "name": "Sticky Note 30214317",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        96
+      ],
+      "parameters": {
+        "content": "## IA_CAVE_Remontee\nRemontée d'information de l'app par mail (RET-01, docs/06). Source : n8n/workflow/src/ et n8n/code/ du dépôt iacaveavin. Ne pas modifier à la main.",
+        "color": 5,
+        "width": 832,
+        "height": 224
+      }
+    }
+  ],
+  "connections": {
+    "Webhook remontée": {
+      "main": [
+        [
+          {
+            "node": "Empreinte remontée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Empreinte remontée": {
+      "main": [
+        [
+          {
+            "node": "Config remontée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config remontée": {
+      "main": [
+        [
+          {
+            "node": "Remontées du jour",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remontées du jour": {
+      "main": [
+        [
+          {
+            "node": "Contrôles remontée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrôles remontée": {
+      "main": [
+        [
+          {
+            "node": "Remontée acceptée ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remontée acceptée ?": {
+      "main": [
+        [
+          {
+            "node": "Pièce jointe ?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Répondre refus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pièce jointe ?": {
+      "main": [
+        [
+          {
+            "node": "Mail avec pièce jointe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mail sans pièce jointe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail avec pièce jointe": {
+      "main": [
+        [
+          {
+            "node": "Mail parti ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail parti ?": {
+      "main": [
+        [
+          {
+            "node": "Journal remontée",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Répondre échec d'envoi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Journal remontée": {
+      "main": [
+        [
+          {
+            "node": "Répondre envoyée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail sans pièce jointe": {
+      "main": [
+        [
+          {
+            "node": "Mail parti ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "meta": {
+    "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
+    "idN8n": "F8HcTU0BuXS1dNas",
+    "versionId": "84c1139c-cd9c-44f9-a6a9-8caaa383fc7a"
+  }
+}

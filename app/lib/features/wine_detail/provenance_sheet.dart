@@ -11,7 +11,6 @@ import '../../core/theme/design_tokens.g.dart';
 import '../../data/enrichment/enrichment_providers.dart';
 import '../../data/providers.dart';
 import '../../domain/wine_detail.dart';
-import '../add/enrichment_screen.dart' show winePhotosProvider;
 import 'stock_dialogs.dart' show confirm;
 
 /// FIC-06 : pastille discrète à côté d'une valeur enrichie.
@@ -233,7 +232,7 @@ Future<void> reEnrich(
   final l = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
   final router = GoRouter.of(context);
-  final photos = await ref.read(photoServiceProvider).photosOf(wine.id);
+  final photos = await ref.read(photoServiceProvider).bottlePhotosOf(wine.id);
   if (photos.isEmpty) {
     messenger.showSnackBar(SnackBar(content: Text(l.reEnrichNoPhoto)));
     return;
@@ -242,43 +241,4 @@ Future<void> reEnrich(
   ref.read(enrichmentRunnerProvider.notifier).kick();
   messenger.showSnackBar(SnackBar(content: Text(l.reEnrichStarted)));
   router.push('/fiche/${wine.id}/identification');
-}
-
-/// Galerie plein écran des photos d'une fiche.
-Future<void> showGallery(
-  BuildContext context,
-  WidgetRef ref,
-  String wineId,
-) async {
-  final service = ref.read(photoServiceProvider);
-  final files = [
-    for (final p in await service.photosOf(wineId)) await service.fileOf(p),
-  ];
-  if (!context.mounted || files.isEmpty) return;
-  final l = AppLocalizations.of(context);
-  await showDialog<void>(
-    context: context,
-    builder: (context) => Dialog.fullscreen(
-      child: Stack(
-        children: [
-          PageView(
-            children: [
-              for (final f in files)
-                InteractiveViewer(child: Center(child: Image.file(f))),
-            ],
-          ),
-          Positioned(
-            top: SpacingTokens.l,
-            right: SpacingTokens.l,
-            child: IconButton.filled(
-              tooltip: l.close,
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.close),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-  ref.invalidate(winePhotosProvider(wineId));
 }

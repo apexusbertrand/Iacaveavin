@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/app.dart';
+import 'package:iacaveavin/data/providers.dart';
 import 'package:integration_test/integration_test.dart';
 
 void main() {
@@ -12,24 +13,21 @@ void main() {
   testWidgets('CMP-07 NAV-01 démo chargée, liste fluide, démo effacée', (
     tester,
   ) async {
-    await tester.pumpWidget(const ProviderScope(child: IaCaveAVinApp()));
+    // Le jeu de démonstration n'a plus d'écran dans l'app publiée (T122) :
+    // le test le charge et l'efface par le dépôt.
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const IaCaveAVinApp(),
+      ),
+    );
     await tester.pumpAndSettle();
-
-    Future<void> goTo(String label) async {
-      await tester.tap(find.byIcon(Icons.menu));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(label).last);
-      await tester.pumpAndSettle();
-    }
-
-    await goTo('Paramètres');
-    if (find.byKey(const ValueKey('demo-load')).evaluate().isNotEmpty) {
-      await tester.tap(find.byKey(const ValueKey('demo-load')));
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-    }
-    expect(find.text('Démonstration chargée : 200 fiches'), findsOneWidget);
-
-    await goTo('Mes vins');
+    await container.read(bootstrapProvider.future);
+    final demo = container.read(demoRepositoryProvider);
+    await demo.load();
+    await tester.pumpAndSettle(const Duration(seconds: 1));
     expect(find.textContaining('200 vins'), findsOneWidget);
 
     // Mesure de fluidité : défilement de toute la liste (NFR-01 au lot 5).
@@ -44,11 +42,8 @@ void main() {
       }
     }, reportKey: 'defilement_liste_demo');
 
-    await goTo('Paramètres');
-    await tester.tap(find.byKey(const ValueKey('demo-erase')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('demo-erase-confirm')));
+    await demo.erase();
     await tester.pumpAndSettle(const Duration(seconds: 1));
-    expect(find.text('Démonstration non chargée'), findsOneWidget);
+    expect(await demo.demoWineCount(), 0);
   });
 }

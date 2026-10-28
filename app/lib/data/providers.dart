@@ -43,6 +43,8 @@ final wineListProvider = StreamProvider<List<WineListItem>>((ref) async* {
   yield* ref.watch(cellarRepositoryProvider).watchWineItems();
 });
 
+/// CMP-07 : jeu de démonstration, pour les tests et les captures du store
+/// seulement. Aucun écran de l'app publiée n'y donne accès (T122).
 final demoRepositoryProvider = Provider<DemoDataRepository>(
   (ref) => DriftDemoRepository(ref.watch(databaseProvider)),
 );

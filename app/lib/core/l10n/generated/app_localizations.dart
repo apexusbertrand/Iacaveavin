@@ -148,23 +148,17 @@ abstract class AppLocalizations {
   /// **'Paramètres'**
   String get navSettings;
 
+  /// No description provided for @navFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remontée d\'information'**
+  String get navFeedback;
+
   /// No description provided for @navAbout.
   ///
   /// In fr, this message translates to:
   /// **'À propos'**
   String get navAbout;
-
-  /// No description provided for @placeholderTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Bientôt disponible'**
-  String get placeholderTitle;
-
-  /// No description provided for @placeholderBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Cet écran arrive avec le lot {lot}.'**
-  String placeholderBody(String lot);
 
   /// No description provided for @wineListTitle.
   ///
@@ -187,7 +181,7 @@ abstract class AppLocalizations {
   /// No description provided for @wineListEmptyBody.
   ///
   /// In fr, this message translates to:
-  /// **'Photographiez votre première étiquette, ou chargez le jeu de démonstration pour découvrir l\'application.'**
+  /// **'Photographiez votre première étiquette avec le bouton +, ou saisissez une bouteille à la main.'**
   String get wineListEmptyBody;
 
   /// No description provided for @wineListLoading.
@@ -220,12 +214,6 @@ abstract class AppLocalizations {
   /// **'Ajouter une bouteille'**
   String get addBottle;
 
-  /// No description provided for @addBottleLater.
-  ///
-  /// In fr, this message translates to:
-  /// **'L\'ajout d\'une bouteille arrive au lot 1 (saisie) et au lot 2a (photo).'**
-  String get addBottleLater;
-
   /// No description provided for @nonVintage.
   ///
   /// In fr, this message translates to:
@@ -255,72 +243,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Haut de la page'**
   String get backToTop;
-
-  /// No description provided for @settingsDemoSection.
-  ///
-  /// In fr, this message translates to:
-  /// **'Jeu de démonstration'**
-  String get settingsDemoSection;
-
-  /// No description provided for @settingsDemoDescription.
-  ///
-  /// In fr, this message translates to:
-  /// **'200 fiches fictives (domaines inventés) pour essayer l\'application et vérifier la fluidité. Vos propres vins ne sont jamais touchés.'**
-  String get settingsDemoDescription;
-
-  /// No description provided for @settingsDemoLoaded.
-  ///
-  /// In fr, this message translates to:
-  /// **'{count, plural, =1{Démonstration chargée : 1 fiche} other{Démonstration chargée : {count} fiches}}'**
-  String settingsDemoLoaded(int count);
-
-  /// No description provided for @settingsDemoNotLoaded.
-  ///
-  /// In fr, this message translates to:
-  /// **'Démonstration non chargée'**
-  String get settingsDemoNotLoaded;
-
-  /// No description provided for @settingsDemoLoad.
-  ///
-  /// In fr, this message translates to:
-  /// **'Charger la démonstration'**
-  String get settingsDemoLoad;
-
-  /// No description provided for @settingsDemoErase.
-  ///
-  /// In fr, this message translates to:
-  /// **'Effacer la démonstration'**
-  String get settingsDemoErase;
-
-  /// No description provided for @settingsDemoEraseTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Effacer la démonstration ?'**
-  String get settingsDemoEraseTitle;
-
-  /// No description provided for @settingsDemoEraseBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les fiches de démonstration, leurs lots et leurs mouvements seront supprimés. Vos propres vins ne sont pas touchés.'**
-  String get settingsDemoEraseBody;
-
-  /// No description provided for @settingsDemoLoadedSnack.
-  ///
-  /// In fr, this message translates to:
-  /// **'Démonstration chargée.'**
-  String get settingsDemoLoadedSnack;
-
-  /// No description provided for @settingsDemoErasedSnack.
-  ///
-  /// In fr, this message translates to:
-  /// **'Démonstration effacée.'**
-  String get settingsDemoErasedSnack;
-
-  /// No description provided for @settingsMoreLater.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les autres réglages (connexion au flux, devise, thème, listes) arrivent au lot 1.'**
-  String get settingsMoreLater;
 
   /// No description provided for @operationFailed.
   ///
@@ -363,12 +285,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Référentiels : pays selon ISO 3166-1. Appellations, régions et cépages : listes provisoires, à remplacer par les données ouvertes de l\'INAO.'**
   String get aboutReferenceData;
-
-  /// No description provided for @aboutDemoNotice.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les domaines du jeu de démonstration sont inventés.'**
-  String get aboutDemoNotice;
 
   /// No description provided for @search.
   ///
@@ -844,30 +760,6 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 fiche mise à jour} other{{count} fiches mises à jour}}'**
   String selectionDone(int count);
 
-  /// No description provided for @laterPdf.
-  ///
-  /// In fr, this message translates to:
-  /// **'PDF (lot 3)'**
-  String get laterPdf;
-
-  /// No description provided for @laterExcel.
-  ///
-  /// In fr, this message translates to:
-  /// **'Export Excel (lot 3)'**
-  String get laterExcel;
-
-  /// No description provided for @laterEnrich.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ré-enrichir (lot 2a)'**
-  String get laterEnrich;
-
-  /// No description provided for @laterPrices.
-  ///
-  /// In fr, this message translates to:
-  /// **'Rafraîchir les prix (lot 2c)'**
-  String get laterPrices;
-
   /// No description provided for @openOneBottle.
   ///
   /// In fr, this message translates to:
@@ -1312,12 +1204,6 @@ abstract class AppLocalizations {
   /// **'Date d\'achat'**
   String get fieldPurchaseDate;
 
-  /// No description provided for @fieldSupplier.
-  ///
-  /// In fr, this message translates to:
-  /// **'Fournisseur'**
-  String get fieldSupplier;
-
   /// No description provided for @fieldFavorite.
   ///
   /// In fr, this message translates to:
@@ -1408,6 +1294,24 @@ abstract class AppLocalizations {
   /// **'Commentaire'**
   String get tastingComment;
 
+  /// No description provided for @tastingPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos de la dégustation'**
+  String get tastingPhotos;
+
+  /// No description provided for @tastingPhotoRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer la photo'**
+  String get tastingPhotoRemove;
+
+  /// No description provided for @tastingPhotosMax.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} photos au plus par dégustation.'**
+  String tastingPhotosMax(int count);
+
   /// No description provided for @tastingPrompt.
   ///
   /// In fr, this message translates to:
@@ -1453,7 +1357,7 @@ abstract class AppLocalizations {
   /// No description provided for @noMarketPrice.
   ///
   /// In fr, this message translates to:
-  /// **'Aucun prix marché relevé. Le relevé automatique arrive au lot 2c.'**
+  /// **'Aucun prix marché relevé pour l\'instant.'**
   String get noMarketPrice;
 
   /// No description provided for @lastMarketPrice.
@@ -1471,14 +1375,8 @@ abstract class AppLocalizations {
   /// No description provided for @refreshPrice.
   ///
   /// In fr, this message translates to:
-  /// **'Rafraîchir'**
+  /// **'Relever le prix'**
   String get refreshPrice;
-
-  /// No description provided for @refreshPriceLater.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le relevé des prix marché arrive au lot 2c.'**
-  String get refreshPriceLater;
 
   /// No description provided for @lots.
   ///
@@ -2137,7 +2035,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsAutoPricesHint.
   ///
   /// In fr, this message translates to:
-  /// **'Désactivé par défaut. Disponible au lot 2c.'**
+  /// **'Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.'**
   String get settingsAutoPricesHint;
 
   /// No description provided for @settingsConnection.
@@ -2149,7 +2047,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsConnectionHint.
   ///
   /// In fr, this message translates to:
-  /// **'Adresse et clé du flux n8n : lot 2c.'**
+  /// **'Adresse de l\'instance n8n et clé secrète partagée avec le flux.'**
   String get settingsConnectionHint;
 
   /// No description provided for @settingsPhotoSpace.
@@ -2581,7 +2479,7 @@ abstract class AppLocalizations {
   /// No description provided for @addByBarcodeHint.
   ///
   /// In fr, this message translates to:
-  /// **'Saisir l\'EAN puis photographier : il aide l\'identification.'**
+  /// **'Scanner l\'EAN puis photographier : il aide l\'identification.'**
   String get addByBarcodeHint;
 
   /// No description provided for @addManual.
@@ -2605,7 +2503,7 @@ abstract class AppLocalizations {
   /// No description provided for @addExcelHint.
   ///
   /// In fr, this message translates to:
-  /// **'Disponible au lot 3.'**
+  /// **'Classeur xlsx, avec simulation avant import.'**
   String get addExcelHint;
 
   /// No description provided for @unidentifiedWine.
@@ -2716,6 +2614,114 @@ abstract class AppLocalizations {
   /// **'Code-barres EAN (facultatif)'**
   String get eanField;
 
+  /// No description provided for @scanLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner le code-barres'**
+  String get scanLive;
+
+  /// No description provided for @scanFromPhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le code-barres sur une photo'**
+  String get scanFromPhoto;
+
+  /// No description provided for @scanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code-barres'**
+  String get scanTitle;
+
+  /// No description provided for @scanHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrez le code-barres de la contre-étiquette : il est lu tout seul.'**
+  String get scanHint;
+
+  /// No description provided for @scanFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code-barres lu : {code}'**
+  String scanFound(String code);
+
+  /// No description provided for @scanNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun code-barres EAN lisible sur cette photo.'**
+  String get scanNotFound;
+
+  /// No description provided for @scanPermissionDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès à l\'appareil photo refusé'**
+  String get scanPermissionDenied;
+
+  /// No description provided for @scanUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecteur de code-barres indisponible sur cet appareil'**
+  String get scanUnavailable;
+
+  /// No description provided for @scanUseField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez les 13 chiffres dans le champ.'**
+  String get scanUseField;
+
+  /// No description provided for @vintageScanLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le millésime avec l\'appareil photo'**
+  String get vintageScanLive;
+
+  /// No description provided for @vintageScanFromPhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le millésime sur une photo'**
+  String get vintageScanFromPhoto;
+
+  /// No description provided for @vintageScanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime'**
+  String get vintageScanTitle;
+
+  /// No description provided for @vintageScanHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrez l\'année inscrite sur l\'étiquette ou la collerette : elle est lue toute seule.'**
+  String get vintageScanHint;
+
+  /// No description provided for @vintageScanSeen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu : {year}, gardez la bouteille immobile…'**
+  String vintageScanSeen(String year);
+
+  /// No description provided for @vintageScanFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime lu : {year}'**
+  String vintageScanFound(String year);
+
+  /// No description provided for @vintageScanNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun millésime lisible sur cette photo.'**
+  String get vintageScanNotFound;
+
+  /// No description provided for @vintageScanUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture du millésime indisponible sur cet appareil'**
+  String get vintageScanUnavailable;
+
+  /// No description provided for @vintageScanUseField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez les 4 chiffres dans le champ.'**
+  String get vintageScanUseField;
+
   /// No description provided for @vintageHintField.
   ///
   /// In fr, this message translates to:
@@ -2743,7 +2749,7 @@ abstract class AppLocalizations {
   /// No description provided for @consentBody.
   ///
   /// In fr, this message translates to:
-  /// **'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement d\'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.'**
+  /// **'Pour identifier le vin, les photos d\'étiquettes sont envoyées au flux d\'enrichissement sur le serveur, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n\'est envoyée.'**
   String get consentBody;
 
   /// No description provided for @consentAccept.
@@ -2848,17 +2854,59 @@ abstract class AppLocalizations {
   /// **'Hors ligne : la fiche reste « à enrichir », l\'envoi partira au retour du réseau.'**
   String get enrichOffline;
 
+  /// No description provided for @enrichNotConnected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux non connecté : la fiche reste « à enrichir ». Renseignez l\'adresse et la clé du flux dans les Paramètres, l\'envoi partira ensuite.'**
+  String get enrichNotConnected;
+
   /// No description provided for @enrichReady.
   ///
   /// In fr, this message translates to:
   /// **'Propositions prêtes'**
   String get enrichReady;
 
+  /// No description provided for @labelPreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu sur l\'étiquette, en attendant'**
+  String get labelPreviewTitle;
+
+  /// No description provided for @labelPreviewLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{field} : {value}'**
+  String labelPreviewLine(String field, String value);
+
   /// No description provided for @reviewProposals.
   ///
   /// In fr, this message translates to:
   /// **'Vérifier les propositions'**
   String get reviewProposals;
+
+  /// No description provided for @validationPendingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu sur l\'étiquette pour l\'instant. Les autres informations s\'ajoutent dès que le serveur les trouve ; vous pouvez déjà corriger.'**
+  String get validationPendingBody;
+
+  /// No description provided for @validationWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validation possible à la fin de la recherche'**
+  String get validationWaiting;
+
+  /// No description provided for @validationSearchFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La recherche des informations a échoué'**
+  String get validationSearchFailed;
+
+  /// No description provided for @validationSearchFailedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui a été lu sur l\'étiquette reste affiché. Relancez la recherche ou complétez la fiche à la main.'**
+  String get validationSearchFailedBody;
 
   /// No description provided for @enrichFailed.
   ///
@@ -3163,7 +3211,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportedSnack.
   ///
   /// In fr, this message translates to:
-  /// **'Erreur signalée : la valeur reste barrée jusqu\'à correction.'**
+  /// **'Erreur signalée : la valeur reste barrée jusqu\'à correction, et le signalement part avec le prochain enrichissement de la fiche.'**
   String get reportedSnack;
 
   /// No description provided for @provenanceBadge.
@@ -3250,65 +3298,1841 @@ abstract class AppLocalizations {
   /// **'Champ déverrouillé : il pourra être proposé à nouveau.'**
   String get unlocked;
 
-  /// No description provided for @settingsFakeFlux.
+  /// No description provided for @fluxUrl.
   ///
   /// In fr, this message translates to:
-  /// **'Flux de démonstration (lot 2a)'**
-  String get settingsFakeFlux;
+  /// **'Adresse du flux'**
+  String get fluxUrl;
 
-  /// No description provided for @settingsFakeFluxHint.
+  /// No description provided for @fluxUrlHint.
   ///
   /// In fr, this message translates to:
-  /// **'Le vrai flux n8n arrive au lot 2c. En attendant, l\'app rejoue les exemples du contrat.'**
-  String get settingsFakeFluxHint;
+  /// **'https://votre-instance.app.n8n.cloud'**
+  String get fluxUrlHint;
 
-  /// No description provided for @fakeScenario.
+  /// No description provided for @fluxKey.
   ///
   /// In fr, this message translates to:
-  /// **'Scénario rejoué'**
-  String get fakeScenario;
+  /// **'Clé secrète'**
+  String get fluxKey;
 
-  /// No description provided for @scenarioDone.
+  /// No description provided for @fluxKeyStored.
   ///
   /// In fr, this message translates to:
-  /// **'Identification complète'**
-  String get scenarioDone;
+  /// **'Clé enregistrée dans le stockage sécurisé du téléphone'**
+  String get fluxKeyStored;
 
-  /// No description provided for @scenarioPartial.
+  /// No description provided for @fluxKeyMissing.
   ///
   /// In fr, this message translates to:
-  /// **'Résultat partiel avec désaccord'**
-  String get scenarioPartial;
+  /// **'Aucune clé enregistrée'**
+  String get fluxKeyMissing;
 
-  /// No description provided for @scenarioCacheHit.
+  /// No description provided for @fluxKeyReplace.
   ///
   /// In fr, this message translates to:
-  /// **'Vin déjà connu (cache)'**
-  String get scenarioCacheHit;
+  /// **'Nouvelle clé (remplace l\'ancienne)'**
+  String get fluxKeyReplace;
 
-  /// No description provided for @scenarioQuota.
+  /// No description provided for @fluxSave.
   ///
   /// In fr, this message translates to:
-  /// **'Quota épuisé'**
-  String get scenarioQuota;
+  /// **'Enregistrer'**
+  String get fluxSave;
 
-  /// No description provided for @scenarioInvalid.
+  /// No description provided for @fluxForget.
   ///
   /// In fr, this message translates to:
-  /// **'Réponse non conforme'**
-  String get scenarioInvalid;
+  /// **'Oublier la connexion'**
+  String get fluxForget;
 
-  /// No description provided for @scenarioNever.
+  /// No description provided for @fluxTest.
   ///
   /// In fr, this message translates to:
-  /// **'Pas de réponse (délai)'**
-  String get scenarioNever;
+  /// **'Tester la connexion'**
+  String get fluxTest;
 
-  /// No description provided for @simulateOffline.
+  /// No description provided for @fluxTesting.
   ///
   /// In fr, this message translates to:
-  /// **'Simuler le mode avion'**
-  String get simulateOffline;
+  /// **'Test en cours…'**
+  String get fluxTesting;
+
+  /// No description provided for @fluxUsingReal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vrai flux utilisé pour les enrichissements et les prix.'**
+  String get fluxUsingReal;
+
+  /// No description provided for @fluxUsingFake.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion enregistrée : l\'identification par photo et les prix attendent la connexion au flux. Le reste de l\'application fonctionne.'**
+  String get fluxUsingFake;
+
+  /// No description provided for @fluxTestOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion réussie : flux joignable, clé acceptée (contrat {version}).'**
+  String fluxTestOk(String version);
+
+  /// No description provided for @fluxTestNotReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux joignable, mais sa clé n\'est pas encore configurée côté n8n.'**
+  String get fluxTestNotReady;
+
+  /// No description provided for @fluxTestBadKey.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux joignable, mais la clé est refusée : {message}'**
+  String fluxTestBadKey(String message);
+
+  /// No description provided for @fluxTestOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux injoignable : vérifiez l\'adresse et le réseau.'**
+  String get fluxTestOffline;
+
+  /// No description provided for @fluxTestInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse inattendue du flux : vérifiez l\'adresse.'**
+  String get fluxTestInvalid;
+
+  /// No description provided for @fluxUrlInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse invalide : elle doit commencer par https://'**
+  String get fluxUrlInvalid;
+
+  /// No description provided for @fluxSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion enregistrée.'**
+  String get fluxSaved;
+
+  /// No description provided for @fluxForgotten.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion oubliée : l\'identification par photo attend une nouvelle connexion.'**
+  String get fluxForgotten;
+
+  /// No description provided for @pricesAllTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relever les prix de toute la cave'**
+  String get pricesAllTitle;
+
+  /// No description provided for @pricesAllHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches sans relevé depuis 24 heures.'**
+  String get pricesAllHint;
+
+  /// No description provided for @pricesAllConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.} =1{1 relevé sera envoyé au flux.} other{{count} relevés seront envoyés au flux.}}'**
+  String pricesAllConfirm(int count);
+
+  /// No description provided for @pricesQuotaLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota restant ce mois : {left} relevés.'**
+  String pricesQuotaLeft(int left);
+
+  /// No description provided for @pricesQuotaUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota restant inconnu : il s\'affichera après le premier relevé.'**
+  String get pricesQuotaUnknown;
+
+  /// No description provided for @pricesQueued.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun relevé ajouté.} =1{1 relevé mis en file.} other{{count} relevés mis en file.}}'**
+  String pricesQueued(int count);
+
+  /// No description provided for @confirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer'**
+  String get confirm;
+
+  /// No description provided for @priceQueuedOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relevé du prix mis en file.'**
+  String get priceQueuedOne;
+
+  /// No description provided for @priceAlreadyQueued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un relevé est déjà en cours pour cette fiche.'**
+  String get priceAlreadyQueued;
+
+  /// No description provided for @priceTooRecentTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relevé récent'**
+  String get priceTooRecentTitle;
+
+  /// No description provided for @priceTooRecent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le dernier relevé a moins de 24 heures. Forcer un nouveau relevé ?'**
+  String get priceTooRecent;
+
+  /// No description provided for @priceForce.
+  ///
+  /// In fr, this message translates to:
+  /// **'Forcer'**
+  String get priceForce;
+
+  /// No description provided for @priceOffers.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucune offre} =1{1 offre} other{{count} offres}}'**
+  String priceOffers(int count);
+
+  /// No description provided for @priceNatureMedian.
+  ///
+  /// In fr, this message translates to:
+  /// **'médiane'**
+  String get priceNatureMedian;
+
+  /// No description provided for @priceNatureOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'offre unique'**
+  String get priceNatureOffer;
+
+  /// No description provided for @priceTrendUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'En hausse de {percent} depuis le relevé précédent'**
+  String priceTrendUp(String percent);
+
+  /// No description provided for @priceTrendDown.
+  ///
+  /// In fr, this message translates to:
+  /// **'En baisse de {percent} depuis le relevé précédent'**
+  String priceTrendDown(String percent);
+
+  /// No description provided for @priceTrendFlat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stable depuis le relevé précédent'**
+  String get priceTrendFlat;
+
+  /// No description provided for @priceOpenOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir l\'offre sur {site}'**
+  String priceOpenOffer(String site);
+
+  /// No description provided for @priceChartLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbe des prix relevés'**
+  String get priceChartLabel;
+
+  /// No description provided for @priceHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique des relevés'**
+  String get priceHistory;
+
+  /// No description provided for @photoTypeDegustation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dégustation'**
+  String get photoTypeDegustation;
+
+  /// No description provided for @photoTypeRepas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repas'**
+  String get photoTypeRepas;
+
+  /// No description provided for @photoTypeEvenement.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get photoTypeEvenement;
+
+  /// No description provided for @tabTastingsPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dégustations et photos'**
+  String get tabTastingsPhotos;
+
+  /// No description provided for @otherPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres photos'**
+  String get otherPhotos;
+
+  /// No description provided for @libraryEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune autre photo pour cette bouteille (repas, événement).'**
+  String get libraryEmpty;
+
+  /// No description provided for @libraryAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une photo'**
+  String get libraryAdd;
+
+  /// No description provided for @libraryTypeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de photo'**
+  String get libraryTypeTitle;
+
+  /// No description provided for @libraryAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo ajoutée'**
+  String get libraryAdded;
+
+  /// No description provided for @photoDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la photo'**
+  String get photoDelete;
+
+  /// No description provided for @photoDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La photo est effacée de l\'appareil.'**
+  String get photoDeleteBody;
+
+  /// No description provided for @photoDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo supprimée'**
+  String get photoDeleted;
+
+  /// No description provided for @photoCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'{index} / {total}'**
+  String photoCounter(int index, int total);
+
+  /// No description provided for @photoOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la photo {index}'**
+  String photoOpen(int index);
+
+  /// No description provided for @validationPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos'**
+  String get validationPhotos;
+
+  /// No description provided for @photoCroppedLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrée sur l\'étiquette'**
+  String get photoCroppedLabel;
+
+  /// No description provided for @photoWholeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo entière'**
+  String get photoWholeLabel;
+
+  /// No description provided for @cropAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer'**
+  String get cropAction;
+
+  /// No description provided for @cropTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer l\'étiquette'**
+  String get cropTitle;
+
+  /// No description provided for @cropHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faites glisser le cadre ou ses coins sur l\'étiquette.'**
+  String get cropHint;
+
+  /// No description provided for @cropWhole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo entière'**
+  String get cropWhole;
+
+  /// No description provided for @cropSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadre enregistré'**
+  String get cropSaved;
+
+  /// No description provided for @cropOriginalNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'La photo d\'origine est gardée jusqu\'à la validation de la fiche.'**
+  String get cropOriginalNote;
+
+  /// No description provided for @excelListName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Liste'**
+  String get excelListName;
+
+  /// No description provided for @excelListValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur autorisée'**
+  String get excelListValue;
+
+  /// No description provided for @excelListParent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattachée à'**
+  String get excelListParent;
+
+  /// No description provided for @excelNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règles d\'import du classeur IA cave à vin\n\nOnglet Vins : une ligne par fiche (domaine, cuvée, millésime).\n- Colonne id remplie : la fiche existante est mise à jour. id vide : une fiche est créée.\n- Action = SUPPRIMER (avec l\'id) : la fiche est supprimée de la cave, ses mouvements restent dans l\'historique.\n- Domaine, Pays, Couleur et Millésime sont obligatoires. Millésime : une année ou NM pour un non millésimé.\n- Les listes (pays, région, appellation, cépages, accords…) prennent les valeurs de l\'onglet Listes. Plusieurs valeurs dans une cellule : séparées par un point-virgule.\n- Cépages : « Merlot 80 %; Cabernet Franc 20 % », total de 100 % au plus.\n- Les colonnes Origine garde, Statut garde, Statut enrichissement, Note Parker, Meilleure note, Stock total et Photo principale sont calculées : elles sont ignorées à l\'import.\n\nOnglet Lots : une ligne par lot (même fiche, format, propriétaire, emplacement, prix).\n- id lot rempli : mise à jour ; vide : création. Action = SUPPRIMER : suppression du lot.\n- id fiche : l\'id d\'une fiche de l\'onglet Vins, ou #numéro de ligne pour une fiche créée par le même import (exemple : #12).\n- Quantité : quantité cible. L\'app crée un mouvement d\'ajustement de l\'écart, motif « import Excel ». Cellule vide : stock inchangé.\n- Emplacement : chemin complet, par exemple « Cave > Armoire 1 > Casier A ».\n\nOnglet Mouvements : lecture seule, ignoré à l\'import.\n\nPhotos : joignez un zip de photos ; une photo dont le nom figure dans la colonne Photo principale est rattachée à la fiche.\n\nAvant tout import, l\'app simule et affiche un rapport. Une sauvegarde automatique est faite juste avant, et l\'import se fait en entier ou pas du tout.'**
+  String get excelNotice;
+
+  /// No description provided for @ieExcelSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Excel'**
+  String get ieExcelSection;
+
+  /// No description provided for @ieExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter la cave'**
+  String get ieExport;
+
+  /// No description provided for @ieExportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classeur xlsx : vins, lots, mouvements, listes autorisées et notice.'**
+  String get ieExportHint;
+
+  /// No description provided for @ieTemplate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle vierge'**
+  String get ieTemplate;
+
+  /// No description provided for @ieTemplateHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Même classeur sans données, pour saisir une cave sur ordinateur.'**
+  String get ieTemplateHint;
+
+  /// No description provided for @ieImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un classeur'**
+  String get ieImport;
+
+  /// No description provided for @ieImportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulation et rapport avant toute modification.'**
+  String get ieImportHint;
+
+  /// No description provided for @iePhotosTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joindre des photos ?'**
+  String get iePhotosTitle;
+
+  /// No description provided for @iePhotosBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un zip de photos peut accompagner le classeur : chaque photo citée dans la colonne Photo principale est rattachée à sa fiche.'**
+  String get iePhotosBody;
+
+  /// No description provided for @iePhotosPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un zip'**
+  String get iePhotosPick;
+
+  /// No description provided for @iePhotosSkip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans photos'**
+  String get iePhotosSkip;
+
+  /// No description provided for @ieReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier prêt'**
+  String get ieReady;
+
+  /// No description provided for @importReportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulation de l\'import'**
+  String get importReportTitle;
+
+  /// No description provided for @importWinesCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches créées : {n}'**
+  String importWinesCreated(int n);
+
+  /// No description provided for @importWinesUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches mises à jour : {n}'**
+  String importWinesUpdated(int n);
+
+  /// No description provided for @importWinesDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiches supprimées : {n}'**
+  String importWinesDeleted(int n);
+
+  /// No description provided for @importLotsCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots créés : {n}'**
+  String importLotsCreated(int n);
+
+  /// No description provided for @importLotsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots mis à jour : {n}'**
+  String importLotsUpdated(int n);
+
+  /// No description provided for @importLotsDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots supprimés : {n}'**
+  String importLotsDeleted(int n);
+
+  /// No description provided for @importStockChanges.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stocks ajustés : {n}'**
+  String importStockChanges(int n);
+
+  /// No description provided for @importPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos rattachées : {n}'**
+  String importPhotos(int n);
+
+  /// No description provided for @importNoChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune différence avec la cave.'**
+  String get importNoChange;
+
+  /// No description provided for @importUnknownTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeurs absentes de l\'app'**
+  String get importUnknownTitle;
+
+  /// No description provided for @importCreateUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les créer pendant l\'import'**
+  String get importCreateUnknown;
+
+  /// No description provided for @importIssuesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreurs à corriger ({n})'**
+  String importIssuesTitle(int n);
+
+  /// No description provided for @importIssueWhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'{sheet}, ligne {row}, colonne {column}'**
+  String importIssueWhere(String sheet, int row, String column);
+
+  /// No description provided for @importApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer'**
+  String get importApply;
+
+  /// No description provided for @importBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corrigez le classeur puis relancez l\'import : rien n\'est modifié tant qu\'il reste une erreur.'**
+  String get importBlocked;
+
+  /// No description provided for @importBackupNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une sauvegarde automatique est faite juste avant l\'import, qui se fait en entier ou pas du tout.'**
+  String get importBackupNote;
+
+  /// No description provided for @importEnrich.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enrichir les fiches créées'**
+  String get importEnrich;
+
+  /// No description provided for @importEnrichHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} fiches créées avec une photo, soit {n} appels au flux. Quota restant ce mois : {left}.'**
+  String importEnrichHint(int n, String left);
+
+  /// No description provided for @importEnrichUnknownQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'inconnu'**
+  String get importEnrichUnknownQuota;
+
+  /// No description provided for @importEnrichStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} enrichissements en file d\'attente'**
+  String importEnrichStarted(int n);
+
+  /// No description provided for @importOwnerList.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get importOwnerList;
+
+  /// No description provided for @issueMissingSheet.
+  ///
+  /// In fr, this message translates to:
+  /// **'onglet absent'**
+  String get issueMissingSheet;
+
+  /// No description provided for @issueMissingColumn.
+  ///
+  /// In fr, this message translates to:
+  /// **'colonne absente'**
+  String get issueMissingColumn;
+
+  /// No description provided for @issueRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'valeur obligatoire'**
+  String get issueRequired;
+
+  /// No description provided for @issueUnknownId.
+  ///
+  /// In fr, this message translates to:
+  /// **'identifiant inconnu'**
+  String get issueUnknownId;
+
+  /// No description provided for @issueDuplicateId.
+  ///
+  /// In fr, this message translates to:
+  /// **'identifiant présent deux fois'**
+  String get issueDuplicateId;
+
+  /// No description provided for @issueInvalidNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'nombre attendu'**
+  String get issueInvalidNumber;
+
+  /// No description provided for @issueInvalidVintage.
+  ///
+  /// In fr, this message translates to:
+  /// **'millésime attendu : une année jusqu\'à l\'année en cours, ou NM'**
+  String get issueInvalidVintage;
+
+  /// No description provided for @issueOutOfRange.
+  ///
+  /// In fr, this message translates to:
+  /// **'valeur hors des bornes'**
+  String get issueOutOfRange;
+
+  /// No description provided for @issueGardeOrder.
+  ///
+  /// In fr, this message translates to:
+  /// **'garde incohérente : début après le millésime, début avant l\'apogée, apogée avant la fin'**
+  String get issueGardeOrder;
+
+  /// No description provided for @issueInvalidEan.
+  ///
+  /// In fr, this message translates to:
+  /// **'code-barres invalide : 13 chiffres et clé de contrôle'**
+  String get issueInvalidEan;
+
+  /// No description provided for @issueInvalidBoolean.
+  ///
+  /// In fr, this message translates to:
+  /// **'oui ou non attendu'**
+  String get issueInvalidBoolean;
+
+  /// No description provided for @issueInvalidDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'date attendue'**
+  String get issueInvalidDate;
+
+  /// No description provided for @issueInvalidGrapes.
+  ///
+  /// In fr, this message translates to:
+  /// **'cépages illisibles : « Merlot 80 %; Cabernet Franc 20 % »'**
+  String get issueInvalidGrapes;
+
+  /// No description provided for @issueInvalidAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'action inconnue : vide ou SUPPRIMER, avec l\'identifiant'**
+  String get issueInvalidAction;
+
+  /// No description provided for @issueUnknownValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'valeur absente de la liste'**
+  String get issueUnknownValue;
+
+  /// No description provided for @issueUnknownLocation.
+  ///
+  /// In fr, this message translates to:
+  /// **'emplacement inconnu'**
+  String get issueUnknownLocation;
+
+  /// No description provided for @issueUnknownWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'fiche inconnue'**
+  String get issueUnknownWine;
+
+  /// No description provided for @issueDeletedWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'fiche supprimée par ce même import'**
+  String get issueDeletedWine;
+
+  /// No description provided for @issueLotWineChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'un lot ne change pas de fiche : créez un nouveau lot'**
+  String get issueLotWineChange;
+
+  /// No description provided for @importFinished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import terminé'**
+  String get importFinished;
+
+  /// No description provided for @pdfGardeRange.
+  ///
+  /// In fr, this message translates to:
+  /// **'de {start} à {end}'**
+  String pdfGardeRange(String start, String end);
+
+  /// No description provided for @pdfGardePeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'apogée {year}'**
+  String pdfGardePeak(String year);
+
+  /// No description provided for @pdfAlcohol.
+  ///
+  /// In fr, this message translates to:
+  /// **'{value} %'**
+  String pdfAlcohol(String value);
+
+  /// No description provided for @pdfGardeSource.
+  ///
+  /// In fr, this message translates to:
+  /// **'Origine de la garde'**
+  String get pdfGardeSource;
+
+  /// No description provided for @pdfGardeStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut de garde'**
+  String get pdfGardeStatus;
+
+  /// No description provided for @pdfParker.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note Parker'**
+  String get pdfParker;
+
+  /// No description provided for @pdfStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'En stock'**
+  String get pdfStock;
+
+  /// No description provided for @pdfBottles.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =0{aucune bouteille} =1{1 bouteille} other{{n} bouteilles}}'**
+  String pdfBottles(int n);
+
+  /// No description provided for @pdfCitedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'citée par {site}'**
+  String pdfCitedBy(String site);
+
+  /// No description provided for @pdfPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'{price} l\'unité'**
+  String pdfPrice(String price);
+
+  /// No description provided for @pdfEditedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Édité le {date}'**
+  String pdfEditedOn(String date);
+
+  /// No description provided for @pdfCatalogueTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue de la cave'**
+  String get pdfCatalogueTitle;
+
+  /// No description provided for @pdfCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 fiche} other{{n} fiches}}'**
+  String pdfCount(int n);
+
+  /// No description provided for @pdfFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres appliqués'**
+  String get pdfFilters;
+
+  /// No description provided for @pdfNoFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun filtre : toutes les fiches.'**
+  String get pdfNoFilter;
+
+  /// No description provided for @pdfPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {n} / {total}'**
+  String pdfPage(String n, String total);
+
+  /// No description provided for @issueWithValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{reason} : « {value} »'**
+  String issueWithValue(String reason, String value);
+
+  /// No description provided for @filterLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} : {value}'**
+  String filterLine(String label, String value);
+
+  /// No description provided for @catalogueSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue PDF'**
+  String get catalogueSection;
+
+  /// No description provided for @catalogueHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux fiches par page A4. Les filtres et le tri de la liste sont repris ; vous pouvez les changer ici sans toucher à la liste.'**
+  String get catalogueHint;
+
+  /// No description provided for @catalogueFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres ({n})'**
+  String catalogueFilters(int n);
+
+  /// No description provided for @catalogueCover.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page de garde (date, filtres, nombre de fiches)'**
+  String get catalogueCover;
+
+  /// No description provided for @catalogueGenerate.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =0{Aucune fiche à imprimer} =1{Générer le catalogue (1 fiche)} other{Générer le catalogue ({n} fiches)}}'**
+  String catalogueGenerate(int n);
+
+  /// No description provided for @winePdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiche PDF'**
+  String get winePdf;
+
+  /// No description provided for @pdfPreparing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation du PDF…'**
+  String get pdfPreparing;
+
+  /// No description provided for @statsTabGeneral.
+  ///
+  /// In fr, this message translates to:
+  /// **'Général'**
+  String get statsTabGeneral;
+
+  /// No description provided for @statsTabRegions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Régions'**
+  String get statsTabRegions;
+
+  /// No description provided for @statsTabGarde.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garde'**
+  String get statsTabGarde;
+
+  /// No description provided for @statsTabValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur'**
+  String get statsTabValue;
+
+  /// No description provided for @statsTabBuying.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide à l\'achat'**
+  String get statsTabBuying;
+
+  /// No description provided for @statsTabExplorer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explorateur'**
+  String get statsTabExplorer;
+
+  /// No description provided for @statsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune bouteille en cave : ajoutez des vins pour voir les statistiques.'**
+  String get statsEmpty;
+
+  /// No description provided for @statNoData.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune donnée pour cette vue.'**
+  String get statNoData;
+
+  /// No description provided for @statMeasureBottles.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de bouteilles'**
+  String get statMeasureBottles;
+
+  /// No description provided for @statMeasureReferences.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de références'**
+  String get statMeasureReferences;
+
+  /// No description provided for @statMeasurePurchase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur d\'achat'**
+  String get statMeasurePurchase;
+
+  /// No description provided for @statMeasureMarket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur marché'**
+  String get statMeasureMarket;
+
+  /// No description provided for @statMeasureGain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus-value latente'**
+  String get statMeasureGain;
+
+  /// No description provided for @statMeasureAvgPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix moyen'**
+  String get statMeasureAvgPrice;
+
+  /// No description provided for @statMeasureAvgScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note moyenne (/100)'**
+  String get statMeasureAvgScore;
+
+  /// No description provided for @statMeasureOpened.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles ouvertes (12 mois)'**
+  String get statMeasureOpened;
+
+  /// No description provided for @statMeasureYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'Années moyennes avant de boire'**
+  String get statMeasureYears;
+
+  /// No description provided for @statDimColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur'**
+  String get statDimColor;
+
+  /// No description provided for @statDimType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get statDimType;
+
+  /// No description provided for @statDimCountry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pays'**
+  String get statDimCountry;
+
+  /// No description provided for @statDimRegion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Région'**
+  String get statDimRegion;
+
+  /// No description provided for @statDimSubRegion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous-région'**
+  String get statDimSubRegion;
+
+  /// No description provided for @statDimAppellation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appellation'**
+  String get statDimAppellation;
+
+  /// No description provided for @statDimProducer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Domaine'**
+  String get statDimProducer;
+
+  /// No description provided for @statDimVintage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime'**
+  String get statDimVintage;
+
+  /// No description provided for @statDimVintageBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tranche de 5 millésimes'**
+  String get statDimVintageBand;
+
+  /// No description provided for @statDimGrape.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cépage principal'**
+  String get statDimGrape;
+
+  /// No description provided for @statDimOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get statDimOwner;
+
+  /// No description provided for @statDimLocation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Emplacement'**
+  String get statDimLocation;
+
+  /// No description provided for @statDimGardeStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut de garde'**
+  String get statDimGardeStatus;
+
+  /// No description provided for @statDimGardeStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Année de début de garde'**
+  String get statDimGardeStart;
+
+  /// No description provided for @statDimPeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Année d\'apogée'**
+  String get statDimPeak;
+
+  /// No description provided for @statDimScoreBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tranche de note'**
+  String get statDimScoreBand;
+
+  /// No description provided for @statDimPriceBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tranche de prix'**
+  String get statDimPriceBand;
+
+  /// No description provided for @statDimSupplier.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur'**
+  String get statDimSupplier;
+
+  /// No description provided for @statDimPurchaseMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois d\'achat'**
+  String get statDimPurchaseMonth;
+
+  /// No description provided for @statDimOpeningMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois d\'ouverture'**
+  String get statDimOpeningMonth;
+
+  /// No description provided for @statChartDonut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donut'**
+  String get statChartDonut;
+
+  /// No description provided for @statChartBarsV.
+  ///
+  /// In fr, this message translates to:
+  /// **'Barres verticales'**
+  String get statChartBarsV;
+
+  /// No description provided for @statChartBarsH.
+  ///
+  /// In fr, this message translates to:
+  /// **'Barres horizontales'**
+  String get statChartBarsH;
+
+  /// No description provided for @statChartStacked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Barres empilées'**
+  String get statChartStacked;
+
+  /// No description provided for @statChartLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbe'**
+  String get statChartLine;
+
+  /// No description provided for @statChartCross.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau croisé'**
+  String get statChartCross;
+
+  /// No description provided for @statChartKpi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indicateur seul'**
+  String get statChartKpi;
+
+  /// No description provided for @statNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non renseigné'**
+  String get statNone;
+
+  /// No description provided for @statOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres'**
+  String get statOther;
+
+  /// No description provided for @statBand.
+  ///
+  /// In fr, this message translates to:
+  /// **'{from} à {to}'**
+  String statBand(String from, String to);
+
+  /// No description provided for @statFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'{from} et plus'**
+  String statFrom(String from);
+
+  /// No description provided for @statToDrinkThisYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire cette année'**
+  String get statToDrinkThisYear;
+
+  /// No description provided for @statDrinkSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire vite'**
+  String get statDrinkSoon;
+
+  /// No description provided for @statPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passées'**
+  String get statPast;
+
+  /// No description provided for @statGardeByYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles par année d\'entrée dans la fenêtre de garde'**
+  String get statGardeByYear;
+
+  /// No description provided for @statByColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles par couleur'**
+  String get statByColor;
+
+  /// No description provided for @statVintageColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésime et couleur'**
+  String get statVintageColor;
+
+  /// No description provided for @statByOrigin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteilles par origine'**
+  String get statByOrigin;
+
+  /// No description provided for @statDrillHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez une barre pour descendre du pays à la région, puis à l\'appellation.'**
+  String get statDrillHint;
+
+  /// No description provided for @statDrillUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remonter'**
+  String get statDrillUp;
+
+  /// No description provided for @statPurchaseVsMarket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat et marché par couleur'**
+  String get statPurchaseVsMarket;
+
+  /// No description provided for @statPurchaseVsMarketRegion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat et marché par région'**
+  String get statPurchaseVsMarketRegion;
+
+  /// No description provided for @statMarketHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur marché du stock actuel, sur 24 mois'**
+  String get statMarketHistory;
+
+  /// No description provided for @statOpenedVsStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvertures des 12 derniers mois et stock, par couleur'**
+  String get statOpenedVsStock;
+
+  /// No description provided for @statMonthsLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois de stock restant au rythme des ouvertures'**
+  String get statMonthsLeft;
+
+  /// No description provided for @statMonthsValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n} mois'**
+  String statMonthsValue(String n);
+
+  /// No description provided for @statNoOpening.
+  ///
+  /// In fr, this message translates to:
+  /// **'aucune ouverture en 12 mois'**
+  String get statNoOpening;
+
+  /// No description provided for @statSeriesPurchase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat'**
+  String get statSeriesPurchase;
+
+  /// No description provided for @statSeriesMarket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marché'**
+  String get statSeriesMarket;
+
+  /// No description provided for @statSeriesOpened.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvertes'**
+  String get statSeriesOpened;
+
+  /// No description provided for @statSeriesStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'En stock'**
+  String get statSeriesStock;
+
+  /// No description provided for @statSeeWines.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{Voir le vin} other{Voir les {n} vins}}'**
+  String statSeeWines(int n);
+
+  /// No description provided for @statWinesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vins de la sélection'**
+  String get statWinesTitle;
+
+  /// No description provided for @statMeasure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mesure'**
+  String get statMeasure;
+
+  /// No description provided for @statDimension.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dimension'**
+  String get statDimension;
+
+  /// No description provided for @statDimension2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seconde dimension'**
+  String get statDimension2;
+
+  /// No description provided for @statNoDimension2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune'**
+  String get statNoDimension2;
+
+  /// No description provided for @statChartType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Graphique'**
+  String get statChartType;
+
+  /// No description provided for @statFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres'**
+  String get statFilters;
+
+  /// No description provided for @statFilterAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un filtre'**
+  String get statFilterAdd;
+
+  /// No description provided for @statFilterLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{dimension} : {values}'**
+  String statFilterLine(String dimension, String values);
+
+  /// No description provided for @statFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favoris'**
+  String get statFavorites;
+
+  /// No description provided for @statNoFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune vue enregistrée.'**
+  String get statNoFavorites;
+
+  /// No description provided for @statSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer en favori'**
+  String get statSave;
+
+  /// No description provided for @statViewName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la vue'**
+  String get statViewName;
+
+  /// No description provided for @statSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue enregistrée'**
+  String get statSaved;
+
+  /// No description provided for @statDeleteView.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la vue'**
+  String get statDeleteView;
+
+  /// No description provided for @statExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter'**
+  String get statExport;
+
+  /// No description provided for @statExportPng.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image PNG'**
+  String get statExportPng;
+
+  /// No description provided for @statExportPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'PDF'**
+  String get statExportPdf;
+
+  /// No description provided for @statExportCsv.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau CSV'**
+  String get statExportCsv;
+
+  /// No description provided for @statTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get statTotal;
+
+  /// No description provided for @statAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyenne'**
+  String get statAverage;
+
+  /// No description provided for @toDrinkTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire'**
+  String get toDrinkTab;
+
+  /// No description provided for @pastTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passés'**
+  String get pastTab;
+
+  /// No description provided for @pastEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun vin en stock n\'a dépassé sa fenêtre de garde.'**
+  String get pastEmpty;
+
+  /// No description provided for @pastHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 vin a dépassé sa fenêtre de garde : à boire sans tarder ou à goûter avant de servir.} other{{count} vins ont dépassé leur fenêtre de garde : à boire sans tarder ou à goûter avant de servir.}}'**
+  String pastHint(int count);
+
+  /// No description provided for @tastingsTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dégustations'**
+  String get tastingsTab;
+
+  /// No description provided for @toDrinkEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun vin dans sa fenêtre de garde en ce moment.'**
+  String get toDrinkEmpty;
+
+  /// No description provided for @toDrinkHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.'**
+  String get toDrinkHint;
+
+  /// No description provided for @dishPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour quel plat ?'**
+  String get dishPick;
+
+  /// No description provided for @dishAny.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les plats'**
+  String get dishAny;
+
+  /// No description provided for @dishNoWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun vin à boire ne s\'accorde avec ce plat.'**
+  String get dishNoWine;
+
+  /// No description provided for @dishCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 vin pour ce plat} other{{n} vins pour ce plat}}'**
+  String dishCount(int n);
+
+  /// No description provided for @tastingsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune dégustation notée. Elles sont proposées à chaque ouverture de bouteille.'**
+  String get tastingsEmpty;
+
+  /// No description provided for @alertTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci dans la cave'**
+  String get alertTitle;
+
+  /// No description provided for @alertBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{peak, plural, =0{} =1{1 vin entre en apogée. } other{{peak} vins entrent en apogée. }}{ending, plural, =0{} =1{1 vin arrive en fin de fenêtre.} other{{ending} vins arrivent en fin de fenêtre.}}'**
+  String alertBody(int peak, int ending);
+
+  /// No description provided for @alertSee.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les vins'**
+  String get alertSee;
+
+  /// No description provided for @alertDismiss.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get alertDismiss;
+
+  /// No description provided for @alertWinesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apogée et fin de fenêtre'**
+  String get alertWinesTitle;
+
+  /// No description provided for @shoppingEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien à acheter. Un vin qui n\'a plus de bouteille vous est proposé ici, et vous pouvez noter un vin repéré ailleurs.'**
+  String get shoppingEmpty;
+
+  /// No description provided for @shoppingAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un vin repéré'**
+  String get shoppingAdd;
+
+  /// No description provided for @shoppingLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vin'**
+  String get shoppingLabel;
+
+  /// No description provided for @shoppingQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quantité souhaitée'**
+  String get shoppingQuantity;
+
+  /// No description provided for @shoppingNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note (où l\'acheter, prix vu)'**
+  String get shoppingNote;
+
+  /// No description provided for @shoppingBought.
+  ///
+  /// In fr, this message translates to:
+  /// **'Acheté'**
+  String get shoppingBought;
+
+  /// No description provided for @shoppingDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer de la liste'**
+  String get shoppingDelete;
+
+  /// No description provided for @shoppingAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté à la liste d\'achats'**
+  String get shoppingAdded;
+
+  /// No description provided for @shoppingProposeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus aucune bouteille'**
+  String get shoppingProposeTitle;
+
+  /// No description provided for @shoppingProposeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{wine} : l\'ajouter à la liste d\'achats ?'**
+  String shoppingProposeBody(String wine);
+
+  /// No description provided for @shoppingProposeAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter à la liste'**
+  String get shoppingProposeAction;
+
+  /// No description provided for @shoppingQuantityValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 bouteille} other{{n} bouteilles}}'**
+  String shoppingQuantityValue(int n);
+
+  /// No description provided for @shareImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager en image'**
+  String get shareImage;
+
+  /// No description provided for @sharePreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager la fiche'**
+  String get sharePreviewTitle;
+
+  /// No description provided for @shareAsImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image'**
+  String get shareAsImage;
+
+  /// No description provided for @shareAsPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'PDF'**
+  String get shareAsPdf;
+
+  /// No description provided for @favoriteOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter aux favoris'**
+  String get favoriteOn;
+
+  /// No description provided for @favoriteOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des favoris'**
+  String get favoriteOff;
+
+  /// No description provided for @gridTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue casier'**
+  String get gridTitle;
+
+  /// No description provided for @gridHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un tap sur une case occupée ouvre la fiche. Un appui long sur une case vide y range une bouteille.'**
+  String get gridHint;
+
+  /// No description provided for @gridCell.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case {cell}'**
+  String gridCell(String cell);
+
+  /// No description provided for @gridCellWine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case {cell} : {wine}'**
+  String gridCellWine(String cell, String wine);
+
+  /// No description provided for @gridPlaceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ranger en {cell}'**
+  String gridPlaceTitle(String cell);
+
+  /// No description provided for @gridHere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà dans ce casier, sans case'**
+  String get gridHere;
+
+  /// No description provided for @gridElsewhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Venant d\'un autre emplacement'**
+  String get gridElsewhere;
+
+  /// No description provided for @gridNoCandidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune bouteille à ranger.'**
+  String get gridNoCandidate;
+
+  /// No description provided for @gridPlaced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bouteille rangée en {cell}'**
+  String gridPlaced(String cell);
+
+  /// No description provided for @gridUnplaced.
+  ///
+  /// In fr, this message translates to:
+  /// **'{n, plural, =1{1 bouteille sans case} other{{n} bouteilles sans case}}'**
+  String gridUnplaced(int n);
+
+  /// No description provided for @tastingScoreValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{score} / {scale}'**
+  String tastingScoreValue(String score, int scale);
+
+  /// No description provided for @feedbackIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un bug, une idée, une fiche fausse ? Écrivez-nous. Le message part par mail à l\'équipe, avec une copie à votre adresse.'**
+  String get feedbackIntro;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackComment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commentaire'**
+  String get feedbackComment;
+
+  /// No description provided for @feedbackEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre adresse mail'**
+  String get feedbackEmail;
+
+  /// No description provided for @feedbackEmailHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçoit la copie et la réponse.'**
+  String get feedbackEmailHelp;
+
+  /// No description provided for @feedbackEmailInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse mail invalide (exemple : prenom.nom@exemple.fr).'**
+  String get feedbackEmailInvalid;
+
+  /// No description provided for @feedbackRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Champ obligatoire.'**
+  String get feedbackRequired;
+
+  /// No description provided for @feedbackAttachment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pièce jointe (facultative)'**
+  String get feedbackAttachment;
+
+  /// No description provided for @feedbackAttachmentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une seule : un PDF ou une image, 5 Mo au plus.'**
+  String get feedbackAttachmentHelp;
+
+  /// No description provided for @feedbackAttachFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joindre un fichier'**
+  String get feedbackAttachFile;
+
+  /// No description provided for @feedbackReplaceFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplacer le fichier'**
+  String get feedbackReplaceFile;
+
+  /// No description provided for @feedbackAttachmentRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer la pièce jointe'**
+  String get feedbackAttachmentRemove;
+
+  /// No description provided for @feedbackAttachmentSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} Ko'**
+  String feedbackAttachmentSize(String size);
+
+  /// No description provided for @feedbackAttachmentType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuls les PDF et les images sont acceptés.'**
+  String get feedbackAttachmentType;
+
+  /// No description provided for @feedbackAttachmentTooBig.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier trop lourd : 5 Mo au plus.'**
+  String get feedbackAttachmentTooBig;
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message envoyé. Une copie part à {email}.'**
+  String feedbackSent(String email);
+
+  /// No description provided for @feedbackQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite de 5 messages par jour atteinte. Réessayez demain.'**
+  String get feedbackQuota;
+
+  /// No description provided for @feedbackRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi refusé : {detail}'**
+  String feedbackRefused(String detail);
+
+  /// No description provided for @feedbackOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de réseau. Votre message reste ici, réessayez une fois connecté.'**
+  String get feedbackOffline;
+
+  /// No description provided for @feedbackNotConnected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Flux non connecté : le message n\'est pas parti. Renseignez l\'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.'**
+  String get feedbackNotConnected;
+
+  /// No description provided for @feedbackAuth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le flux refuse la clé de l\'application. Vérifiez-la dans les paramètres.'**
+  String get feedbackAuth;
+
+  /// No description provided for @feedbackPrivacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.'**
+  String get feedbackPrivacy;
 }
 
 class _AppLocalizationsDelegate

@@ -46,6 +46,25 @@ void main() {
     },
   );
 
+  test('PRV-R4 le signalement part avec le prochain enrichissement, puis s\'arrête', () async {
+    final wine = await enriched();
+    var d = (await w.f.repo.wine(wine))!;
+    expect(await w.queue.reports(wine), isEmpty);
+    await w.f.repo.reportProvenance(d.provenances['appellation']!.id);
+    final reports = await w.queue.reports(wine);
+    expect(reports.map((r) => r.field), ['appellation']);
+    expect(reports.single.value, isNotEmpty);
+    // Nouvel enrichissement, une heure plus tard : nouvelle proposition, le
+    // signalement s'arrête.
+    w.now = w.now.add(const Duration(hours: 1));
+    await w.queue.retry(wine);
+    await w.runToEnd();
+    await w.validation.apply(wine, (await w.queue.resultFor(wine))!);
+    expect(await w.queue.reports(wine), isEmpty);
+    d = (await w.f.repo.wine(wine))!;
+    expect(d.provenances['appellation']!.reported, isFalse);
+  });
+
   test(
     'PRV-R3 déverrouiller rend le champ au prochain enrichissement',
     () async {

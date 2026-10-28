@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
+import 'package:iacaveavin/data/enrichment/enrichment_providers.dart';
+import 'package:iacaveavin/data/flux_credentials.dart';
 import 'package:iacaveavin/app.dart';
 import 'package:iacaveavin/data/backup_providers.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
@@ -111,6 +114,7 @@ Future<FakeDemoRepository> pumpApp(
         databaseProvider.overrideWithValue(db),
         currentYearProvider.overrideWithValue(2026),
         ...noFileSystem,
+        ...testFlux,
         bootstrapProvider.overrideWith((ref) async => 'cave-test'),
         wineListProvider.overrideWith(
           (ref) => wines ?? Stream.value(sampleWines),
@@ -162,6 +166,7 @@ Future<AppDatabase> pumpRealApp(
         assetReaderProvider.overrideWithValue(readAssetFromDisk),
         currentYearProvider.overrideWithValue(2026),
         ...noFileSystem,
+        ...testFlux,
         if (appDir != null)
           appDirProvider.overrideWithValue(() async => appDir),
         ...extra,
@@ -197,8 +202,28 @@ Future<void> pumpUntil(WidgetTester tester, bool Function() done) async {
   await settle(tester);
 }
 
+/// Sans connexion enregistrée, l'app publiée n'a pas de flux (T122). Les
+/// tests rejouent les exemples du contrat avec [FakeGateway], réglé par les
+/// préférences fakeScenario et simulateOffline.
+final testFlux = [
+  unconnectedGatewayProvider.overrideWithValue(
+    (validator, settings) => FakeGateway(
+      validator: validator,
+      readExample: (name) => readAssetFromDisk('assets/contrat/exemples/$name'),
+      scenario: FakeScenario.values.firstWhere(
+        (s) => s.name == settings.fakeScenario,
+        orElse: () => FakeScenario.done,
+      ),
+      online: !settings.simulateOffline,
+      delay: const Duration(milliseconds: 600),
+    ),
+  ),
+];
+
 /// Pas de répertoire d'application en test : sauvegardes et photos vides.
 final noFileSystem = [
   autoBackupsProvider.overrideWith((ref) async => const []),
   photoSpaceProvider.overrideWith((ref) async => 0),
+  // Pas de stockage sécurisé du système dans les tests : clé en mémoire.
+  secretStoreProvider.overrideWith((ref) => MemorySecretStore()),
 ];

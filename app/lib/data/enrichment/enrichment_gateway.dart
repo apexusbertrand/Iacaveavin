@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../domain/enrichment.dart';
+import '../../domain/feedback.dart';
 import 'contract_validator.dart';
 
 /// Le flux est injoignable (mode avion, serveur arrêté) : le job attend.
@@ -9,6 +10,16 @@ class OfflineException implements Exception {
 
   @override
   String toString() => 'OfflineException';
+}
+
+/// Aucune connexion au flux n'est enregistrée (PAR-05) : la fiche reste
+/// « à enrichir » et partira une fois la connexion faite dans les Paramètres.
+/// Traitée comme une absence de réseau par la file d'attente.
+class NotConnectedException extends OfflineException {
+  const NotConnectedException();
+
+  @override
+  String toString() => 'NotConnectedException';
 }
 
 class FluxHealth {
@@ -22,8 +33,39 @@ class FluxHealth {
 /// validée contre le contrat avant d'être renvoyée (AJO-12).
 abstract interface class EnrichmentGateway {
   Future<JobResponse> requestEnrichment(EnrichmentRequest request);
+
+  /// PRX-02 : relevé du prix marché d'une fiche existante.
+  Future<JobResponse> requestPrice(PriceRequest request);
   Future<JobResponse> followJob(String jobId);
   Future<FluxHealth> health();
+
+  /// RET-01 : remontée d'information envoyée par mail par le flux.
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request);
+}
+
+/// App publiée sans connexion enregistrée : pas de flux de démonstration,
+/// chaque appel signale l'absence de connexion.
+class NotConnectedGateway implements EnrichmentGateway {
+  const NotConnectedGateway();
+
+  @override
+  Future<JobResponse> requestEnrichment(EnrichmentRequest request) =>
+      Future.error(const NotConnectedException());
+
+  @override
+  Future<JobResponse> requestPrice(PriceRequest request) =>
+      Future.error(const NotConnectedException());
+
+  @override
+  Future<JobResponse> followJob(String jobId) =>
+      Future.error(const NotConnectedException());
+
+  @override
+  Future<FluxHealth> health() => Future.error(const NotConnectedException());
+
+  @override
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request) =>
+      Future.error(const NotConnectedException());
 }
 
 /// Scénarios rejoués par [FakeGateway].
@@ -90,6 +132,21 @@ class FakeGateway implements EnrichmentGateway {
     if (!online) throw const OfflineException();
   }
 
+  /// Dernière remontée reçue (RET-01).
+  FeedbackRequest? lastFeedback;
+
+  /// Remontée rejouée pour les tests : rien ne part, la réponse est celle de
+  /// l'exemple du contrat, validée comme une vraie.
+  @override
+  Future<FeedbackResult> sendFeedback(FeedbackRequest request) async {
+    _checkOnline();
+    lastFeedback = request;
+    if (delay > Duration.zero) await Future<void>.delayed(delay);
+    final e = await _example('reponse-remontee.json');
+    final body = jsonEncode({...e, 'request_id': request.requestId});
+    return FeedbackResult.fromJson(validator.checkFeedbackResponse(body));
+  }
+
   @override
   Future<JobResponse> requestEnrichment(EnrichmentRequest request) async {
     _checkOnline();
@@ -121,15 +178,58 @@ class FakeGateway implements EnrichmentGateway {
     );
   }
 
+  /// Dernier relevé de prix demandé.
+  PriceRequest? lastPriceRequest;
+
+  @override
+  Future<JobResponse> requestPrice(PriceRequest request) async {
+    _checkOnline();
+    lastPriceRequest = request;
+    final job = _FakeJob(
+      requestId: request.requestId,
+      wineId: request.wineId,
+      jobId: _uuidFor(_jobs.length),
+      price: true,
+    );
+    _jobs[job.jobId] = job;
+    if (scenario == FakeScenario.quota) {
+      final e = await _example('erreur-quota.json');
+      return _answer({...e, 'request_id': request.requestId, 'type': 'prix'});
+    }
+    final base = await _example('job-en-cours.json');
+    return _answer(
+      job.stamp({
+        ...base,
+        'type': 'prix',
+        'statut': 'en_attente',
+        'etape': 'prix',
+      }),
+    );
+  }
+
   @override
   Future<JobResponse> followJob(String jobId) async {
     _checkOnline();
     final job = _jobs[jobId];
     if (job == null) throw StateError('job inconnu $jobId');
+    if (job.price) {
+      job.polls++;
+      if (job.polls < pollsBeforeDone) {
+        final base = await _example('job-en-cours.json');
+        return _answer(job.stamp({...base, 'type': 'prix', 'etape': 'prix'}));
+      }
+      final e = await _example('prix-termine.json');
+      return _answer(job.stamp(e));
+    }
     job.polls++;
     if (scenario == FakeScenario.never || job.polls < pollsBeforeDone) {
-      final base = await _example('job-en-cours.json');
       final step = jobSteps[(job.polls) % (jobSteps.length - 1)];
+      // T111 : dès l'étape enrichissement, la lecture de l'étiquette suit.
+      final base = await _example(
+        jobSteps.indexOf(step) >= jobSteps.indexOf('enrichissement')
+            ? 'job-en-cours-lecture.json'
+            : 'job-en-cours.json',
+      );
       return _answer(job.stamp({...base, 'etape': step}));
     }
     return _final(job);
@@ -158,11 +258,17 @@ class FakeGateway implements EnrichmentGateway {
 }
 
 class _FakeJob {
-  _FakeJob({required this.requestId, required this.jobId, this.wineId});
+  _FakeJob({
+    required this.requestId,
+    required this.jobId,
+    this.wineId,
+    this.price = false,
+  });
 
   final String requestId;
   final String jobId;
   final String? wineId;
+  final bool price;
   int polls = 0;
 
   Map<String, dynamic> stamp(Map<String, dynamic> json) => {

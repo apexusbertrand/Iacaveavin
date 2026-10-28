@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ia-cave-a-vin/contrat-n8n/reponse-remontee.schema.json",
+  "title": "Réponse de POST /remontee",
+  "description": "Contrat 1.3 (RET-01). envoye : le mail est parti. erreur : rien n'est parti, le formulaire garde sa saisie.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version_contrat", "request_id", "statut"],
+  "properties": {
+    "version_contrat": { "type": "string", "pattern": "^1\\.[0-9]+$" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "statut": { "enum": ["envoye", "erreur"] },
+    "envoi_restants_jour": { "type": "integer", "minimum": 0 },
+    "erreur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "reessayable"],
+      "properties": {
+        "code": { "enum": ["requete_invalide", "auth_invalide", "signature_expiree", "quota_depasse", "interne"] },
+        "message": { "type": "string" },
+        "reessayable": { "type": "boolean" }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "statut": { "const": "erreur" } } }, "then": { "required": ["erreur"] } }
+  ]
+}

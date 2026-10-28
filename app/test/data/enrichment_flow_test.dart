@@ -47,6 +47,7 @@ class Flow {
         for (final r in (yaml['regles'] as YamlList).cast<YamlMap>())
           GardeRule.fromJson(r),
       ],
+      photos: photos,
       clock: () => now,
     );
   }
@@ -255,4 +256,42 @@ void main() {
     expect(await w.f.repo.wine(wine), isNull);
     expect((await w.f.repo.wine(existing))!.bottles, 5);
   });
+
+  test(
+    'AJO-13 le résultat rogne la photo, la validation supprime l\'origine',
+    () async {
+      final wine = await w.photographed();
+      await w.runToEnd();
+      // Exemple du contrat : cadre (0,18 ; 0,22 ; 0,64 × 0,5) sur la photo 0.
+      var ph = (await w.photos.photosOf(wine)).single;
+      expect((ph.largeur, ph.hauteur), (768, 400));
+      expect(ph.cadre, isNotNull);
+      final origine = File('${w.root.path}/${ph.cheminOriginal}');
+      expect(origine.existsSync(), isTrue);
+      await w.validation.apply(wine, (await w.queue.resultFor(wine))!);
+      ph = (await w.photos.photosOf(wine)).single;
+      expect(origine.existsSync(), isFalse);
+      expect(ph.cheminOriginal, isNull);
+      expect(
+        (ph.largeur, ph.hauteur),
+        (768, 400),
+        reason: 'photo rognée gardée',
+      );
+    },
+  );
+
+  test(
+    'AJO-05 T110 suivi toutes les 3 s pendant 90 s, puis toutes les 10 s',
+    () {
+      expect(pollDelay(Duration.zero), const Duration(seconds: 3));
+      expect(
+        pollDelay(const Duration(seconds: 89)),
+        const Duration(seconds: 3),
+      );
+      expect(
+        pollDelay(const Duration(seconds: 90)),
+        const Duration(seconds: 10),
+      );
+    },
+  );
 }

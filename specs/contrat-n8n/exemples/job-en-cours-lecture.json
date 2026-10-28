@@ -1,0 +1,58 @@
+{
+  "version_contrat": "1.1",
+  "job_id": "9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d",
+  "request_id": "5d0c1c9e-8a3f-4f6e-9c2b-1a7e3d4f5b60",
+  "fiche_id": "0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10",
+  "type": "enrichissement",
+  "statut": "en_cours",
+  "etape": "enrichissement",
+  "quota": {
+    "enrichissements_restants_mois": 87,
+    "prix_restants_mois": 120
+  },
+  "resultat": {
+    "fiche": {
+      "domaine": {
+        "valeur": "Guillaume L'Echanson",
+        "source": "etiquette",
+        "confiance": null
+      },
+      "cuvee": {
+        "valeur": null,
+        "source": null,
+        "confiance": null,
+        "motif": "non lu sur l'étiquette"
+      },
+      "appellation": {
+        "valeur": "Bourgogne Côte d'Or",
+        "source": "etiquette",
+        "confiance": null
+      },
+      "millesime": {
+        "valeur": 2024,
+        "source": "etiquette",
+        "confiance": null
+      },
+      "couleur": {
+        "valeur": null,
+        "source": null,
+        "confiance": null,
+        "motif": "non lu sur l'étiquette"
+      },
+      "volume_cl": {
+        "valeur": 75,
+        "source": "etiquette",
+        "confiance": null
+      }
+    },
+    "transcription": [
+      {
+        "index": 0,
+        "texte": "GUILLAUME L'ECHANSON / BOURGOGNE CÔTE D'OR / APPELLATION D'ORIGINE PROTÉGÉE / PINOT NOIR / 2024 / PRODUIT DE FRANCE"
+      }
+    ],
+    "notes_critiques": [],
+    "alertes": [],
+    "sources_consultees": []
+  }
+}

@@ -4,6 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yaml/yaml.dart';
 
+import 'package:iacaveavin/domain/excel_layout.dart';
+
 import '../helpers.dart';
 
 /// Alignement de la base drift sur specs/dictionnaire-donnees.yaml (règle 9).
@@ -87,4 +89,22 @@ void main() {
       }
     },
   );
+
+  test('XLS-01 colonnes Excel = clés excel du dictionnaire, même ordre', () {
+    final attendues = <String>[
+      for (final entry in entites.entries)
+        for (final c
+            in ((entry.value as YamlMap)['champs'] as YamlList).cast<YamlMap>())
+          if (c['excel'] != null) '${entry.key}.${c['cle']}=${c['excel']}',
+    ];
+    final par = <String, List<String>>{};
+    for (final a in attendues) {
+      final onglet = a.split('=').last.replaceFirst('RO:', '').split('/').first;
+      par.putIfAbsent(onglet, () => []).add(a);
+    }
+    String key(ExcelColumn c) => '${c.entity}.${c.key}=${c.dictionaryKey}';
+    expect([for (final c in wineColumns) key(c)], par[sheetWines]);
+    expect([for (final c in lotColumns) key(c)], par[sheetLots]);
+    expect([for (final c in movementColumns) key(c)], par[sheetMovements]);
+  });
 }

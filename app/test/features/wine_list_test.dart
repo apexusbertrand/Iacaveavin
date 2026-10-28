@@ -39,14 +39,14 @@ void main() {
     expect(find.textContaining('France'), findsNWidgets(3));
   });
 
-  testWidgets('CMP-07 état vide : message et chargement de la démonstration', (
+  testWidgets('LST-01 NFR-18 état vide : message, sans démonstration', (
     tester,
   ) async {
     final repo = await pumpApp(tester, wines: Stream.value(const []));
     expect(find.text('Aucun vin.'), findsOneWidget);
-    await tester.tap(find.text('Charger la démonstration'));
-    await tester.pumpAndSettle();
-    expect(repo.loads, 1);
+    expect(find.textContaining('bouton +'), findsOneWidget);
+    expect(find.textContaining('démonstration'), findsNothing);
+    expect(repo.loads, 0);
   });
 
   testWidgets('CMP-07 état chargement : squelettes, jamais d\'écran blanc', (

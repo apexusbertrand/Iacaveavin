@@ -14,6 +14,7 @@ import '../../data/reference_repository.dart';
 import '../../domain/wine_detail.dart';
 import '../wine_detail/stock_dialogs.dart';
 import '../wine_list/wine_card.dart';
+import 'rack_grid.dart';
 
 /// Emplacements (EMP-01, EMP-02, EMP-05) : arbre sur 4 niveaux.
 class LocationsScreen extends ConsumerWidget {
@@ -377,6 +378,8 @@ class LocationDetailScreen extends ConsumerWidget {
               ],
             ),
           ),
+          if ((loc.rows ?? 0) > 0 && (loc.cols ?? 0) > 0)
+            RackGrid(location: loc, lots: lots),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.l),
             child: Text(l.locationWines, style: theme.textTheme.titleMedium),
@@ -393,7 +396,8 @@ class LocationDetailScreen extends ConsumerWidget {
                 [
                   lot.ownerName,
                   if (lot.positions != null) lot.positions!,
-                  if (lot.locationId != locationId) _path(all, lot.locationId),
+                  if (lot.locationId != locationId && lot.locationId != null)
+                    _path(all, lot.locationId!),
                 ].join(' · '),
               ),
               trailing: Text(

@@ -20,7 +20,9 @@ import '../../data/enrichment/enrichment_providers.dart';
 import '../add/add_menu.dart';
 import '../backup/backup_screen.dart';
 import 'list_filters_sheet.dart';
+import '../to_drink/monthly_alert_banner.dart';
 import 'list_state.dart';
+import '../wine_detail/price_actions.dart';
 import 'selection_actions.dart';
 import 'wine_card.dart';
 
@@ -54,6 +56,8 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       // AJO-09 : les jobs en attente repartent au lancement.
       ref.read(enrichmentRunnerProvider.notifier).kick();
       await runAutoBackupIfDue(ref);
+      // PRX-06 : rafraîchissement mensuel des prix, si l'option est active.
+      if (mounted) await autoRefreshPricesIfDue(ref);
     });
   }
 
@@ -181,10 +185,6 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         icon: Icons.wine_bar_outlined,
         title: l.wineListEmptyTitle,
         body: l.wineListEmptyBody,
-        action: FilledButton(
-          onPressed: _loadDemo,
-          child: Text(l.settingsDemoLoad),
-        ),
       );
     }
     final labels = ref.watch(labelsProvider).value ?? const {};
@@ -208,61 +208,69 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       locale: locale,
       name: settings.currency,
     );
-    return ListView.builder(
-      key: const ValueKey('wine-list'),
-      controller: _scroll,
-      padding: const EdgeInsets.only(
-        top: SpacingTokens.xs,
-        bottom: SpacingTokens.xxl * 3,
-      ),
-      itemCount: entries.length,
-      itemBuilder: (context, i) {
-        final e = entries[i];
-        if (e.group != null) {
-          final g = e.group!;
-          return _GroupHeader(
-            group: g,
-            collapsed: _collapsed.contains(g.key),
-            onTap: () => setState(
-              () => _collapsed.contains(g.key)
-                  ? _collapsed.remove(g.key)
-                  : _collapsed.add(g.key),
+    // CMP-02 : alerte du mois en tête de la liste.
+    return Column(
+      children: [
+        const MonthlyAlertBanner(),
+        Expanded(
+          child: ListView.builder(
+            key: const ValueKey('wine-list'),
+            controller: _scroll,
+            padding: const EdgeInsets.only(
+              top: SpacingTokens.xs,
+              bottom: SpacingTokens.xxl * 3,
             ),
-          );
-        }
-        final w = e.wine!;
-        final selected = _selected.contains(w.id);
-        void toggle() => setState(
-          () => selected ? _selected.remove(w.id) : _selected.add(w.id),
-        );
-        final tile = settings.compactView
-            ? CompactWineRow(
-                item: w,
-                selected: selected,
-                onTap: _selected.isEmpty ? () => _openWine(w) : toggle,
-                onLongPress: toggle,
-              )
-            : WineCard(
-                item: w,
-                currency: currency,
-                showMarketPrice: settings.cardPrice == CardPrice.market,
-                selected: selected,
-                onTap: _selected.isEmpty ? () => _openWine(w) : toggle,
-                onLongPress: toggle,
+            itemCount: entries.length,
+            itemBuilder: (context, i) {
+              final e = entries[i];
+              if (e.group != null) {
+                final g = e.group!;
+                return _GroupHeader(
+                  group: g,
+                  collapsed: _collapsed.contains(g.key),
+                  onTap: () => setState(
+                    () => _collapsed.contains(g.key)
+                        ? _collapsed.remove(g.key)
+                        : _collapsed.add(g.key),
+                  ),
+                );
+              }
+              final w = e.wine!;
+              final selected = _selected.contains(w.id);
+              void toggle() => setState(
+                () => selected ? _selected.remove(w.id) : _selected.add(w.id),
               );
-        if (_selected.isNotEmpty || w.primaryLotId == null) return tile;
-        // Glisser vers la gauche ouvre une bouteille, annulable 5 s.
-        return Dismissible(
-          key: ValueKey('swipe-${w.id}'),
-          direction: DismissDirection.endToStart,
-          background: _SwipeBackground(label: l.openOneBottle),
-          confirmDismiss: (_) async {
-            await _openBottle(w);
-            return false;
-          },
-          child: tile,
-        );
-      },
+              final tile = settings.compactView
+                  ? CompactWineRow(
+                      item: w,
+                      selected: selected,
+                      onTap: _selected.isEmpty ? () => _openWine(w) : toggle,
+                      onLongPress: toggle,
+                    )
+                  : WineCard(
+                      item: w,
+                      currency: currency,
+                      showMarketPrice: settings.cardPrice == CardPrice.market,
+                      selected: selected,
+                      onTap: _selected.isEmpty ? () => _openWine(w) : toggle,
+                      onLongPress: toggle,
+                    );
+              if (_selected.isNotEmpty || w.primaryLotId == null) return tile;
+              // Glisser vers la gauche ouvre une bouteille, annulable 5 s.
+              return Dismissible(
+                key: ValueKey('swipe-${w.id}'),
+                direction: DismissDirection.endToStart,
+                background: _SwipeBackground(label: l.openOneBottle),
+                confirmDismiss: (_) async {
+                  await _openBottle(w);
+                  return false;
+                },
+                child: tile,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -394,16 +402,14 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         icon: const Icon(Icons.person_outline),
         onPressed: () => _runSelection(SelectionAction.owner),
       ),
-      PopupMenuButton<void>(
-        itemBuilder: (_) => [
-          for (final label in [
-            l.laterPdf,
-            l.laterExcel,
-            l.laterEnrich,
-            l.laterPrices,
-          ])
-            PopupMenuItem<void>(enabled: false, child: Text(label)),
-        ],
+      IconButton(
+        key: const ValueKey('selection-prices'),
+        tooltip: l.refreshPrice,
+        icon: const Icon(Icons.euro),
+        onPressed: () async {
+          await refreshAllPrices(context, ref, wineIds: _selected.toList());
+          if (mounted) setState(_selected.clear);
+        },
       ),
     ],
   );
@@ -461,17 +467,6 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       builder: (_) => FiltersSheet(initial: current.filters),
     );
     if (result != null) _updateQuery((q) => q.copyWith(filters: result));
-  }
-
-  Future<void> _loadDemo() async {
-    final l = AppLocalizations.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    try {
-      await ref.read(demoRepositoryProvider).load();
-      ref.invalidate(demoCountProvider);
-    } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(l.operationFailed('$e'))));
-    }
   }
 }
 

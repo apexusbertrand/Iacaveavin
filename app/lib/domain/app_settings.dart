@@ -5,7 +5,8 @@ enum AppThemeMode { system, light, dark }
 enum CardPrice { purchase, market }
 
 /// Réglages de l'application (PAR-05) et état mémorisé de la liste (LST-09).
-/// Aucun secret ici : la clé du flux n8n ira dans le stockage sécurisé (lot 2c).
+/// Aucun secret ici : la clé du flux n8n est dans le stockage sécurisé
+/// (FluxCredentials), jamais dans les préférences.
 class AppSettings {
   const AppSettings({
     this.currency = 'EUR',
@@ -25,6 +26,10 @@ class AppSettings {
     this.photoConsent = false,
     this.fakeScenario = 'done',
     this.simulateOffline = false,
+    this.fluxUrl = '',
+    this.installationId,
+    this.lastAutoPriceRefresh,
+    this.alertSeenMonth,
   });
 
   /// Code ISO 4217.
@@ -50,17 +55,34 @@ class AppSettings {
   final DateTime? lastAutoBackup;
   final DateTime? lastExternalBackup;
 
+  /// CMP-02 : mois (AAAA-MM) dont l'alerte a été vue et fermée.
+  final String? alertSeenMonth;
+
   /// Premier lancement, point de départ du rappel d'export (SAV-03).
   final DateTime? firstLaunch;
 
   /// NFR-08 : consentement explicite avant le premier envoi de photos.
   final bool photoConsent;
 
-  /// Lot 2a : scénario rejoué par le faux flux (nom de FakeScenario).
+  /// Tests seulement : scénario rejoué par FakeGateway (nom de FakeScenario).
+  /// L'app publiée n'a pas de faux flux (T122).
   final String fakeScenario;
 
-  /// Lot 2a : le faux flux se comporte comme en mode avion.
+  /// Tests seulement : FakeGateway se comporte comme en mode avion.
   final bool simulateOffline;
+
+  /// PAR-05 : adresse de l'instance n8n. Vide : pas de connexion, les fiches
+  /// restent « à enrichir ».
+  final String fluxUrl;
+
+  /// UUID de l'installation (en-tête X-IACAV-Installation), généré une fois.
+  final String? installationId;
+
+  /// PRX-06 : dernier rafraîchissement automatique des prix.
+  final DateTime? lastAutoPriceRefresh;
+
+  /// Le vrai flux est utilisé dès qu'une adresse est enregistrée.
+  bool get usesRealFlux => fluxUrl.trim().isNotEmpty;
 
   AppSettings copyWith({
     String? currency,
@@ -76,10 +98,14 @@ class AppSettings {
     bool? compactView,
     DateTime? lastAutoBackup,
     DateTime? lastExternalBackup,
+    String? alertSeenMonth,
     DateTime? firstLaunch,
     bool? photoConsent,
     String? fakeScenario,
     bool? simulateOffline,
+    String? fluxUrl,
+    String? installationId,
+    DateTime? lastAutoPriceRefresh,
   }) => AppSettings(
     currency: currency ?? this.currency,
     themeMode: themeMode ?? this.themeMode,
@@ -98,10 +124,14 @@ class AppSettings {
     compactView: compactView ?? this.compactView,
     lastAutoBackup: lastAutoBackup ?? this.lastAutoBackup,
     lastExternalBackup: lastExternalBackup ?? this.lastExternalBackup,
+    alertSeenMonth: alertSeenMonth ?? this.alertSeenMonth,
     firstLaunch: firstLaunch ?? this.firstLaunch,
     photoConsent: photoConsent ?? this.photoConsent,
     fakeScenario: fakeScenario ?? this.fakeScenario,
     simulateOffline: simulateOffline ?? this.simulateOffline,
+    fluxUrl: fluxUrl ?? this.fluxUrl,
+    installationId: installationId ?? this.installationId,
+    lastAutoPriceRefresh: lastAutoPriceRefresh ?? this.lastAutoPriceRefresh,
   );
 
   static Map<String, Object?> _query(WineQuery q) => {
@@ -133,10 +163,14 @@ class AppSettings {
     'compactView': compactView,
     'lastAutoBackup': lastAutoBackup?.toIso8601String(),
     'lastExternalBackup': lastExternalBackup?.toIso8601String(),
+    'alertSeenMonth': alertSeenMonth,
     'firstLaunch': firstLaunch?.toIso8601String(),
     'photoConsent': photoConsent,
     'fakeScenario': fakeScenario,
     'simulateOffline': simulateOffline,
+    'fluxUrl': fluxUrl,
+    'installationId': installationId,
+    'lastAutoPriceRefresh': lastAutoPriceRefresh?.toIso8601String(),
   };
 
   static AppSettings fromJson(Map<String, Object?> json) => AppSettings(
@@ -158,9 +192,13 @@ class AppSettings {
     compactView: json['compactView'] == true,
     lastAutoBackup: DateTime.tryParse('${json['lastAutoBackup']}'),
     lastExternalBackup: DateTime.tryParse('${json['lastExternalBackup']}'),
+    alertSeenMonth: json['alertSeenMonth'] as String?,
     firstLaunch: DateTime.tryParse('${json['firstLaunch']}'),
     photoConsent: json['photoConsent'] == true,
     fakeScenario: json['fakeScenario'] as String? ?? 'done',
     simulateOffline: json['simulateOffline'] == true,
+    fluxUrl: json['fluxUrl'] as String? ?? '',
+    installationId: json['installationId'] as String?,
+    lastAutoPriceRefresh: DateTime.tryParse('${json['lastAutoPriceRefresh']}'),
   );
 }

@@ -44,8 +44,6 @@ class AboutScreen extends StatelessWidget {
           ),
           const SizedBox(height: SpacingTokens.xl),
           Text(l.aboutReferenceData, style: secondary),
-          const SizedBox(height: SpacingTokens.s),
-          Text(l.aboutDemoNotice, style: secondary),
         ],
       ),
     );

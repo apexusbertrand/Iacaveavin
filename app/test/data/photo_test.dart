@@ -100,4 +100,66 @@ void main() {
       expect(Directory('${root.path}/photos/${f.wine}').existsSync(), isFalse);
     },
   );
+
+  test('CMP-08 photo de dégustation ramenée à un écran de smartphone', () {
+    // 4 000 × 3 000 (paysage) : tient dans 1 920 × 1 080.
+    final landscape = processScreenPhoto(sharpLabel(w: 4000, h: 3000));
+    expect([landscape.width, landscape.height], [1440, 1080]);
+    // 3 000 × 4 000 (portrait) : tient dans 1 080 × 1 920.
+    final portrait = processScreenPhoto(sharpLabel(w: 3000, h: 4000));
+    expect([portrait.width, portrait.height], [1080, 1440]);
+    // Panorama très large : borné par le grand côté.
+    final wide = processScreenPhoto(sharpLabel(w: 4000, h: 1000));
+    expect([wide.width, wide.height], [1920, 480]);
+    // Déjà petite : gardée telle quelle.
+    final small = processScreenPhoto(sharpLabel(w: 800, h: 600));
+    expect([small.width, small.height], [800, 600]);
+    expect(landscape.stored.length, lessThan(600 * 1024));
+    expect(img.decodeJpg(landscape.thumb)!.width, thumbLongSide);
+  });
+
+  test(
+    'CMP-08 photos rattachées à la dégustation et dans la bibliothèque',
+    () async {
+      final f = Fixture();
+      await f.setUp();
+      addTearDown(f.db.close);
+      final root = Directory.systemTemp.createTempSync('iacav-photos-');
+      addTearDown(() => root.deleteSync(recursive: true));
+      final service = PhotoService(
+        f.db,
+        appDir: () async => root,
+        clock: () => f.now,
+      );
+      final tasting = await f.repo.addTasting(
+        wineId: f.wine,
+        cellarId: f.cellar,
+        comment: 'Superbe',
+      );
+      final other = await f.repo.addTasting(wineId: f.wine, cellarId: f.cellar);
+      final p = processScreenPhoto(sharpLabel(w: 1200, h: 900));
+      for (var i = 0; i < 2; i++) {
+        await service.save(
+          wineId: f.wine,
+          cellarId: f.cellar,
+          photo: p,
+          type: 'degustation',
+          tastingId: tasting,
+        );
+      }
+      final photos = await service.tastingPhotosOf(tasting);
+      expect(photos, hasLength(2));
+      expect(photos.every((x) => x.degustationId == tasting), isTrue);
+      expect(photos.every((x) => !x.principale), isTrue);
+      expect(await service.tastingPhotosOf(other), isEmpty);
+      expect(await service.libraryOf(f.wine), hasLength(2));
+      expect(
+        await service.forRequest(f.wine),
+        isEmpty,
+        reason: 'jamais au flux',
+      );
+      await service.delete(photos.first);
+      expect(await service.tastingPhotosOf(tasting), hasLength(1));
+    },
+  );
 }

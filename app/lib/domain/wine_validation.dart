@@ -52,6 +52,17 @@ bool isValidEan13(String code) {
   return (10 - sum % 10) % 10 == code.codeUnitAt(12) - 48;
 }
 
+/// AJO-10 : premier EAN valide parmi les valeurs lues par le lecteur de
+/// code-barres. Un UPC-A (12 chiffres) devient l'EAN-13 précédé de 0.
+String? eanFromScan(Iterable<String?> values) {
+  for (final v in values) {
+    final digits = (v ?? '').replaceAll(RegExp(r'\s'), '');
+    final ean = digits.length == 12 ? '0$digits' : digits;
+    if (isValidEan13(ean)) return ean;
+  }
+  return null;
+}
+
 /// EMP-02 : positions « A3, B5 » dans une grille de [rows] lignes (A à Z) et
 /// [cols] colonnes (1 à 50). Renvoie les cellules normalisées, ou null si une
 /// position est invalide.

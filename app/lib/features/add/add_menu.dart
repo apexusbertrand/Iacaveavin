@@ -51,10 +51,14 @@ Future<void> showAddMenu(BuildContext context) {
             },
           ),
           ListTile(
-            enabled: false,
+            key: const ValueKey('add-excel'),
             leading: const Icon(Icons.table_view_outlined),
             title: Text(l.addExcel),
             subtitle: Text(l.addExcelHint),
+            onTap: () {
+              Navigator.of(sheet).pop();
+              context.go('/import-export');
+            },
           ),
         ],
       ),

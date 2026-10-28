@@ -12,16 +12,8 @@
   "navImportExport": "Import et export",
   "navBackup": "Sauvegarde",
   "navSettings": "Paramètres",
+  "navFeedback": "Remontée d'information",
   "navAbout": "À propos",
-  "placeholderTitle": "Bientôt disponible",
-  "placeholderBody": "Cet écran arrive avec le lot {lot}.",
-  "@placeholderBody": {
-    "placeholders": {
-      "lot": {
-        "type": "String"
-      }
-    }
-  },
   "wineListTitle": "Mes vins",
   "wineListSummary": "{wines, plural, =0{Aucun vin} =1{1 vin} other{{wines} vins}} · {bottles, plural, =0{0 bouteille} =1{1 bouteille} other{{bottles} bouteilles}}",
   "@wineListSummary": {
@@ -35,7 +27,7 @@
     }
   },
   "wineListEmptyTitle": "Aucun vin.",
-  "wineListEmptyBody": "Photographiez votre première étiquette, ou chargez le jeu de démonstration pour découvrir l'application.",
+  "wineListEmptyBody": "Photographiez votre première étiquette avec le bouton +, ou saisissez une bouteille à la main.",
   "wineListLoading": "Chargement de la cave",
   "wineListErrorTitle": "La cave n'a pas pu être lue.",
   "wineListErrorDetail": "Détail : {detail}",
@@ -48,7 +40,6 @@
   },
   "retry": "Réessayer",
   "addBottle": "Ajouter une bouteille",
-  "addBottleLater": "L'ajout d'une bouteille arrive au lot 1 (saisie) et au lot 2a (photo).",
   "nonVintage": "NM",
   "bottleCount": "{count, plural, =0{Épuisé} =1{1 bouteille} other{{count} bouteilles}}",
   "@bottleCount": {
@@ -74,24 +65,6 @@
     }
   },
   "backToTop": "Haut de la page",
-  "settingsDemoSection": "Jeu de démonstration",
-  "settingsDemoDescription": "200 fiches fictives (domaines inventés) pour essayer l'application et vérifier la fluidité. Vos propres vins ne sont jamais touchés.",
-  "settingsDemoLoaded": "{count, plural, =1{Démonstration chargée : 1 fiche} other{Démonstration chargée : {count} fiches}}",
-  "@settingsDemoLoaded": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "settingsDemoNotLoaded": "Démonstration non chargée",
-  "settingsDemoLoad": "Charger la démonstration",
-  "settingsDemoErase": "Effacer la démonstration",
-  "settingsDemoEraseTitle": "Effacer la démonstration ?",
-  "settingsDemoEraseBody": "Les fiches de démonstration, leurs lots et leurs mouvements seront supprimés. Vos propres vins ne sont pas touchés.",
-  "settingsDemoLoadedSnack": "Démonstration chargée.",
-  "settingsDemoErasedSnack": "Démonstration effacée.",
-  "settingsMoreLater": "Les autres réglages (connexion au flux, devise, thème, listes) arrivent au lot 1.",
   "operationFailed": "L'opération a échoué : {detail}",
   "@operationFailed": {
     "placeholders": {
@@ -113,7 +86,6 @@
   },
   "aboutHealthWarning": "L'abus d'alcool est dangereux pour la santé, à consommer avec modération.",
   "aboutReferenceData": "Référentiels : pays selon ISO 3166-1. Appellations, régions et cépages : listes provisoires, à remplacer par les données ouvertes de l'INAO.",
-  "aboutDemoNotice": "Les domaines du jeu de démonstration sont inventés.",
   "search": "Rechercher",
   "searchHint": "Nom, domaine, appellation, cépage…",
   "closeSearch": "Fermer la recherche",
@@ -237,10 +209,6 @@
       }
     }
   },
-  "laterPdf": "PDF (lot 3)",
-  "laterExcel": "Export Excel (lot 3)",
-  "laterEnrich": "Ré-enrichir (lot 2a)",
-  "laterPrices": "Rafraîchir les prix (lot 2c)",
   "openOneBottle": "Ouvrir 1 bouteille",
   "bottleOpened": "1 bouteille ouverte : {name}",
   "@bottleOpened": {
@@ -364,7 +332,6 @@
   "fieldFormat": "Format",
   "fieldUnitPrice": "Prix d'achat unitaire TTC",
   "fieldPurchaseDate": "Date d'achat",
-  "fieldSupplier": "Fournisseur",
   "fieldFavorite": "Favori",
   "gardeRange": "{start} → {end}",
   "@gardeRange": {
@@ -434,6 +401,16 @@
   },
   "tastingDish": "Plat servi",
   "tastingComment": "Commentaire",
+  "tastingPhotos": "Photos de la dégustation",
+  "tastingPhotoRemove": "Retirer la photo",
+  "tastingPhotosMax": "{count} photos au plus par dégustation.",
+  "@tastingPhotosMax": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tastingPrompt": "Noter cette dégustation ?",
   "later": "Plus tard",
   "save": "Enregistrer",
@@ -441,7 +418,7 @@
   "purchasePrices": "Prix d'achat par lot",
   "marketPrices": "Prix marché",
   "noPurchasePrice": "Prix d'achat inconnu",
-  "noMarketPrice": "Aucun prix marché relevé. Le relevé automatique arrive au lot 2c.",
+  "noMarketPrice": "Aucun prix marché relevé pour l'instant.",
   "lastMarketPrice": "Dernier prix : {price} le {date}",
   "@lastMarketPrice": {
     "placeholders": {
@@ -461,8 +438,7 @@
       }
     }
   },
-  "refreshPrice": "Rafraîchir",
-  "refreshPriceLater": "Le relevé des prix marché arrive au lot 2c.",
+  "refreshPrice": "Relever le prix",
   "lots": "Lots",
   "lotLine": "{owner} · {format} cl · {count}",
   "@lotLine": {
@@ -694,9 +670,9 @@
   "settingsNotifications": "Notifications",
   "settingsNotificationsHint": "Apogée et fin d'enrichissement (lots 2a et 4).",
   "settingsAutoPrices": "Rafraîchissement mensuel des prix",
-  "settingsAutoPricesHint": "Désactivé par défaut. Disponible au lot 2c.",
+  "settingsAutoPricesHint": "Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.",
   "settingsConnection": "Connexion au flux d'enrichissement",
-  "settingsConnectionHint": "Adresse et clé du flux n8n : lot 2c.",
+  "settingsConnectionHint": "Adresse de l'instance n8n et clé secrète partagée avec le flux.",
   "settingsPhotoSpace": "Espace occupé par les photos",
   "photoSpaceValue": "{size}",
   "@photoSpaceValue": {
@@ -843,11 +819,11 @@
   "addByPhoto": "Photographier l'étiquette",
   "addByPhotoHint": "1 à 4 photos, la fiche se remplit presque seule.",
   "addByBarcode": "Avec le code-barres",
-  "addByBarcodeHint": "Saisir l'EAN puis photographier : il aide l'identification.",
+  "addByBarcodeHint": "Scanner l'EAN puis photographier : il aide l'identification.",
   "addManual": "Saisie manuelle",
   "addManualHint": "Remplir la fiche soi-même.",
   "addExcel": "Import Excel",
-  "addExcelHint": "Disponible au lot 3.",
+  "addExcelHint": "Classeur xlsx, avec simulation avant import.",
   "unidentifiedWine": "Vin à identifier",
   "captureTitle": "Photos de la bouteille",
   "captureHint": "Cadrez l'étiquette entière, bien droite, sans reflet. Ajoutez la contre-étiquette si elle porte le degré ou les cépages.",
@@ -866,11 +842,50 @@
   "photoProcessing": "Traitement de la photo…",
   "photoUnreadable": "Image illisible.",
   "eanField": "Code-barres EAN (facultatif)",
+  "scanLive": "Scanner le code-barres",
+  "scanFromPhoto": "Lire le code-barres sur une photo",
+  "scanTitle": "Code-barres",
+  "scanHint": "Cadrez le code-barres de la contre-étiquette : il est lu tout seul.",
+  "scanFound": "Code-barres lu : {code}",
+  "@scanFound": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "scanNotFound": "Aucun code-barres EAN lisible sur cette photo.",
+  "scanPermissionDenied": "Accès à l'appareil photo refusé",
+  "scanUnavailable": "Lecteur de code-barres indisponible sur cet appareil",
+  "scanUseField": "Saisissez les 13 chiffres dans le champ.",
+  "vintageScanLive": "Lire le millésime avec l'appareil photo",
+  "vintageScanFromPhoto": "Lire le millésime sur une photo",
+  "vintageScanTitle": "Millésime",
+  "vintageScanHint": "Cadrez l'année inscrite sur l'étiquette ou la collerette : elle est lue toute seule.",
+  "vintageScanSeen": "Lu : {year}, gardez la bouteille immobile…",
+  "@vintageScanSeen": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "vintageScanFound": "Millésime lu : {year}",
+  "@vintageScanFound": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "vintageScanNotFound": "Aucun millésime lisible sur cette photo.",
+  "vintageScanUnavailable": "Lecture du millésime indisponible sur cet appareil",
+  "vintageScanUseField": "Saisissez les 4 chiffres dans le champ.",
   "vintageHintField": "Millésime si vous le connaissez (facultatif)",
   "continueToEnrichment": "Lancer l'identification",
   "needOnePhoto": "Ajoutez au moins une photo de l'étiquette.",
   "consentTitle": "Envoi des photos",
-  "consentBody": "Pour identifier le vin, les photos d'étiquettes sont envoyées au flux d'enrichissement d'Apexus, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n'est envoyée.",
+  "consentBody": "Pour identifier le vin, les photos d'étiquettes sont envoyées au flux d'enrichissement sur le serveur, lues, puis effacées après le traitement. Aucune autre donnée de votre cave n'est envoyée.",
   "consentAccept": "J'accepte",
   "consentRefuse": "Refuser",
   "consentRefused": "Photos gardées sur le téléphone, fiche à compléter à la main.",
@@ -888,8 +903,25 @@
   "stepControles": "Contrôles",
   "stepTermine": "Terminé",
   "enrichOffline": "Hors ligne : la fiche reste « à enrichir », l'envoi partira au retour du réseau.",
+  "enrichNotConnected": "Flux non connecté : la fiche reste « à enrichir ». Renseignez l'adresse et la clé du flux dans les Paramètres, l'envoi partira ensuite.",
   "enrichReady": "Propositions prêtes",
+  "labelPreviewTitle": "Lu sur l'étiquette, en attendant",
+  "labelPreviewLine": "{field} : {value}",
+  "@labelPreviewLine": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "reviewProposals": "Vérifier les propositions",
+  "validationPendingBody": "Lu sur l'étiquette pour l'instant. Les autres informations s'ajoutent dès que le serveur les trouve ; vous pouvez déjà corriger.",
+  "validationWaiting": "Validation possible à la fin de la recherche",
+  "validationSearchFailed": "La recherche des informations a échoué",
+  "validationSearchFailedBody": "Ce qui a été lu sur l'étiquette reste affiché. Relancez la recherche ou complétez la fiche à la main.",
   "enrichFailed": "L'identification a échoué : {reason}",
   "@enrichFailed": {
     "placeholders": {
@@ -1037,7 +1069,7 @@
   "linkCopied": "Lien copié.",
   "reportError": "Signaler une erreur",
   "reported": "Signalé comme faux, à corriger",
-  "reportedSnack": "Erreur signalée : la valeur reste barrée jusqu'à correction.",
+  "reportedSnack": "Erreur signalée : la valeur reste barrée jusqu'à correction, et le signalement part avec le prochain enrichissement de la fiche.",
   "provenanceBadge": "Voir la provenance",
   "aiWritten": "Rédigé par IA à partir de {site}",
   "@aiWritten": {
@@ -1059,14 +1091,734 @@
   "reEnrichNoPhoto": "Aucune photo sur cette fiche : ré-enrichissement impossible.",
   "unlockField": "Déverrouiller",
   "unlocked": "Champ déverrouillé : il pourra être proposé à nouveau.",
-  "settingsFakeFlux": "Flux de démonstration (lot 2a)",
-  "settingsFakeFluxHint": "Le vrai flux n8n arrive au lot 2c. En attendant, l'app rejoue les exemples du contrat.",
-  "fakeScenario": "Scénario rejoué",
-  "scenarioDone": "Identification complète",
-  "scenarioPartial": "Résultat partiel avec désaccord",
-  "scenarioCacheHit": "Vin déjà connu (cache)",
-  "scenarioQuota": "Quota épuisé",
-  "scenarioInvalid": "Réponse non conforme",
-  "scenarioNever": "Pas de réponse (délai)",
-  "simulateOffline": "Simuler le mode avion"
+  "fluxUrl": "Adresse du flux",
+  "fluxUrlHint": "https://votre-instance.app.n8n.cloud",
+  "fluxKey": "Clé secrète",
+  "fluxKeyStored": "Clé enregistrée dans le stockage sécurisé du téléphone",
+  "fluxKeyMissing": "Aucune clé enregistrée",
+  "fluxKeyReplace": "Nouvelle clé (remplace l'ancienne)",
+  "fluxSave": "Enregistrer",
+  "fluxForget": "Oublier la connexion",
+  "fluxTest": "Tester la connexion",
+  "fluxTesting": "Test en cours…",
+  "fluxUsingReal": "Vrai flux utilisé pour les enrichissements et les prix.",
+  "fluxUsingFake": "Pas de connexion enregistrée : l'identification par photo et les prix attendent la connexion au flux. Le reste de l'application fonctionne.",
+  "fluxTestOk": "Connexion réussie : flux joignable, clé acceptée (contrat {version}).",
+  "@fluxTestOk": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "fluxTestNotReady": "Flux joignable, mais sa clé n'est pas encore configurée côté n8n.",
+  "fluxTestBadKey": "Flux joignable, mais la clé est refusée : {message}",
+  "@fluxTestBadKey": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "fluxTestOffline": "Flux injoignable : vérifiez l'adresse et le réseau.",
+  "fluxTestInvalid": "Réponse inattendue du flux : vérifiez l'adresse.",
+  "fluxUrlInvalid": "Adresse invalide : elle doit commencer par https://",
+  "fluxSaved": "Connexion enregistrée.",
+  "fluxForgotten": "Connexion oubliée : l'identification par photo attend une nouvelle connexion.",
+  "pricesAllTitle": "Relever les prix de toute la cave",
+  "pricesAllHint": "Fiches sans relevé depuis 24 heures.",
+  "pricesAllConfirm": "{count, plural, =0{Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.} =1{1 relevé sera envoyé au flux.} other{{count} relevés seront envoyés au flux.}}",
+  "@pricesAllConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pricesQuotaLeft": "Quota restant ce mois : {left} relevés.",
+  "@pricesQuotaLeft": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "pricesQuotaUnknown": "Quota restant inconnu : il s'affichera après le premier relevé.",
+  "pricesQueued": "{count, plural, =0{Aucun relevé ajouté.} =1{1 relevé mis en file.} other{{count} relevés mis en file.}}",
+  "@pricesQueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirm": "Confirmer",
+  "priceQueuedOne": "Relevé du prix mis en file.",
+  "priceAlreadyQueued": "Un relevé est déjà en cours pour cette fiche.",
+  "priceTooRecentTitle": "Relevé récent",
+  "priceTooRecent": "Le dernier relevé a moins de 24 heures. Forcer un nouveau relevé ?",
+  "priceForce": "Forcer",
+  "priceOffers": "{count, plural, =0{aucune offre} =1{1 offre} other{{count} offres}}",
+  "@priceOffers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "priceNatureMedian": "médiane",
+  "priceNatureOffer": "offre unique",
+  "priceTrendUp": "En hausse de {percent} depuis le relevé précédent",
+  "@priceTrendUp": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "priceTrendDown": "En baisse de {percent} depuis le relevé précédent",
+  "@priceTrendDown": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "priceTrendFlat": "Stable depuis le relevé précédent",
+  "priceOpenOffer": "Voir l'offre sur {site}",
+  "@priceOpenOffer": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChartLabel": "Courbe des prix relevés",
+  "priceHistory": "Historique des relevés",
+  "photoTypeDegustation": "Dégustation",
+  "photoTypeRepas": "Repas",
+  "photoTypeEvenement": "Événement",
+  "tabTastingsPhotos": "Dégustations et photos",
+  "otherPhotos": "Autres photos",
+  "libraryEmpty": "Aucune autre photo pour cette bouteille (repas, événement).",
+  "libraryAdd": "Ajouter une photo",
+  "libraryTypeTitle": "Type de photo",
+  "libraryAdded": "Photo ajoutée",
+  "photoDelete": "Supprimer la photo",
+  "photoDeleteBody": "La photo est effacée de l'appareil.",
+  "photoDeleted": "Photo supprimée",
+  "photoCounter": "{index} / {total}",
+  "@photoCounter": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "photoOpen": "Voir la photo {index}",
+  "@photoOpen": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "validationPhotos": "Photos",
+  "photoCroppedLabel": "Recadrée sur l'étiquette",
+  "photoWholeLabel": "Photo entière",
+  "cropAction": "Recadrer",
+  "cropTitle": "Recadrer l'étiquette",
+  "cropHint": "Faites glisser le cadre ou ses coins sur l'étiquette.",
+  "cropWhole": "Photo entière",
+  "cropSaved": "Cadre enregistré",
+  "cropOriginalNote": "La photo d'origine est gardée jusqu'à la validation de la fiche.",
+  "excelListName": "Liste",
+  "excelListValue": "Valeur autorisée",
+  "excelListParent": "Rattachée à",
+  "excelNotice": "Règles d'import du classeur IA cave à vin\n\nOnglet Vins : une ligne par fiche (domaine, cuvée, millésime).\n- Colonne id remplie : la fiche existante est mise à jour. id vide : une fiche est créée.\n- Action = SUPPRIMER (avec l'id) : la fiche est supprimée de la cave, ses mouvements restent dans l'historique.\n- Domaine, Pays, Couleur et Millésime sont obligatoires. Millésime : une année ou NM pour un non millésimé.\n- Les listes (pays, région, appellation, cépages, accords…) prennent les valeurs de l'onglet Listes. Plusieurs valeurs dans une cellule : séparées par un point-virgule.\n- Cépages : « Merlot 80 %; Cabernet Franc 20 % », total de 100 % au plus.\n- Les colonnes Origine garde, Statut garde, Statut enrichissement, Note Parker, Meilleure note, Stock total et Photo principale sont calculées : elles sont ignorées à l'import.\n\nOnglet Lots : une ligne par lot (même fiche, format, propriétaire, emplacement, prix).\n- id lot rempli : mise à jour ; vide : création. Action = SUPPRIMER : suppression du lot.\n- id fiche : l'id d'une fiche de l'onglet Vins, ou #numéro de ligne pour une fiche créée par le même import (exemple : #12).\n- Quantité : quantité cible. L'app crée un mouvement d'ajustement de l'écart, motif « import Excel ». Cellule vide : stock inchangé.\n- Emplacement : chemin complet, par exemple « Cave > Armoire 1 > Casier A ».\n\nOnglet Mouvements : lecture seule, ignoré à l'import.\n\nPhotos : joignez un zip de photos ; une photo dont le nom figure dans la colonne Photo principale est rattachée à la fiche.\n\nAvant tout import, l'app simule et affiche un rapport. Une sauvegarde automatique est faite juste avant, et l'import se fait en entier ou pas du tout.",
+  "ieExcelSection": "Excel",
+  "ieExport": "Exporter la cave",
+  "ieExportHint": "Classeur xlsx : vins, lots, mouvements, listes autorisées et notice.",
+  "ieTemplate": "Modèle vierge",
+  "ieTemplateHint": "Même classeur sans données, pour saisir une cave sur ordinateur.",
+  "ieImport": "Importer un classeur",
+  "ieImportHint": "Simulation et rapport avant toute modification.",
+  "iePhotosTitle": "Joindre des photos ?",
+  "iePhotosBody": "Un zip de photos peut accompagner le classeur : chaque photo citée dans la colonne Photo principale est rattachée à sa fiche.",
+  "iePhotosPick": "Choisir un zip",
+  "iePhotosSkip": "Sans photos",
+  "ieReady": "Fichier prêt",
+  "importReportTitle": "Simulation de l'import",
+  "importWinesCreated": "Fiches créées : {n}",
+  "@importWinesCreated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importWinesUpdated": "Fiches mises à jour : {n}",
+  "@importWinesUpdated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importWinesDeleted": "Fiches supprimées : {n}",
+  "@importWinesDeleted": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importLotsCreated": "Lots créés : {n}",
+  "@importLotsCreated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importLotsUpdated": "Lots mis à jour : {n}",
+  "@importLotsUpdated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importLotsDeleted": "Lots supprimés : {n}",
+  "@importLotsDeleted": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importStockChanges": "Stocks ajustés : {n}",
+  "@importStockChanges": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importPhotos": "Photos rattachées : {n}",
+  "@importPhotos": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importNoChange": "Aucune différence avec la cave.",
+  "importUnknownTitle": "Valeurs absentes de l'app",
+  "importCreateUnknown": "Les créer pendant l'import",
+  "importIssuesTitle": "Erreurs à corriger ({n})",
+  "@importIssuesTitle": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importIssueWhere": "{sheet}, ligne {row}, colonne {column}",
+  "@importIssueWhere": {
+    "placeholders": {
+      "sheet": {
+        "type": "String"
+      },
+      "row": {
+        "type": "int"
+      },
+      "column": {
+        "type": "String"
+      }
+    }
+  },
+  "importApply": "Importer",
+  "importBlocked": "Corrigez le classeur puis relancez l'import : rien n'est modifié tant qu'il reste une erreur.",
+  "importBackupNote": "Une sauvegarde automatique est faite juste avant l'import, qui se fait en entier ou pas du tout.",
+  "importEnrich": "Enrichir les fiches créées",
+  "importEnrichHint": "{n} fiches créées avec une photo, soit {n} appels au flux. Quota restant ce mois : {left}.",
+  "@importEnrichHint": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "left": {
+        "type": "String"
+      }
+    }
+  },
+  "importEnrichUnknownQuota": "inconnu",
+  "importEnrichStarted": "{n} enrichissements en file d'attente",
+  "@importEnrichStarted": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importOwnerList": "Propriétaire",
+  "issueMissingSheet": "onglet absent",
+  "issueMissingColumn": "colonne absente",
+  "issueRequired": "valeur obligatoire",
+  "issueUnknownId": "identifiant inconnu",
+  "issueDuplicateId": "identifiant présent deux fois",
+  "issueInvalidNumber": "nombre attendu",
+  "issueInvalidVintage": "millésime attendu : une année jusqu'à l'année en cours, ou NM",
+  "issueOutOfRange": "valeur hors des bornes",
+  "issueGardeOrder": "garde incohérente : début après le millésime, début avant l'apogée, apogée avant la fin",
+  "issueInvalidEan": "code-barres invalide : 13 chiffres et clé de contrôle",
+  "issueInvalidBoolean": "oui ou non attendu",
+  "issueInvalidDate": "date attendue",
+  "issueInvalidGrapes": "cépages illisibles : « Merlot 80 %; Cabernet Franc 20 % »",
+  "issueInvalidAction": "action inconnue : vide ou SUPPRIMER, avec l'identifiant",
+  "issueUnknownValue": "valeur absente de la liste",
+  "issueUnknownLocation": "emplacement inconnu",
+  "issueUnknownWine": "fiche inconnue",
+  "issueDeletedWine": "fiche supprimée par ce même import",
+  "issueLotWineChange": "un lot ne change pas de fiche : créez un nouveau lot",
+  "importFinished": "Import terminé",
+  "pdfGardeRange": "de {start} à {end}",
+  "@pdfGardeRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfGardePeak": "apogée {year}",
+  "@pdfGardePeak": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfAlcohol": "{value} %",
+  "@pdfAlcohol": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfGardeSource": "Origine de la garde",
+  "pdfGardeStatus": "Statut de garde",
+  "pdfParker": "Note Parker",
+  "pdfStock": "En stock",
+  "pdfBottles": "{n, plural, =0{aucune bouteille} =1{1 bouteille} other{{n} bouteilles}}",
+  "@pdfBottles": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfCitedBy": "citée par {site}",
+  "@pdfCitedBy": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfPrice": "{price} l'unité",
+  "@pdfPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfEditedOn": "Édité le {date}",
+  "@pdfEditedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfCatalogueTitle": "Catalogue de la cave",
+  "pdfCount": "{n, plural, =1{1 fiche} other{{n} fiches}}",
+  "@pdfCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfFilters": "Filtres appliqués",
+  "pdfNoFilter": "Aucun filtre : toutes les fiches.",
+  "pdfPage": "Page {n} / {total}",
+  "@pdfPage": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "issueWithValue": "{reason} : « {value} »",
+  "@issueWithValue": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "filterLine": "{label} : {value}",
+  "@filterLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogueSection": "Catalogue PDF",
+  "catalogueHint": "Deux fiches par page A4. Les filtres et le tri de la liste sont repris ; vous pouvez les changer ici sans toucher à la liste.",
+  "catalogueFilters": "Filtres ({n})",
+  "@catalogueFilters": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogueCover": "Page de garde (date, filtres, nombre de fiches)",
+  "catalogueGenerate": "{n, plural, =0{Aucune fiche à imprimer} =1{Générer le catalogue (1 fiche)} other{Générer le catalogue ({n} fiches)}}",
+  "@catalogueGenerate": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "winePdf": "Fiche PDF",
+  "pdfPreparing": "Préparation du PDF…",
+  "statsTabGeneral": "Général",
+  "statsTabRegions": "Régions",
+  "statsTabGarde": "Garde",
+  "statsTabValue": "Valeur",
+  "statsTabBuying": "Aide à l'achat",
+  "statsTabExplorer": "Explorateur",
+  "statsEmpty": "Aucune bouteille en cave : ajoutez des vins pour voir les statistiques.",
+  "statNoData": "Aucune donnée pour cette vue.",
+  "statMeasureBottles": "Nombre de bouteilles",
+  "statMeasureReferences": "Nombre de références",
+  "statMeasurePurchase": "Valeur d'achat",
+  "statMeasureMarket": "Valeur marché",
+  "statMeasureGain": "Plus-value latente",
+  "statMeasureAvgPrice": "Prix moyen",
+  "statMeasureAvgScore": "Note moyenne (/100)",
+  "statMeasureOpened": "Bouteilles ouvertes (12 mois)",
+  "statMeasureYears": "Années moyennes avant de boire",
+  "statDimColor": "Couleur",
+  "statDimType": "Type",
+  "statDimCountry": "Pays",
+  "statDimRegion": "Région",
+  "statDimSubRegion": "Sous-région",
+  "statDimAppellation": "Appellation",
+  "statDimProducer": "Domaine",
+  "statDimVintage": "Millésime",
+  "statDimVintageBand": "Tranche de 5 millésimes",
+  "statDimGrape": "Cépage principal",
+  "statDimOwner": "Propriétaire",
+  "statDimLocation": "Emplacement",
+  "statDimGardeStatus": "Statut de garde",
+  "statDimGardeStart": "Année de début de garde",
+  "statDimPeak": "Année d'apogée",
+  "statDimScoreBand": "Tranche de note",
+  "statDimPriceBand": "Tranche de prix",
+  "statDimSupplier": "Fournisseur",
+  "statDimPurchaseMonth": "Mois d'achat",
+  "statDimOpeningMonth": "Mois d'ouverture",
+  "statChartDonut": "Donut",
+  "statChartBarsV": "Barres verticales",
+  "statChartBarsH": "Barres horizontales",
+  "statChartStacked": "Barres empilées",
+  "statChartLine": "Courbe",
+  "statChartCross": "Tableau croisé",
+  "statChartKpi": "Indicateur seul",
+  "statNone": "Non renseigné",
+  "statOther": "Autres",
+  "statBand": "{from} à {to}",
+  "@statBand": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "statFrom": "{from} et plus",
+  "@statFrom": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "statToDrinkThisYear": "À boire cette année",
+  "statDrinkSoon": "À boire vite",
+  "statPast": "Passées",
+  "statGardeByYear": "Bouteilles par année d'entrée dans la fenêtre de garde",
+  "statByColor": "Bouteilles par couleur",
+  "statVintageColor": "Millésime et couleur",
+  "statByOrigin": "Bouteilles par origine",
+  "statDrillHint": "Touchez une barre pour descendre du pays à la région, puis à l'appellation.",
+  "statDrillUp": "Remonter",
+  "statPurchaseVsMarket": "Achat et marché par couleur",
+  "statPurchaseVsMarketRegion": "Achat et marché par région",
+  "statMarketHistory": "Valeur marché du stock actuel, sur 24 mois",
+  "statOpenedVsStock": "Ouvertures des 12 derniers mois et stock, par couleur",
+  "statMonthsLeft": "Mois de stock restant au rythme des ouvertures",
+  "statMonthsValue": "{n} mois",
+  "@statMonthsValue": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "statNoOpening": "aucune ouverture en 12 mois",
+  "statSeriesPurchase": "Achat",
+  "statSeriesMarket": "Marché",
+  "statSeriesOpened": "Ouvertes",
+  "statSeriesStock": "En stock",
+  "statSeeWines": "{n, plural, =1{Voir le vin} other{Voir les {n} vins}}",
+  "@statSeeWines": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "statWinesTitle": "Vins de la sélection",
+  "statMeasure": "Mesure",
+  "statDimension": "Dimension",
+  "statDimension2": "Seconde dimension",
+  "statNoDimension2": "Aucune",
+  "statChartType": "Graphique",
+  "statFilters": "Filtres",
+  "statFilterAdd": "Ajouter un filtre",
+  "statFilterLine": "{dimension} : {values}",
+  "@statFilterLine": {
+    "placeholders": {
+      "dimension": {
+        "type": "String"
+      },
+      "values": {
+        "type": "String"
+      }
+    }
+  },
+  "statFavorites": "Favoris",
+  "statNoFavorites": "Aucune vue enregistrée.",
+  "statSave": "Enregistrer en favori",
+  "statViewName": "Nom de la vue",
+  "statSaved": "Vue enregistrée",
+  "statDeleteView": "Supprimer la vue",
+  "statExport": "Exporter",
+  "statExportPng": "Image PNG",
+  "statExportPdf": "PDF",
+  "statExportCsv": "Tableau CSV",
+  "statTotal": "Total",
+  "statAverage": "Moyenne",
+  "toDrinkTab": "À boire",
+  "pastTab": "Passés",
+  "pastEmpty": "Aucun vin en stock n'a dépassé sa fenêtre de garde.",
+  "pastHint": "{count, plural, =1{1 vin a dépassé sa fenêtre de garde : à boire sans tarder ou à goûter avant de servir.} other{{count} vins ont dépassé leur fenêtre de garde : à boire sans tarder ou à goûter avant de servir.}}",
+  "@pastHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tastingsTab": "Dégustations",
+  "toDrinkEmpty": "Aucun vin dans sa fenêtre de garde en ce moment.",
+  "toDrinkHint": "Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.",
+  "dishPick": "Pour quel plat ?",
+  "dishAny": "Tous les plats",
+  "dishNoWine": "Aucun vin à boire ne s'accorde avec ce plat.",
+  "dishCount": "{n, plural, =1{1 vin pour ce plat} other{{n} vins pour ce plat}}",
+  "@dishCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tastingsEmpty": "Aucune dégustation notée. Elles sont proposées à chaque ouverture de bouteille.",
+  "alertTitle": "Ce mois-ci dans la cave",
+  "alertBody": "{peak, plural, =0{} =1{1 vin entre en apogée. } other{{peak} vins entrent en apogée. }}{ending, plural, =0{} =1{1 vin arrive en fin de fenêtre.} other{{ending} vins arrivent en fin de fenêtre.}}",
+  "@alertBody": {
+    "placeholders": {
+      "peak": {
+        "type": "int"
+      },
+      "ending": {
+        "type": "int"
+      }
+    }
+  },
+  "alertSee": "Voir les vins",
+  "alertDismiss": "Fermer",
+  "alertWinesTitle": "Apogée et fin de fenêtre",
+  "shoppingEmpty": "Rien à acheter. Un vin qui n'a plus de bouteille vous est proposé ici, et vous pouvez noter un vin repéré ailleurs.",
+  "shoppingAdd": "Ajouter un vin repéré",
+  "shoppingLabel": "Vin",
+  "shoppingQuantity": "Quantité souhaitée",
+  "shoppingNote": "Note (où l'acheter, prix vu)",
+  "shoppingBought": "Acheté",
+  "shoppingDelete": "Retirer de la liste",
+  "shoppingAdded": "Ajouté à la liste d'achats",
+  "shoppingProposeTitle": "Plus aucune bouteille",
+  "shoppingProposeBody": "{wine} : l'ajouter à la liste d'achats ?",
+  "@shoppingProposeBody": {
+    "placeholders": {
+      "wine": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingProposeAction": "Ajouter à la liste",
+  "shoppingQuantityValue": "{n, plural, =1{1 bouteille} other{{n} bouteilles}}",
+  "@shoppingQuantityValue": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "shareImage": "Partager en image",
+  "sharePreviewTitle": "Partager la fiche",
+  "shareAsImage": "Image",
+  "shareAsPdf": "PDF",
+  "favoriteOn": "Ajouter aux favoris",
+  "favoriteOff": "Retirer des favoris",
+  "gridTitle": "Vue casier",
+  "gridHint": "Un tap sur une case occupée ouvre la fiche. Un appui long sur une case vide y range une bouteille.",
+  "gridCell": "Case {cell}",
+  "@gridCell": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      }
+    }
+  },
+  "gridCellWine": "Case {cell} : {wine}",
+  "@gridCellWine": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      },
+      "wine": {
+        "type": "String"
+      }
+    }
+  },
+  "gridPlaceTitle": "Ranger en {cell}",
+  "@gridPlaceTitle": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      }
+    }
+  },
+  "gridHere": "Déjà dans ce casier, sans case",
+  "gridElsewhere": "Venant d'un autre emplacement",
+  "gridNoCandidate": "Aucune bouteille à ranger.",
+  "gridPlaced": "Bouteille rangée en {cell}",
+  "@gridPlaced": {
+    "placeholders": {
+      "cell": {
+        "type": "String"
+      }
+    }
+  },
+  "gridUnplaced": "{n, plural, =1{1 bouteille sans case} other{{n} bouteilles sans case}}",
+  "@gridUnplaced": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tastingScoreValue": "{score} / {scale}",
+  "@tastingScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "scale": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackIntro": "Un bug, une idée, une fiche fausse ? Écrivez-nous. Le message part par mail à l'équipe, avec une copie à votre adresse.",
+  "feedbackTitle": "Titre",
+  "feedbackComment": "Commentaire",
+  "feedbackEmail": "Votre adresse mail",
+  "feedbackEmailHelp": "Reçoit la copie et la réponse.",
+  "feedbackEmailInvalid": "Adresse mail invalide (exemple : prenom.nom@exemple.fr).",
+  "feedbackRequired": "Champ obligatoire.",
+  "feedbackAttachment": "Pièce jointe (facultative)",
+  "feedbackAttachmentHelp": "Une seule : un PDF ou une image, 5 Mo au plus.",
+  "feedbackAttachFile": "Joindre un fichier",
+  "feedbackReplaceFile": "Remplacer le fichier",
+  "feedbackAttachmentRemove": "Retirer la pièce jointe",
+  "feedbackAttachmentSize": "{size} Ko",
+  "@feedbackAttachmentSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackAttachmentType": "Seuls les PDF et les images sont acceptés.",
+  "feedbackAttachmentTooBig": "Fichier trop lourd : 5 Mo au plus.",
+  "feedbackSend": "Envoyer",
+  "feedbackSent": "Message envoyé. Une copie part à {email}.",
+  "@feedbackSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackQuota": "Limite de 5 messages par jour atteinte. Réessayez demain.",
+  "feedbackRefused": "Envoi refusé : {detail}",
+  "@feedbackRefused": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackOffline": "Pas de réseau. Votre message reste ici, réessayez une fois connecté.",
+  "feedbackNotConnected": "Flux non connecté : le message n'est pas parti. Renseignez l'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.",
+  "feedbackAuth": "Le flux refuse la clé de l'application. Vérifiez-la dans les paramètres.",
+  "feedbackPrivacy": "Votre adresse sert seulement à vous répondre. Elle n'est pas enregistrée sur le téléphone."
 }

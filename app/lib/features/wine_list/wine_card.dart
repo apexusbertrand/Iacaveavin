@@ -328,7 +328,10 @@ class _StatusDot extends StatelessWidget {
           ),
         ),
         const SizedBox(width: SpacingTokens.xs),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        // Colonne étroite : le libellé passe à la ligne au lieu de déborder.
+        Flexible(
+          child: Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ),
       ],
     );
   }
