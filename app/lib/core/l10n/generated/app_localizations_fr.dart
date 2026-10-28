@@ -1738,6 +1738,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reviewProposals => 'Vérifier les propositions';
 
   @override
+  String get validationPendingBody =>
+      'Lu sur l\'étiquette pour l\'instant. Les autres informations s\'ajoutent dès que le serveur les trouve ; vous pouvez déjà corriger.';
+
+  @override
+  String get validationWaiting =>
+      'Validation possible à la fin de la recherche';
+
+  @override
+  String get validationSearchFailed => 'La recherche des informations a échoué';
+
+  @override
+  String get validationSearchFailedBody =>
+      'Ce qui a été lu sur l\'étiquette reste affiché. Relancez la recherche ou complétez la fiche à la main.';
+
+  @override
   String enrichFailed(String reason) {
     return 'L\'identification a échoué : $reason';
   }

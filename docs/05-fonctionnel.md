@@ -54,6 +54,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - AJO-12. Toute réponse du flux est validée contre specs/contrat-n8n/reponse-job.schema.json. Une réponse invalide est traitée comme une erreur, journalisée, et la fiche reste éditable à la main.
 - AJO-13. Recadrage sur l'étiquette : la lecture du flux renvoie le cadre de l'étiquette de chaque photo (contrat 1.1) ; l'app rogne la photo à la réception, garde la photo entière quand aucune étiquette n'est identifiable, et permet de retoucher le cadre ou de revenir à la photo entière à l'écran de validation. La photo d'origine est conservée jusqu'à la validation de la fiche, puis supprimée (2026-10-26, évolution 1, T86, T87).
 - AJO-14. Millésime lu par l'appareil photo, comme le code-barres : lecture à la volée dans un viseur (la même année lue seule sur deux images de suite) ou sur une photo de la galerie. Lecture sur le téléphone, sans réseau. Les dates de fondation (« depuis 1919 ») sont écartées. Le champ reste modifiable (2026-10-28, T116).
+- AJO-15. Validation progressive : dès que l'étiquette est lue, l'écran Identification passe seul à l'écran de validation, rempli avec la lecture ; les champs trouvés par le serveur s'y ajoutent à chaque retour du flux. On peut corriger ou rejeter un champ pendant l'attente ; l'enregistrement s'ouvre à la fin de la recherche. Le lot se saisit sur le même écran tant qu'il n'existe pas. En cas d'échec, la lecture reste affichée avec une relance (2026-10-28, T117).
 
 ## STK. Stock et corrections [lot 1]
 

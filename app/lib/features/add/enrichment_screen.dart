@@ -41,8 +41,14 @@ final winePhotosProvider = FutureProvider.family<List<File>, String>((
   ];
 });
 
+/// AJO-15 : vrai dès que le job porte une proposition à montrer, la lecture
+/// de l'étiquette (en cours) ou le résultat final.
+bool hasProposals(JobResponse? r) =>
+    r?.result != null && r!.status != JobStatus.error;
+
 /// AJO-04, AJO-05, AJO-09, AJO-11 : pendant que l'agent travaille,
 /// l'utilisateur renseigne le lot ; l'avancement s'affiche en clair.
+/// AJO-15 : dès que l'étiquette est lue, l'écran passe à la validation.
 class EnrichmentScreen extends ConsumerWidget {
   const EnrichmentScreen({super.key, required this.wineId});
 
@@ -57,6 +63,14 @@ class EnrichmentScreen extends ConsumerWidget {
     final report = ref.watch(enrichmentRunnerProvider);
     final photos = ref.watch(winePhotosProvider(wineId)).value ?? const [];
     final last = EnrichmentQueue.lastResponse(job);
+    // AJO-15 : l'écran se reconstruit à chaque réponse du flux enregistrée.
+    if (hasProposals(last)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted && ModalRoute.of(context)?.isCurrent == true) {
+          context.pushReplacement('/fiche/$wineId/validation');
+        }
+      });
+    }
     final w = wine.value;
     if (w == null) {
       return Scaffold(
@@ -152,7 +166,7 @@ class EnrichmentScreen extends ConsumerWidget {
             ),
             const SizedBox(height: SpacingTokens.s),
             if (w.lots.isEmpty)
-              _LotEditor(wine: w)
+              LotEditor(wine: w)
             else
               for (final lot in w.lots)
                 ListTile(
@@ -289,16 +303,16 @@ class _LabelPreview extends StatelessWidget {
 }
 
 /// AJO-04 : lot pré-rempli avec les valeurs par défaut.
-class _LotEditor extends ConsumerStatefulWidget {
-  const _LotEditor({required this.wine});
+class LotEditor extends ConsumerStatefulWidget {
+  const LotEditor({super.key, required this.wine});
 
   final WineDetail wine;
 
   @override
-  ConsumerState<_LotEditor> createState() => _LotEditorState();
+  ConsumerState<LotEditor> createState() => _LotEditorState();
 }
 
-class _LotEditorState extends ConsumerState<_LotEditor> {
+class _LotEditorState extends ConsumerState<LotEditor> {
   String? _owner;
 
   @override

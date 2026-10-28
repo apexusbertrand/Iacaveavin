@@ -2980,6 +2980,30 @@ abstract class AppLocalizations {
   /// **'Vérifier les propositions'**
   String get reviewProposals;
 
+  /// No description provided for @validationPendingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu sur l\'étiquette pour l\'instant. Les autres informations s\'ajoutent dès que le serveur les trouve ; vous pouvez déjà corriger.'**
+  String get validationPendingBody;
+
+  /// No description provided for @validationWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validation possible à la fin de la recherche'**
+  String get validationWaiting;
+
+  /// No description provided for @validationSearchFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La recherche des informations a échoué'**
+  String get validationSearchFailed;
+
+  /// No description provided for @validationSearchFailedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui a été lu sur l\'étiquette reste affiché. Relancez la recherche ou complétez la fiche à la main.'**
+  String get validationSearchFailedBody;
+
   /// No description provided for @enrichFailed.
   ///
   /// In fr, this message translates to:

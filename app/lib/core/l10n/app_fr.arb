@@ -948,6 +948,10 @@
     }
   },
   "reviewProposals": "Vérifier les propositions",
+  "validationPendingBody": "Lu sur l'étiquette pour l'instant. Les autres informations s'ajoutent dès que le serveur les trouve ; vous pouvez déjà corriger.",
+  "validationWaiting": "Validation possible à la fin de la recherche",
+  "validationSearchFailed": "La recherche des informations a échoué",
+  "validationSearchFailedBody": "Ce qui a été lu sur l'étiquette reste affiché. Relancez la recherche ou complétez la fiche à la main.",
   "enrichFailed": "L'identification a échoué : {reason}",
   "@enrichFailed": {
     "placeholders": {

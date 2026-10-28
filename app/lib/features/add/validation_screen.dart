@@ -8,14 +8,17 @@ import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
 import '../../core/widgets/state_views.dart';
+import '../../data/db/app_database.dart';
 import '../../data/enrichment/enrichment_providers.dart';
+import '../../data/enrichment/enrichment_queue.dart';
 import '../../data/enrichment/validation_service.dart';
-import '../../data/providers.dart';
 import '../../domain/enrichment.dart';
 import '../../domain/wine_detail.dart';
 import '../photos/photo_crop_screen.dart';
 import '../photos/photo_gallery.dart';
-import 'enrichment_screen.dart' show winePhotosProvider;
+import '../wine_detail/wine_detail_screen.dart' show wineDetailProvider;
+import 'enrichment_screen.dart'
+    show LotEditor, hasProposals, latestJobProvider, winePhotosProvider;
 
 /// Ordre d'affichage des champs proposés (docs/03, fiche).
 const _fieldOrder = [
@@ -48,25 +51,50 @@ class _ValidationData {
     required this.wine,
     required this.locked,
     this.duplicate,
+    this.pending = false,
+    this.job,
   });
 
   final JobResponse response;
   final WineDetail wine;
   final Set<String> locked;
   final String? duplicate;
+
+  /// AJO-15 : l'agent cherche encore ; les champs se complètent au retour
+  /// du flux et l'enregistrement attend la fin.
+  final bool pending;
+  final Job? job;
 }
 
 final _validationDataProvider = FutureProvider.autoDispose
     .family<_ValidationData?, String>((ref, wineId) async {
+      // AJO-15 : relu à chaque réponse du flux enregistrée.
+      final job = await ref.watch(latestJobProvider(wineId).future);
       final queue = await ref.watch(enrichmentQueueProvider.future);
+      // Relu aussi quand le lot est enregistré depuis cet écran.
+      final wine = await ref.watch(wineDetailProvider(wineId).future);
+      if (wine == null) return null;
+      final locked = (await queue.lockedFields(wineId)).toSet();
       final response = await queue.resultFor(wineId);
-      final wine = await ref.watch(cellarRepositoryProvider).wine(wineId);
-      if (response == null || wine == null) return null;
+      if (response == null) {
+        final last = EnrichmentQueue.lastResponse(job);
+        final failed = job?.statut == JobStatus.error.code;
+        if (last?.result == null || (!failed && !hasProposals(last))) {
+          return null;
+        }
+        return _ValidationData(
+          response: last!,
+          wine: wine,
+          locked: locked,
+          pending: true,
+          job: job,
+        );
+      }
       final validation = await ref.watch(validationServiceProvider.future);
       return _ValidationData(
         response: response,
         wine: wine,
-        locked: (await queue.lockedFields(wineId)).toSet(),
+        locked: locked,
         duplicate: await validation.duplicateOf(wineId, response),
       );
     });
@@ -233,6 +261,7 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
     final theme = Theme.of(context);
     final async = ref.watch(_validationDataProvider(widget.wineId));
     return async.when(
+      skipLoadingOnReload: true,
       loading: () => Scaffold(
         appBar: AppBar(title: Text(l.validationTitle)),
         body: const Center(child: CircularProgressIndicator()),
@@ -268,7 +297,7 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
               IconButton(
                 key: const ValueKey('validation-save'),
                 tooltip: l.saveValidation,
-                onPressed: _saving ? null : () => _save(data),
+                onPressed: _saving || data.pending ? null : () => _save(data),
                 icon: const Icon(Icons.check),
               ),
             ],
@@ -276,6 +305,7 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
           body: ListView(
             padding: const EdgeInsets.only(bottom: SpacingTokens.xxl * 2),
             children: [
+              if (data.pending) _PendingBanner(data: data),
               if (data.duplicate != null)
                 Card(
                   color: theme.colorScheme.primary,
@@ -361,12 +391,21 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
                   onChanged: (v) => setState(() => _includePrices = v),
                 ),
               ],
+              if (data.wine.lots.isEmpty) ...[
+                _Header(l.enrichLotTitle),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: SpacingTokens.l,
+                  ),
+                  child: LotEditor(wine: data.wine),
+                ),
+              ],
               Padding(
                 padding: const EdgeInsets.all(SpacingTokens.l),
                 child: FilledButton(
                   key: const ValueKey('accept-all'),
-                  onPressed: _saving ? null : () => _save(data),
-                  child: Text(l.acceptAll),
+                  onPressed: _saving || data.pending ? null : () => _save(data),
+                  child: Text(data.pending ? l.validationWaiting : l.acceptAll),
                 ),
               ),
             ],
@@ -395,6 +434,52 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
       _ => null,
     };
     return v == null || v.isEmpty ? null : v;
+  }
+}
+
+/// AJO-15 : bandeau de la recherche en cours, ou de son échec avec relance.
+class _PendingBanner extends ConsumerWidget {
+  const _PendingBanner({required this.data});
+
+  final _ValidationData data;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final job = data.job;
+    if (job?.statut == JobStatus.error.code) {
+      return Card(
+        key: const ValueKey('validation-failed'),
+        margin: const EdgeInsets.all(SpacingTokens.l),
+        child: ListTile(
+          leading: Icon(Icons.error_outline, color: theme.colorScheme.error),
+          title: Text(l.validationSearchFailed),
+          subtitle: Text(l.validationSearchFailedBody),
+          trailing: TextButton(
+            key: const ValueKey('validation-retry'),
+            onPressed: () async {
+              await (await ref.read(enrichmentQueueProvider.future))
+                  .retry(data.wine.id);
+              ref.read(enrichmentRunnerProvider.notifier).kick();
+            },
+            child: Text(l.enrichRetry),
+          ),
+        ),
+      );
+    }
+    return Card(
+      key: const ValueKey('validation-pending'),
+      margin: const EdgeInsets.all(SpacingTokens.l),
+      child: ListTile(
+        leading: const SizedBox.square(
+          dimension: SpacingTokens.xl,
+          child: CircularProgressIndicator(strokeWidth: 3),
+        ),
+        title: Text(l.stepLabel(data.response.step)),
+        subtitle: Text(l.validationPendingBody),
+      ),
+    );
   }
 }
 

@@ -117,29 +117,43 @@ void main() {
       // NFR-08 : consentement explicite avant le premier envoi.
       expect(find.text('Envoi des photos'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('consent-accept')));
+      // AJO-15 : l'écran passe seul à la validation dès qu'il y a une
+      // proposition ; ici le résultat final arrive au deuxième suivi.
+      final acceptAll = find.byKey(const ValueKey('accept-all'));
+      await pumpUntil(
+        tester,
+        () =>
+            find.byKey(const ValueKey('validation-save')).evaluate().isNotEmpty,
+      );
       await settleLong(tester);
-      // AJO-04 : le lot se renseigne pendant l'attente.
-      expect(find.text('Pendant ce temps, le lot'), findsOneWidget);
+      expect(find.byKey(const ValueKey('validation-pending')), findsNothing);
+      // AJO-04 : le lot se renseigne sur le même écran tant qu'il n'existe pas.
       await tester.scrollUntilVisible(
         find.byKey(const ValueKey('lot-save')),
         300,
         scrollable: find.byType(Scrollable).first,
       );
+      expect(find.text('Pendant ce temps, le lot'), findsOneWidget);
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
       await settle(tester);
       await tester.tap(find.byKey(const ValueKey('lot-save')));
-      await settleLong(tester, 10);
+      await settleLong(tester, 4);
+      expect(find.byKey(const ValueKey('lot-save')), findsNothing);
+      expect(tester.widget<FilledButton>(acceptAll).onPressed, isNotNull);
       await tester.scrollUntilVisible(
-        find.byKey(const ValueKey('review-proposals')),
+        find.textContaining('Étiquette · confiance 97 %'),
         -300,
         scrollable: find.byType(Scrollable).first,
       );
-      await tester.tap(find.byKey(const ValueKey('review-proposals')));
-      await settleLong(tester, 3);
       // AJO-06 : chaque champ avec source et confiance.
       expect(find.textContaining('Étiquette · confiance 97 %'), findsOneWidget);
       expect(find.text('Confiance faible : vérifiez'), findsNothing);
       // AJO-13 : photo rognée sur le cadre renvoyé, retour à la photo entière.
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('crop-photo-0')),
+        -300,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.text("Recadrée sur l'étiquette"), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('crop-photo-0')));
       final editor = find.byKey(const ValueKey('crop-frame'));
@@ -274,14 +288,16 @@ void main() {
   );
 
   testWidgets(
-    'AJO-05 T111 lecture de l\'étiquette affichée pendant l\'enrichissement',
+    'AJO-05 AJO-15 T111 validation ouverte dès la lecture, complétée ensuite',
     (tester) async {
+      // Suivis 1 et 2 : lecture en cours ; 3 et 4 : étape enrichissement,
+      // lecture de l'étiquette jointe ; 5 : résultat final.
       final gateway = FakeGateway(
         validator: validator(),
         readExample: readExample,
-        scenario: FakeScenario.never,
+        pollsBeforeDone: 5,
       );
-      await start(tester, gateway: gateway);
+      final database = await start(tester, gateway: gateway);
       await tester.tap(find.byTooltip('Ajouter une bouteille'));
       await settle(tester);
       await tester.tap(find.byKey(const ValueKey('add-photo')));
@@ -296,22 +312,35 @@ void main() {
       await settle(tester);
       await tester.tap(find.byKey(const ValueKey('consent-accept')));
       await settle(tester);
-      expect(find.byKey(const ValueKey('label-preview')), findsNothing);
-      // Suivi toutes les 3 s : l'étape enrichissement arrive au 3e appel.
-      final preview = find.byKey(const ValueKey('label-preview'));
-      for (var i = 0; i < 6 && preview.evaluate().isEmpty; i++) {
+      // Suivi toutes les 3 s : la lecture arrive au 3e appel.
+      final pending = find.byKey(const ValueKey('validation-pending'));
+      for (var i = 0; i < 6 && pending.evaluate().isEmpty; i++) {
         await tester.pump(const Duration(seconds: 3));
         await settle(tester);
       }
-      expect(preview, findsOneWidget);
-      expect(find.text("Lu sur l'étiquette, en attendant"), findsOneWidget);
-      expect(find.text("Domaine : Guillaume L'Echanson"), findsOneWidget);
-      expect(find.text('Millésime : 2024'), findsOneWidget);
-      // Couleur non lue : rien d'affiché, jamais devinée.
-      expect(find.byKey(const ValueKey('label-preview-couleur')), findsNothing);
-      // Rien d'enregistré : la fiche reste en cours, sans domaine.
-      expect(find.byKey(const ValueKey('review-proposals')), findsNothing);
-      await tester.pumpWidget(const SizedBox());
+      expect(pending, findsOneWidget, reason: 'validation ouverte en cours');
+      expect(find.byKey(const ValueKey('field-domaine')), findsOneWidget);
+      expect(find.byKey(const ValueKey('field-cepages')), findsNothing);
+      final save = find.byKey(const ValueKey('validation-save'));
+      expect(tester.widget<IconButton>(save).onPressed, isNull);
+      // Rien n'est enregistré pendant l'attente.
+      final items = await tester.runAsync(
+        () => CellarRepository(database).wineItems(),
+      );
+      expect(items!.single.enrichmentStatus, isNot('valide'));
+      // Résultat final : la même page se complète et s'enregistre.
+      for (var i = 0; i < 6 && pending.evaluate().isNotEmpty; i++) {
+        await tester.pump(const Duration(seconds: 3));
+        await settle(tester);
+      }
+      expect(pending, findsNothing);
+      expect(tester.widget<IconButton>(save).onPressed, isNotNull);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('field-cepages')),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.byKey(const ValueKey('field-cepages')), findsOneWidget);
     },
   );
 }
