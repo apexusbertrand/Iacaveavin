@@ -18,7 +18,8 @@ async function executer(script, noeuds, entree) {
     const items = [].concat(noeuds[nom]).map((json) => ({ json }));
     return { first: () => items[0], all: () => items, isExecuted: true };
   };
-  const ctx = vm.createContext({ $, $input: { first: () => ({ json: entree }), all: () => [{ json: entree }] }, TextEncoder, TextDecoder, Intl, URL, Buffer });
+  const ctx = vm.createContext({ $, $input: { first: () => ({ json: entree }), all: () => [{ json: entree }] }, TextEncoder, TextDecoder, Intl, Buffer });
+  // Pas d'URL : l'objet manque dans le bac à sable des nœuds Code de n8n (T109).
   // Objets du bac à sable ramenés dans ce contexte pour les comparaisons.
   return JSON.parse(JSON.stringify(await vm.runInContext(`(async function () {\n${a.noeud(script)}\n}).call({ helpers: {} })`, ctx)));
 }

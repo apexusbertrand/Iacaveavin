@@ -6,14 +6,24 @@ if (typeof require !== 'undefined' && typeof urlsCitees === 'undefined') {
   Object.assign(globalThis, require('./metier.js'), require('./modele.js'));
 }
 
-/** Forme comparable d'une URL : hôte sans www, sans fragment ni barre finale. */
+/**
+ * Forme comparable d'une URL : hôte sans www ni port, chemin décodé sans
+ * barre finale, requête, sans fragment. Sans l'objet URL, absent du bac à
+ * sable des nœuds Code de n8n (T109).
+ */
 function urlComparable(u) {
-  try {
-    const x = new URL(u);
-    return x.hostname.toLowerCase().replace(/^www\./, '') + x.pathname.replace(/\/+$/, '') + x.search;
-  } catch (e) {
-    return null;
-  }
+  if (typeof u !== 'string') return null;
+  const m = /^[a-z][a-z0-9+.-]*:\/\/([^/?#]+)([^?#]*)(\?[^#]*)?/i.exec(u.trim());
+  if (!m) return null;
+  const decoder = (x) => {
+    try {
+      return decodeURIComponent(x);
+    } catch (e) {
+      return x;
+    }
+  };
+  const hote = m[1].toLowerCase().replace(/^[^@]*@/, '').replace(/:\d+$/, '').replace(/^www\./, '');
+  return hote + decoder(m[2]).replace(/\/+$/, '') + decoder(m[3] || '');
 }
 
 /** URL des résultats de recherche renvoyés pendant l'appel au modèle. */

@@ -241,3 +241,14 @@ test('T108 page citée non vue : valeur retirée, étiquette gardée, diagnostic
   assert.match(r.alertes[0].message, /^3 valeur\(s\) retirée\(s\).*arrêt end_turn, 2 recherche\(s\), 2 résultat\(s\) vu\(s\)/);
   assert.equal(v.retirerNonVues('pas du json', 'x'), 'pas du json');
 });
+
+test('T109 URL comparables sans l\'objet URL (absent du bac à sable n8n)', () => {
+  const { urlComparable } = require('../lib/recherche.js');
+  const u = 'https://www.Vinatis.com/66045-chignin-bergeron-la-bergeronnelle-2022/?ref=1#avis';
+  assert.equal(urlComparable(u), 'vinatis.com/66045-chignin-bergeron-la-bergeronnelle-2022?ref=1');
+  assert.equal(urlComparable('http://cavusvinifera.com:443/fr/Ren%C3%A9-Quenard'), urlComparable('https://www.cavusvinifera.com/fr/René-Quenard/'));
+  assert.equal(urlComparable('pas une url'), null);
+  assert.equal(urlComparable(null), null);
+  const src = fs.readFileSync(path.join(__dirname, '../lib/recherche.js'), 'utf8');
+  assert.doesNotMatch(src, /new URL\(/);
+});
