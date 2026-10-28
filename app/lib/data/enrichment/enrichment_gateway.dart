@@ -169,8 +169,13 @@ class FakeGateway implements EnrichmentGateway {
     }
     job.polls++;
     if (scenario == FakeScenario.never || job.polls < pollsBeforeDone) {
-      final base = await _example('job-en-cours.json');
       final step = jobSteps[(job.polls) % (jobSteps.length - 1)];
+      // T111 : dès l'étape enrichissement, la lecture de l'étiquette suit.
+      final base = await _example(
+        jobSteps.indexOf(step) >= jobSteps.indexOf('enrichissement')
+            ? 'job-en-cours-lecture.json'
+            : 'job-en-cours.json',
+      );
       return _answer(job.stamp({...base, 'etape': step}));
     }
     return _final(job);

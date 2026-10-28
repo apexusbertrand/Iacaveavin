@@ -48,6 +48,13 @@ function retirerNonVues(texte, diagnostic) {
     if (v.source === 'etiquette') delete v.url;
     else fiche[champ] = { valeur: null, source: null, confiance: null, motif: 'page citée absente des résultats de recherche' };
   }
+  // T113 : une valeur nulle sans source ni confiance est complétée à null,
+  // sans rien inventer, au lieu de relancer l'agent pour la forme (20 à 40 s).
+  for (const v of Object.values(fiche)) {
+    if (!v || typeof v !== 'object' || v.valeur !== null) continue;
+    if (!('source' in v)) v.source = null;
+    if (!('confiance' in v)) v.confiance = null;
+  }
   if (Array.isArray(r.notes_critiques)) {
     r.notes_critiques = r.notes_critiques.filter((n) => {
       if (n && vues.has(n.url)) return true;

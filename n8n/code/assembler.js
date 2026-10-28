@@ -14,7 +14,7 @@ const path = require('path');
 
 const ici = __dirname;
 const racine = path.resolve(ici, '../..');
-const VERSION_FLUX = '0.2.0';
+const VERSION_FLUX = '0.3.0';
 
 const lire = (p) => fs.readFileSync(path.join(racine, p), 'utf8');
 

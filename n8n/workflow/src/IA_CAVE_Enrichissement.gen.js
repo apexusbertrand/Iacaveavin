@@ -51,8 +51,11 @@ ${o.si('siCache', 'Cache valide ?', '{{ $json.cache }}')}
 
 ${o.code('resCache', 'Résultat du cache', 'resultat_cache', "{ ok: true }")}
 
+// T111 : la lecture de l'étiquette part dans le job, l'app l'affiche pendant
+// que l'agent cherche.
 ${o.ecrire('etapeEnrich', 'Étape enrichissement', 'jobs', 'update',
-    { etape: "'enrichissement'" }, [['job_id', o.ex(`{{ ${TROUVE}.job_id }}`)]])}
+    { etape: "'enrichissement'", resultat: o.ex("{{ $('Lecture étiquette').first().json.partiel }}") },
+    [['job_id', o.ex(`{{ ${TROUVE}.job_id }}`)]])}
 
 ${o.code('preparer', 'Préparation agent', 'preparer_agent', "{ systeme: 'x', message: 'x' }")}
 

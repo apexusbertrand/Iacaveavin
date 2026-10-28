@@ -279,4 +279,19 @@ void main() {
       );
     },
   );
+
+  test(
+    'AJO-05 T110 suivi toutes les 3 s pendant 90 s, puis toutes les 10 s',
+    () {
+      expect(pollDelay(Duration.zero), const Duration(seconds: 3));
+      expect(
+        pollDelay(const Duration(seconds: 89)),
+        const Duration(seconds: 3),
+      );
+      expect(
+        pollDelay(const Duration(seconds: 90)),
+        const Duration(seconds: 10),
+      );
+    },
+  );
 }

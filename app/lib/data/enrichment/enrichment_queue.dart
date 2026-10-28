@@ -12,9 +12,11 @@ import 'enrichment_gateway.dart';
 /// Délai maximal d'un job (docs/02 : 3 min au plus).
 const jobTimeout = Duration(minutes: 3);
 
-/// Rythme de suivi : toutes les 3 s pendant 30 s, puis toutes les 10 s.
+/// Rythme de suivi : toutes les 3 s pendant 90 s, puis toutes les 10 s
+/// (T110 : un enrichissement dure de 40 à 80 s, le résultat s'affiche moins
+/// de 3 s après la fin).
 Duration pollDelay(Duration sinceSent) =>
-    sinceSent < const Duration(seconds: 30)
+    sinceSent < const Duration(seconds: 90)
     ? const Duration(seconds: 3)
     : const Duration(seconds: 10);
 

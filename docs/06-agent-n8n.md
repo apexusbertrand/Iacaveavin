@@ -44,6 +44,7 @@ Clé de cache d'un vin : domaine, appellation, cuvée et millésime normalisés 
 1. Lecture des étiquettes par un modèle vision : transcription intégrale de chaque photo, puis extraction structurée (domaine, cuvée, appellation, signe de qualité, classement, lieu-dit, millésime, couleur, degré, volume, mentions bio, mise en bouteille). Le même appel donne, pour chaque photo, le cadre de l'étiquette en fractions de l'image (`cadrages`, contrat 1.1, T86) ; `cadre: null` quand aucune étiquette n'est identifiable, et l'app garde alors la photo entière.
 2. Normalisation : rattachement aux référentiels (appellations officielles, cépages, régions), correction des erreurs de lecture, séparation appellation / signe de qualité / classement. Recherche du LWIN quand il existe.
 3. Cache : si la clé existe et date de moins de 180 jours, renvoi immédiat du résultat (champ `cache.hit`).
+3 bis. Sans cache, la lecture part tout de suite dans le job : `resultat` partiel en statut `en_cours` (domaine, cuvée, appellation, millésime, couleur, degré, volume, source `etiquette`, valeur nulle avec motif sinon ; transcription ; notes, alertes et sources vides). L'app l'affiche pendant que l'agent cherche, sans rien enregistrer (T111).
 4. Identification du domaine et de son site officiel, avec vérification que le site appartient au producteur (nom, adresse, mentions légales).
 5. Enrichissement par priorité décroissante : site officiel (fiche technique cuvée et millésime), organismes officiels et interprofessions, sources tierces reconnues. Liste des domaines autorisés : n8n/sources-autorisees.yaml.
 6. Rédaction des commentaires domaine et millésime : 400 à 600 caractères chacun, écrits par l'agent à partir des sources, jamais copiés.
@@ -75,7 +76,7 @@ Mise en œuvre (lot 2b, sous-flux IA_CAVE_Prix) :
 
 ## Recherche web et budget
 
-L'agent utilise la recherche web intégrée de Claude (outil serveur `web_search` de l'API Anthropic, option `webSearch` du nœud Anthropic de n8n), sans intermédiaire (T85, décision de Bertrand du 2026-10-26). Tavily est retiré. La recherche est payante : 10 dollars pour 1 000 recherches, plus les jetons des résultats lus par le modèle ([tarifs Anthropic](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search-tool)).
+L'agent d'enrichissement tourne sur Claude Sonnet 4.6 (`claude-sonnet-4-6`, Haiku 5.5 essayé et écarté, T112), la lecture d'étiquette et la correction sur Claude Sonnet 5. Une valeur nulle sans source ni confiance est complétée par le flux, sans relancer la correction (T113). L'agent utilise la recherche web intégrée de Claude (outil serveur `web_search` de l'API Anthropic, option `webSearch` du nœud Anthropic de n8n), sans intermédiaire (T85, décision de Bertrand du 2026-10-26). Tavily est retiré. La recherche est payante : 10 dollars pour 1 000 recherches, plus les jetons des résultats lus par le modèle ([tarifs Anthropic](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search-tool)).
 
 Garde-fous :
 

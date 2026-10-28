@@ -252,3 +252,20 @@ test('T109 URL comparables sans l\'objet URL (absent du bac à sable n8n)', () =
   const src = fs.readFileSync(path.join(__dirname, '../lib/recherche.js'), 'utf8');
   assert.doesNotMatch(src, /new URL\(/);
 });
+
+test('AJO-05 T113 valeur nulle sans source ni confiance : complétée à null, pas de relance', () => {
+  const v = require('../lib/verification.js');
+  const { validateSchema } = require('../lib/schema.js');
+  const schemaReponse = JSON.parse(fs.readFileSync(path.join(racine, 'specs/contrat-n8n/reponse-job.schema.json'), 'utf8'));
+  const r = JSON.parse(JSON.stringify(termine.resultat));
+  r.fiche.lieu_dit = { valeur: null, motif: 'aucun lieu-dit sur l\'étiquette' };
+  r.fiche.lwin = { valeur: null, source: 'tiers', motif: 'non trouvé' };
+  const vues = new Set(r.sources_consultees.map((s) => s.url));
+  const sortie = JSON.parse(v.retirerNonVues(JSON.stringify(r), 'x'));
+  assert.deepEqual(sortie.fiche.lieu_dit, { valeur: null, motif: 'aucun lieu-dit sur l\'étiquette', source: null, confiance: null });
+  assert.equal(sortie.fiche.lwin.source, 'tiers', 'une source donnée reste telle quelle');
+  assert.equal(sortie.fiche.domaine.valeur, r.fiche.domaine.valeur, 'les valeurs renseignées ne bougent pas');
+  assert.ok(vues.size > 0);
+  delete sortie.fiche.lwin;
+  assert.deepEqual(validateSchema(schemaReponse.$defs.resultat_enrichissement, sortie, schemaReponse), []);
+});

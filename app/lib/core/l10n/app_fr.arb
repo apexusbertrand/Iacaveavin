@@ -902,6 +902,18 @@
   "stepTermine": "Terminé",
   "enrichOffline": "Hors ligne : la fiche reste « à enrichir », l'envoi partira au retour du réseau.",
   "enrichReady": "Propositions prêtes",
+  "labelPreviewTitle": "Lu sur l'étiquette, en attendant",
+  "labelPreviewLine": "{field} : {value}",
+  "@labelPreviewLine": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "reviewProposals": "Vérifier les propositions",
   "enrichFailed": "L'identification a échoué : {reason}",
   "@enrichFailed": {

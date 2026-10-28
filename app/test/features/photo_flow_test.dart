@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/cellar_repository.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
+import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
+import 'package:iacaveavin/data/enrichment/enrichment_providers.dart';
 import 'package:iacaveavin/data/reference_repository.dart';
 import 'package:iacaveavin/features/add/barcode_reader.dart';
 import 'package:iacaveavin/features/add/capture_screen.dart';
 
+import '../data/contract_test.dart' show readExample, validator;
 import '../data/photo_test.dart' show sharpLabel;
 import '../fakes.dart';
 
@@ -48,6 +51,7 @@ void main() {
     WidgetTester tester, {
     Map<String, Object> prefs = const {},
     BarcodeReader? barcode,
+    EnrichmentGateway? gateway,
   }) => pumpRealApp(
     tester,
     seed: seedOwner,
@@ -58,6 +62,7 @@ void main() {
         ({required bool camera}) async => label,
       ),
       if (barcode != null) barcodeReaderProvider.overrideWithValue(barcode),
+      if (gateway != null) gatewayProvider.overrideWith((ref) => gateway),
     ],
   );
 
@@ -213,6 +218,48 @@ void main() {
         findsOneWidget,
       );
       expect(field.controller!.text, '3760256272183', reason: 'EAN conservé');
+    },
+  );
+
+  testWidgets(
+    'AJO-05 T111 lecture de l\'étiquette affichée pendant l\'enrichissement',
+    (tester) async {
+      final gateway = FakeGateway(
+        validator: validator(),
+        readExample: readExample,
+        scenario: FakeScenario.never,
+      );
+      await start(tester, gateway: gateway);
+      await tester.tap(find.byTooltip('Ajouter une bouteille'));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('add-photo')));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('take-photo')));
+      await photoReady(tester);
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('capture-continue')),
+      );
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('capture-continue')));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('consent-accept')));
+      await settle(tester);
+      expect(find.byKey(const ValueKey('label-preview')), findsNothing);
+      // Suivi toutes les 3 s : l'étape enrichissement arrive au 3e appel.
+      final preview = find.byKey(const ValueKey('label-preview'));
+      for (var i = 0; i < 6 && preview.evaluate().isEmpty; i++) {
+        await tester.pump(const Duration(seconds: 3));
+        await settle(tester);
+      }
+      expect(preview, findsOneWidget);
+      expect(find.text("Lu sur l'étiquette, en attendant"), findsOneWidget);
+      expect(find.text("Domaine : Guillaume L'Echanson"), findsOneWidget);
+      expect(find.text('Millésime : 2024'), findsOneWidget);
+      // Couleur non lue : rien d'affiché, jamais devinée.
+      expect(find.byKey(const ValueKey('label-preview-couleur')), findsNothing);
+      // Rien d'enregistré : la fiche reste en cours, sans domaine.
+      expect(find.byKey(const ValueKey('review-proposals')), findsNothing);
+      await tester.pumpWidget(const SizedBox());
     },
   );
 }

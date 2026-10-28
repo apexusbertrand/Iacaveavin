@@ -11,6 +11,7 @@ cas = {
  "requete-enrichissement.json": ("requete-enrichissement.schema.json", True),
  "requete-prix.json": ("requete-prix.schema.json", True),
  "job-en-cours.json": ("reponse-job.schema.json", True),
+ "job-en-cours-lecture.json": ("reponse-job.schema.json", True),
  "enrichissement-termine.json": ("reponse-job.schema.json", True),
  "enrichissement-partiel.json": ("reponse-job.schema.json", True),
  "prix-termine.json": ("reponse-job.schema.json", True),

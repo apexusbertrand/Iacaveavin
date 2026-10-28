@@ -1683,6 +1683,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get enrichReady => 'Propositions prêtes';
 
   @override
+  String get labelPreviewTitle => 'Lu sur l\'étiquette, en attendant';
+
+  @override
+  String labelPreviewLine(String field, String value) {
+    return '$field : $value';
+  }
+
+  @override
   String get reviewProposals => 'Vérifier les propositions';
 
   @override

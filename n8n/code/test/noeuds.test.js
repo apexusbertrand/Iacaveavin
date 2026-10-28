@@ -146,3 +146,26 @@ test('NFR-06 nœud santé : autotest de signature dans le bac à sable', async (
   const [s] = await executer('sante', { 'Config santé': config }, {});
   assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.2', ok: true });
 });
+
+test('AJO-05 T111 lecture de l\'étiquette renvoyée en résultat partiel pendant l\'enrichissement', async () => {
+  const { validateSchema } = require('../lib/schema.js');
+  const { enveloppeJob } = require('../lib/enveloppes.js');
+  const schemaReponse = lire('specs/contrat-n8n/reponse-job.schema.json');
+  const [l] = await executer('lecture', {}, lectureModele);
+  const partiel = JSON.parse(l.json.partiel);
+  assert.deepEqual(partiel.fiche.domaine, { valeur: "Guillaume L'Echanson", source: 'etiquette', confiance: null });
+  assert.equal(partiel.fiche.millesime.valeur, 2024);
+  assert.equal(partiel.fiche.couleur.valeur, null, 'couleur non lue : vide avec motif, jamais devinée');
+  assert.ok(partiel.fiche.couleur.motif);
+  const job = { job_id: envoi.job_id, request_id: requete.request_id, type: 'enrichissement', statut: 'en_cours', etape: 'enrichissement', resultat: l.json.partiel };
+  assert.deepEqual(validateSchema(schemaReponse, enveloppeJob(job, null)), []);
+  // Valeurs hors format du modèle : écartées plutôt que transmises.
+  const bruit = { content: JSON.stringify({ transcription: [{ index: 0, texte: 'x' }], etiquette: { domaine: '  ', millesime: 1850, couleur: 'violet', degre: '13' } }) };
+  const [b] = await executer('lecture', {}, bruit);
+  const pb = JSON.parse(b.json.partiel);
+  assert.equal(pb.fiche.domaine.valeur, null);
+  assert.equal(pb.fiche.millesime.valeur, null);
+  assert.equal(pb.fiche.couleur.valeur, null);
+  assert.equal(pb.fiche.degre, undefined);
+  assert.deepEqual(validateSchema(schemaReponse, enveloppeJob({ ...job, resultat: b.json.partiel }, null)), []);
+});

@@ -103,7 +103,7 @@ final pendingJobsProvider = StreamProvider<int>((ref) async* {
   yield* queue.watchPendingCount();
 });
 
-/// Fait tourner la file : envoi, puis suivi toutes les 3 s pendant 30 s,
+/// Fait tourner la file : envoi, puis suivi toutes les 3 s pendant 90 s,
 /// puis toutes les 10 s (docs/02), tant qu'un job attend.
 class EnrichmentRunner extends Notifier<QueueReport?> {
   Timer? _timer;

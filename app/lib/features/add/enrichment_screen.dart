@@ -18,6 +18,7 @@ import '../../domain/enrichment.dart';
 import '../../domain/wine_detail.dart';
 import '../wine_detail/stock_dialogs.dart';
 import '../wine_detail/wine_detail_screen.dart';
+import 'validation_screen.dart';
 
 final latestJobProvider = StreamProvider.family<Job?, String>((
   ref,
@@ -109,6 +110,8 @@ class EnrichmentScreen extends ConsumerWidget {
               last: last,
               offline: report?.offline == true,
             ),
+            if (status == WineStatus.running && last?.result != null)
+              _LabelPreview(result: last!.result!),
             if (quotaLow(left, monthlyEnrichmentQuota))
               Padding(
                 padding: const EdgeInsets.only(top: SpacingTokens.s),
@@ -228,6 +231,59 @@ class _Progress extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// AJO-05, T111 : ce que la lecture a trouvé sur l'étiquette, affiché pendant
+/// que l'agent cherche. Rien n'est enregistré : les valeurs arrivent avec le
+/// résultat final, à valider.
+class _LabelPreview extends StatelessWidget {
+  const _LabelPreview({required this.result});
+
+  static const fields = [
+    'domaine',
+    'cuvee',
+    'appellation',
+    'millesime',
+    'couleur',
+    'degre',
+    'volume_cl',
+  ];
+
+  final EnrichmentResult result;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final read = [
+      for (final f in fields)
+        if (result.fields[f] case final v? when !v.isEmpty)
+          (f, formatProposed(v.value)),
+    ];
+    if (read.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      key: const ValueKey('label-preview'),
+      padding: const EdgeInsets.only(top: SpacingTokens.m),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.labelPreviewTitle,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: context.palette.primaryText,
+            ),
+          ),
+          const SizedBox(height: SpacingTokens.xs),
+          for (final (f, v) in read)
+            Text(
+              l.labelPreviewLine(l.contractFieldLabel(f), v),
+              key: ValueKey('label-preview-$f'),
+              style: theme.textTheme.bodyMedium,
+            ),
+        ],
+      ),
     );
   }
 }

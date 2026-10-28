@@ -18,6 +18,7 @@ const IDENTIFIANTS = {
 
 const MODELE = 'claude-sonnet-5';
 // Agent d'enrichissement : Claude Sonnet 4.6, choix de Bertrand du 2026-10-26.
+// Haiku 5.5 essayé le 2026-10-28 (T112) : plus rapide, fiches moins remplies.
 const MODELE_AGENT = 'claude-sonnet-4-6';
 
 const q = (s) => JSON.stringify(s);

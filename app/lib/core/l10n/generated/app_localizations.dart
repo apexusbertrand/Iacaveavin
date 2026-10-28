@@ -2890,6 +2890,18 @@ abstract class AppLocalizations {
   /// **'Propositions prêtes'**
   String get enrichReady;
 
+  /// No description provided for @labelPreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu sur l\'étiquette, en attendant'**
+  String get labelPreviewTitle;
+
+  /// No description provided for @labelPreviewLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{field} : {value}'**
+  String labelPreviewLine(String field, String value);
+
   /// No description provided for @reviewProposals.
   ///
   /// In fr, this message translates to:

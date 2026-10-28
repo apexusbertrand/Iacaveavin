@@ -103,7 +103,7 @@ sequenceDiagram
     N-->>F: statut termine + résultat
   else nouveau vin
     N-->>F: 202 statut en_attente + job_id
-    loop toutes les 3 s pendant 30 s, puis toutes les 10 s, 3 min au plus
+    loop toutes les 3 s pendant 90 s (T110), puis toutes les 10 s, 3 min au plus
       F->>N: GET /jobs?job_id=…
       N-->>F: en_cours (étape) ou termine / partiel / erreur
     end

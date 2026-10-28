@@ -31,4 +31,21 @@ for (const c of Array.isArray(lecture.cadrages) ? lecture.cadrages : []) {
 }
 const e = lecture.etiquette || {};
 const cle = cleVin({ domaine: e.domaine, appellation: e.appellation, cuvee: e.cuvee, millesime: e.millesime });
-return [{ json: { lecture: { ...lecture, transcription, cadrages }, transcription, cadrages, cle: cle || 'aucune-cle', avec_cle: !!cle, brut_modele: texteDe(brut).slice(0, 4000) } }];
+// T111 : résultat partiel écrit dans le job dès la lecture, pour que l'app
+// affiche ce qui est lu sur l'étiquette pendant l'enrichissement. Une valeur
+// absente ou hors format reste nulle, avec son motif (règle 2).
+const COULEURS = ['rouge', 'blanc', 'rose', 'champagne', 'effervescent', 'liquoreux', 'orange', 'autre'];
+const lu = (valeur) => (valeur === null || valeur === undefined
+  ? { valeur: null, source: null, confiance: null, motif: 'non lu sur l\'étiquette' }
+  : { valeur, source: 'etiquette', confiance: null });
+const texte = (v) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, 300) : null);
+const millesime = Number.isInteger(e.millesime) && e.millesime >= 1900 && e.millesime <= 2100 ? e.millesime : e.millesime === 'NM' ? 'NM' : null;
+const fiche = {
+  domaine: lu(texte(e.domaine)), cuvee: lu(texte(e.cuvee)), appellation: lu(texte(e.appellation)),
+  millesime: lu(millesime), couleur: lu(COULEURS.includes(e.couleur) ? e.couleur : null),
+};
+for (const k of ['degre', 'volume_cl']) {
+  if (nombre(e[k]) !== null && e[k] > 0) fiche[k] = lu(e[k]);
+}
+const partiel = { fiche, transcription, notes_critiques: [], alertes: [], sources_consultees: [] };
+return [{ json: { lecture: { ...lecture, transcription, cadrages }, transcription, cadrages, cle: cle || 'aucune-cle', avec_cle: !!cle, partiel: JSON.stringify(partiel), brut_modele: texteDe(brut).slice(0, 4000) } }];
