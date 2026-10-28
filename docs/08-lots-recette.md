@@ -26,7 +26,7 @@ flowchart LR
 | 2b Flux n8n | flux IA_CAVE_Agent et sous-flux, tables, cache, quotas, sécurité, prompts, sources vérifiées dans n8n/sources-autorisees.yaml, script du jeu d'essai | jeu de 30 étiquettes aux cibles de docs/06-agent-n8n.md ; coût moyen d'un enrichissement mesuré et noté dans docs/decisions.md |
 | 2c Branchement réel | `N8nGateway`, réglages de connexion (PAR-05), PRX-02 à PRX-06 | 20 bouteilles réelles ajoutées par photo en moins de 30 s de saisie active chacune |
 | 3 Restitution | STA, PDF, XLS | aller-retour Excel de 500 lignes sans écart ; catalogue de 200 fiches en moins de 30 s ; 5 vues de l'explorateur vérifiées à la main contre la liste filtrée |
-| 4 Confort | CMP-01 à CMP-06, CMP-08, EMP-03, RET-01 | usage normal pendant 2 semaines sans blocage |
+| 4 Confort | CMP-01 à CMP-06, CMP-08, CMP-09, EMP-03, RET-01 | usage normal pendant 2 semaines sans blocage |
 | 5 Recette élargie | APK distribué à 3 à 5 proches, corrections, NFR mesurées sur 5 000 fiches | 4 semaines d'usage, aucun bug bloquant ouvert, décision écrite de publier ou non |
 | 6 Google Play | après décision : compte développeur, fiche store, Data safety, test fermé, production (docs/09-distribution-publication.md) | app en production |
 | 7 iOS | portage, revue Apple | app sur l'App Store |

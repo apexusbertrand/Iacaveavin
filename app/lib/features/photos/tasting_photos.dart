@@ -28,9 +28,12 @@ final tastingPhotosProvider = FutureProvider.family<List<GalleryPhoto>, String>(
 
 /// CMP-08 : miniatures d'une dégustation ; un tap ouvre le plein écran.
 class TastingPhotoStrip extends ConsumerWidget {
-  const TastingPhotoStrip({super.key, required this.tastingId});
+  const TastingPhotoStrip({super.key, required this.tastingId, this.onDelete});
 
   final String tastingId;
+
+  /// Suppression depuis le plein écran ; absente, la galerie est en lecture.
+  final Future<bool> Function(GalleryPhoto photo)? onDelete;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +53,12 @@ class TastingPhotoStrip extends ConsumerWidget {
             button: true,
             label: l.photoOpen(i + 1),
             child: InkWell(
-              onTap: () => showPhotoGallery(context, photos, initialIndex: i),
+              onTap: () => showPhotoGallery(
+                context,
+                photos,
+                initialIndex: i,
+                onDelete: onDelete,
+              ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(RadiusTokens.badge),
                 child: AspectRatio(

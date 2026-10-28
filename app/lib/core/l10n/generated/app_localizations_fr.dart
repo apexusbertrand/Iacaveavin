@@ -2210,11 +2210,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get photoTypeEvenement => 'Événement';
 
   @override
-  String get tabPhotos => 'Photos';
+  String get tabTastingsPhotos => 'Dégustations et photos';
+
+  @override
+  String get otherPhotos => 'Autres photos';
 
   @override
   String get libraryEmpty =>
-      'Aucune photo de dégustation ou de repas pour cette bouteille.';
+      'Aucune autre photo pour cette bouteille (repas, événement).';
 
   @override
   String get libraryAdd => 'Ajouter une photo';
@@ -2898,6 +2901,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get toDrinkTab => 'À boire';
+
+  @override
+  String get pastTab => 'Passés';
+
+  @override
+  String get pastEmpty =>
+      'Aucun vin en stock n\'a dépassé sa fenêtre de garde.';
+
+  @override
+  String pastHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count vins ont dépassé leur fenêtre de garde : à boire sans tarder ou à goûter avant de servir.',
+      one: '1 vin a dépassé sa fenêtre de garde : à boire sans tarder ou à goûter avant de servir.',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get tastingsTab => 'Dégustations';

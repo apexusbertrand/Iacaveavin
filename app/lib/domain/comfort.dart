@@ -1,5 +1,5 @@
-/// Lot 4, confort : vins à boire (CMP-01), accords inversés (CMP-04) et
-/// alerte du mois (CMP-02), en fonctions pures.
+/// Lot 4, confort : vins à boire (CMP-01), vins passés (CMP-09), accords
+/// inversés (CMP-04) et alerte du mois (CMP-02), en fonctions pures.
 library;
 
 import 'garde.dart';
@@ -25,6 +25,21 @@ List<WineListItem> toDrinkList(Iterable<WineListItem> items, int year) {
     final soonB = b.statusIn(year) == CellarStatus.drinkSoon ? 0 : 1;
     if (soonA != soonB) return soonA.compareTo(soonB);
     final end = (a.gardeEnd ?? 9999).compareTo(b.gardeEnd ?? 9999);
+    if (end != 0) return end;
+    return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
+  });
+  return list;
+}
+
+/// CMP-09 : vins en stock dont la fenêtre de garde est dépassée, à part des
+/// vins à boire. Fin de fenêtre la plus ancienne en tête, puis par nom.
+List<WineListItem> pastList(Iterable<WineListItem> items, int year) {
+  final list = [
+    for (final w in items)
+      if (w.bottles > 0 && w.statusIn(year) == CellarStatus.past) w,
+  ];
+  list.sort((a, b) {
+    final end = (a.gardeEnd ?? 0).compareTo(b.gardeEnd ?? 0);
     if (end != 0) return end;
     return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
   });

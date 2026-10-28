@@ -34,7 +34,7 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 - FIC-08. Dupliquer pour un autre millésime : nouvelle fiche sur la même cuvée, seuls les champs liés au millésime sont à enrichir.
 - FIC-09. Ré-enrichir : relance le flux sur les champs non verrouillés et montre les différences avant de les appliquer.
 - FIC-10. Toutes les photos de la bouteille sont visibles : carrousel sur la fiche, plein écran avec zoom et balayage d'une photo à l'autre (2026-10-26, évolution 1).
-- FIC-11. Bibliothèque de photos par bouteille, ajoutées à tout moment (dégustation, repas, événement) depuis l'appareil photo ou la galerie, supprimables. Ces photos ne sont jamais envoyées au flux et ne deviennent pas la photo principale (2026-10-26, évolution 1 bis, T88).
+- FIC-11. Bibliothèque de photos par bouteille, ajoutées à tout moment (dégustation, repas, événement) depuis l'appareil photo ou la galerie, supprimables. Ces photos ne sont jamais envoyées au flux et ne deviennent pas la photo principale (2026-10-26, évolution 1 bis, T88). Elles sont dans l'onglet Dégustations et photos de la fiche, sous les dégustations ; une photo prise en notant une dégustation s'affiche sous celle-ci et n'est pas répétée (2026-10-28, T120).
 
 ## AJO. Ajout d'une bouteille par photo [lot 2a côté app, 2b côté n8n]
 
@@ -159,6 +159,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - CMP-06. Favoris et partage d'une fiche en image ou en PDF.
 - CMP-07. [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés, toutes couleurs, millésimes 2005 à 2024, plusieurs propriétaires et emplacements), activable et effaçable dans les Réglages. Il sert aux tests de performance et aux captures.
 - CMP-08. Photos de dégustation : en notant une dégustation, ajout de 6 photos au plus (appareil ou galerie), ramenées à la taille d'un écran de smartphone (1 080 × 1 920 au plus), rattachées à la dégustation, visibles dans son historique et dans la bibliothèque de la bouteille, jamais envoyées au flux (2026-10-28, T114).
+- CMP-09. Vins passés : sur l'écran À boire, un onglet Passés liste à part les vins en stock dont la fenêtre de garde est dépassée (année en cours après la fin de garde), fin la plus ancienne en tête. Ils n'apparaissent ni dans l'onglet À boire ni dans les accords inversés (2026-10-28, T121).
 
 ## RET. Remontée d'information [lot 4]
 

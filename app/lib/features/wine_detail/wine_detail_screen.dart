@@ -16,8 +16,7 @@ import '../../domain/price_trend.dart';
 import '../../domain/scores.dart';
 import '../../domain/wine_detail.dart';
 import '../photos/photo_gallery.dart';
-import '../photos/photo_library_tab.dart';
-import '../photos/tasting_photos.dart';
+import '../photos/tastings_photos_tab.dart';
 import '../wine_list/wine_card.dart';
 import 'pdf_actions.dart';
 import 'price_actions.dart';
@@ -83,7 +82,7 @@ class _Detail extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -138,9 +137,8 @@ class _Detail extends ConsumerWidget {
             tabs: [
               Tab(text: l.tabInfo),
               Tab(text: l.tabOperations),
-              Tab(text: l.tabTastings),
+              Tab(text: l.tabTastingsPhotos),
               Tab(text: l.tabPrices),
-              Tab(text: l.tabPhotos),
             ],
           ),
         ),
@@ -153,9 +151,8 @@ class _Detail extends ConsumerWidget {
             children: [
               _InfoTab(wine: wine),
               _OperationsTab(wine: wine),
-              _TastingsTab(wine: wine),
+              TastingsPhotosTab(wine: wine),
               _PricesTab(wine: wine),
-              PhotoLibraryTab(wineId: wine.id),
             ],
           ),
         ),
@@ -830,57 +827,6 @@ class _OperationsTab extends StatelessWidget {
     );
   }
 }
-
-class _TastingsTab extends ConsumerWidget {
-  const _TastingsTab({required this.wine});
-
-  final WineDetail wine;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppLocalizations.of(context);
-    final scale = ref.watch(settingsProvider.select((s) => s.personalScale));
-    final add = Padding(
-      padding: const EdgeInsets.all(SpacingTokens.l),
-      child: OutlinedButton.icon(
-        onPressed: () => tastingDialog(context, ref, wine),
-        icon: const Icon(Icons.rate_review_outlined),
-        label: Text(l.addTasting),
-      ),
-    );
-    if (wine.tastings.isEmpty) {
-      return MessageStateView(
-        icon: Icons.rate_review_outlined,
-        title: l.noTastings,
-        action: add,
-      );
-    }
-    return ListView(
-      children: [
-        add,
-        for (final t in wine.tastings)
-          ListTile(
-            title: Text(
-              [
-                t.date,
-                if (t.score != null) '${_num(t.score!)} / $scale',
-              ].join(' · '),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text([t.dish, t.comment].whereType<String>().join('\n')),
-                TastingPhotoStrip(tastingId: t.id),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-String _num(double v) =>
-    v == v.roundToDouble() ? v.toInt().toString() : '$v'.replaceAll('.', ',');
 
 class _PricesTab extends ConsumerWidget {
   const _PricesTab({required this.wine});

@@ -62,6 +62,20 @@ Future<void> seedComfort(AppDatabase db, String cellar) async {
     cellarId: cellar,
     lot: LotDraft(ownerId: owner, quantity: 4),
   );
+  // CMP-09 : fenêtre close en 2022, toujours en cave.
+  await repo.createWine(
+    const WineDraft(
+      producer: 'Chateau Passe',
+      country: 'FR',
+      color: 'rouge',
+      vintage: '2005',
+      gardeStart: 2010,
+      gardeEnd: 2022,
+      pairings: ['gibier-a-poil'],
+    ),
+    cellarId: cellar,
+    lot: LotDraft(ownerId: owner, quantity: 1),
+  );
   await repo.addTasting(
     wineId: apogeeId,
     cellarId: cellar,
@@ -86,6 +100,7 @@ void main() {
     expect(t('Clos Vite'), findsOneWidget);
     expect(t('Mas Apogee'), findsOneWidget);
     expect(t('Domaine Jeune'), findsNothing);
+    expect(t('Chateau Passe'), findsNothing, reason: 'CMP-09 : à part');
     expect(
       tester.getTopLeft(t('Clos Vite')).dy,
       lessThan(tester.getTopLeft(t('Mas Apogee')).dy),
@@ -126,6 +141,22 @@ void main() {
     );
     expect(t('Clos Vite'), findsOneWidget);
     expect(find.byKey(const ValueKey('monthly-alert')), findsNothing);
+  });
+
+  testWidgets('CMP-09 onglet Passés : fenêtre dépassée, distinct de À boire', (
+    tester,
+  ) async {
+    await pumpRealApp(tester, location: '/a-boire', seed: seedComfort);
+    expect(t('Chateau Passe'), findsNothing);
+    await tester.tap(find.text('Passés'));
+    await settle(tester);
+    expect(t('Chateau Passe'), findsOneWidget);
+    expect(t('1 vin a dépassé sa fenêtre de garde'), findsOneWidget);
+    expect(t('Clos Vite'), findsNothing);
+    expect(t('Mas Apogee'), findsNothing);
+    await tester.tap(t('Chateau Passe'));
+    await settle(tester);
+    expect(find.byKey(const ValueKey('wine-menu')), findsOneWidget);
   });
 
   testWidgets('CMP-05 onglet Dégustations : vin, date, plat, note', (

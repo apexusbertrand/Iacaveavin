@@ -3724,16 +3724,22 @@ abstract class AppLocalizations {
   /// **'Événement'**
   String get photoTypeEvenement;
 
-  /// No description provided for @tabPhotos.
+  /// No description provided for @tabTastingsPhotos.
   ///
   /// In fr, this message translates to:
-  /// **'Photos'**
-  String get tabPhotos;
+  /// **'Dégustations et photos'**
+  String get tabTastingsPhotos;
+
+  /// No description provided for @otherPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres photos'**
+  String get otherPhotos;
 
   /// No description provided for @libraryEmpty.
   ///
   /// In fr, this message translates to:
-  /// **'Aucune photo de dégustation ou de repas pour cette bouteille.'**
+  /// **'Aucune autre photo pour cette bouteille (repas, événement).'**
   String get libraryEmpty;
 
   /// No description provided for @libraryAdd.
@@ -4881,6 +4887,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'À boire'**
   String get toDrinkTab;
+
+  /// No description provided for @pastTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passés'**
+  String get pastTab;
+
+  /// No description provided for @pastEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun vin en stock n\'a dépassé sa fenêtre de garde.'**
+  String get pastEmpty;
+
+  /// No description provided for @pastHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 vin a dépassé sa fenêtre de garde : à boire sans tarder ou à goûter avant de servir.} other{{count} vins ont dépassé leur fenêtre de garde : à boire sans tarder ou à goûter avant de servir.}}'**
+  String pastHint(int count);
 
   /// No description provided for @tastingsTab.
   ///

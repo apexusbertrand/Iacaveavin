@@ -18,8 +18,8 @@ import '../wine_list/wine_card.dart';
 import 'comfort_providers.dart';
 import 'monthly_alert_banner.dart';
 
-/// CMP-01, CMP-02, CMP-04, CMP-05 : vins à boire, alerte du mois, accords
-/// inversés et historique des dégustations.
+/// CMP-01, CMP-02, CMP-04, CMP-05, CMP-09 : vins à boire, alerte du mois,
+/// accords inversés, vins passés et historique des dégustations.
 class ToDrinkScreen extends StatelessWidget {
   const ToDrinkScreen({super.key});
 
@@ -27,7 +27,7 @@ class ToDrinkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.navToDrink),
@@ -37,12 +37,15 @@ class ToDrinkScreen extends StatelessWidget {
             indicatorColor: Theme.of(context).colorScheme.primary,
             tabs: [
               Tab(text: l.toDrinkTab),
+              Tab(text: l.pastTab),
               Tab(text: l.tastingsTab),
             ],
           ),
         ),
         drawer: const AppDrawer(current: AppDestination.toDrink),
-        body: const TabBarView(children: [_ToDrinkTab(), _TastingsTab()]),
+        body: const TabBarView(
+          children: [_ToDrinkTab(), _PastTab(), _TastingsTab()],
+        ),
       ),
     );
   }
@@ -152,6 +155,69 @@ class _ToDrinkTabState extends ConsumerState<_ToDrinkTab> {
                     ),
                   ),
               ],
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+/// CMP-09 : vins en stock dont la fenêtre de garde est dépassée. Ils ne
+/// figurent jamais dans l'onglet À boire.
+class _PastTab extends ConsumerWidget {
+  const _PastTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final items = ref.watch(wineListProvider);
+    final year = ref.watch(currentYearProvider);
+    final settings = ref.watch(settingsProvider);
+    final currency = NumberFormat.simpleCurrency(
+      locale: Localizations.localeOf(context).toLanguageTag(),
+      name: settings.currency,
+    );
+    return items.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => MessageStateView(
+        icon: Icons.error_outline,
+        isError: true,
+        title: l.operationFailed('$e'),
+      ),
+      data: (all) {
+        final wines = pastList(all, year);
+        if (wines.isEmpty) {
+          return MessageStateView(
+            icon: Icons.history_toggle_off,
+            title: l.pastEmpty,
+          );
+        }
+        return ListView.builder(
+          key: const ValueKey('past-list'),
+          itemCount: wines.length + 1,
+          itemBuilder: (context, i) {
+            if (i == 0) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  SpacingTokens.l,
+                  SpacingTokens.m,
+                  SpacingTokens.l,
+                  SpacingTokens.s,
+                ),
+                child: Text(
+                  l.pastHint(wines.length),
+                  style: theme.textTheme.bodyMedium,
+                ),
+              );
+            }
+            final w = wines[i - 1];
+            return WineCard(
+              item: w,
+              currency: currency,
+              showMarketPrice: settings.cardPrice == CardPrice.market,
+              onTap: () => context.push('/fiche/${w.id}'),
             );
           },
         );

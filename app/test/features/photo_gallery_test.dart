@@ -76,13 +76,13 @@ void main() {
       await settle(tester);
 
       // FIC-11 : bibliothèque vide, ajout d'une photo de repas.
-      await tester.ensureVisible(find.text('Photos'));
+      await tester.ensureVisible(find.text('Dégustations et photos'));
       await settle(tester);
-      await tester.tap(find.text('Photos'));
+      await tester.tap(find.text('Dégustations et photos'));
       await settle(tester);
       expect(
         find.text(
-          'Aucune photo de dégustation ou de repas pour cette bouteille.',
+          'Aucune autre photo pour cette bouteille (repas, événement).',
         ),
         findsOneWidget,
       );
@@ -99,7 +99,13 @@ void main() {
       final repas = rows!.singleWhere((p) => p.typePhoto == 'repas');
       expect(repas.principale, isFalse);
 
-      // Suppression demandée depuis le plein écran.
+      // Suppression demandée depuis le plein écran (photo remontée au-dessus
+      // du message de confirmation d'ajout).
+      await tester.drag(
+        find.byKey(const ValueKey('tastings-photos')),
+        const Offset(0, -400),
+      );
+      await settle(tester);
       await tester.tap(added);
       await settle(tester);
       expect(find.text('Repas'), findsWidgets);
@@ -117,7 +123,7 @@ void main() {
   );
 
   testWidgets(
-    'CMP-08 photos prises en notant une dégustation, visibles dans l\'historique',
+    'CMP-05 CMP-08 FIC-11 dégustations et photos dans un seul onglet',
     (tester) async {
       late String wine;
       final db = await pumpRealApp(
@@ -143,13 +149,13 @@ void main() {
       GoRouter.of(tester.element(find.byType(Scaffold).first))
           .push('/fiche/$wine');
       await settle(tester);
-      await tester.ensureVisible(find.text('Dégustations'));
+      await tester.ensureVisible(find.text('Dégustations et photos'));
       await settle(tester);
-      await tester.tap(find.text('Dégustations'));
+      await tester.tap(find.text('Dégustations et photos'));
       await settle(tester);
-      await tester.ensureVisible(find.text('Noter une dégustation'));
-      await settle(tester);
-      await tester.tap(find.text('Noter une dégustation'));
+      expect(find.text('Aucune dégustation notée.'), findsOneWidget);
+      expect(find.text('Autres photos'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('tasting-add')));
       await settle(tester);
       expect(find.text('Photos de la dégustation'), findsOneWidget);
       for (final source in ['tasting-photo-camera', 'tasting-photo-gallery']) {
@@ -197,10 +203,23 @@ void main() {
       expect(photos!.single.degustationId, tasting!.id);
       expect(photos.single.typePhoto, 'degustation');
       expect(photos.single.largeur, 1200, reason: 'déjà sous la taille écran');
-      expect(
-        find.byKey(ValueKey('tasting-photos-${tasting.id}')),
-        findsOneWidget,
+      final strip = find.byKey(ValueKey('tasting-photos-${tasting.id}'));
+      expect(strip, findsOneWidget);
+      // La photo de la dégustation n'apparaît pas une 2e fois en dessous.
+      expect(find.byKey(const ValueKey('library-photo-0')), findsNothing);
+
+      // Supprimée depuis le plein écran ouvert sous la dégustation.
+      await tester.tap(
+        find.descendant(of: strip, matching: find.byType(InkWell)).first,
       );
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('gallery-delete')));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('confirm')));
+      await pumpUntil(tester, () => strip.evaluate().isEmpty);
+      expect(strip, findsNothing);
+      final after = await tester.runAsync(() => db.select(db.photos).get());
+      expect(after!.single.deletedAt, isNotNull);
     },
   );
 }

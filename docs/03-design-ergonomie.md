@@ -41,7 +41,7 @@ Badge de note : couleur selon la note sur 100 (95 et plus or, 90 à 94 vert, 85 
 - Barre : Retour, Modifier, menu (dupliquer pour un autre millésime, ré-enrichir, rafraîchir le prix, PDF, partager, supprimer).
 - En-tête : photo principale à gauche (un tap ouvre la galerie plein écran), à droite le nom en capitales, le millésime en gras, le format, la chip couleur, le prix, « 5 restantes » et « 0 consommée » avec accord du pluriel.
 - Deux boutons larges : « Ajouter 1 bouteille » et « Ouvrir 1 bouteille », chacun avec son compteur moins/plus.
-- Onglets : Informations, Opérations, Dégustations, Prix.
+- Onglets : Informations, Opérations, Dégustations et photos, Prix. L'onglet Dégustations et photos réunit les dégustations (chacune avec ses photos) et, en dessous, les autres photos de la bouteille (repas, événement) ; il remplace les onglets séparés Dégustations et Photos (T120).
 - Informations en cartes groupées, libellé à gauche en `primaryTexte`, valeur à droite.
   - Origine : pays et drapeau, région, sous-région, appellation, signe de qualité, classement, lieu-dit, domaine.
   - Cave : emplacement avec chevron vers la vue casier, positions, propriétaires, garde et statut, degré.

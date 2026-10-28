@@ -162,9 +162,11 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - [x] EMP-03 : vue casier sur l'emplacement qui a une grille, cases à la couleur du vin, tap vers la fiche, appui long sur une case vide pour y ranger une bouteille (T100)
   - [x] CMP-08 : photos de dégustation, 6 au plus, réduites à 1 080 × 1 920 (schéma v5, T114, identifiant corrigé T119)
   - [x] RET-01 : formulaire de remontée d'information par mail, une pièce jointe PDF ou image, flux IA_CAVE_Remontee (contrat 1.3, flux 0.4.0, T118)
+  - [x] CMP-09 : onglet Passés de l'écran À boire, vins en stock dont la fenêtre est dépassée (T121)
 - Points d'étape :
   - 2026-10-27 fait : tout le périmètre du lot, testé (domaine, dépôt, écrans, migration v3 vers v4). Écran provisoire « bientôt disponible » retiré, toutes les entrées du menu sont livrées. Corrigé au passage : le libellé de garde débordait de la carte de vin dans une colonne étroite. En cours : rien. Bloquant : recette sur téléphone. Prochaine étape : APK de la branche, recette de Bertrand.
   - 2026-10-28 fait : demandes de Bertrand du jour, sans APK jusqu'à son accord. CMP-08 photos de dégustation (T114), PDF et image de la fiche nommés d'après le vin (PDF-01, T115), AJO-14 lecture du millésime à la caméra sur le téléphone (T116), AJO-15 validation ouverte dès la lecture de l'étiquette et complétée au fil du flux (T117), RET-01 remontée par mail (T118, flux Remontee créé, Agent republié en 0.4.0, Purge complétée, /sante vérifié : 0.4.0, contrat 1.3, ok). Corrigé : doublon d'identifiant CMP-07 (T119). En cours : rien. Bloquant : accord de Bertrand pour l'APK. Prochaine étape : APK puis recette sur téléphone, dont la build release avec R8 (T116).
+  - 2026-10-28 fait, sans APK : onglets Dégustations et Photos de la fiche fusionnés (T120), onglet Passés sur À boire (CMP-09, T121). En cours : rien. Bloquant : accord de Bertrand pour l'APK.
 - Mesures : aucune cible chiffrée propre au lot ; listes paresseuses (ListView.builder), calculs en fonctions pures sur la liste déjà chargée.
 - Recette Bertrand :
 

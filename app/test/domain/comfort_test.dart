@@ -66,6 +66,31 @@ void main() {
     ]);
   });
 
+  test('CMP-09 vins passés : en stock, fenêtre dépassée, à part des vins '
+      'à boire, fin la plus ancienne en tête', () {
+    final avecPasses = [
+      ...cave,
+      wine('passe-ancien', start: 2000, end: 2012),
+      wine('passe-vide', bottles: 0, start: 2000, end: 2010),
+      wine('fin-annee-derniere', start: 2015, end: 2025),
+    ];
+    expect(pastList(avecPasses, year).map((w) => w.id), [
+      'passe-ancien',
+      'passe',
+      'fin-annee-derniere',
+    ]);
+    final aBoire = toDrinkList(avecPasses, year).map((w) => w.id).toSet();
+    expect(
+      aBoire.intersection({'passe-ancien', 'passe', 'fin-annee-derniere'}),
+      isEmpty,
+    );
+    // Fin de fenêtre cette année : encore à boire, pas passé.
+    expect(
+      pastList([wine('fin-cette-annee', start: 2015, end: 2026)], year),
+      isEmpty,
+    );
+  });
+
   test('CMP-04 accords inversés : vins à boire qui portent le plat', () {
     final items = [
       wine('a', start: 2020, end: 2035, pairings: ['gibier', 'fromage']),

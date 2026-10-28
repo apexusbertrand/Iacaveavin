@@ -1239,8 +1239,9 @@
   "photoTypeDegustation": "Dégustation",
   "photoTypeRepas": "Repas",
   "photoTypeEvenement": "Événement",
-  "tabPhotos": "Photos",
-  "libraryEmpty": "Aucune photo de dégustation ou de repas pour cette bouteille.",
+  "tabTastingsPhotos": "Dégustations et photos",
+  "otherPhotos": "Autres photos",
+  "libraryEmpty": "Aucune autre photo pour cette bouteille (repas, événement).",
   "libraryAdd": "Ajouter une photo",
   "libraryTypeTitle": "Type de photo",
   "libraryAdded": "Photo ajoutée",
@@ -1686,6 +1687,16 @@
   "statTotal": "Total",
   "statAverage": "Moyenne",
   "toDrinkTab": "À boire",
+  "pastTab": "Passés",
+  "pastEmpty": "Aucun vin en stock n'a dépassé sa fenêtre de garde.",
+  "pastHint": "{count, plural, =1{1 vin a dépassé sa fenêtre de garde : à boire sans tarder ou à goûter avant de servir.} other{{count} vins ont dépassé leur fenêtre de garde : à boire sans tarder ou à goûter avant de servir.}}",
+  "@pastHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tastingsTab": "Dégustations",
   "toDrinkEmpty": "Aucun vin dans sa fenêtre de garde en ce moment.",
   "toDrinkHint": "Vins dans leur fenêtre de garde, à boire vite en tête, puis par fin de fenêtre.",
