@@ -5,6 +5,13 @@ on:
     branches: ["**"]
     tags: ["v*"]
   pull_request:
+  # Release à la main depuis l'onglet Actions (« Run workflow » sur main) :
+  # crée le tag et la release, utile quand le tag ne peut pas être poussé.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Tag de la release, égal à la version de pubspec.yaml (ex. v1.0.0)"
+        required: true
 
 concurrency:
   group: app-${{ github.ref }}
@@ -76,13 +83,19 @@ jobs:
 
   release:
     name: APK et AAB signés, release GitHub
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     needs: verifier
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
+      - name: Tag conforme à la version de pubspec.yaml
+        run: |
+          attendu="v$(sed -n 's/^version: \([0-9.]*\)+.*/\1/p' app/pubspec.yaml)"
+          if [ "$TAG" != "$attendu" ]; then echo "Tag $TAG différent de la version $attendu de pubspec.yaml"; exit 1; fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -114,20 +127,22 @@ jobs:
         run: |
           flutter pub get
           flutter build apk --release --obfuscate --split-debug-info=build/symbols
-          cp build/app/outputs/flutter-apk/app-release.apk "build/iacaveavin-${GITHUB_REF_NAME}.apk"
+          cp build/app/outputs/flutter-apk/app-release.apk "build/iacaveavin-${TAG}.apk"
       - name: Build AAB release pour Google Play (obfusqué, même clé d'envoi)
         working-directory: app
         run: |
           flutter build appbundle --release --obfuscate --split-debug-info=build/symbols-aab
-          cp build/app/outputs/bundle/release/app-release.aab "build/iacaveavin-${GITHUB_REF_NAME}.aab"
-          (cd build && zip -qr "iacaveavin-${GITHUB_REF_NAME}-symboles.zip" symbols-aab)
+          cp build/app/outputs/bundle/release/app-release.aab "build/iacaveavin-${TAG}.aab"
+          (cd build && zip -qr "iacaveavin-${TAG}-symboles.zip" symbols-aab)
       - name: Effacer le keystore du runner
         if: always()
         run: rm -f "$RUNNER_TEMP/iacaveavin-upload.jks" app/android/key.properties
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.TAG }}
+          target_commitish: ${{ github.sha }}
           files: |
-            app/build/iacaveavin-${{ github.ref_name }}.apk
-            app/build/iacaveavin-${{ github.ref_name }}.aab
-            app/build/iacaveavin-${{ github.ref_name }}-symboles.zip
+            app/build/iacaveavin-${{ env.TAG }}.apk
+            app/build/iacaveavin-${{ env.TAG }}.aab
+            app/build/iacaveavin-${{ env.TAG }}-symboles.zip
           generate_release_notes: true
