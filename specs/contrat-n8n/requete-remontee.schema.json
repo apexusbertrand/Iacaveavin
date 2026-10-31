@@ -2,15 +2,36 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "ia-cave-a-vin/contrat-n8n/requete-remontee.schema.json",
   "title": "POST /remontee : corps de la requête",
-  "description": "Contrat 1.3 (RET-01) : remontée d'information envoyée par l'utilisateur. Le flux l'envoie par mail à l'adresse de l'équipe, en copie au contact, réponse au contact. Signée comme les autres requêtes.",
+  "description": "Contrat 2.0 (RET-01, CPT-03) : remontée d'information d'un compte connecté. Le flux l'envoie par mail à l'adresse de l'équipe, en copie au contact, réponse au contact. Signée avec la clé du compte.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version_contrat", "request_id", "titre", "commentaire", "email_contact", "date_client"],
+  "required": [
+    "version_contrat",
+    "request_id",
+    "titre",
+    "commentaire",
+    "email_contact",
+    "date_client"
+  ],
   "properties": {
-    "version_contrat": { "type": "string", "pattern": "^1\\.[0-9]+$" },
-    "request_id": { "type": "string", "format": "uuid" },
-    "titre": { "type": "string", "minLength": 1, "maxLength": 120 },
-    "commentaire": { "type": "string", "minLength": 1, "maxLength": 5000 },
+    "version_contrat": {
+      "type": "string",
+      "pattern": "^2\\.[0-9]+$"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "titre": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "commentaire": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 5000
+    },
     "email_contact": {
       "type": "string",
       "maxLength": 254,
@@ -20,11 +41,26 @@
     "piece_jointe": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["nom", "mime", "base64"],
+      "required": [
+        "nom",
+        "mime",
+        "base64"
+      ],
       "description": "Une seule pièce jointe, PDF ou image.",
       "properties": {
-        "nom": { "type": "string", "minLength": 1, "maxLength": 120 },
-        "mime": { "enum": ["application/pdf", "image/jpeg", "image/png", "image/webp"] },
+        "nom": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "mime": {
+          "enum": [
+            "application/pdf",
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+          ]
+        },
         "base64": {
           "type": "string",
           "contentEncoding": "base64",
@@ -34,7 +70,13 @@
         }
       }
     },
-    "version_app": { "type": "string", "maxLength": 40 },
-    "date_client": { "type": "string", "format": "date" }
+    "version_app": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "date_client": {
+      "type": "string",
+      "format": "date"
+    }
   }
 }

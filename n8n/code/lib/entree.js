@@ -37,8 +37,8 @@ function decisionEntree({
   });
   if (!auth.ok) return refus(auth.code, auth.message);
   if (!corps) return refus('requete_invalide', 'Corps JSON illisible.');
-  if (typeof corps.version_contrat !== 'string' || !/^1\./.test(corps.version_contrat)) {
-    return refus('version_non_supportee', 'Version de contrat attendue : 1.x.');
+  if (typeof corps.version_contrat !== 'string' || !/^2\./.test(corps.version_contrat)) {
+    return refus('version_non_supportee', 'Version de contrat attendue : 2.x (connexion par compte).');
   }
   if (jobExistant && jobExistant.job_id) {
     // Idempotence : même request_id, même job, renvoyé tel quel.

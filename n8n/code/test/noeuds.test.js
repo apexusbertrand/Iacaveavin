@@ -25,7 +25,7 @@ async function executer(script, noeuds, entree) {
 }
 
 const config = [{ cle: 'cle_app', valeur: 'k' }, { cle: 'quota_enrichissements', valeur: '100' }, { cle: 'email_alerte', valeur: 'a@b.fr' }];
-const envoi = { job_id: '9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d', type: 'enrichissement', requete: { ...requete, champs_verrouilles: ['degre'], signalements: [] }, recu_le: Date.now() - 5000 };
+const envoi = { job_id: '9b1f6c2e-0d4a-4c51-9a77-1e2f3a4b5c6d', type: 'enrichissement', requete: { ...requete, version_contrat: '1.3', champs_verrouilles: ['degre'], signalements: [] }, recu_le: Date.now() - 5000 };
 const lectureModele = { content: '```json\n' + JSON.stringify({
   transcription: [{ index: 0, texte: "GUILLAUME L'ECHANSON" }],
   etiquette: { domaine: "Guillaume L'Echanson", appellation: "Bourgogne Côte d'Or", millesime: 2024 },
@@ -144,7 +144,7 @@ test('PRV-R4 signalements (contrat 1.2) : enregistrés, cache contourné, rappel
 
 test('NFR-06 nœud santé : autotest de signature dans le bac à sable', async () => {
   const [s] = await executer('sante', { 'Config santé': config }, {});
-  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '1.3', ok: true });
+  assert.deepEqual(s.json, { version_flux: a.VERSION_FLUX, version_contrat: '2.0', ok: true });
 });
 
 test('AJO-05 T111 lecture de l\'étiquette renvoyée en résultat partiel pendant l\'enrichissement', async () => {

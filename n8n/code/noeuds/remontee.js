@@ -1,5 +1,6 @@
-// POST /iacave/remontee (RET-01) : contrôles (signature, contrat, 5 envois
-// par jour et par installation) puis mail à composer. La pièce jointe passe
+// POST /iacave/remontee (RET-01, CPT-03) : contrôles (compte connecté,
+// signature avec sa clé, contrat, 5 envois par jour et par compte) puis mail
+// à composer. La pièce jointe passe
 // en binaire pour le nœud Gmail, sans rester dans le JSON.
 // @inclure securite.js
 // @inclure schema.js
@@ -11,6 +12,7 @@ for (const i of $('Config remontée').all()) {
 }
 const d = decisionRemontee({
   entetes: e.entetes, empreinte: e.empreinte, texteCorps: e.texteCorps, config,
+  compte: $('Compte remontée').all().map((i) => i.json).find((r) => r.compte_id) || null,
   envoisDuJour: $('Remontées du jour').all().map((i) => i.json),
   maintenant: Date.now(),
   schemaRequete: __SCHEMA_REMONTEE__, schemaReponse: __SCHEMA_REPONSE_REMONTEE__,

@@ -178,28 +178,36 @@ test('docs/06 inclure_prix : requête de relevé tirée de la fiche, prix fusion
   assert.equal(JSON.parse(k.json.cache_ligne.resultat).prix, undefined, 'les prix ne vont pas dans le cache du vin');
 });
 
-test('docs/06 POST /prix : même chaîne d\'entrée, type prix, signature sur /webhook/iacave/prix, quota de prix', async () => {
+test('docs/06 CPT-02 POST /prix : même chaîne d\'entrée, type prix, signature du compte sur /webhook/iacave/prix, quota du compte', async () => {
   const { signatureAttendue, sha256, toHex, utf8 } = require('../lib/securite.js');
-  const cle = 'cle-de-developpement';
+  const compte = {
+    compte_id: '3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c', email: 'prenom.nom@exemple.fr', statut: 'gratuit',
+    cle_session: 'b'.repeat(64), cle_expire_le: '2099-01-01T00:00:00.000Z',
+  };
   const texteCorps = JSON.stringify(requetePrix);
   const empreinte = toHex(sha256(utf8(texteCorps)));
   const ts = String(Math.floor(Date.now() / 1000));
   const entetes = (chemin) => ({
     'x-iacav-installation': '0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10',
+    'x-iacav-compte': compte.compte_id,
     'x-iacav-horodatage': ts,
-    'x-iacav-signature': signatureAttendue(cle, ts, 'POST', chemin, empreinte),
+    'x-iacav-signature': signatureAttendue(compte.cle_session, ts, 'POST', chemin, empreinte),
   });
-  const config = [{ cle: 'cle_app', valeur: cle }, { cle: 'quota_prix', valeur: '120' }];
+  const config = [{ cle: 'quota_gratuit_prix', valeur: '10' }];
   const noeuds = (chemin, quota) => ({
-    'Empreinte enrichissement': { empreinte, texteCorps, entetes: entetes(chemin) },
-    'Webhook prix': {}, 'Config enrichissement': config, 'Job existant enrichissement': {}, 'Quota enrichissement': quota,
+    'Empreinte enrichissement': { empreinte, texteCorps, requestId: requetePrix.request_id, entetes: entetes(chemin) },
+    'Webhook prix': {}, 'Config enrichissement': config, 'Compte enrichissement': compte, 'Job existant enrichissement': {}, 'Quota enrichissement': quota,
   });
-  const [ok] = await executer('controle_enrichissement', noeuds('/webhook/iacave/prix', { mois: '2026-11', prix: 3 }), {});
+  const [ok] = await executer('controle_enrichissement', noeuds('/webhook/iacave/prix', { compte_id: compte.compte_id, mois: '2026-11', prix: 3 }), {});
   assert.equal(ok.json.decision, 'nouveau');
   assert.equal(ok.json.envoi.type, 'prix');
   assert.equal(ok.json.reponse.etape, 'prix');
+  assert.equal(ok.json.usage.prix, 4);
   const [faux] = await executer('controle_enrichissement', noeuds('/webhook/iacave/enrichissement', {}), {});
   assert.equal(faux.json.reponse.erreur.code, 'auth_invalide', 'signature d\'une autre route');
-  const [plein] = await executer('controle_enrichissement', noeuds('/webhook/iacave/prix', { mois: '2026-11', prix: 120 }), {});
+  const [plein] = await executer('controle_enrichissement', noeuds('/webhook/iacave/prix', { compte_id: compte.compte_id, mois: '2026-11', prix: 10 }), {});
   assert.equal(plein.json.reponse.erreur.code, 'quota_depasse');
+  const sansCompte = { ...noeuds('/webhook/iacave/prix', {}), 'Compte enrichissement': {} };
+  const [refus] = await executer('controle_enrichissement', sansCompte, {});
+  assert.equal(refus.json.reponse.erreur.code, 'auth_invalide');
 });

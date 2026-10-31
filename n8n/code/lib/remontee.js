@@ -1,10 +1,10 @@
-// POST /iacave/remontee (RET-01, contrat 1.3) : remontée d'information de
-// l'utilisateur envoyée par mail. Dépend de securite.js et schema.js.
+// POST /iacave/remontee (RET-01, contrat 2.0) : remontée d'information d'un
+// compte connecté, envoyée par mail. Dépend de securite.js et schema.js.
 
 const CHEMIN_REMONTEE = '/webhook/iacave/remontee';
 const DESTINATAIRE_REMONTEE = 'apexus.claude@gmail.com';
 const REMONTEES_PAR_JOUR = 5;
-const VERSION_CONTRAT_REMONTEE = '1.3';
+const VERSION_CONTRAT_REMONTEE = '2.0';
 const HTTP_REMONTEE = { requete_invalide: 400, auth_invalide: 401, signature_expiree: 401, quota_depasse: 429, interne: 500 };
 const UUID_NUL_REMONTEE = '00000000-0000-4000-8000-000000000000';
 
@@ -41,7 +41,7 @@ function signatureFichierOk(mime, b64) {
  * Décision sur une remontée : refus (avec la réponse au contrat) ou envoi
  * (avec le mail à composer et la ligne de journal).
  */
-function decisionRemontee({ entetes, empreinte, texteCorps, config, envoisDuJour, maintenant, schemaRequete, schemaReponse }) {
+function decisionRemontee({ entetes, empreinte, texteCorps, config, compte, envoisDuJour, maintenant, schemaRequete, schemaReponse }) {
   let corps = null;
   try {
     const v = JSON.parse(texteCorps);
@@ -61,8 +61,12 @@ function decisionRemontee({ entetes, empreinte, texteCorps, config, envoisDuJour
       erreur: { code, message, reessayable: !['requete_invalide', 'quota_depasse'].includes(code) },
     },
   });
+  // CPT-03 : remontée réservée aux comptes connectés, signée avec leur clé.
+  const actif = !!(compte && compte.compte_id && compte.statut !== 'bloque' && compte.cle_session
+    && Date.parse(compte.cle_expire_le || 0) > maintenant);
+  if (!actif) return refus('auth_invalide', 'Connectez-vous à votre compte pour envoyer une remontée.');
   const auth = verifierRequete({
-    entetes, methode: 'POST', chemin: CHEMIN_REMONTEE, corps: empreinte, cle: config.cle_app,
+    entetes, methode: 'POST', chemin: CHEMIN_REMONTEE, corps: empreinte, cle: compte.cle_session,
     maintenant: Math.floor(maintenant / 1000), fenetre: parseInt(config.fenetre_secondes, 10) || 300,
   });
   if (!auth.ok) return refus(auth.code, auth.message);
@@ -74,7 +78,7 @@ function decisionRemontee({ entetes, empreinte, texteCorps, config, envoisDuJour
   if (pj && !signatureFichierOk(pj.mime, pj.base64)) return refus('requete_invalide', 'Pièce jointe : le contenu ne correspond pas à un PDF ou à une image.');
   const jour = jourRemontee(new Date(maintenant));
   const plafond = parseInt(config.remontees_par_jour, 10) || REMONTEES_PAR_JOUR;
-  const deja = (envoisDuJour || []).filter((r) => r && r.installation === auth.installation && r.jour === jour).length;
+  const deja = (envoisDuJour || []).filter((r) => r && r.compte_id === compte.compte_id && r.jour === jour).length;
   if (deja >= plafond) {
     return refus('quota_depasse', `${plafond} remontées par jour au plus : réessayez demain.`, { envoi_restants_jour: 0 });
   }
@@ -86,6 +90,7 @@ function decisionRemontee({ entetes, empreinte, texteCorps, config, envoisDuJour
     'De : ' + contact,
     'Titre : ' + titre,
     'Version de l\'app : ' + (corps.version_app ? uneLigne(corps.version_app) : 'inconnue'),
+    'Compte : ' + compte.compte_id + ' (' + compte.email + ')',
     'Installation : ' + auth.installation,
     'Date du téléphone : ' + corps.date_client,
     pj ? 'Pièce jointe : ' + uneLigne(pj.nom) : 'Pièce jointe : aucune',
@@ -126,7 +131,7 @@ function decisionRemontee({ entetes, empreinte, texteCorps, config, envoisDuJour
     },
     piece: pj ? { nom: uneLigne(pj.nom), mime: pj.mime, base64: String(pj.base64).replace(/\s/g, '') } : null,
     ligne: {
-      request_id: corps.request_id, installation: auth.installation, jour, titre,
+      request_id: corps.request_id, installation: auth.installation, compte_id: compte.compte_id, jour, titre,
       email_contact: contact, piece_jointe: pj ? uneLigne(pj.nom) : '',
     },
   };

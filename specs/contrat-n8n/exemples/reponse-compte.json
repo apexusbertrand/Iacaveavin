@@ -1,0 +1,14 @@
+{
+  "version_contrat": "2.0",
+  "request_id": "00000000-0000-4000-8000-000000000000",
+  "statut": "ok",
+  "compte": {
+    "compte_id": "3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c",
+    "email": "prenom.nom@exemple.fr",
+    "statut_compte": "gratuit",
+    "quota": {
+      "enrichissements_restants_mois": 7,
+      "prix_restants_mois": 10
+    }
+  }
+}

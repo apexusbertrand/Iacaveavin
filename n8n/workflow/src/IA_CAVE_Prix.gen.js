@@ -94,6 +94,17 @@ ${o.ecrire('jobTermine', 'Job prix terminé', 'jobs', 'update',
     { statut: o.ex(`{{ ${CLOT}.statut }}`), etape: "'termine'", resultat: o.ex(`{{ ${CLOT}.resultat }}`), journal: o.ex(`{{ ${CLOT}.journal }}`), execution_id: o.ex('{{ $execution.id }}') },
     [['job_id', o.ex(`{{ ${CLOT}.job_id }}`)]])}
 
+// Base des vins traités : relevé de prix renvoyé à l'app, rattaché au compte.
+${o.ecrire('traceVin', 'Vin traité prix', 'vins_traites', 'insert', {
+    job_id: o.ex(`{{ ${CLOT}.job_id }}`),
+    compte_id: o.ex(`{{ ${DECL}.compte_id || '' }}`),
+    type: "'prix'",
+    statut: o.ex(`{{ ${CLOT}.statut }}`),
+    jour: o.ex("{{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd') }}"),
+    resultat: o.ex(`{{ ${CLOT}.resultat }}`),
+    version_flux: o.q(o.VERSION_FLUX),
+  })}
+
 ${o.ecrire('quotaEcrire', 'Quota du mois prix', 'quotas', 'upsert', {
     mois: o.ex(`{{ ${CLOT}.quota.mois }}`),
     enrichissements: o.ex(`{{ ${CLOT}.quota.enrichissements }}`),
@@ -140,7 +151,7 @@ export default workflow('ia-cave-prix', 'IA_CAVE_Prix')
   .to(cloture)
   .to(siCache
     .onTrue(cacheEcrire.to(siJob
-      .onTrue(jobTermine.to(quotaEcrire).to(siAlerte.onTrue(mailQuota)))
+      .onTrue(jobTermine.to(traceVin).to(quotaEcrire).to(siAlerte.onTrue(mailQuota)))
       .onFalse(retour)))
     .onFalse(siJob))
   .add(note);

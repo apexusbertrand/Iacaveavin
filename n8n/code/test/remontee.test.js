@@ -1,4 +1,4 @@
-// RET-01 : remontée d'information par mail (contrat 1.3).
+// RET-01, CPT-03 : remontée d'information par mail, réservée aux comptes (contrat 2.0).
 // Lancer : node --test n8n/code/test/*.test.js
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -17,10 +17,14 @@ const schemaRequete = lire('specs/contrat-n8n/requete-remontee.schema.json');
 const schemaReponse = lire('specs/contrat-n8n/reponse-remontee.schema.json');
 const exemple = lire('specs/contrat-n8n/exemples/requete-remontee.json');
 
-const CLE = 'cle-de-developpement';
+const CLE = 'b'.repeat(64);
 const MAINTENANT = Date.parse('2026-10-28T20:00:00Z');
 const INSTALLATION = '0b8f7e2a-4c1d-4a9b-8e3f-2d6c5b4a3f10';
-const config = { cle_app: CLE, fenetre_secondes: '300' };
+const config = { fenetre_secondes: '300' };
+const COMPTE = {
+  compte_id: '3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c', email: 'bertrand.exemple@exemple.fr', statut: 'gratuit',
+  cle_session: CLE, cle_expire_le: '2099-01-01T00:00:00.000Z',
+};
 
 function signe(corps, { cle = CLE, chemin = r.CHEMIN_REMONTEE } = {}) {
   const texteCorps = typeof corps === 'string' ? corps : JSON.stringify(corps);
@@ -30,6 +34,7 @@ function signe(corps, { cle = CLE, chemin = r.CHEMIN_REMONTEE } = {}) {
     texteCorps, empreinte,
     entetes: {
       'x-iacav-installation': INSTALLATION,
+      'x-iacav-compte': COMPTE.compte_id,
       'x-iacav-horodatage': ts,
       'x-iacav-signature': signatureAttendue(cle, ts, 'POST', chemin, empreinte),
     },
@@ -37,7 +42,7 @@ function signe(corps, { cle = CLE, chemin = r.CHEMIN_REMONTEE } = {}) {
 }
 
 const decider = (corps, over = {}) => r.decisionRemontee({
-  ...signe(corps, over), config, envoisDuJour: [], maintenant: MAINTENANT,
+  ...signe(corps, over), config, compte: COMPTE, envoisDuJour: [], maintenant: MAINTENANT,
   schemaRequete, schemaReponse, ...over,
 });
 
@@ -57,11 +62,19 @@ test('RET-01 remontée signée : mail à l\'équipe, copie et réponse au contac
   assert.match(d.mail.texte, /Pièce jointe : capture\.pdf/);
   assert.equal(d.piece.mime, 'application/pdf');
   assert.equal(d.ligne.installation, INSTALLATION);
+  assert.equal(d.ligne.compte_id, COMPTE.compte_id);
+  assert.match(d.mail.texte, /Compte : 3c9e1f4a/);
   assert.equal(d.ligne.jour, '2026-10-28');
 });
 
+test('CPT-03 remontée sans compte ou avec une session expirée : refusée', () => {
+  assert.equal(decider(exemple, { compte: null }).reponse.erreur.code, 'auth_invalide');
+  assert.equal(decider(exemple, { compte: { ...COMPTE, cle_expire_le: '2020-01-01T00:00:00.000Z' } }).http, 401);
+  assert.equal(decider(exemple, { compte: { ...COMPTE, statut: 'bloque' } }).decision, 'refus');
+});
+
 test('RET-01 refus : signature, contrat, faux PDF, plafond quotidien', () => {
-  assert.equal(decider(exemple, { cle: 'autre' }).reponse.erreur.code, 'auth_invalide');
+  assert.equal(decider(exemple, { cle: 'c'.repeat(64) }).reponse.erreur.code, 'auth_invalide');
   // Signé pour un autre chemin : refusé.
   assert.equal(decider(exemple, { chemin: '/webhook/iacave/prix' }).http, 401);
   const mauvaisMail = decider({ ...exemple, email_contact: 'bertrand@exemple' });
@@ -75,13 +88,13 @@ test('RET-01 refus : signature, contrat, faux PDF, plafond quotidien', () => {
   const lourd = 'JVBERi0' + 'A'.repeat(7 * 1024 * 1024 - 7);
   assert.equal(decider({ ...exemple, piece_jointe: { ...exemple.piece_jointe, base64: lourd } }).http, 400);
   const jour = r.jourRemontee(new Date(MAINTENANT));
-  const cinq = Array.from({ length: 5 }, () => ({ installation: INSTALLATION, jour }));
+  const cinq = Array.from({ length: 5 }, () => ({ compte_id: COMPTE.compte_id, jour }));
   const plein = decider(exemple, { envoisDuJour: cinq });
   assert.equal(plein.http, 429);
   assert.equal(plein.reponse.erreur.code, 'quota_depasse');
   assert.deepEqual(validateSchema(schemaReponse, plein.reponse), []);
-  // Les envois d'une autre installation ou d'hier ne comptent pas.
-  const autres = [...cinq.map((x) => ({ ...x, installation: 'autre' })), { installation: INSTALLATION, jour: '2026-10-27' }];
+  // Les envois d'un autre compte ou d'hier ne comptent pas.
+  const autres = [...cinq.map((x) => ({ ...x, compte_id: 'autre' })), { compte_id: COMPTE.compte_id, jour: '2026-10-27' }];
   assert.equal(decider(exemple, { envoisDuJour: autres }).decision, 'envoi');
   // Un titre sur plusieurs lignes ne casse pas l'objet du mail.
   assert.equal(decider({ ...exemple, titre: 'A\nBcc: x@y.fr' }).mail.sujet, '[IA cave à vin] A Bcc: x@y.fr');
@@ -91,7 +104,8 @@ test('RET-01 nœud assemblé : pièce jointe en binaire, base64 retiré du JSON'
   const s = signe(exemple);
   const noeuds = {
     'Empreinte remontée': { empreinte: s.empreinte, texteCorps: s.texteCorps, entetes: s.entetes },
-    'Config remontée': [{ cle: 'cle_app', valeur: CLE }],
+    'Config remontée': [{ cle: 'fenetre_secondes', valeur: '300' }],
+    'Compte remontée': COMPTE,
     'Remontées du jour': [{}],
   };
   const $ = (nom) => {

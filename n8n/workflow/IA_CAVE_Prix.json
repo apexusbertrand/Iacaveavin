@@ -965,6 +965,105 @@
           "name": "Claude AI Cave"
         }
       }
+    },
+    {
+      "id": "79586c55-b9b9-4899-bfb7-2fc58baedb13",
+      "name": "Vin traité prix",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        4624,
+        224
+      ],
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "job_id",
+              "id": "job_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "compte_id",
+              "id": "compte_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "type",
+              "id": "type",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "statut",
+              "id": "statut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "jour",
+              "id": "jour",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "resultat",
+              "id": "resultat",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "version_flux",
+              "id": "version_flux",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "compte_id": "={{ $('Déclencheur prix').first().json.compte_id || '' }}",
+            "job_id": "={{ $('Clôture prix').first().json.job_id }}",
+            "jour": "={{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd') }}",
+            "resultat": "={{ $('Clôture prix').first().json.resultat }}",
+            "statut": "={{ $('Clôture prix').first().json.statut }}",
+            "type": "prix",
+            "version_flux": "0.5.0"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "iacave_vins_traites",
+          "mode": "id",
+          "value": "bsu05H3uJXUsFrRH"
+        },
+        "operation": "insert",
+        "resource": "row"
+      },
+      "executeOnce": true
     }
   ],
   "connections": {
@@ -1241,17 +1340,6 @@
         ]
       ]
     },
-    "Job prix terminé": {
-      "main": [
-        [
-          {
-            "node": "Quota du mois prix",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Quota du mois prix": {
       "main": [
         [
@@ -1284,6 +1372,28 @@
           }
         ]
       ]
+    },
+    "Job prix terminé": {
+      "main": [
+        [
+          {
+            "node": "Vin traité prix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vin traité prix": {
+      "main": [
+        [
+          {
+            "node": "Quota du mois prix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1298,6 +1408,6 @@
   "meta": {
     "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
     "idN8n": "PeGDu6KX9n4SDml1",
-    "versionId": "063733ae-fcf9-4bee-9771-c33267312e3e"
+    "versionId": "0ef6672f-f856-4b94-b78e-f0d2631516c0"
   }
 }

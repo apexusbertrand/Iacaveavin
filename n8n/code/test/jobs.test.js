@@ -71,7 +71,7 @@ test('NFR-06 refus signés, datés et au contrat', () => {
     'signature_expiree': entree(requete, signer(texte, { ts: MAINTENANT / 1000 - 400 })),
     'auth_invalide ': entree(requete, signer(texte, { cle: 'autre' })),
     'requete_invalide': entree({ ...requete, champ_inconnu: 1 }),
-    'version_non_supportee': entree({ ...requete, version_contrat: '2.0' }),
+    'version_non_supportee': entree({ ...requete, version_contrat: '1.3' }),
     'quota_depasse': entree(requete, { ligneQuota: { enrichissements: 100 } }),
   };
   for (const [code, d] of Object.entries(cas)) {

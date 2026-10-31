@@ -1,6 +1,8 @@
 // Purge quotidienne des tables iacave_* selon les durées de docs/06
 // (stockage côté n8n). Aucune donnée de l'app n'est touchée : seulement les
-// jobs, caches, quotas, signalements et journal des remontées du flux.
+// jobs, caches, quotas, signalements, journal des remontées, codes de
+// connexion et compteurs d'usage du flux. Les comptes et la base des vins
+// traités ne sont pas purgés (suppression sur demande, docs/06).
 module.exports = (o) => {
   const purge = (variable, nom, cle, colonne, duree) => `const ${variable} = node({
   type: 'n8n-nodes-base.dataTable', version: 1.1,
@@ -30,6 +32,10 @@ ${purge('signalements', 'Signalements de plus de 24 mois', 'signalements', 'crea
 
 ${purge('remontees', 'Remontées de plus de 30 jours', 'remontees', 'createdAt', '{ days: 30 }')}
 
+${purge('codes', 'Codes de connexion de plus de 24 heures', 'codes', 'updatedAt', '{ hours: 24 }')}
+
+${purge('usages', 'Usages de plus de 24 mois', 'usages', 'createdAt', '{ months: 24 }')}
+
 const note = sticky('## IA_CAVE_Purge\\nDurées de conservation de docs/06 (stockage côté n8n). Source : n8n/workflow/src/ du dépôt iacaveavin.', [jobs, cacheVins, cachePrix, quotas, signalements], { color: 5 });
 
 export default workflow('ia-cave-purge', 'IA_CAVE_Purge')
@@ -40,6 +46,8 @@ export default workflow('ia-cave-purge', 'IA_CAVE_Purge')
   .to(quotas)
   .to(signalements)
   .to(remontees)
+  .to(codes)
+  .to(usages)
   .add(note);
 `;
 };

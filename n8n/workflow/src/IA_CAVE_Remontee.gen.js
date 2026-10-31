@@ -26,6 +26,7 @@ ${o.webhook('webhookRemontee', 'Webhook remontée', 'POST', 'iacave/remontee', t
 ${o.code('empreinte', 'Empreinte remontée', 'empreinte', "{ empreinte: 'x', texteCorps: '{}', requestId: 'x', entetes: {} }")}
 ${o.lire('config', 'Config remontée', 'config', [], { tout: true })}
 ${o.lire('duJour', 'Remontées du jour', 'remontees', [['jour', o.ex("{{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd') }}")]], { tout: true })}
+${o.lire('compte', 'Compte remontée', 'comptes', [['compte_id', o.ex("{{ $('Empreinte remontée').first().json.entetes['x-iacav-compte'] || 'aucun' }}")]])}
 ${o.code('controles', 'Contrôles remontée', 'remontee', "{ decision: 'refus', http: 401, reponse: {}, avec_piece: false }")}
 ${o.si('siEnvoi', 'Remontée acceptée ?', "{{ $json.decision === 'envoi' }}")}
 ${o.si('siPiece', 'Pièce jointe ?', '{{ $json.avec_piece }}')}
@@ -33,7 +34,7 @@ ${gmail('mailPiece', 'Mail avec pièce jointe', true)}
 ${gmail('mailSimple', 'Mail sans pièce jointe', false)}
 ${o.si('siParti', 'Mail parti ?', '{{ !$json.error }}')}
 ${o.ecrire('journal', 'Journal remontée', 'remontees', 'insert', Object.fromEntries(
-    ['request_id', 'installation', 'jour', 'titre', 'email_contact', 'piece_jointe']
+    ['request_id', 'installation', 'compte_id', 'jour', 'titre', 'email_contact', 'piece_jointe']
       .map((k) => [k, o.ex(`{{ ${CTL}.ligne.${k} }}`)])))}
 ${o.repondre('repondreEnvoye', 'Répondre envoyée', `{{ ${CTL}.reponse }}`, '{{ 200 }}')}
 ${o.repondre('repondreEchec', "Répondre échec d'envoi", `{{ ${CTL}.reponse_echec }}`, '{{ 502 }}')}
@@ -46,6 +47,7 @@ export default workflow('ia-cave-remontee', 'IA_CAVE_Remontee')
   .to(empreinte)
   .to(config)
   .to(duJour)
+  .to(compte)
   .to(controles)
   .to(siEnvoi
     .onTrue(siPiece

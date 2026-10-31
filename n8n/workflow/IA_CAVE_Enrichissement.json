@@ -1182,6 +1182,105 @@
         },
         "operation": "insert"
       }
+    },
+    {
+      "id": "78c0de19-982d-4a7a-8ca3-367066aaff1f",
+      "name": "Vin traité",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3536,
+        288
+      ],
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "job_id",
+              "id": "job_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "compte_id",
+              "id": "compte_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "type",
+              "id": "type",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "statut",
+              "id": "statut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "jour",
+              "id": "jour",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "resultat",
+              "id": "resultat",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "version_flux",
+              "id": "version_flux",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "compte_id": "={{ $('Déclencheur enrichissement').first().json.compte_id || '' }}",
+            "job_id": "={{ $('Clôture').first().json.job_id }}",
+            "jour": "={{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd') }}",
+            "resultat": "={{ $('Clôture').first().json.resultat }}",
+            "statut": "={{ $('Clôture').first().json.statut }}",
+            "type": "enrichissement",
+            "version_flux": "0.5.0"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "iacave_vins_traites",
+          "mode": "id",
+          "value": "bsu05H3uJXUsFrRH"
+        },
+        "operation": "insert",
+        "resource": "row"
+      },
+      "executeOnce": true
     }
   ],
   "connections": {
@@ -1431,17 +1530,6 @@
         ]
       ]
     },
-    "Job terminé": {
-      "main": [
-        [
-          {
-            "node": "Quota du mois",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Quota du mois": {
       "main": [
         [
@@ -1576,6 +1664,28 @@
           }
         ]
       ]
+    },
+    "Job terminé": {
+      "main": [
+        [
+          {
+            "node": "Vin traité",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vin traité": {
+      "main": [
+        [
+          {
+            "node": "Quota du mois",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1592,6 +1702,6 @@
   "meta": {
     "source": "dépôt iacaveavin, n8n/workflow/src/ et n8n/code/",
     "idN8n": "5z197yDZlge7nrpM",
-    "versionId": "1d46f046-fa0b-4e73-984b-32afab586259"
+    "versionId": "a66fab55-b8d7-492b-b93b-835e301e6ddb"
   }
 }

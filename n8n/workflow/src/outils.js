@@ -9,6 +9,10 @@ const TABLES = {
   quotas: ['1ip3UBzHPzShXuiU', 'iacave_quotas'],
   signalements: ['HcfygIuRGsBxv9vG', 'iacave_signalements'],
   remontees: ['PIiO4KNKOsm0MGNS', 'iacave_remontees'],
+  comptes: ['M56nuQuNJAgaM5YF', 'iacave_comptes'],
+  codes: ['pKL0B6OpQlciS7Ky', 'iacave_codes'],
+  usages: ['w60MV3nBzdIci9sE', 'iacave_usages'],
+  vins_traites: ['bsu05H3uJXUsFrRH', 'iacave_vins_traites'],
 };
 
 const IDENTIFIANTS = {
@@ -37,7 +41,7 @@ function conditions(filtres) {
 function colonnes(valeurs) {
   const v = Object.entries(valeurs).map(([k, x]) => `${q(k)}: ${x}`).join(', ');
   const schema = Object.entries(valeurs).map(([k]) => {
-    const type = ['utilisations', 'enrichissements', 'prix', 'credits_recherche', 'appels_modele'].includes(k) ? 'number'
+    const type = ['utilisations', 'enrichissements', 'prix', 'credits_recherche', 'appels_modele', 'essais', 'envois'].includes(k) ? 'number'
       : k === 'alerte_envoyee' ? 'boolean' : 'string';
     return `{ id: ${q(k)}, displayName: ${q(k)}, required: false, defaultMatch: false, display: true, type: ${q(type)}, canBeUsedToMatch: true }`;
   }).join(', ');

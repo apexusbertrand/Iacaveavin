@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ia-cave-a-vin/contrat-n8n/requete-compte-code.schema.json",
+  "title": "POST /compte/code : demande d'un code de connexion",
+  "description": "Contrat 2.0 (CPT-01). Requête publique, non signée : le flux envoie un code à 6 chiffres à l'adresse, valable 10 minutes. La réponse est la même que l'adresse ait un compte ou non.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version_contrat",
+    "request_id",
+    "email",
+    "installation"
+  ],
+  "properties": {
+    "version_contrat": {
+      "type": "string",
+      "pattern": "^2\\.[0-9]+$"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "email": {
+      "type": "string",
+      "maxLength": 254,
+      "pattern": "^[A-Za-z0-9._%+'-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$"
+    },
+    "installation": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

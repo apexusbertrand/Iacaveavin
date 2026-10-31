@@ -5,7 +5,7 @@ Code retour 1 si un cas échoue : utilisé par la CI et par le flux n8n avant to
 import json, sys, pathlib
 from jsonschema import Draft202012Validator, FormatChecker
 base = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else pathlib.Path(__file__).resolve().parent.parent / "specs" / "contrat-n8n"
-schemas = {n: json.loads((base / n).read_text()) for n in ["requete-enrichissement.schema.json","requete-prix.schema.json","reponse-job.schema.json","requete-remontee.schema.json","reponse-remontee.schema.json"]}
+schemas = {n: json.loads((base / n).read_text()) for n in ["requete-enrichissement.schema.json","requete-prix.schema.json","reponse-job.schema.json","requete-remontee.schema.json","reponse-remontee.schema.json","requete-compte-code.schema.json","requete-compte-session.schema.json","reponse-compte.schema.json"]}
 for s in schemas.values(): Draft202012Validator.check_schema(s)
 cas = {
  "requete-enrichissement.json": ("requete-enrichissement.schema.json", True),
@@ -18,6 +18,11 @@ cas = {
  "erreur-quota.json": ("reponse-job.schema.json", True),
  "requete-remontee.json": ("requete-remontee.schema.json", True),
  "reponse-remontee.json": ("reponse-remontee.schema.json", True),
+ "requete-compte-code.json": ("requete-compte-code.schema.json", True),
+ "requete-compte-session.json": ("requete-compte-session.schema.json", True),
+ "reponse-compte-code.json": ("reponse-compte.schema.json", True),
+ "reponse-compte-session.json": ("reponse-compte.schema.json", True),
+ "reponse-compte.json": ("reponse-compte.schema.json", True),
 }
 ok = True
 for f,(s,attendu) in cas.items():
@@ -73,9 +78,33 @@ for k,doc in mrem.items():
     print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
     ok &= rejete
 vrr = Draft202012Validator(schemas["reponse-remontee.schema.json"], format_checker=FormatChecker())
-m = {"version_contrat": "1.3", "request_id": rem["request_id"], "statut": "erreur"}
+m = {"version_contrat": "2.0", "request_id": rem["request_id"], "statut": "erreur"}
 rejete = any(True for _ in vrr.iter_errors(m))
 print(("OK " if rejete else "KO ") + "rejet attendu : erreur de remontée sans détail")
+ok &= rejete
+# Comptes (contrat 2.0) : code mal formé, session sans clé, clé hors de la
+# réponse connecte, ancienne version de requête doivent être REJETÉS
+vs = Draft202012Validator(schemas["requete-compte-session.schema.json"], format_checker=FormatChecker())
+ses = json.loads((base/"exemples"/"requete-compte-session.json").read_text())
+vc = Draft202012Validator(schemas["reponse-compte.schema.json"], format_checker=FormatChecker())
+con = json.loads((base/"exemples"/"reponse-compte-session.json").read_text())
+etat = json.loads((base/"exemples"/"reponse-compte.json").read_text())
+mcpt = {}
+for mauvais in ["12345", "1234567", "12a456"]:
+    m = copy.deepcopy(ses); m["code"] = mauvais; mcpt[("session", "code mal formé " + mauvais)] = m
+m = copy.deepcopy(ses); m["version_contrat"] = "1.3"; mcpt[("session", "requête en version 1.x")] = m
+m = copy.deepcopy(con); m["compte"].pop("cle_session"); mcpt[("reponse", "session ouverte sans clé")] = m
+m = copy.deepcopy(etat); m["compte"]["cle_session"] = "5f" * 32; mcpt[("reponse", "clé renvoyée hors connexion")] = m
+m = copy.deepcopy(etat); m["compte"]["statut_compte"] = "premium"; mcpt[("reponse", "statut de compte inconnu")] = m
+m = copy.deepcopy(con); m["compte"]["cle_session"] = "court"; mcpt[("reponse", "clé de session mal formée")] = m
+for (cible, k), doc in mcpt.items():
+    rejete = any(True for _ in (vs if cible == "session" else vc).iter_errors(doc))
+    print(("OK " if rejete else "KO ") + "rejet attendu : " + k)
+    ok &= rejete
+vq = Draft202012Validator(schemas["requete-enrichissement.schema.json"], format_checker=FormatChecker())
+m = copy.deepcopy(req); m["version_contrat"] = "1.3"
+rejete = any(True for _ in vq.iter_errors(m))
+print(("OK " if rejete else "KO ") + "rejet attendu : enrichissement en version 1.x")
 ok &= rejete
 print("TOUT EST CONFORME" if ok else "ÉCHECS")
 sys.exit(0 if ok else 1)

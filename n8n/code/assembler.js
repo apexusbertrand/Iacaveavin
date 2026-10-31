@@ -4,7 +4,8 @@
 // - n8n/code/noeuds/<nom>.js : script d'un nœud Code. Une ligne
 //   « // @inclure <fichier> » est remplacée par n8n/code/lib/<fichier> ;
 //   __VERSION_FLUX__, __SCHEMA_REPONSE__, __SCHEMA_ENRICHISSEMENT__,
-//   __SCHEMA_PRIX__, __SCHEMA_REMONTEE__, __SCHEMA_REPONSE_REMONTEE__, __VECTEUR__, __SOURCES__ et __ACCORDS__ par leurs valeurs.
+//   __SCHEMA_PRIX__, __SCHEMA_REMONTEE__, __SCHEMA_REPONSE_REMONTEE__, __SCHEMA_COMPTE_CODE__,
+//   __SCHEMA_COMPTE_SESSION__, __SCHEMA_REPONSE_COMPTE__, __VECTEUR__, __SOURCES__ et __ACCORDS__ par leurs valeurs.
 // - n8n/workflow/src/<flux>.sdk.js : source SDK du flux ; CODE('<nom>') y
 //   est remplacé par le script assemblé du nœud, en chaîne JSON.
 //
@@ -14,7 +15,7 @@ const path = require('path');
 
 const ici = __dirname;
 const racine = path.resolve(ici, '../..');
-const VERSION_FLUX = '0.4.0';
+const VERSION_FLUX = '0.5.0';
 
 const lire = (p) => fs.readFileSync(path.join(racine, p), 'utf8');
 
@@ -78,6 +79,9 @@ function noeud(nom) {
     .replace(/__SCHEMA_PRIX__/g, () => json('specs/contrat-n8n/requete-prix.schema.json'))
     .replace(/__SCHEMA_REMONTEE__/g, () => json('specs/contrat-n8n/requete-remontee.schema.json'))
     .replace(/__SCHEMA_REPONSE_REMONTEE__/g, () => json('specs/contrat-n8n/reponse-remontee.schema.json'))
+    .replace(/__SCHEMA_COMPTE_CODE__/g, () => json('specs/contrat-n8n/requete-compte-code.schema.json'))
+    .replace(/__SCHEMA_COMPTE_SESSION__/g, () => json('specs/contrat-n8n/requete-compte-session.schema.json'))
+    .replace(/__SCHEMA_REPONSE_COMPTE__/g, () => json('specs/contrat-n8n/reponse-compte.schema.json'))
     .replace(/__VECTEUR__/g, () => json('specs/contrat-n8n/vecteur-signature.json'))
     .replace(/__PROMPT_ENRICHISSEMENT__/g, () => JSON.stringify(prompt('prompt-agent-enrichissement.md')))
     .replace(/__PROMPT_PRIX__/g, () => JSON.stringify(prompt('prompt-agent-prix.md')))
@@ -88,7 +92,7 @@ function noeud(nom) {
 function flux(nom) {
   const gen = path.join(racine, 'n8n/workflow/src', nom + '.gen.js');
   const src = fs.existsSync(gen)
-    ? require(gen)(require(path.join(racine, 'n8n/workflow/src/outils.js')))
+    ? require(gen)({ ...require(path.join(racine, 'n8n/workflow/src/outils.js')), VERSION_FLUX })
     : fs.readFileSync(path.join(racine, 'n8n/workflow/src', nom + '.sdk.js'), 'utf8');
   return src
     .replace(/CODE\((['"])([a-z0-9_-]+)\1\)/g, (_, _q, n) => JSON.stringify(noeud(n)))

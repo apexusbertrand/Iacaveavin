@@ -128,6 +128,18 @@ ${o.ecrire('jobTermine', 'Job terminé', 'jobs', 'update',
     { statut: o.ex('{{ $json.statut }}'), etape: "'termine'", resultat: o.ex('{{ $json.resultat }}'), journal: o.ex('{{ $json.journal }}') },
     [['job_id', o.ex('{{ $json.job_id }}')]])}
 
+// Base des vins traités (point 2 de la demande du 2026-10-31) : ce que l'app
+// reçoit, rattaché au compte pseudonyme, sans photo.
+${o.ecrire('traceVin', 'Vin traité', 'vins_traites', 'insert', {
+    job_id: o.ex(`{{ ${CLOT}.job_id }}`),
+    compte_id: o.ex(`{{ ${TROUVE}.compte_id || '' }}`),
+    type: "'enrichissement'",
+    statut: o.ex(`{{ ${CLOT}.statut }}`),
+    jour: o.ex("{{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd') }}"),
+    resultat: o.ex(`{{ ${CLOT}.resultat }}`),
+    version_flux: o.q(o.VERSION_FLUX),
+  })}
+
 ${o.ecrire('quotaEcrire', 'Quota du mois', 'quotas', 'upsert', {
     mois: o.ex(`{{ ${CLOT}.quota.mois }}`),
     enrichissements: o.ex(`{{ ${CLOT}.quota.enrichissements }}`),
@@ -188,6 +200,7 @@ export default workflow('ia-cave-enrichissement', 'IA_CAVE_Enrichissement')
   .add(quotaCloture)
   .to(cloture)
   .to(jobTermine)
+  .to(traceVin)
   .to(quotaEcrire)
   .to(siEcrireCache
     .onTrue(cacheEcrire.to(siAlerte.onTrue(mailQuota)))

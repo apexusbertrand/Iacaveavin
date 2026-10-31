@@ -7,6 +7,10 @@ const SOUS_FLUX_PRIX = 'PeGDu6KX9n4SDml1';
 
 module.exports = (o) => {
   const CTL = "$('Contrôles enrichissement').first().json";
+  // Compte annoncé par l'en-tête X-IACAV-Compte (contrat 2.0) ; la signature
+  // avec la clé de ce compte est vérifiée ensuite par les contrôles.
+  const COMPTE_ENRICH = "{{ $('Empreinte enrichissement').first().json.entetes['x-iacav-compte'] || 'aucun' }}";
+  const COMPTE_SUIVI = "{{ $('Webhook suivi').first().json.headers['x-iacav-compte'] || 'aucun' }}";
   return `import { workflow, node, trigger, ifElse, sticky, expr } from '@n8n/workflow-sdk';
 
 ${o.webhook('webhookSante', 'Webhook santé', 'GET', 'iacave/sante', false)}
@@ -22,12 +26,16 @@ ${o.webhook('webhookPrix', 'Webhook prix', 'POST', 'iacave/prix', true)}
 ${o.code('empreinte', 'Empreinte enrichissement', 'empreinte', "{ empreinte: 'x', texteCorps: '{}', requestId: 'x', entetes: {} }")}
 ${o.lire('configEnrich', 'Config enrichissement', 'config', [], { tout: true })}
 ${o.lire('jobExistant', 'Job existant enrichissement', 'jobs', [['request_id', o.ex("{{ $('Empreinte enrichissement').first().json.requestId }}")]])}
-${o.lire('quotaEnrich', 'Quota enrichissement', 'quotas', [['mois', o.ex(o.MOIS)]])}
+${o.lire('compteEnrich', 'Compte enrichissement', 'comptes', [['compte_id', o.ex(COMPTE_ENRICH)]])}
+${o.lire('quotaEnrich', 'Quota enrichissement', 'usages', [['compte_id', o.ex(COMPTE_ENRICH)], ['mois', o.ex(o.MOIS)]])}
 ${o.code('controles', 'Contrôles enrichissement', 'controle_enrichissement', "{ decision: 'refus', http: 401, reponse: {} }")}
 ${o.si('siNouveau', 'Nouveau job ?', "{{ $json.decision === 'nouveau' }}")}
 ${o.ecrire('creerJob', 'Créer le job', 'jobs', 'insert', Object.fromEntries(
-    ['job_id', 'request_id', 'type', 'statut', 'etape', 'fiche_id', 'installation', 'requete', 'resultat', 'erreur', 'version_flux']
+    ['job_id', 'request_id', 'type', 'statut', 'etape', 'fiche_id', 'installation', 'compte_id', 'requete', 'resultat', 'erreur', 'version_flux']
       .map((k) => [k, o.ex(`{{ ${CTL}.job.${k} }}`)])))}
+${o.ecrire('compterUsage', 'Usage du compte', 'usages', 'upsert', Object.fromEntries(
+    ['compte_id', 'mois', 'enrichissements', 'prix'].map((k) => [k, o.ex(`{{ ${CTL}.usage.${k} }}`)])),
+  [['compte_id', o.ex(`{{ ${CTL}.usage.compte_id }}`)], ['mois', o.ex(`{{ ${CTL}.usage.mois }}`)]])}
 ${o.code('charge', 'Charge du sous-flux', 'charge', "{ job_id: 'x' }")}
 const lancer = node({
   type: 'n8n-nodes-base.executeWorkflow', version: 1.4,
@@ -42,7 +50,8 @@ ${o.repondre('repondreEnrich', 'Répondre enrichissement', '{{ $json.reponse }}'
 ${o.webhook('webhookSuivi', 'Webhook suivi', 'GET', 'iacave/jobs', false)}
 ${o.lire('configSuivi', 'Config suivi', 'config', [], { tout: true })}
 ${o.lire('jobSuivi', 'Job suivi', 'jobs', [['job_id', o.ex("{{ $('Webhook suivi').first().json.query.job_id || 'aucun' }}")]])}
-${o.lire('quotaSuivi', 'Quota suivi', 'quotas', [['mois', o.ex(o.MOIS)]])}
+${o.lire('compteSuivi', 'Compte suivi', 'comptes', [['compte_id', o.ex(COMPTE_SUIVI)]])}
+${o.lire('quotaSuivi', 'Quota suivi', 'usages', [['compte_id', o.ex(COMPTE_SUIVI)], ['mois', o.ex(o.MOIS)]])}
 ${o.code('suivi', 'Suivi du job', 'suivi', "{ http: 200, reponse: {} }")}
 ${o.repondre('repondreSuivi', 'Répondre suivi', '{{ $json.reponse }}', '{{ $json.http }}')}
 
@@ -57,16 +66,18 @@ export default workflow('ia-cave-agent', 'IA_CAVE_Agent')
   .to(empreinte)
   .to(configEnrich)
   .to(jobExistant)
+  .to(compteEnrich)
   .to(quotaEnrich)
   .to(controles)
   .to(siNouveau
-    .onTrue(creerJob.to(charge).to(lancer).to(repondreCree))
+    .onTrue(creerJob.to(compterUsage).to(charge).to(lancer).to(repondreCree))
     .onFalse(repondreEnrich))
   .add(webhookPrix)
   .to(empreinte)
   .add(webhookSuivi)
   .to(configSuivi)
   .to(jobSuivi)
+  .to(compteSuivi)
   .to(quotaSuivi)
   .to(suivi)
   .to(repondreSuivi)
