@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
   push:
     branches: ["lot-4-confort"]
-    paths: [".github/workflows/diagnostic-release.yml"]
+    paths:
+      - ".github/workflows/diagnostic-release.yml"
+      - "app/android/**"
 
 env:
   FLUTTER_VERSION: "3.47.7"
@@ -69,8 +71,11 @@ jobs:
             sleep 40
             adb logcat -d > logcat.txt
             adb exec-out screencap -p > ecran.png
-            echo "=== Erreurs du journal ==="
-            grep -E "AndroidRuntime|FATAL|flutter|Exception|Error|E/MethodChannel|PlatformException|iacaveavin" logcat.txt | grep -v "^--------" | head -300 || true
+            echo "=== Erreurs de l'app ==="
+            grep -E "FATAL EXCEPTION|Unhandled Exception|E flutter|AndroidRuntime" logcat.txt | head -100 || true
+            if grep -qE "FATAL EXCEPTION|Unhandled Exception" logcat.txt; then echo "ÉCHEC : l'app plante au démarrage"; exit 1; fi
+            adb shell pidof fr.apexus.iacaveavin || (echo "ÉCHEC : l'app n'est plus lancée"; exit 1)
+            echo "Démarrage sans erreur" 
       - uses: actions/upload-artifact@v4
         if: always()
         with:

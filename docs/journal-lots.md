@@ -169,6 +169,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - 2026-10-28 fait, sans APK : onglets Dégustations et Photos de la fiche fusionnés (T120), onglet Passés sur À boire (CMP-09, T121). En cours : rien. Bloquant : accord de Bertrand pour l'APK.
   - 2026-10-28 fait : préparation de la V1 publiée (NFR-18, T122) : démo, flux de démonstration et mentions de lots retirés de l'app, version 1.0.0. AAB ajouté à la release de la CI (T123). APK de contrôle relancé à la demande de Bertrand. Bloquant : secrets de signature pour l'AAB, décision sur la clé partagée avant une publication publique.
   - 2026-10-29 fait : PR #1 à #5 fusionnées dans main, release v1.0.0 construite par la CI (APK et AAB signés, symboles, build R8 vérifiée). Matériel Play Console dans store/ (T124). Bloquant : publication par Bertrand (compte Play, test fermé de 12 testeurs pendant 14 jours), clé du flux pour l'examen Google.
+  - 2026-10-31 fait : APK v1.0.0 figée au démarrage, cause trouvée sur émulateur (R8 et JNI, T125), correctif 1.0.1. Prochaine étape : release v1.0.1 et nouvel essai sur téléphone.
 - Mesures : aucune cible chiffrée propre au lot ; listes paresseuses (ListView.builder), calculs en fonctions pures sur la liste déjà chargée.
 - Recette Bertrand :
 
