@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import '../../core/flux_config.dart';
+import '../../domain/account.dart';
 import '../../domain/enrichment.dart';
 import '../../domain/feedback.dart';
 import 'contract_validator.dart';
@@ -22,12 +24,15 @@ class AuthException implements Exception {
 }
 
 /// Vrai flux n8n (lot 2c). Seule classe de l'app qui fait des appels HTTP.
-/// Chaque requête est signée (docs/02-architecture.md) et chaque réponse
-/// validée contre reponse-job.schema.json avant d'être renvoyée (AJO-12).
+/// Chaque requête est signée avec la clé du compte (contrat 2.0,
+/// docs/02-architecture.md) et chaque réponse validée contre le contrat
+/// avant d'être renvoyée (AJO-12). Sans compte ([key] vide), seuls la santé
+/// et les points d'entrée de connexion (CPT-01, CPT-02) répondent.
 class N8nGateway implements EnrichmentGateway {
   N8nGateway({
-    required this.baseUrl,
-    required this.key,
+    this.baseUrl = fluxBaseUrl,
+    this.key = '',
+    this.accountId,
     required this.installationId,
     required this.validator,
     HttpClient? client,
@@ -37,9 +42,13 @@ class N8nGateway implements EnrichmentGateway {
     _client.connectionTimeout = requestTimeout;
   }
 
-  /// Adresse de l'instance, par exemple https://apexus.app.n8n.cloud.
+  /// Adresse de l'instance : [fluxBaseUrl] dans l'app (T126), un serveur
+  /// local dans les tests.
   final String baseUrl;
+
+  /// Clé de session du compte (vide sans compte).
   final String key;
+  final String? accountId;
   final String installationId;
   final ContractValidator validator;
   final HttpClient _client;
@@ -61,6 +70,7 @@ class N8nGateway implements EnrichmentGateway {
     String method,
     String pathAndQuery, [
     Object? json,
+    bool signed = true,
   ]) async {
     final uri = _uri(pathAndQuery);
     final body = json == null ? <int>[] : utf8.encode(jsonEncode(json));
@@ -68,14 +78,17 @@ class N8nGateway implements EnrichmentGateway {
     final signedPath = uri.hasQuery ? '${uri.path}?${uri.query}' : uri.path;
     try {
       final req = await _client.openUrl(method, uri).timeout(requestTimeout);
-      securityHeaders(
-        key: key,
-        installationId: installationId,
-        now: _clock(),
-        method: method,
-        path: signedPath,
-        body: body,
-      ).forEach(req.headers.set);
+      if (signed) {
+        securityHeaders(
+          key: key,
+          installationId: installationId,
+          accountId: accountId,
+          now: _clock(),
+          method: method,
+          path: signedPath,
+          body: body,
+        ).forEach(req.headers.set);
+      }
       if (json != null) {
         req.headers.contentType = ContentType.json;
         req.contentLength = body.length;
@@ -132,7 +145,7 @@ class N8nGateway implements EnrichmentGateway {
     return _job(status, body);
   }
 
-  /// RET-01 : POST /remontee, réponse validée contre le contrat 1.3. Un
+  /// RET-01 : POST /remontee, réponse validée contre le contrat 2.0. Un
   /// refus de signature devient [AuthException], comme pour les jobs.
   @override
   Future<FeedbackResult> sendFeedback(FeedbackRequest request) async {
@@ -146,11 +159,10 @@ class N8nGateway implements EnrichmentGateway {
     return r;
   }
 
-  /// GET /sante : `{version_flux, version_contrat, ok}`. `ok` faux tant que la
-  /// clé n'est pas configurée côté n8n.
+  /// GET /sante : `{version_flux, version_contrat, ok}`, sans signature.
   @override
   Future<FluxHealth> health() async {
-    final (status, body) = await _send('GET', '$_prefix/sante');
+    final (status, body) = await _send('GET', '$_prefix/sante', null, false);
     final Object? json;
     try {
       json = jsonDecode(body);
@@ -166,31 +178,46 @@ class N8nGateway implements EnrichmentGateway {
     );
   }
 
-  /// PAR-05 « Tester la connexion » : /sante, puis un suivi signé d'un job
-  /// inexistant. Une réponse 404 au contrat prouve que la clé est acceptée.
-  Future<ConnectionCheck> check() async {
-    final h = await health();
-    if (!h.ok) return const ConnectionCheck(ConnectionStatus.notReady);
-    try {
-      final r = await followJob('00000000-0000-4000-8000-000000000000');
-      return r.error?.code == 'auth_invalide' ||
-              r.error?.code == 'signature_expiree'
-          ? ConnectionCheck(ConnectionStatus.badKey, message: r.error!.message)
-          : ConnectionCheck(ConnectionStatus.ok, version: h.contractVersion);
-    } on AuthException catch (e) {
-      return ConnectionCheck(ConnectionStatus.badKey, message: e.message);
-    }
-  }
+  AccountReply _account((int, String) r) =>
+      AccountReply.fromJson(validator.checkAccountResponse(r.$2));
+
+  /// CPT-01 : POST /compte/code, sans signature. Le flux envoie un code à
+  /// six chiffres à [email].
+  Future<AccountReply> requestLoginCode({
+    required String requestId,
+    required String email,
+  }) async => _account(
+    await _send('POST', '$_prefix/compte/code', {
+      'version_contrat': contractVersion,
+      'request_id': requestId,
+      'email': normalizeEmail(email),
+      'installation': installationId,
+    }, false),
+  );
+
+  /// CPT-02 : POST /compte/session, sans signature. Un bon code ouvre la
+  /// session et renvoie la clé du compte.
+  Future<AccountReply> openSession({
+    required String requestId,
+    required String email,
+    required String code,
+  }) async => _account(
+    await _send('POST', '$_prefix/compte/session', {
+      'version_contrat': contractVersion,
+      'request_id': requestId,
+      'email': normalizeEmail(email),
+      'code': code.trim(),
+      'installation': installationId,
+    }, false),
+  );
+
+  /// CPT-04 : GET /compte, signé : statut et quotas du mois.
+  Future<AccountReply> accountState() async =>
+      _account(await _send('GET', '$_prefix/compte'));
+
+  /// CPT-04 : POST /compte/deconnexion, signé : le flux révoque la clé.
+  Future<AccountReply> signOut() async =>
+      _account(await _send('POST', '$_prefix/compte/deconnexion', const {}));
 
   void close() => _client.close(force: true);
-}
-
-enum ConnectionStatus { ok, notReady, badKey }
-
-class ConnectionCheck {
-  const ConnectionCheck(this.status, {this.version, this.message});
-
-  final ConnectionStatus status;
-  final String? version;
-  final String? message;
 }

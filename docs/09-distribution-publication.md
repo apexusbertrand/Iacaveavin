@@ -36,7 +36,7 @@ Avant toute publication, vérifier que le nom n'est pas déjà une marque dépos
 - Data safety : photos envoyées au serveur pour traitement, non partagées, effacées après traitement ; ni compte, ni publicité, ni localisation.
 - Classification du contenu : questionnaire IARC, références à l'alcool, public adulte.
 - Contenus générés par IA : vérifier la politique Google Play en vigueur au moment de la soumission. L'app prévoit déjà le marquage des textes rédigés par IA et leur signalement (FIC-07, PRV-R4).
-- Avant publication publique, remplacer la clé partagée par des comptes et des quotas par compte (docs/10-evolutions.md).
+- ~~Avant publication publique, remplacer la clé partagée par des comptes et des quotas par compte (docs/10-evolutions.md).~~ Fait le 2026-10-31 (T126) : connexion par code mail, adresse du flux fixée dans l'app. L'examinateur de Google se connecte avec sa propre adresse : plus de clé à lui confier.
 
 ## Phase 3 : App Store
 

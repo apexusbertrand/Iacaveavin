@@ -5,8 +5,8 @@ import 'package:crypto/crypto.dart';
 /// Signature des requêtes au flux (docs/02-architecture.md, sécurité des
 /// appels) :
 /// hex(HMAC-SHA256(clé, horodatage + "\n" + méthode + "\n" + chemin + "\n" +
-/// sha256_hex(corps))). La clé est le texte UTF-8 saisi dans les Réglages
-/// (T58), le chemin comprend la chaîne de requête.
+/// sha256_hex(corps))). Contrat 2.0 : la clé est la clé de session du compte
+/// (texte UTF-8), le chemin comprend la chaîne de requête.
 String signRequest({
   required String key,
   required String timestamp,
@@ -19,10 +19,12 @@ String signRequest({
   return Hmac(sha256, utf8.encode(key)).convert(utf8.encode(text)).toString();
 }
 
-/// Les trois en-têtes de sécurité d'une requête.
+/// Les en-têtes de sécurité d'une requête. Contrat 2.0 : [accountId] annonce
+/// le compte dont la clé signe la requête (X-IACAV-Compte).
 Map<String, String> securityHeaders({
   required String key,
   required String installationId,
+  String? accountId,
   required DateTime now,
   required String method,
   required String path,
@@ -31,6 +33,7 @@ Map<String, String> securityHeaders({
   final ts = (now.toUtc().millisecondsSinceEpoch ~/ 1000).toString();
   return {
     'X-IACAV-Installation': installationId,
+    'X-IACAV-Compte': ?accountId,
     'X-IACAV-Horodatage': ts,
     'X-IACAV-Signature': signRequest(
       key: key,

@@ -124,6 +124,11 @@ class EnrichmentScreen extends ConsumerWidget {
               last: last,
               offline: report?.offline == true,
               notConnected: report?.notConnected == true,
+              onSignIn: () async {
+                // CPT-01 : connexion, puis l'envoi en attente repart.
+                await context.push('/compte');
+                ref.read(enrichmentRunnerProvider.notifier).kick();
+              },
             ),
             if (status == WineStatus.running && last?.result != null)
               _LabelPreview(result: last!.result!),
@@ -196,6 +201,7 @@ class _Progress extends StatelessWidget {
     required this.last,
     required this.offline,
     this.notConnected = false,
+    this.onSignIn,
   });
 
   final String status;
@@ -203,6 +209,7 @@ class _Progress extends StatelessWidget {
   final JobResponse? last;
   final bool offline;
   final bool notConnected;
+  final VoidCallback? onSignIn;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +245,7 @@ class _Progress extends StatelessWidget {
                 child: CircularProgressIndicator(strokeWidth: 3),
               );
     }
-    return Row(
+    final row = Row(
       children: [
         ?leading,
         const SizedBox(width: SpacingTokens.m),
@@ -248,6 +255,20 @@ class _Progress extends StatelessWidget {
             key: const ValueKey('enrich-progress'),
             style: theme.textTheme.titleMedium,
           ),
+        ),
+      ],
+    );
+    if (!notConnected || onSignIn == null) return row;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        row,
+        const SizedBox(height: SpacingTokens.m),
+        FilledButton.icon(
+          key: const ValueKey('enrich-signin'),
+          onPressed: onSignIn,
+          icon: const Icon(Icons.login),
+          label: Text(l.accountSignInAction),
         ),
       ],
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/about/about_screen.dart';
+import '../../features/account/account_screen.dart';
 import '../../features/feedback/feedback_screen.dart';
 import '../../features/add/capture_screen.dart';
 import '../../features/add/enrichment_screen.dart';
@@ -43,6 +44,10 @@ GoRouter buildRouter({String initialLocation = '/'}) => GoRouter(
         locationId: state.pathParameters['id']!,
         highlightWineId: state.uri.queryParameters['fiche'],
       ),
+    ),
+    GoRoute(
+      path: '/compte',
+      builder: (context, state) => const AccountScreen(),
     ),
     GoRoute(
       path: '/inventaire',

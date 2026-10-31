@@ -13,7 +13,9 @@ import 'photo_frame.dart';
 /// 1.2 : valeurs signalées fausses jointes à la requête (`signalements`,
 /// PRV-R4).
 /// 1.3 : POST /remontee, remontée d'information par mail (RET-01).
-const contractVersion = '1.3';
+/// 2.0 : comptes (CPT-01 à CPT-04) ; chaque requête est signée avec la clé
+/// du compte et porte l'en-tête X-IACAV-Compte (T126).
+const contractVersion = '2.0';
 
 enum JobStatus {
   pending('en_attente'),

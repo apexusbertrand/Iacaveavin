@@ -1,6 +1,6 @@
-# Fiche Google Play : IA cave à vin 1.0.0
+# Fiche Google Play : IA cave à vin
 
-Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T123 et T124 (docs/decisions.md). Captures, icône et bannière : dossier store/ à côté de ce fichier.
+Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T123 et T124, comptes T126 à T129 (docs/decisions.md). Mis à jour le 2026-10-31 pour la version avec comptes, pas encore compilée. Captures, icône et bannière : dossier store/ à côté de ce fichier.
 
 ## Identité
 
@@ -54,10 +54,10 @@ ANALYSEZ
 - Export et import Excel avec simulation avant import.
 
 VOS DONNÉES RESTENT CHEZ VOUS
-La cave vit sur votre téléphone et fonctionne hors ligne : liste, fiches, stock, statistiques, PDF et Excel. Ni compte, ni publicité, ni mesure d'audience. Seules les photos d'étiquettes partent au service d'identification, après votre accord, et elles y sont effacées dès la fiche remplie. Sauvegarde et restauration complètes en un fichier.
+La cave vit sur votre téléphone et fonctionne hors ligne, sans compte : liste, fiches, stock, statistiques, PDF et Excel. Ni publicité, ni mesure d'audience. Seules les photos d'étiquettes partent au service d'identification, après votre accord, et elles n'y sont jamais enregistrées. Sauvegarde et restauration complètes en un fichier.
 
 À SAVOIR
-L'identification par photo et le relevé des prix passent par un service en ligne d'Apexus, ouvert sur invitation pendant cette première version : l'adresse et la clé se saisissent dans les Paramètres. Sans elles, toute la gestion de cave fonctionne et les fiches restent « à enrichir » jusqu'à la connexion.
+L'identification par photo et le relevé des prix passent par un service en ligne d'Apexus, avec un compte gratuit : votre adresse mail et un code reçu par mail, sans mot de passe. 10 identifications et 10 relevés de prix par mois. Sans compte, toute la gestion de cave fonctionne et les fiches restent « à enrichir » jusqu'à la connexion.
 
 Application réservée aux personnes majeures. Elle ne vend pas d'alcool.
 L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
@@ -90,12 +90,12 @@ Choisir « Toutes les fonctionnalités ou certaines d'entre elles sont soumises 
 
 ```
 La gestion de cave (liste, fiches, stock, emplacements, statistiques, PDF, Excel, sauvegarde) est accessible sans aucun identifiant.
-L'identification par photo et le relevé des prix utilisent un service en ligne réservé aux testeurs : Paramètres > Connexion au flux d'enrichissement, saisir l'adresse et la clé secrète ci-dessous, puis « Tester la connexion ».
-Adresse : https://apexus.app.n8n.cloud
-Clé : [clé dédiée à l'examen Google, à créer par Bertrand]
+L'identification par photo et le relevé des prix demandent un compte gratuit : Paramètres > Compte, saisir une adresse mail, « Recevoir un code », puis saisir le code à six chiffres reçu par mail. N'importe quelle adresse convient, le compte est créé à la première connexion.
 ```
 
-Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé. Le mieux est une clé dédiée à l'examen, révoquée ensuite. Cela demande une évolution du flux (plusieurs clés acceptées), non faite à ce jour.
+~~Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé.~~ Réglé par les comptes (T126) : l'examinateur se connecte avec sa propre adresse.
+
+Point à trancher par Bertrand avant la soumission : Google exige, pour une app qui crée des comptes, un moyen de demander la suppression du compte dans l'app et par une page web (rubrique « Suppression des données »). La politique de confidentialité indique l'adresse apexus.claude@gmail.com ; il faut au moins une page web publiée qui l'explique, et de préférence un bouton « Supprimer mon compte » dans l'app (non fait).
 
 ## Annonces
 
@@ -131,20 +131,22 @@ Réponses générales :
 | --- | --- |
 | L'application collecte ou partage-t-elle des données ? | Oui |
 | Données chiffrées en transit | Oui (HTTPS uniquement) |
-| Les utilisateurs peuvent demander la suppression | Oui, par mail à l'adresse de contact ; la cave elle-même est sur le téléphone et s'efface en désinstallant l'application |
-| Partage avec des tiers | Non. Les prestataires qui traitent pour le compte d'Apexus (hébergeur n8n, modèle d'IA Anthropic, Gmail pour l'envoi des remontées) ne comptent pas comme partage au sens de Google |
+| Les utilisateurs peuvent demander la suppression | Oui, par mail à apexus.claude@gmail.com (compte, adresse, historique des vins traités) ; la cave elle-même est sur le téléphone et s'efface en désinstallant l'application |
+| Partage avec des tiers | Non. Les prestataires qui traitent pour le compte d'Apexus (hébergeur n8n, modèle d'IA Anthropic, Gmail pour l'envoi des codes et des remontées) ne comptent pas comme partage au sens de Google |
+| Création de compte | Oui : adresse mail et code reçu par mail, sans mot de passe |
 
-Données collectées (toutes facultatives, aucune n'est partagée) :
+Données collectées (toutes facultatives : sans compte, rien ne part ; aucune n'est partagée) :
 
 | Type Google | Donnée réelle | Traitement éphémère | Finalités |
 | --- | --- | --- | --- |
 | Photos et vidéos > Photos | photos d'étiquettes envoyées pour l'identification, après consentement | Oui : gardées en mémoire le temps du traitement, jamais écrites | Fonctionnalités de l'application |
-| Contenus générés par l'utilisateur > Autres | indices saisis (texte libre, code-barres, millésime), valeurs signalées comme fausses | Non (requête gardée 90 jours, signalements 24 mois) | Fonctionnalités de l'application |
-| Informations personnelles > Adresse e-mail | adresse de contact saisie dans le formulaire de remontée | Non (journal 30 jours, mail dans la boîte de l'équipe) | Communications du développeur |
+| Contenus générés par l'utilisateur > Autres | indices saisis (texte libre, code-barres, millésime), valeurs signalées comme fausses, fiches et prix trouvés pour le compte | Non (requête gardée 90 jours, signalements 24 mois, base des vins traités sans limite, rattachée à l'identifiant pseudonyme du compte) | Fonctionnalités de l'application, analyses (amélioration du service) |
+| Informations personnelles > Adresse e-mail | adresse du compte ; adresse de contact d'une remontée | Non (compte : jusqu'à sa suppression ; remontée : journal 30 jours, mail dans la boîte de l'équipe) | Gestion du compte, Fonctionnalités de l'application, Communications du développeur |
+| Informations personnelles > Identifiants utilisateur | identifiant de compte aléatoire (pseudonyme) | Non (tant que le compte existe) | Gestion du compte, sécurité, prévention des fraudes (quotas) |
 | Messages > Autres messages in-app | titre, commentaire et pièce jointe d'une remontée | Non (mail dans la boîte de l'équipe) | Communications du développeur |
 | Identifiants de l'appareil ou autres | identifiant d'installation aléatoire, généré par l'application | Non (90 jours avec chaque requête) | Fonctionnalités de l'application, sécurité, prévention des fraudes (quotas) |
 
-Non collectés : position, contacts, identité, données financières, santé, historique de navigation, identifiant publicitaire, journaux de plantage, mesures d'audience. Prix d'achat, stock, emplacements et dégustations restent sur le téléphone.
+Non collectés : position, contacts, nom, données financières, santé, historique de navigation, identifiant publicitaire, journaux de plantage, mesures d'audience. Prix d'achat, stock, emplacements et dégustations restent sur le téléphone.
 
 ## Autres déclarations
 

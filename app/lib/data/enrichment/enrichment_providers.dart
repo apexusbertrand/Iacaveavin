@@ -28,10 +28,13 @@ final contractValidatorProvider = FutureProvider<ContractValidator>((
     feedbackResponseSchema: await rootBundle.loadString(
       ContractValidator.feedbackResponseAsset,
     ),
+    accountResponseSchema: await rootBundle.loadString(
+      ContractValidator.accountResponseAsset,
+    ),
   );
 });
 
-/// Passerelle sans connexion enregistrée. L'app publiée n'a pas de flux de
+/// Passerelle sans compte connecté. L'app publiée n'a pas de flux de
 /// démonstration (T122) : l'enrichissement attend la connexion. Les tests la
 /// remplacent par [FakeGateway], qui rejoue les exemples du contrat.
 final unconnectedGatewayProvider =
@@ -40,24 +43,25 @@ final unconnectedGatewayProvider =
           (validator, settings) => const NotConnectedGateway(),
     );
 
-/// Vrai flux n8n dès qu'une adresse et une clé sont enregistrées (PAR-05),
-/// sinon [unconnectedGatewayProvider].
+/// CPT-03 : vrai flux n8n, signé avec la clé du compte, dès qu'un compte
+/// actif est connecté ; sinon [unconnectedGatewayProvider].
 final gatewayProvider = FutureProvider<EnrichmentGateway>((ref) async {
   final settings = ref.watch(settingsProvider);
   final validator = await ref.watch(contractValidatorProvider.future);
-  if (settings.usesRealFlux && settings.installationId != null) {
-    await ref.watch(fluxKeyPresentProvider.future);
-    final key = await ref.read(secretStoreProvider).read();
-    if (key != null && key.isNotEmpty) {
-      final gateway = N8nGateway(
-        baseUrl: settings.fluxUrl,
-        key: key,
-        installationId: settings.installationId!,
-        validator: validator,
-      );
-      ref.onDispose(gateway.close);
-      return gateway;
-    }
+  final session = await ref.watch(accountProvider.future);
+  final now = ref.read(accountClockProvider)();
+  if (session != null &&
+      session.isActive(now) &&
+      settings.installationId != null) {
+    final gateway = N8nGateway(
+      baseUrl: ref.watch(fluxBaseUrlProvider),
+      key: session.key,
+      accountId: session.account.id,
+      installationId: settings.installationId!,
+      validator: validator,
+    );
+    ref.onDispose(gateway.close);
+    return gateway;
   }
   return ref.watch(unconnectedGatewayProvider)(validator, settings);
 });

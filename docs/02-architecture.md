@@ -131,19 +131,20 @@ stateDiagram-v2
 
 ## Sécurité des appels au flux
 
-Phase 1, app non publiée : une clé secrète unique, générée côté n8n, saisie une fois dans les Réglages de l'app (ou scannée en QR code) et rangée dans le stockage sécurisé. Elle n'est jamais dans l'APK ni dans le dépôt.
+~~Phase 1, app non publiée : une clé secrète unique, générée côté n8n, saisie une fois dans les Réglages de l'app (ou scannée en QR code) et rangée dans le stockage sécurisé.~~ Depuis le contrat 2.0 (2026-10-31, T126) : une clé par compte. L'utilisateur se connecte par un code reçu par mail (CPT-01, CPT-02) ; le flux renvoie une clé de session de 180 jours, rangée dans le stockage sécurisé du téléphone. Aucune clé n'est dans l'APK ni dans le dépôt ; l'adresse du flux, publique, est fixée dans l'app (`app/lib/core/flux_config.dart`).
 
-Chaque requête porte trois en-têtes :
+Chaque requête signée porte quatre en-têtes :
 
 | En-tête | Contenu |
 | --- | --- |
 | X-IACAV-Installation | UUID de l'installation, généré au premier lancement |
+| X-IACAV-Compte | identifiant pseudonyme du compte dont la clé signe la requête (contrat 2.0) |
 | X-IACAV-Horodatage | secondes Unix |
 | X-IACAV-Signature | hex(HMAC-SHA256(clé, horodatage + "\n" + méthode + "\n" + chemin + "\n" + sha256_hex(corps))) |
 
 Le chemin signé est celui de l'URL après l'hôte, chaîne de requête comprise : `/webhook/iacave/jobs?job_id=…` pour le suivi. Un GET a un corps vide, dont l'empreinte est le sha256 de zéro octet. Le vecteur de test est dans `specs/contrat-n8n/vecteur-signature.json`.
 
-Le flux refuse une requête à plus de 300 secondes d'écart, une signature fausse, ou un request_id déjà traité (il renvoie alors le job existant). Révocation : changer la clé côté n8n. Le jour d'une publication, ce schéma cède la place aux comptes (docs/10-evolutions.md).
+Le flux refuse une requête sans compte actif (inconnu, clé expirée ou révoquée, compte suspendu), à plus de 300 secondes d'écart, ou dont la signature ne correspond pas à la clé du compte ; un request_id déjà traité par le même compte renvoie le job existant. Révocation : déconnexion depuis l'app (la clé est vidée côté n8n), ou statut `bloque` posé par Bertrand dans iacave_comptes. La demande de code (POST /compte/code) et l'ouverture de session (POST /compte/session) ne sont pas signées : elles sont protégées par le code à usage unique, 5 essais, 5 codes par heure.
 
 ## Volumes et stockage
 

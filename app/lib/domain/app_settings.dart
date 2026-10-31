@@ -26,7 +26,6 @@ class AppSettings {
     this.photoConsent = false,
     this.fakeScenario = 'done',
     this.simulateOffline = false,
-    this.fluxUrl = '',
     this.installationId,
     this.lastAutoPriceRefresh,
     this.alertSeenMonth,
@@ -71,18 +70,11 @@ class AppSettings {
   /// Tests seulement : FakeGateway se comporte comme en mode avion.
   final bool simulateOffline;
 
-  /// PAR-05 : adresse de l'instance n8n. Vide : pas de connexion, les fiches
-  /// restent « à enrichir ».
-  final String fluxUrl;
-
   /// UUID de l'installation (en-tête X-IACAV-Installation), généré une fois.
   final String? installationId;
 
   /// PRX-06 : dernier rafraîchissement automatique des prix.
   final DateTime? lastAutoPriceRefresh;
-
-  /// Le vrai flux est utilisé dès qu'une adresse est enregistrée.
-  bool get usesRealFlux => fluxUrl.trim().isNotEmpty;
 
   AppSettings copyWith({
     String? currency,
@@ -103,7 +95,6 @@ class AppSettings {
     bool? photoConsent,
     String? fakeScenario,
     bool? simulateOffline,
-    String? fluxUrl,
     String? installationId,
     DateTime? lastAutoPriceRefresh,
   }) => AppSettings(
@@ -129,7 +120,6 @@ class AppSettings {
     photoConsent: photoConsent ?? this.photoConsent,
     fakeScenario: fakeScenario ?? this.fakeScenario,
     simulateOffline: simulateOffline ?? this.simulateOffline,
-    fluxUrl: fluxUrl ?? this.fluxUrl,
     installationId: installationId ?? this.installationId,
     lastAutoPriceRefresh: lastAutoPriceRefresh ?? this.lastAutoPriceRefresh,
   );
@@ -168,7 +158,6 @@ class AppSettings {
     'photoConsent': photoConsent,
     'fakeScenario': fakeScenario,
     'simulateOffline': simulateOffline,
-    'fluxUrl': fluxUrl,
     'installationId': installationId,
     'lastAutoPriceRefresh': lastAutoPriceRefresh?.toIso8601String(),
   };
@@ -197,7 +186,6 @@ class AppSettings {
     photoConsent: json['photoConsent'] == true,
     fakeScenario: json['fakeScenario'] as String? ?? 'done',
     simulateOffline: json['simulateOffline'] == true,
-    fluxUrl: json['fluxUrl'] as String? ?? '',
     installationId: json['installationId'] as String?,
     lastAutoPriceRefresh: DateTime.tryParse('${json['lastAutoPriceRefresh']}'),
   );

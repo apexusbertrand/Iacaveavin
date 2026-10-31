@@ -7,6 +7,7 @@ import 'package:iacaveavin/data/enrichment/contract_validator.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
 import 'package:iacaveavin/data/enrichment/n8n_gateway.dart';
 import 'package:iacaveavin/data/enrichment/request_signer.dart';
+import 'package:iacaveavin/domain/account.dart';
 import 'package:iacaveavin/domain/enrichment.dart';
 import 'package:iacaveavin/domain/feedback.dart';
 
@@ -55,7 +56,11 @@ class FakeN8n {
         path: path,
         body: utf8.encode(body),
       );
-      final (status, json) = req.uri.path.endsWith('/sante')
+      final unsigned =
+          req.uri.path.endsWith('/sante') ||
+          req.uri.path.endsWith('/compte/code') ||
+          req.uri.path.endsWith('/compte/session');
+      final (status, json) = unsigned
           ? answer(req.method, path, body)
           : headers['x-iacav-signature'] != expected
           ? (401, _error('auth_invalide', 'Signature invalide.'))
@@ -79,13 +84,25 @@ Map<String, Object?> _error(String code, String message) => {
   'erreur': {'code': code, 'message': message, 'reessayable': false},
 };
 
+const _account = '3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c';
+
 N8nGateway gatewayFor(FakeN8n s, {String key = _key, ContractValidator? v}) =>
     N8nGateway(
       baseUrl: s.url,
       key: key,
+      accountId: _account,
       installationId: _installation,
-      validator: v ?? validator(),
+      validator: v ?? accountValidator(),
     );
+
+ContractValidator accountValidator() => ContractValidator(
+  responseSchema: File('assets/contrat/reponse-job.schema.json')
+      .readAsStringSync(),
+  feedbackResponseSchema: File('assets/contrat/reponse-remontee.schema.json')
+      .readAsStringSync(),
+  accountResponseSchema: File('assets/contrat/reponse-compte.schema.json')
+      .readAsStringSync(),
+);
 
 const priceRequest = PriceRequest(
   requestId: 'c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f',
@@ -182,25 +199,102 @@ void main() {
     });
 
     test(
-      'PAR-05 test de connexion : clé acceptée, refusée, flux non configuré',
+      'CPT-01 code demandé sans signature, adresse normalisée au contrat 2.0',
       () async {
-        s.answer = (m, p, b) => p.endsWith('/sante')
-            ? (
-                200,
-                {'version_flux': '0.1.0', 'version_contrat': '1.0', 'ok': true},
-              )
-            : (404, _error('requete_invalide', 'Job inconnu ou expiré.'));
-        expect((await gatewayFor(s).check()).status, ConnectionStatus.ok);
-        final bad = await gatewayFor(s, key: 'mauvaise-cle').check();
-        expect(bad.status, ConnectionStatus.badKey);
-        expect(bad.message, 'Signature invalide.');
-        s.answer = (m, p, b) => (
-          200,
-          {'version_flux': '0.1.0', 'version_contrat': '1.0', 'ok': false},
-        );
-        expect((await gatewayFor(s).check()).status, ConnectionStatus.notReady);
+        s.answer = (m, p, b) => (200, example('reponse-compte-code.json'));
+        final r =
+            await N8nGateway(
+              baseUrl: s.url,
+              installationId: _installation,
+              validator: accountValidator(),
+            ).requestLoginCode(
+              requestId: '7d1c2a9e-5b3f-4e6a-8c2d-1f0e9a8b7c6d',
+              email: ' Prenom.Nom@Exemple.fr ',
+            );
+        final sent = s.requests.single;
+        expect(sent.path, '/webhook/iacave/compte/code');
+        expect(sent.headers.containsKey('x-iacav-signature'), isFalse);
+        final body = jsonDecode(sent.body) as Map<String, dynamic>;
+        expect(body['email'], 'prenom.nom@exemple.fr');
+        expect(body['version_contrat'], '2.0');
+        expect(body['installation'], _installation);
+        expect(r.status, 'code_envoye');
+        expect(r.codeValidSeconds, 600);
       },
     );
+
+    test('CPT-02 bon code : session ouverte, clé et quotas lus', () async {
+      s.answer = (m, p, b) => (200, example('reponse-compte-session.json'));
+      final r = await gatewayFor(s, key: '').openSession(
+        requestId: '8e2d3b0f-6c4a-4f7b-9d3e-2a1f0b9c8d7e',
+        email: 'prenom.nom@exemple.fr',
+        code: '123456',
+      );
+      expect(s.requests.single.path, '/webhook/iacave/compte/session');
+      expect(jsonDecode(s.requests.single.body)['code'], '123456');
+      final session = r.session!;
+      expect(session.account.id, _account);
+      expect(session.account.status, AccountStatus.free);
+      expect(session.account.quota.enrichmentsLeft, 10);
+      expect(session.key, hasLength(64));
+      expect(session.isActive(DateTime.utc(2026, 11)), isTrue);
+      expect(session.isActive(DateTime.utc(2027, 5)), isFalse);
+
+      s.answer = (m, p, b) => (
+        401,
+        {
+          'version_contrat': '2.0',
+          'request_id': '8e2d3b0f-6c4a-4f7b-9d3e-2a1f0b9c8d7e',
+          'statut': 'erreur',
+          'erreur': {
+            'code': 'code_invalide',
+            'message': 'Code incorrect. Essais restants : 4.',
+            'reessayable': true,
+          },
+        },
+      );
+      final bad = await gatewayFor(s, key: '').openSession(
+        requestId: '8e2d3b0f-6c4a-4f7b-9d3e-2a1f0b9c8d7e',
+        email: 'prenom.nom@exemple.fr',
+        code: '000000',
+      );
+      expect(bad.session, isNull);
+      expect(bad.errorCode, 'code_invalide');
+    });
+
+    test(
+      'CPT-03 job signé avec la clé du compte et l\'en-tête X-IACAV-Compte',
+      () async {
+        s.answer = (m, p, b) => (200, example('job-en-cours.json'));
+        await gatewayFor(s).followJob('9b1f6c2e-0d4a-4c51-9a77-000000000001');
+        final h = s.requests.single.headers;
+        expect(h['x-iacav-compte'], _account);
+        expect(h['x-iacav-installation'], _installation);
+        // Une autre clé que celle du compte est refusée par le flux.
+        expect(
+          () => gatewayFor(
+            s,
+            key: 'autre-cle',
+          ).followJob('9b1f6c2e-0d4a-4c51-9a77-000000000001'),
+          throwsA(isA<AuthException>()),
+        );
+      },
+    );
+
+    test('CPT-04 état du compte et déconnexion signés', () async {
+      s.answer = (m, p, b) => (200, example('reponse-compte.json'));
+      final state = await gatewayFor(s).accountState();
+      expect(s.requests.last.method, 'GET');
+      expect(s.requests.last.path, '/webhook/iacave/compte');
+      expect(state.account!.quota.pricesLeft, isNonNegative);
+      expect(state.session, isNull);
+      s.answer = (m, p, b) =>
+          (200, {...example('reponse-compte.json'), 'statut': 'deconnecte'});
+      final out = await gatewayFor(s).signOut();
+      expect(s.requests.last.path, '/webhook/iacave/compte/deconnexion');
+      expect(s.requests.last.headers['x-iacav-compte'], _account);
+      expect(out.status, 'deconnecte');
+    });
 
     test('RET-01 remontée signée sur /remontee, quota lu', () async {
       const request = FeedbackRequest(
@@ -224,7 +318,7 @@ void main() {
       s.answer = (m, p, b) => (
         429,
         {
-          'version_contrat': '1.3',
+          'version_contrat': '2.0',
           'request_id': request.requestId,
           'statut': 'erreur',
           'envoi_restants_jour': 0,

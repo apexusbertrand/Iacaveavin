@@ -11,7 +11,11 @@ class ContractValidator {
     required String responseSchema,
     String? requestSchema,
     String? feedbackResponseSchema,
-  }) : _response = JsonSchema.create(responseSchema),
+    String? accountResponseSchema,
+  }) : _account = accountResponseSchema == null
+           ? null
+           : JsonSchema.create(accountResponseSchema),
+       _response = JsonSchema.create(responseSchema),
        _request = requestSchema == null
            ? null
            : JsonSchema.create(requestSchema),
@@ -24,10 +28,13 @@ class ContractValidator {
       'assets/contrat/requete-enrichissement.schema.json';
   static const feedbackResponseAsset =
       'assets/contrat/reponse-remontee.schema.json';
+  static const accountResponseAsset =
+      'assets/contrat/reponse-compte.schema.json';
 
   final JsonSchema _response;
   final JsonSchema? _request;
   final JsonSchema? _feedback;
+  final JsonSchema? _account;
 
   /// Erreurs de validation d'une réponse (vide si elle est conforme).
   List<String> responseErrors(Object? json) => _errors(_response, json);
@@ -58,11 +65,15 @@ class ContractValidator {
 extension FeedbackContract on ContractValidator {
   /// RET-01 : réponse de POST /remontee décodée et validée. Sans schéma
   /// chargé, aucune réponse n'est acceptée.
-  Map<String, dynamic> checkFeedbackResponse(String body) {
-    final schema = _feedback;
-    if (schema == null) {
-      throw const ContractException(['schéma de remontée absent']);
-    }
+  Map<String, dynamic> checkFeedbackResponse(String body) =>
+      _check(_feedback, body, 'schéma de remontée absent');
+
+  /// CPT-01 à CPT-04 : réponse des points d'entrée /compte décodée et validée.
+  Map<String, dynamic> checkAccountResponse(String body) =>
+      _check(_account, body, 'schéma de compte absent');
+
+  Map<String, dynamic> _check(JsonSchema? schema, String body, String absent) {
+    if (schema == null) throw ContractException([absent]);
     final Object? json;
     try {
       json = jsonDecode(body);

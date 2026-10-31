@@ -8,7 +8,8 @@ modèle et crédits de recherche.
 
 Usage (depuis un poste qui joint l'instance n8n) :
     export IACAVE_URL=https://apexus.app.n8n.cloud
-    export IACAVE_CLE=...            # la clé cle_app, jamais dans git
+    export IACAVE_COMPTE=...         # compte_id (contrat 2.0, T126)
+    export IACAVE_CLE=...            # sa clé de session, jamais dans git
     python3 scripts/jeu_essai.py [--prix] [--dossier n8n/jeu-essai] [--seulement 01-...]
     python3 scripts/jeu_essai.py --auto-test   # vérifie signature et comparaisons, sans réseau
 
@@ -59,6 +60,7 @@ def appeler(url, cle, installation, methode, chemin, corps=b""):
     entetes = {
         "Content-Type": "application/json",
         "X-IACAV-Installation": installation,
+        "X-IACAV-Compte": os.environ.get("IACAVE_COMPTE", ""),
         "X-IACAV-Horodatage": ts,
         "X-IACAV-Signature": signature(cle, ts, methode, chemin, corps),
     }
@@ -92,7 +94,7 @@ def requete(dossier, avec_prix):
     if not photos:
         raise SystemExit(f"{dossier} : aucune photo .jpg")
     return {
-        "version_contrat": "1.0",
+        "version_contrat": "2.0",
         "request_id": str(uuid.uuid4()),
         "photos": photos,
         "champs_verrouilles": [],
@@ -199,8 +201,8 @@ def main():
     if a.auto_test:
         return auto_test()
     url, cle = os.environ.get("IACAVE_URL"), os.environ.get("IACAVE_CLE")
-    if not url or not cle:
-        raise SystemExit("IACAVE_URL et IACAVE_CLE sont requis (la clé reste hors git).")
+    if not url or not cle or not os.environ.get("IACAVE_COMPTE"):
+        raise SystemExit("IACAVE_URL, IACAVE_COMPTE et IACAVE_CLE sont requis (la clé reste hors git).")
     installation = str(uuid.uuid4())
     dossiers = sorted(d for d in pathlib.Path(a.dossier).iterdir() if d.is_dir() and (d / "attendu.json").exists())
     if a.seulement:

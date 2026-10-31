@@ -17,18 +17,18 @@ Cible : caviste, restaurant, cave d'entreprise.
 
 ## 10.2 Authentification et synchronisation
 
-- Comptes par e-mail, Google ou Apple.
+- Comptes par e-mail : fait le 2026-10-31 (code reçu par mail, CPT-01 à CPT-04, T126). Google et Apple restent à faire : il faut un client OAuth créé par Bertrand.
 - Synchronisation entre appareils avec résolution des conflits, hors ligne conservé.
 - Cave partagée en famille, droits par personne.
 - Sauvegarde cloud chiffrée et automatique.
 - n8n reste l'orchestrateur de l'enrichissement. Une base managée (Supabase ou Firebase par exemple) porte comptes et synchronisation, choix à faire le moment venu.
-- La clé partagée disparaît : quotas et sécurité passent au niveau du compte.
+- ~~La clé partagée disparaît : quotas et sécurité passent au niveau du compte.~~ Fait le 2026-10-31 (contrat 2.0, T126) : clé de session par compte, quotas par compte et par mois.
 
 ## 10.3 Commercialisation
 
 - Freemium : cave locale gratuite et quelques enrichissements par mois. Abonnement pour l'illimité, les prix, le catalogue PDF, la synchronisation.
 - Les sources gratuites de la phase 1 (notes citées, pages marchandes publiques, offre gratuite de recherche) ne tiennent pas à l'échelle d'un produit vendu. Prévoir des licences : notes critiques (l'API Robert Parker existe via Liv-ex pour ses membres professionnels), prix (API destinées aux marchands), recherche web en offre payante.
 - Coûts variables à couvrir : modèle IA, recherche web, licences, hébergement n8n. Le coût moyen mesuré au lot 2b sert de base au prix.
-- Paiement par Google Play Billing et par les achats intégrés Apple pour toute fonction numérique vendue dans l'app, commission des stores comprise dans le calcul.
+- Paiement par Google Play Billing et par les achats intégrés Apple pour toute fonction numérique vendue dans l'app, commission des stores comprise dans le calcul. Préparé côté flux le 2026-10-31 (T127) : statut `abonne` et quotas d'abonné dans iacave_config ; reste à brancher l'achat et la vérification du reçu, qui posera ce statut.
 - Juridique : CGU, CGV, politique de confidentialité, contrats de sous-traitance RGPD avec l'hébergeur et le fournisseur IA, dépôt de marque après recherche d'antériorité.
 - Marque blanche pour cavistes (leur logo, leurs couleurs), dans la continuité du métier d'Apexus.

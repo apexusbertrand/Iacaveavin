@@ -18,14 +18,18 @@ Décision D4 : un nouveau flux dans l'instance n8n actuelle, isolé des flux exi
 | /webhook/iacave/enrichissement | POST | requete-enrichissement.schema.json | reponse-job.schema.json, statut en_attente (202) ou termine si cache |
 | /webhook/iacave/prix | POST | requete-prix.schema.json | idem |
 | /webhook/iacave/jobs?job_id=… | GET | aucun (signature sur le chemin avec la requête) | reponse-job.schema.json, 404 si job inconnu |
-| /webhook/iacave/sante | GET | aucun | `{"version_flux": "...", "version_contrat": "1.3", "ok": true}` |
+| /webhook/iacave/sante | GET | aucun | `{"version_flux": "0.5.0", "version_contrat": "2.0", "ok": true}` |
+| /webhook/iacave/compte/code | POST, non signé | requete-compte-code.schema.json | reponse-compte.schema.json, code_envoye (200), refus (400, 429), mail non parti (502) |
+| /webhook/iacave/compte/session | POST, non signé | requete-compte-session.schema.json | reponse-compte.schema.json, connecte avec la clé de session (200), code faux ou expiré (401) |
+| /webhook/iacave/compte | GET | aucun (signé) | reponse-compte.schema.json, ok : statut et quotas du mois |
+| /webhook/iacave/compte/deconnexion | POST | `{}` (signé) | reponse-compte.schema.json, deconnecte : clé révoquée |
 | /webhook/iacave/remontee | POST | requete-remontee.schema.json | reponse-remontee.schema.json : envoye (200), refus (400, 401, 429), mail non parti (502) |
 
 POST /enrichissement et POST /prix partagent les nœuds de contrôle d'entrée ; le type vient du webhook qui reçoit la requête (T65). Le webhook répond immédiatement avec le job_id (nœud Respond to Webhook), puis le traitement continue. L'app interroge /jobs toutes les 3 secondes pendant 30 secondes, puis toutes les 10 secondes, jusqu'à 3 minutes.
 
-POST /remontee (RET-01, T118) vit dans son propre flux, IA_CAVE_Remontee : contrôle de signature, schéma, taille et type réel de la pièce jointe, plafond de 5 envois par jour et par installation, puis mail Gmail à apexus.claude@gmail.com avec le contact en copie et en adresse de réponse. Aucun agent, aucun appel au modèle.
+POST /remontee (RET-01, T118) vit dans son propre flux, IA_CAVE_Remontee : contrôle de signature, schéma, taille et type réel de la pièce jointe, plafond de 5 envois par jour et par compte (T126), puis mail Gmail à apexus.claude@gmail.com avec le contact en copie et en adresse de réponse. Aucun agent, aucun appel au modèle.
 
-Contrôles à l'entrée, dans cet ordre : en-têtes présents, horodatage à moins de 300 secondes, signature HMAC (docs/02-architecture.md), request_id déjà vu (renvoyer le job existant), quota, validation du corps contre le schéma.
+Contrôles à l'entrée, dans cet ordre : compte actif (lu par l'en-tête X-IACAV-Compte), en-têtes présents, horodatage à moins de 300 secondes, signature HMAC avec la clé du compte (docs/02-architecture.md), version de contrat 2.x, request_id déjà vu pour ce compte (renvoyer le job existant), quota du compte, validation du corps contre le schéma. Les comptes vivent dans le flux IA_CAVE_Comptes (CPT-01 à CPT-04, T126) ; le sous-flux reçoit la requête avec la version 1.3 pour garder ses règles de résultat.
 
 ## Stockage côté n8n
 
@@ -36,9 +40,13 @@ Tables n8n (Data Tables) si la version de l'instance les propose, sinon une base
 | iacave_jobs | job_id, request_id (unique), type, statut, etape, requête sans les photos, résultat, erreur, dates | 90 jours |
 | iacave_cache_vins | clé normalisée, résultat de fiche, date, nombre d'utilisations | 180 jours |
 | iacave_cache_prix | clé + format, résultat de prix, date | 24 heures |
-| iacave_quotas | mois, enrichissements, prix, crédits de recherche consommés | 24 mois |
+| iacave_quotas | mois, enrichissements, prix, crédits de recherche consommés, toutes installations (suivi du coût) | 24 mois |
 | iacave_signalements | job, champ, valeur signalée comme fausse, date | 24 mois |
-| iacave_remontees | request_id, installation, jour, titre, adresse de contact, nom de la pièce jointe (ni le commentaire ni le fichier) | 30 jours (sert au plafond du jour) |
+| iacave_remontees | request_id, installation, compte, jour, titre, adresse de contact, nom de la pièce jointe (ni le commentaire ni le fichier) | 30 jours (sert au plafond du jour) |
+| iacave_comptes | compte_id pseudonyme, adresse mail, statut (gratuit, abonne, bloque), clé de session et son expiration, dates de création et de dernière connexion, installation | tant que le compte existe ; suppression sur demande à apexus.claude@gmail.com |
+| iacave_codes | adresse, empreinte SHA-256 du code (jamais le code), expiration, essais, envois de l'heure | 24 heures |
+| iacave_usages | compte, mois, enrichissements et prix consommés | 24 mois |
+| iacave_vins_traites | job, compte pseudonyme (pas l'adresse), type, statut, jour, résultat renvoyé à l'app (fiche, notes, prix, sources ; jamais de photo), version du flux | sans limite : base des vins traités (T128) |
 | (pas de table de photos) | les photos passent du webhook au sous-flux en mémoire, elles ne sont écrites nulle part ; les exécutions réussies ne sont pas conservées (T61) | aucune |
 
 Clé de cache d'un vin : domaine, appellation, cuvée et millésime normalisés (minuscules, sans accents, espaces et ponctuation en tirets), séparés par `|`. Le cache intervient après la lecture d'étiquette : il économise les recherches web, pas la lecture. Un signalement d'erreur sur un champ invalide l'entrée de cache correspondante : la requête porte alors `signalements` (contrat 1.2, PRV-R4), le flux les écrit dans iacave_signalements, relance l'agent au lieu de servir le cache, et lui demande de ne pas reproposer ces valeurs sans source nouvelle (T105). Une entrée de cache sans aucune source web n'est jamais resservie (T103). Une valeur dont la page citée n'est pas parmi les résultats de recherche est retirée avec un motif et une alerte de diagnostic, la fiche n'est plus refusée en bloc (T108).

@@ -12,7 +12,7 @@ import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
 import '../wine_detail/price_actions.dart';
-import 'connection_section.dart';
+import '../account/account_section.dart';
 
 const _currencies = ['EUR', 'CHF', 'USD', 'GBP', 'CAD'];
 
@@ -219,8 +219,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: Text(l.pricesAllHint),
             onTap: () => refreshAllPrices(context, ref),
           ),
-          header(l.settingsConnection),
-          const ConnectionSection(),
+          header(l.settingsAccount),
+          const AccountSection(),
           ListTile(
             title: Text(l.settingsPhotoSpace),
             leading: const Icon(Icons.photo_outlined),

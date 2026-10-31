@@ -12,7 +12,7 @@ bool isValidEmail(String text) {
   return t.length <= 254 && _emailPattern.hasMatch(t);
 }
 
-/// Limites du contrat 1.3.
+/// Limites du contrat 2.0.
 const feedbackTitleMax = 120;
 const feedbackCommentMax = 5000;
 const feedbackAttachmentMaxBytes = 5 * 1024 * 1024;
@@ -53,7 +53,7 @@ class FeedbackAttachment {
   bool get isImage => mime.startsWith('image/');
 }
 
-/// RET-01 : corps de POST /remontee (contrat 1.3).
+/// RET-01 : corps de POST /remontee (contrat 2.0).
 class FeedbackRequest {
   const FeedbackRequest({
     required this.requestId,
@@ -74,7 +74,7 @@ class FeedbackRequest {
   final String? appVersion;
 
   Map<String, Object?> toJson() => {
-    'version_contrat': '1.3',
+    'version_contrat': '2.0',
     'request_id': requestId,
     'titre': title.trim(),
     'commentaire': comment.trim(),

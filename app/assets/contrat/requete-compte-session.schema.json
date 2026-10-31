@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ia-cave-a-vin/contrat-n8n/requete-compte-session.schema.json",
+  "title": "POST /compte/session : ouverture d'une session avec le code reçu",
+  "description": "Contrat 2.0 (CPT-01). Requête publique, non signée. Code juste et non expiré : le compte est créé s'il n'existe pas, et une clé de session propre au compte est renvoyée. 5 essais au plus par code.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version_contrat",
+    "request_id",
+    "email",
+    "code",
+    "installation"
+  ],
+  "properties": {
+    "version_contrat": {
+      "type": "string",
+      "pattern": "^2\\.[0-9]+$"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "email": {
+      "type": "string",
+      "maxLength": 254,
+      "pattern": "^[A-Za-z0-9._%+'-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$"
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[0-9]{6}$"
+    },
+    "installation": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

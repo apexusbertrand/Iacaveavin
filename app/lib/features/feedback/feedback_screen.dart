@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,6 +17,7 @@ import '../../data/enrichment/enrichment_gateway.dart';
 import '../../data/enrichment/enrichment_providers.dart';
 import '../../data/enrichment/n8n_gateway.dart' show AuthException;
 import '../../data/export_providers.dart';
+import '../../data/flux_credentials.dart';
 import '../../domain/feedback.dart';
 import '../add/capture_screen.dart' show imagePickerProvider;
 
@@ -37,6 +39,14 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
   FeedbackAttachment? _attachment;
   bool _preparing = false;
   bool _sending = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // CPT-03 : l'adresse du compte connecté sert d'adresse de contact.
+    final email = ref.read(accountProvider).value?.account.email;
+    if (email != null) _email.text = email;
+  }
 
   @override
   void dispose() {
@@ -156,6 +166,11 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
     );
     final a = _attachment;
     final busy = _sending || _preparing;
+    final signedIn = ref.watch(signedInProvider);
+    ref.listen(accountProvider, (_, next) {
+      final email = next.value?.account.email;
+      if (email != null && _email.text.trim().isEmpty) _email.text = email;
+    });
     return Scaffold(
       appBar: AppBar(title: Text(l.navFeedback)),
       drawer: const AppDrawer(current: AppDestination.feedback),
@@ -266,6 +281,29 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             ),
             const SizedBox(height: SpacingTokens.s),
             Text(l.feedbackPrivacy, style: secondary),
+            if (!signedIn) ...[
+              const SizedBox(height: SpacingTokens.l),
+              // CPT-03 : la remontée part avec le compte connecté.
+              Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.all(SpacingTokens.l),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l.feedbackSignInNeeded),
+                      const SizedBox(height: SpacingTokens.m),
+                      FilledButton.icon(
+                        key: const ValueKey('feedback-signin'),
+                        onPressed: () => context.push('/compte'),
+                        icon: const Icon(Icons.login),
+                        label: Text(l.accountSignInAction),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

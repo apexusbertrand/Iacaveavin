@@ -58,7 +58,7 @@ void main() {
     expect(attachmentMime(Uint8List(0)), isNull);
   });
 
-  test('RET-01 la requête respecte le contrat 1.3, avec ou sans pièce', () {
+  test('RET-01 la requête respecte le contrat 2.0, avec ou sans pièce', () {
     final base = FeedbackRequest(
       requestId: '5f0c2a8e-3b1d-4c6e-9a7f-2d4b6c8e0a1b',
       title: '  Fiche fausse  ',
@@ -69,7 +69,7 @@ void main() {
     );
     final json = wire(base)! as Map<String, dynamic>;
     expect(errors(json), isEmpty);
-    expect(json['version_contrat'], '1.3');
+    expect(json['version_contrat'], '2.0');
     expect(json['titre'], 'Fiche fausse');
     expect(json['email_contact'], 'bertrand@exemple.fr');
     expect(json.containsKey('piece_jointe'), isFalse);
@@ -106,7 +106,7 @@ void main() {
 
   test('RET-01 réponse d\'erreur lue : code, message, relance', () {
     final r = FeedbackResult.fromJson({
-      'version_contrat': '1.3',
+      'version_contrat': '2.0',
       'request_id': '5f0c2a8e-3b1d-4c6e-9a7f-2d4b6c8e0a1b',
       'statut': 'erreur',
       'envoi_restants_jour': 0,

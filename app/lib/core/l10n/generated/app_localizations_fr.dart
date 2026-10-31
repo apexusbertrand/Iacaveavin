@@ -1187,13 +1187,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.';
 
   @override
-  String get settingsConnection => 'Connexion au flux d\'enrichissement';
-
-  @override
-  String get settingsConnectionHint =>
-      'Adresse de l\'instance n8n et clé secrète partagée avec le flux.';
-
-  @override
   String get settingsPhotoSpace => 'Espace occupé par les photos';
 
   @override
@@ -1659,7 +1652,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get enrichNotConnected =>
-      'Flux non connecté : la fiche reste « à enrichir ». Renseignez l\'adresse et la clé du flux dans les Paramètres, l\'envoi partira ensuite.';
+      'Aucun compte connecté : la fiche reste « à enrichir ». Connectez-vous pour lancer l\'identification, l\'envoi partira ensuite.';
 
   @override
   String get enrichReady => 'Propositions prêtes';
@@ -1930,78 +1923,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get unlocked =>
       'Champ déverrouillé : il pourra être proposé à nouveau.';
-
-  @override
-  String get fluxUrl => 'Adresse du flux';
-
-  @override
-  String get fluxUrlHint => 'https://votre-instance.app.n8n.cloud';
-
-  @override
-  String get fluxKey => 'Clé secrète';
-
-  @override
-  String get fluxKeyStored =>
-      'Clé enregistrée dans le stockage sécurisé du téléphone';
-
-  @override
-  String get fluxKeyMissing => 'Aucune clé enregistrée';
-
-  @override
-  String get fluxKeyReplace => 'Nouvelle clé (remplace l\'ancienne)';
-
-  @override
-  String get fluxSave => 'Enregistrer';
-
-  @override
-  String get fluxForget => 'Oublier la connexion';
-
-  @override
-  String get fluxTest => 'Tester la connexion';
-
-  @override
-  String get fluxTesting => 'Test en cours…';
-
-  @override
-  String get fluxUsingReal =>
-      'Vrai flux utilisé pour les enrichissements et les prix.';
-
-  @override
-  String get fluxUsingFake =>
-      'Pas de connexion enregistrée : l\'identification par photo et les prix attendent la connexion au flux. Le reste de l\'application fonctionne.';
-
-  @override
-  String fluxTestOk(String version) {
-    return 'Connexion réussie : flux joignable, clé acceptée (contrat $version).';
-  }
-
-  @override
-  String get fluxTestNotReady =>
-      'Flux joignable, mais sa clé n\'est pas encore configurée côté n8n.';
-
-  @override
-  String fluxTestBadKey(String message) {
-    return 'Flux joignable, mais la clé est refusée : $message';
-  }
-
-  @override
-  String get fluxTestOffline =>
-      'Flux injoignable : vérifiez l\'adresse et le réseau.';
-
-  @override
-  String get fluxTestInvalid =>
-      'Réponse inattendue du flux : vérifiez l\'adresse.';
-
-  @override
-  String get fluxUrlInvalid =>
-      'Adresse invalide : elle doit commencer par https://';
-
-  @override
-  String get fluxSaved => 'Connexion enregistrée.';
-
-  @override
-  String get fluxForgotten =>
-      'Connexion oubliée : l\'identification par photo attend une nouvelle connexion.';
 
   @override
   String get pricesAllTitle => 'Relever les prix de toute la cave';
@@ -3081,13 +3002,119 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get feedbackNotConnected =>
-      'Flux non connecté : le message n\'est pas parti. Renseignez l\'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.';
+      'Aucun compte connecté : le message n\'est pas parti. Connectez-vous, puis renvoyez-le.';
 
   @override
   String get feedbackAuth =>
-      'Le flux refuse la clé de l\'application. Vérifiez-la dans les paramètres.';
+      'Votre session a expiré : reconnectez-vous dans les Paramètres, puis renvoyez le message.';
 
   @override
   String get feedbackPrivacy =>
-      'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.';
+      'Votre adresse sert seulement à vous répondre. Elle part avec le message, l\'application ne la garde que pour votre compte.';
+
+  @override
+  String get settingsAccount => 'Compte';
+
+  @override
+  String get accountTitle => 'Connexion';
+
+  @override
+  String get accountHint =>
+      'L\'identification par photo, les prix et la remontée d\'information demandent un compte. Saisissez votre adresse : vous recevrez un code à six chiffres par mail. La cave fonctionne sans compte.';
+
+  @override
+  String get accountEmail => 'Adresse mail';
+
+  @override
+  String get accountEmailInvalid =>
+      'Adresse mail invalide (exemple : prenom.nom@exemple.fr).';
+
+  @override
+  String get accountRequestCode => 'Recevoir un code';
+
+  @override
+  String accountCodeSent(String email) {
+    return 'Code envoyé à $email. Il est valable 10 minutes.';
+  }
+
+  @override
+  String get accountCode => 'Code reçu par mail';
+
+  @override
+  String get accountCodeHelp =>
+      'Six chiffres. Pensez à regarder les indésirables.';
+
+  @override
+  String get accountCodeInvalid => 'Le code compte six chiffres.';
+
+  @override
+  String get accountSignIn => 'Se connecter';
+
+  @override
+  String get accountSignInAction => 'Me connecter';
+
+  @override
+  String get accountChangeEmail => 'Changer d\'adresse';
+
+  @override
+  String accountSignedInAs(String email) {
+    return 'Connecté : $email';
+  }
+
+  @override
+  String accountStatusLine(String status) {
+    return 'Formule : $status';
+  }
+
+  @override
+  String get accountStatusFree => 'gratuite';
+
+  @override
+  String get accountStatusSubscriber => 'abonnement';
+
+  @override
+  String get accountStatusBlocked => 'compte suspendu';
+
+  @override
+  String accountQuotaLine(int enrichments, int prices) {
+    String _temp0 = intl.Intl.pluralLogic(
+      enrichments,
+      locale: localeName,
+      other: '$enrichments identifications',
+      one: '1 identification',
+      zero: 'aucune identification',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      prices,
+      locale: localeName,
+      other: '$prices relevés de prix',
+      one: '1 relevé de prix',
+      zero: 'aucun relevé de prix',
+    );
+    return 'Ce mois-ci : $_temp0 et $_temp1 restants.';
+  }
+
+  @override
+  String get accountRefresh => 'Actualiser';
+
+  @override
+  String get accountRefreshed => 'Compte à jour.';
+
+  @override
+  String get accountSignOut => 'Se déconnecter';
+
+  @override
+  String get accountSignedOut =>
+      'Déconnecté : l\'identification par photo attend une nouvelle connexion.';
+
+  @override
+  String get accountOffline => 'Pas de réseau : réessayez une fois connecté.';
+
+  @override
+  String get accountInvalid =>
+      'Réponse inattendue du service : réessayez plus tard.';
+
+  @override
+  String get feedbackSignInNeeded =>
+      'Connectez-vous à votre compte pour envoyer une remontée.';
 }

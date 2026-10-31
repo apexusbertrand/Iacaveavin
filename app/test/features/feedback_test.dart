@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/data/flux_credentials.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_providers.dart';
 import 'package:iacaveavin/data/export_providers.dart';
@@ -31,6 +32,7 @@ void main() {
     tester,
     location: '/remontee',
     appDir: root,
+    secrets: MemorySecretStore(connected ? testSessionJson() : null),
     extra: [
       gatewayProvider.overrideWith(
         (ref) => connected ? gateway : const NotConnectedGateway(),
@@ -83,6 +85,8 @@ void main() {
 
   testWidgets('RET-01 champs vides refusés', (tester) async {
     await start(tester);
+    // CPT-03 : l'adresse du compte est pré-remplie ; on la vide.
+    await tester.enterText(find.byKey(const ValueKey('feedback-email')), '');
     await tapKey(tester, 'feedback-send');
     expect(find.text('Champ obligatoire.'), findsNWidgets(3));
     expect(gateway.lastFeedback, isNull);
@@ -164,9 +168,16 @@ void main() {
     await start(tester);
     await fill(tester);
     await tapKey(tester, 'feedback-send');
-    expect(find.textContaining('Flux non connecté'), findsOneWidget);
+    expect(find.textContaining('Aucun compte connecté'), findsOneWidget);
     expect(gateway.lastFeedback, isNull);
     expect(find.textContaining('Message envoyé'), findsNothing);
+    // CPT-03 : sans compte, l'écran invite à se connecter.
+    expect(find.byKey(const ValueKey('feedback-signin')), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('feedback-title')),
+      -300,
+      scrollable: find.byType(Scrollable).first,
+    );
     final title = tester.widget<TextField>(
       find.descendant(
         of: find.byKey(const ValueKey('feedback-title')),

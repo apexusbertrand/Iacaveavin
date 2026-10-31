@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -92,6 +93,7 @@ Future<FakeDemoRepository> pumpApp(
   FakeDemoRepository? demo,
   Brightness? brightness,
   Map<String, Object> prefs = const {},
+  SecretStore? secrets,
 }) async {
   // Téléphone de 360 x 780 dp.
   tester.view.physicalSize = const Size(1080, 2340);
@@ -114,6 +116,12 @@ Future<FakeDemoRepository> pumpApp(
         databaseProvider.overrideWithValue(db),
         currentYearProvider.overrideWithValue(2026),
         ...noFileSystem,
+        // Pas de stockage sécurisé du système dans les tests : session en
+        // mémoire, et aucun appel réseau vers le vrai flux.
+        secretStoreProvider.overrideWith(
+          (ref) => secrets ?? MemorySecretStore(),
+        ),
+        fluxBaseUrlProvider.overrideWithValue('http://127.0.0.1:9'),
         ...testFlux,
         bootstrapProvider.overrideWith((ref) async => 'cave-test'),
         wineListProvider.overrideWith(
@@ -137,6 +145,7 @@ Future<AppDatabase> pumpRealApp(
   Future<void> Function(AppDatabase db, String cellarId)? seed,
   List<Override> extra = const [],
   Directory? appDir,
+  SecretStore? secrets,
 }) async {
   tester.view.physicalSize = const Size(1080, 2340);
   tester.view.devicePixelRatio = 3;
@@ -166,6 +175,10 @@ Future<AppDatabase> pumpRealApp(
         assetReaderProvider.overrideWithValue(readAssetFromDisk),
         currentYearProvider.overrideWithValue(2026),
         ...noFileSystem,
+        secretStoreProvider.overrideWith(
+          (ref) => secrets ?? MemorySecretStore(),
+        ),
+        fluxBaseUrlProvider.overrideWithValue('http://127.0.0.1:9'),
         ...testFlux,
         if (appDir != null)
           appDirProvider.overrideWithValue(() async => appDir),
@@ -224,6 +237,18 @@ final testFlux = [
 final noFileSystem = [
   autoBackupsProvider.overrideWith((ref) async => const []),
   photoSpaceProvider.overrideWith((ref) async => 0),
-  // Pas de stockage sécurisé du système dans les tests : clé en mémoire.
-  secretStoreProvider.overrideWith((ref) => MemorySecretStore()),
 ];
+
+/// Session de compte valable jusqu'en 2099, pour les écrans qui demandent un
+/// compte connecté (CPT-03).
+String testSessionJson({String expires = '2099-01-01T00:00:00Z'}) =>
+    jsonEncode({
+      'compte': {
+        'compte_id': '3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c',
+        'email': 'prenom.nom@exemple.fr',
+        'statut_compte': 'gratuit',
+        'quota': {'enrichissements_restants_mois': 7, 'prix_restants_mois': 1},
+      },
+      'cle_session': 'ab' * 32,
+      'cle_expire_le': expires,
+    });

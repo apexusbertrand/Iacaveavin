@@ -2038,18 +2038,6 @@ abstract class AppLocalizations {
   /// **'Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.'**
   String get settingsAutoPricesHint;
 
-  /// No description provided for @settingsConnection.
-  ///
-  /// In fr, this message translates to:
-  /// **'Connexion au flux d\'enrichissement'**
-  String get settingsConnection;
-
-  /// No description provided for @settingsConnectionHint.
-  ///
-  /// In fr, this message translates to:
-  /// **'Adresse de l\'instance n8n et clé secrète partagée avec le flux.'**
-  String get settingsConnectionHint;
-
   /// No description provided for @settingsPhotoSpace.
   ///
   /// In fr, this message translates to:
@@ -2857,7 +2845,7 @@ abstract class AppLocalizations {
   /// No description provided for @enrichNotConnected.
   ///
   /// In fr, this message translates to:
-  /// **'Flux non connecté : la fiche reste « à enrichir ». Renseignez l\'adresse et la clé du flux dans les Paramètres, l\'envoi partira ensuite.'**
+  /// **'Aucun compte connecté : la fiche reste « à enrichir ». Connectez-vous pour lancer l\'identification, l\'envoi partira ensuite.'**
   String get enrichNotConnected;
 
   /// No description provided for @enrichReady.
@@ -3297,126 +3285,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Champ déverrouillé : il pourra être proposé à nouveau.'**
   String get unlocked;
-
-  /// No description provided for @fluxUrl.
-  ///
-  /// In fr, this message translates to:
-  /// **'Adresse du flux'**
-  String get fluxUrl;
-
-  /// No description provided for @fluxUrlHint.
-  ///
-  /// In fr, this message translates to:
-  /// **'https://votre-instance.app.n8n.cloud'**
-  String get fluxUrlHint;
-
-  /// No description provided for @fluxKey.
-  ///
-  /// In fr, this message translates to:
-  /// **'Clé secrète'**
-  String get fluxKey;
-
-  /// No description provided for @fluxKeyStored.
-  ///
-  /// In fr, this message translates to:
-  /// **'Clé enregistrée dans le stockage sécurisé du téléphone'**
-  String get fluxKeyStored;
-
-  /// No description provided for @fluxKeyMissing.
-  ///
-  /// In fr, this message translates to:
-  /// **'Aucune clé enregistrée'**
-  String get fluxKeyMissing;
-
-  /// No description provided for @fluxKeyReplace.
-  ///
-  /// In fr, this message translates to:
-  /// **'Nouvelle clé (remplace l\'ancienne)'**
-  String get fluxKeyReplace;
-
-  /// No description provided for @fluxSave.
-  ///
-  /// In fr, this message translates to:
-  /// **'Enregistrer'**
-  String get fluxSave;
-
-  /// No description provided for @fluxForget.
-  ///
-  /// In fr, this message translates to:
-  /// **'Oublier la connexion'**
-  String get fluxForget;
-
-  /// No description provided for @fluxTest.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tester la connexion'**
-  String get fluxTest;
-
-  /// No description provided for @fluxTesting.
-  ///
-  /// In fr, this message translates to:
-  /// **'Test en cours…'**
-  String get fluxTesting;
-
-  /// No description provided for @fluxUsingReal.
-  ///
-  /// In fr, this message translates to:
-  /// **'Vrai flux utilisé pour les enrichissements et les prix.'**
-  String get fluxUsingReal;
-
-  /// No description provided for @fluxUsingFake.
-  ///
-  /// In fr, this message translates to:
-  /// **'Pas de connexion enregistrée : l\'identification par photo et les prix attendent la connexion au flux. Le reste de l\'application fonctionne.'**
-  String get fluxUsingFake;
-
-  /// No description provided for @fluxTestOk.
-  ///
-  /// In fr, this message translates to:
-  /// **'Connexion réussie : flux joignable, clé acceptée (contrat {version}).'**
-  String fluxTestOk(String version);
-
-  /// No description provided for @fluxTestNotReady.
-  ///
-  /// In fr, this message translates to:
-  /// **'Flux joignable, mais sa clé n\'est pas encore configurée côté n8n.'**
-  String get fluxTestNotReady;
-
-  /// No description provided for @fluxTestBadKey.
-  ///
-  /// In fr, this message translates to:
-  /// **'Flux joignable, mais la clé est refusée : {message}'**
-  String fluxTestBadKey(String message);
-
-  /// No description provided for @fluxTestOffline.
-  ///
-  /// In fr, this message translates to:
-  /// **'Flux injoignable : vérifiez l\'adresse et le réseau.'**
-  String get fluxTestOffline;
-
-  /// No description provided for @fluxTestInvalid.
-  ///
-  /// In fr, this message translates to:
-  /// **'Réponse inattendue du flux : vérifiez l\'adresse.'**
-  String get fluxTestInvalid;
-
-  /// No description provided for @fluxUrlInvalid.
-  ///
-  /// In fr, this message translates to:
-  /// **'Adresse invalide : elle doit commencer par https://'**
-  String get fluxUrlInvalid;
-
-  /// No description provided for @fluxSaved.
-  ///
-  /// In fr, this message translates to:
-  /// **'Connexion enregistrée.'**
-  String get fluxSaved;
-
-  /// No description provided for @fluxForgotten.
-  ///
-  /// In fr, this message translates to:
-  /// **'Connexion oubliée : l\'identification par photo attend une nouvelle connexion.'**
-  String get fluxForgotten;
 
   /// No description provided for @pricesAllTitle.
   ///
@@ -5119,20 +4987,176 @@ abstract class AppLocalizations {
   /// No description provided for @feedbackNotConnected.
   ///
   /// In fr, this message translates to:
-  /// **'Flux non connecté : le message n\'est pas parti. Renseignez l\'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.'**
+  /// **'Aucun compte connecté : le message n\'est pas parti. Connectez-vous, puis renvoyez-le.'**
   String get feedbackNotConnected;
 
   /// No description provided for @feedbackAuth.
   ///
   /// In fr, this message translates to:
-  /// **'Le flux refuse la clé de l\'application. Vérifiez-la dans les paramètres.'**
+  /// **'Votre session a expiré : reconnectez-vous dans les Paramètres, puis renvoyez le message.'**
   String get feedbackAuth;
 
   /// No description provided for @feedbackPrivacy.
   ///
   /// In fr, this message translates to:
-  /// **'Votre adresse sert seulement à vous répondre. Elle n\'est pas enregistrée sur le téléphone.'**
+  /// **'Votre adresse sert seulement à vous répondre. Elle part avec le message, l\'application ne la garde que pour votre compte.'**
   String get feedbackPrivacy;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get settingsAccount;
+
+  /// No description provided for @accountTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion'**
+  String get accountTitle;
+
+  /// No description provided for @accountHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'identification par photo, les prix et la remontée d\'information demandent un compte. Saisissez votre adresse : vous recevrez un code à six chiffres par mail. La cave fonctionne sans compte.'**
+  String get accountHint;
+
+  /// No description provided for @accountEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse mail'**
+  String get accountEmail;
+
+  /// No description provided for @accountEmailInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse mail invalide (exemple : prenom.nom@exemple.fr).'**
+  String get accountEmailInvalid;
+
+  /// No description provided for @accountRequestCode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir un code'**
+  String get accountRequestCode;
+
+  /// No description provided for @accountCodeSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code envoyé à {email}. Il est valable 10 minutes.'**
+  String accountCodeSent(String email);
+
+  /// No description provided for @accountCode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code reçu par mail'**
+  String get accountCode;
+
+  /// No description provided for @accountCodeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Six chiffres. Pensez à regarder les indésirables.'**
+  String get accountCodeHelp;
+
+  /// No description provided for @accountCodeInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code compte six chiffres.'**
+  String get accountCodeInvalid;
+
+  /// No description provided for @accountSignIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter'**
+  String get accountSignIn;
+
+  /// No description provided for @accountSignInAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me connecter'**
+  String get accountSignInAction;
+
+  /// No description provided for @accountChangeEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer d\'adresse'**
+  String get accountChangeEmail;
+
+  /// No description provided for @accountSignedInAs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connecté : {email}'**
+  String accountSignedInAs(String email);
+
+  /// No description provided for @accountStatusLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Formule : {status}'**
+  String accountStatusLine(String status);
+
+  /// No description provided for @accountStatusFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'gratuite'**
+  String get accountStatusFree;
+
+  /// No description provided for @accountStatusSubscriber.
+  ///
+  /// In fr, this message translates to:
+  /// **'abonnement'**
+  String get accountStatusSubscriber;
+
+  /// No description provided for @accountStatusBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'compte suspendu'**
+  String get accountStatusBlocked;
+
+  /// No description provided for @accountQuotaLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci : {enrichments, plural, =0{aucune identification} =1{1 identification} other{{enrichments} identifications}} et {prices, plural, =0{aucun relevé de prix} =1{1 relevé de prix} other{{prices} relevés de prix}} restants.'**
+  String accountQuotaLine(int enrichments, int prices);
+
+  /// No description provided for @accountRefresh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualiser'**
+  String get accountRefresh;
+
+  /// No description provided for @accountRefreshed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte à jour.'**
+  String get accountRefreshed;
+
+  /// No description provided for @accountSignOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get accountSignOut;
+
+  /// No description provided for @accountSignedOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecté : l\'identification par photo attend une nouvelle connexion.'**
+  String get accountSignedOut;
+
+  /// No description provided for @accountOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de réseau : réessayez une fois connecté.'**
+  String get accountOffline;
+
+  /// No description provided for @accountInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse inattendue du service : réessayez plus tard.'**
+  String get accountInvalid;
+
+  /// No description provided for @feedbackSignInNeeded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connectez-vous à votre compte pour envoyer une remontée.'**
+  String get feedbackSignInNeeded;
 }
 
 class _AppLocalizationsDelegate

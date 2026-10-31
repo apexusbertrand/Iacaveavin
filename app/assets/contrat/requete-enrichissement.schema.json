@@ -5,15 +5,28 @@
   "description": "Envoyé par l'app au flux n8n. Les photos sont déjà compressées sur le téléphone (1 500 px côté long, JPEG qualité 80).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version_contrat", "request_id", "photos", "langue", "date_client"],
+  "required": [
+    "version_contrat",
+    "request_id",
+    "photos",
+    "langue",
+    "date_client"
+  ],
   "properties": {
-    "version_contrat": { "type": "string", "pattern": "^1\\.[0-9]+$" },
+    "version_contrat": {
+      "type": "string",
+      "pattern": "^2\\.[0-9]+$"
+    },
     "request_id": {
       "type": "string",
       "format": "uuid",
       "description": "Généré par l'app. Un second envoi avec le même request_id renvoie le job existant (idempotence)."
     },
-    "fiche_id": { "type": "string", "format": "uuid", "description": "Fiche locale à enrichir, renvoyée telle quelle." },
+    "fiche_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Fiche locale à enrichir, renvoyée telle quelle."
+    },
     "photos": {
       "type": "array",
       "minItems": 1,
@@ -21,11 +34,33 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["index", "type_photo", "mime", "base64"],
+        "required": [
+          "index",
+          "type_photo",
+          "mime",
+          "base64"
+        ],
         "properties": {
-          "index": { "type": "integer", "minimum": 0, "maximum": 3 },
-          "type_photo": { "enum": ["etiquette", "contre_etiquette", "capsule", "collerette", "autre"] },
-          "mime": { "enum": ["image/jpeg", "image/webp"] },
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "type_photo": {
+            "enum": [
+              "etiquette",
+              "contre_etiquette",
+              "capsule",
+              "collerette",
+              "autre"
+            ]
+          },
+          "mime": {
+            "enum": [
+              "image/jpeg",
+              "image/webp"
+            ]
+          },
           "base64": {
             "type": "string",
             "contentEncoding": "base64",
@@ -40,16 +75,38 @@
       "additionalProperties": false,
       "description": "Ce que l'utilisateur a déjà saisi ou scanné. Facultatif.",
       "properties": {
-        "ean": { "type": "string", "pattern": "^[0-9]{13}$" },
-        "texte_libre": { "type": "string", "maxLength": 200 },
-        "millesime": { "oneOf": [{ "type": "integer", "minimum": 1900, "maximum": 2100 }, { "const": "NM" }] },
-        "format_cl": { "type": "number", "exclusiveMinimum": 0 }
+        "ean": {
+          "type": "string",
+          "pattern": "^[0-9]{13}$"
+        },
+        "texte_libre": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "millesime": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 2100
+            },
+            {
+              "const": "NM"
+            }
+          ]
+        },
+        "format_cl": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
       }
     },
     "champs_verrouilles": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Champs saisis à la main que l'agent ne doit pas proposer de modifier (noms du contrat)."
     },
     "signalements": {
@@ -59,10 +116,22 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["champ", "valeur"],
+        "required": [
+          "champ",
+          "valeur"
+        ],
         "properties": {
-          "champ": { "type": "string", "pattern": "^[a-z_]{1,40}$", "description": "Nom du champ dans le contrat, comme champs_verrouilles." },
-          "valeur": { "type": "string", "minLength": 1, "maxLength": 500, "description": "Valeur signalée, telle qu'affichée." }
+          "champ": {
+            "type": "string",
+            "pattern": "^[a-z_]{1,40}$",
+            "description": "Nom du champ dans le contrat, comme champs_verrouilles."
+          },
+          "valeur": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Valeur signalée, telle qu'affichée."
+          }
         }
       }
     },
@@ -71,7 +140,12 @@
       "default": true,
       "description": "Lancer aussi la recherche de prix dans le même job."
     },
-    "langue": { "const": "fr" },
-    "date_client": { "type": "string", "format": "date" }
+    "langue": {
+      "const": "fr"
+    },
+    "date_client": {
+      "type": "string",
+      "format": "date"
+    }
   }
 }

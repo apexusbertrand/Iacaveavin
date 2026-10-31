@@ -671,8 +671,6 @@
   "settingsNotificationsHint": "Apogée et fin d'enrichissement (lots 2a et 4).",
   "settingsAutoPrices": "Rafraîchissement mensuel des prix",
   "settingsAutoPricesHint": "Une fois par mois, les fiches sans relevé récent sont mises en file. Désactivé par défaut.",
-  "settingsConnection": "Connexion au flux d'enrichissement",
-  "settingsConnectionHint": "Adresse de l'instance n8n et clé secrète partagée avec le flux.",
   "settingsPhotoSpace": "Espace occupé par les photos",
   "photoSpaceValue": "{size}",
   "@photoSpaceValue": {
@@ -903,7 +901,7 @@
   "stepControles": "Contrôles",
   "stepTermine": "Terminé",
   "enrichOffline": "Hors ligne : la fiche reste « à enrichir », l'envoi partira au retour du réseau.",
-  "enrichNotConnected": "Flux non connecté : la fiche reste « à enrichir ». Renseignez l'adresse et la clé du flux dans les Paramètres, l'envoi partira ensuite.",
+  "enrichNotConnected": "Aucun compte connecté : la fiche reste « à enrichir ». Connectez-vous pour lancer l'identification, l'envoi partira ensuite.",
   "enrichReady": "Propositions prêtes",
   "labelPreviewTitle": "Lu sur l'étiquette, en attendant",
   "labelPreviewLine": "{field} : {value}",
@@ -1091,40 +1089,6 @@
   "reEnrichNoPhoto": "Aucune photo sur cette fiche : ré-enrichissement impossible.",
   "unlockField": "Déverrouiller",
   "unlocked": "Champ déverrouillé : il pourra être proposé à nouveau.",
-  "fluxUrl": "Adresse du flux",
-  "fluxUrlHint": "https://votre-instance.app.n8n.cloud",
-  "fluxKey": "Clé secrète",
-  "fluxKeyStored": "Clé enregistrée dans le stockage sécurisé du téléphone",
-  "fluxKeyMissing": "Aucune clé enregistrée",
-  "fluxKeyReplace": "Nouvelle clé (remplace l'ancienne)",
-  "fluxSave": "Enregistrer",
-  "fluxForget": "Oublier la connexion",
-  "fluxTest": "Tester la connexion",
-  "fluxTesting": "Test en cours…",
-  "fluxUsingReal": "Vrai flux utilisé pour les enrichissements et les prix.",
-  "fluxUsingFake": "Pas de connexion enregistrée : l'identification par photo et les prix attendent la connexion au flux. Le reste de l'application fonctionne.",
-  "fluxTestOk": "Connexion réussie : flux joignable, clé acceptée (contrat {version}).",
-  "@fluxTestOk": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "fluxTestNotReady": "Flux joignable, mais sa clé n'est pas encore configurée côté n8n.",
-  "fluxTestBadKey": "Flux joignable, mais la clé est refusée : {message}",
-  "@fluxTestBadKey": {
-    "placeholders": {
-      "message": {
-        "type": "String"
-      }
-    }
-  },
-  "fluxTestOffline": "Flux injoignable : vérifiez l'adresse et le réseau.",
-  "fluxTestInvalid": "Réponse inattendue du flux : vérifiez l'adresse.",
-  "fluxUrlInvalid": "Adresse invalide : elle doit commencer par https://",
-  "fluxSaved": "Connexion enregistrée.",
-  "fluxForgotten": "Connexion oubliée : l'identification par photo attend une nouvelle connexion.",
   "pricesAllTitle": "Relever les prix de toute la cave",
   "pricesAllHint": "Fiches sans relevé depuis 24 heures.",
   "pricesAllConfirm": "{count, plural, =0{Aucune fiche à relever : toutes ont un relevé de moins de 24 heures.} =1{1 relevé sera envoyé au flux.} other{{count} relevés seront envoyés au flux.}}",
@@ -1818,7 +1782,64 @@
     }
   },
   "feedbackOffline": "Pas de réseau. Votre message reste ici, réessayez une fois connecté.",
-  "feedbackNotConnected": "Flux non connecté : le message n'est pas parti. Renseignez l'adresse et la clé du flux dans les Paramètres, puis renvoyez-le.",
-  "feedbackAuth": "Le flux refuse la clé de l'application. Vérifiez-la dans les paramètres.",
-  "feedbackPrivacy": "Votre adresse sert seulement à vous répondre. Elle n'est pas enregistrée sur le téléphone."
+  "feedbackNotConnected": "Aucun compte connecté : le message n'est pas parti. Connectez-vous, puis renvoyez-le.",
+  "feedbackAuth": "Votre session a expiré : reconnectez-vous dans les Paramètres, puis renvoyez le message.",
+  "feedbackPrivacy": "Votre adresse sert seulement à vous répondre. Elle part avec le message, l'application ne la garde que pour votre compte.",
+  "settingsAccount": "Compte",
+  "accountTitle": "Connexion",
+  "accountHint": "L'identification par photo, les prix et la remontée d'information demandent un compte. Saisissez votre adresse : vous recevrez un code à six chiffres par mail. La cave fonctionne sans compte.",
+  "accountEmail": "Adresse mail",
+  "accountEmailInvalid": "Adresse mail invalide (exemple : prenom.nom@exemple.fr).",
+  "accountRequestCode": "Recevoir un code",
+  "accountCodeSent": "Code envoyé à {email}. Il est valable 10 minutes.",
+  "@accountCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "accountCode": "Code reçu par mail",
+  "accountCodeHelp": "Six chiffres. Pensez à regarder les indésirables.",
+  "accountCodeInvalid": "Le code compte six chiffres.",
+  "accountSignIn": "Se connecter",
+  "accountSignInAction": "Me connecter",
+  "accountChangeEmail": "Changer d'adresse",
+  "accountSignedInAs": "Connecté : {email}",
+  "@accountSignedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "accountStatusLine": "Formule : {status}",
+  "@accountStatusLine": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "accountStatusFree": "gratuite",
+  "accountStatusSubscriber": "abonnement",
+  "accountStatusBlocked": "compte suspendu",
+  "accountQuotaLine": "Ce mois-ci : {enrichments, plural, =0{aucune identification} =1{1 identification} other{{enrichments} identifications}} et {prices, plural, =0{aucun relevé de prix} =1{1 relevé de prix} other{{prices} relevés de prix}} restants.",
+  "@accountQuotaLine": {
+    "placeholders": {
+      "enrichments": {
+        "type": "int"
+      },
+      "prices": {
+        "type": "int"
+      }
+    }
+  },
+  "accountRefresh": "Actualiser",
+  "accountRefreshed": "Compte à jour.",
+  "accountSignOut": "Se déconnecter",
+  "accountSignedOut": "Déconnecté : l'identification par photo attend une nouvelle connexion.",
+  "accountOffline": "Pas de réseau : réessayez une fois connecté.",
+  "accountInvalid": "Réponse inattendue du service : réessayez plus tard.",
+  "feedbackSignInNeeded": "Connectez-vous à votre compte pour envoyer une remontée."
 }
