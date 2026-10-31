@@ -119,6 +119,13 @@ class AppPalette extends ThemeExtension<AppPalette> {
   };
 }
 
+/// Polices emoji de secours (Android, iOS) pour les drapeaux.
+const emojiFallback = [
+  'Noto Color Emoji',
+  'NotoColorEmoji',
+  'Apple Color Emoji',
+];
+
 abstract final class AppTheme {
   static ThemeData light() => _build(
     brightness: Brightness.light,
@@ -167,7 +174,7 @@ abstract final class AppTheme {
       outlineVariant: palette.separator,
     );
 
-    final textTheme = TextTheme(
+    final textStyles = TextTheme(
       titleLarge: TextStyle(
         fontSize: FontSizeTokens.titre,
         fontWeight: FontWeightTokens.gras,
@@ -203,13 +210,16 @@ abstract final class AppTheme {
         color: palette.text,
       ),
     );
+    // Drapeaux des pays (emoji) : police de secours nommée, la police système
+    // reste celle du téléphone.
+    final textTheme = textStyles.apply(fontFamilyFallback: emojiFallback);
 
     final buttonShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(RadiusTokens.bouton),
     );
     const minSize = Size(minTouchTarget, minTouchTarget);
 
-    return ThemeData(
+    final theme = ThemeData(
       useMaterial3: true,
       brightness: brightness,
       colorScheme: scheme,
@@ -220,7 +230,6 @@ abstract final class AppTheme {
         backgroundColor: palette.appBar,
         foregroundColor: palette.onAppBar,
         iconTheme: IconThemeData(color: palette.onAppBar),
-        titleTextStyle: textTheme.titleLarge?.copyWith(color: palette.onAppBar),
       ),
       cardTheme: CardThemeData(
         color: palette.card,
@@ -270,6 +279,15 @@ abstract final class AppTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: palette.appBar,
         contentTextStyle: textTheme.bodyLarge?.copyWith(
+          color: palette.onAppBar,
+        ),
+      ),
+    );
+    // Titre de la barre : style du thème complet (police comprise), pas le
+    // style brut qui n'a pas de police nommée.
+    return theme.copyWith(
+      appBarTheme: theme.appBarTheme.copyWith(
+        titleTextStyle: theme.textTheme.titleLarge?.copyWith(
           color: palette.onAppBar,
         ),
       ),

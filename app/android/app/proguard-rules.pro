@@ -5,3 +5,18 @@
 -dontwarn com.google.mlkit.vision.text.devanagari.**
 -dontwarn com.google.mlkit.vision.text.japanese.**
 -dontwarn com.google.mlkit.vision.text.korean.**
+
+# Plugins appelés depuis Dart par JNI (bindings jnigen : shared_preferences,
+# path_provider...). R8 ne voit pas ces appels et retirait les méthodes :
+# la v1.0.0 restait figée au démarrage (NoSuchMethodError sur
+# SharedPreferencesApiRegistrar.getAll, T125).
+-keep class io.flutter.plugins.** { *; }
+-keep class com.github.dart_lang.jni.** { *; }
+# Les signatures appelées par JNI citent des types Kotlin (méthodes suspend :
+# kotlin.coroutines.Continuation, résultat kotlin.Result). Renommés par R8,
+# la méthode n'est plus trouvée même si sa classe est gardée.
+-keep class kotlin.coroutines.** { *; }
+-keep class kotlin.Result { *; }
+-keep class kotlin.Result$* { *; }
+-keep class kotlin.Unit { *; }
+-keep class kotlin.jvm.functions.** { *; }
