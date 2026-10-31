@@ -12,3 +12,11 @@
 # SharedPreferencesApiRegistrar.getAll, T125).
 -keep class io.flutter.plugins.** { *; }
 -keep class com.github.dart_lang.jni.** { *; }
+# Les signatures appelées par JNI citent des types Kotlin (méthodes suspend :
+# kotlin.coroutines.Continuation, résultat kotlin.Result). Renommés par R8,
+# la méthode n'est plus trouvée même si sa classe est gardée.
+-keep class kotlin.coroutines.** { *; }
+-keep class kotlin.Result { *; }
+-keep class kotlin.Result$* { *; }
+-keep class kotlin.Unit { *; }
+-keep class kotlin.jvm.functions.** { *; }
