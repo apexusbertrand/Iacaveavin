@@ -197,13 +197,28 @@ Une ligne par décision, la plus récente en bas. Une décision ne s'efface pas 
 | T129 | La remontée d'information exige un compte (5 par jour et par compte) ; l'adresse du compte est proposée comme adresse de contact. Codes de connexion purgés après 24 h, usages après 24 mois. Flux IA_CAVE_Comptes et IA_CAVE_Remontee réglés comme les autres : aucune donnée gardée pour les exécutions réussies (une exécution du flux Comptes contient la clé de session renvoyée), flux d'erreurs IA_CAVE_Erreurs, fuseau Europe/Paris, 60 s au plus | choix de Bertrand (remontée avec compte) ; réglages alignés sur IA_CAVE_Agent |
 | T130 | Flux 0.5.0 publiés le 2026-10-31 et vérifiés par de vrais appels : code reçu par mail, session ouverte, état du compte signé, relevé de prix signé par le compte (usage compté, trace écrite), suivi du job, déconnexion qui révoque la clé, /sante 0.5.0 et 2.0. Écarts signalés : à la création d'un job, le quota renvoyé est celui d'avant la consommation (il est à jour au suivi suivant) ; les réponses de job gardent `version_contrat: "1.1"` (T106). L'app n'est pas compilée (demande de Bertrand) : les testeurs en 1.0.1 n'ont plus d'identification tant que la version 2 n'est pas installée | demande de Bertrand : « sans compiler l'application » |
 
+## Réponses de Bertrand du 2026-11-01
+
+| Id | Réponse | Suite |
+| --- | --- | --- |
+| V1 | T1 à T125 validées en bloc, telles qu'appliquées et testées. Une remarque ultérieure ouvrira une nouvelle décision | aucune |
+| V2 | Q2 : règles de garde par défaut validées | prochaine session : `a_valider: false` dans specs/regles-garde.yaml, copie embarquée de l'app, test PAR-06 (le libellé « valeurs par défaut à valider » disparaît) |
+| V3 | T126 validée : connexion par code mail seul. Pas de connexion Google pour l'instant | à rouvrir si des utilisateurs la demandent |
+| V4 | T127 validée : quotas gratuit 10 identifications et 10 relevés de prix par mois, abonné 500 et 500 | aucune |
+| V5 | T128 validée : base des vins traités gardée sans limite, effacement sur demande | aucune |
+| V6 | Suppression du compte : bouton « Supprimer mon compte » dans l'écran Compte, sans page web pour l'instant. Écart signalé : le formulaire Sécurité des données de Google Play demande aussi un lien web de demande de suppression ; sans lui, la soumission peut être refusée | prochaine session : bouton (Q7) |
+| V7 | Q6 : abonnement mensuel et annuel, par Google Play Billing, désabonnement géré par Google Play. Prix décidé plus tard, à la création des produits dans la Play Console | prochaine session : boutons de souscription et de désabonnement (Q6) |
+| V8 | Fiche Play : contact apexus.claude@gmail.com seul, pas de site web. Écart signalé : Google exige quand même une URL publique pour la politique de confidentialité ; il faudra la publier quelque part (page GitHub Pages ou Google Sites par exemple) | à trancher avant la soumission (Q8) |
+
 ## À compléter
 
 | Id | Sujet | Quand |
 | --- | --- | --- |
 | Q1 | Valeurs exactes des couleurs Apexus extraites du logo | lot 0 |
-| Q2 | Validation des règles de garde par défaut (specs/regles-garde.yaml) | avant la fin du lot 1 |
+| ~~Q2~~ | ~~Validation des règles de garde par défaut (specs/regles-garde.yaml)~~ validées le 2026-11-01 (V2) | soldé |
 | Q3 | Vérification des domaines candidats de n8n/sources-autorisees.yaml : robots.txt lus le 2026-10-21 (constats dans le fichier), CGU à lire par Bertrand avant activation | lot 2b |
 | Q4 | Coût moyen d'un enrichissement en appels au modèle IA. Mesure sans recherche web (2026-10-21) : 2 appels (lecture d'étiquette, agent), environ 8 000 jetons pour l'agent, 17 s ; avec cache du vin : 1 appel, 5 s. Avec la recherche intégrée (T85), un vin mesuré le 2026-10-28 : agent Sonnet 4.6 49 s, 58 000 jetons lus, 2 900 écrits, 3 recherches ; jeu d'essai complet à faire | fin du lot 2b |
-| Q5 | Publier ou non sur Google Play, compte personnel ou organisation | fin du lot 5 |
-| Q6 | À faire, demandé par Bertrand le 2026-11-01 : bouton de souscription à l'abonnement et bouton de désabonnement dans l'écran Compte (CPT-04). Le statut `abonne` et ses quotas existent déjà côté flux (T127) ; reste à choisir le paiement (Google Play Billing pour Android, achats intégrés Apple pour iOS), le prix, et la vérification du reçu côté n8n qui pose ou retire le statut. Voir aussi la suppression du compte exigée par Google (T130) | prochaine session de développement |
+| ~~Q5~~ | ~~Publier ou non sur Google Play, compte personnel ou organisation~~ publication décidée (T123), compte personnel (test fermé de 14 jours, docs/09) | soldé |
+| Q6 | À faire, demandé par Bertrand le 2026-11-01 : bouton de souscription à l'abonnement et bouton de désabonnement dans l'écran Compte (CPT-04). Formules mensuelle et annuelle par Google Play Billing, prix fixé plus tard dans la Play Console (V7). Le statut `abonne` et ses quotas existent déjà côté flux (T127) ; reste à choisir le paiement (Google Play Billing pour Android, achats intégrés Apple pour iOS), le prix, et la vérification du reçu côté n8n qui pose ou retire le statut. Voir aussi la suppression du compte exigée par Google (T130) | prochaine session de développement |
+| Q7 | À faire : bouton « Supprimer mon compte » dans l'écran Compte (V6). Le flux traite la demande : clé révoquée, compte et usages effacés, lignes de la base des vins traités détachées du compte. Confirmation avant envoi. Nouveau point d'entrée signé au contrat 2.1 | prochaine session de développement |
+| Q8 | URL publique de la politique de confidentialité, exigée par Google Play, sans site web Apexus (V8) : choisir l'hébergement | avant la soumission sur Google Play |

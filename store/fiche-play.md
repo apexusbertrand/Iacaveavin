@@ -12,9 +12,9 @@ Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T1
 | Application ou jeu | Application |
 | Gratuite ou payante | Gratuite |
 | Catégorie | Alimentation et boissons |
-| Adresse e-mail de contact | apexus.claude@gmail.com (à confirmer par Bertrand) |
-| Site web | https://apexus.fr (à confirmer) |
-| Politique de confidentialité | URL de la page publiée à partir de politique-confidentialite.html, par exemple https://apexus.fr/iacaveavin/confidentialite |
+| Adresse e-mail de contact | apexus.claude@gmail.com (confirmé le 2026-11-01, V8) |
+| Site web | aucun (choix de Bertrand du 2026-11-01, V8) |
+| Politique de confidentialité | URL publique obligatoire : page publiée à partir de politique-confidentialite.html, hébergement à choisir (Q8) |
 
 ## Description courte (80 caractères max, ici 72)
 
@@ -95,7 +95,7 @@ L'identification par photo et le relevé des prix demandent un compte gratuit : 
 
 ~~Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé.~~ Réglé par les comptes (T126) : l'examinateur se connecte avec sa propre adresse.
 
-Point à trancher par Bertrand avant la soumission : Google exige, pour une app qui crée des comptes, un moyen de demander la suppression du compte dans l'app et par une page web (rubrique « Suppression des données »). La politique de confidentialité indique l'adresse apexus.claude@gmail.com ; il faut au moins une page web publiée qui l'explique, et de préférence un bouton « Supprimer mon compte » dans l'app (non fait).
+Suppression du compte : choix de Bertrand du 2026-11-01, bouton « Supprimer mon compte » dans l'app, à faire (Q7). Google demande aussi un lien web dans la rubrique « Suppression des données » ; la page de la politique de confidentialité, une fois publiée (Q8), peut servir de lien si elle explique la démarche.
 
 ## Annonces
 
