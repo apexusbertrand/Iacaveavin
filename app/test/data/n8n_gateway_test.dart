@@ -216,7 +216,7 @@ void main() {
         expect(sent.headers.containsKey('x-iacav-signature'), isFalse);
         final body = jsonDecode(sent.body) as Map<String, dynamic>;
         expect(body['email'], 'prenom.nom@exemple.fr');
-        expect(body['version_contrat'], '2.0');
+        expect(body['version_contrat'], '2.1');
         expect(body['installation'], _installation);
         expect(r.status, 'code_envoye');
         expect(r.codeValidSeconds, 600);
@@ -295,6 +295,20 @@ void main() {
       expect(s.requests.last.headers['x-iacav-compte'], _account);
       expect(out.status, 'deconnecte');
     });
+
+    test(
+      'CPT-05 suppression signée sur /compte/suppression (contrat 2.1)',
+      () async {
+        s.answer = (m, p, b) =>
+            (200, example('reponse-compte-suppression.json'));
+        final r = await gatewayFor(s).deleteAccount();
+        expect(s.requests.last.method, 'POST');
+        expect(s.requests.last.path, '/webhook/iacave/compte/suppression');
+        expect(s.requests.last.headers['x-iacav-compte'], _account);
+        expect(r.status, 'supprime');
+        expect(r.account, isNull);
+      },
+    );
 
     test('RET-01 remontée signée sur /remontee, quota lu', () async {
       const request = FeedbackRequest(

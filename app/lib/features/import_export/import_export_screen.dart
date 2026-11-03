@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -142,8 +143,12 @@ class _ImportExportScreenState extends ConsumerState<ImportExportScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.navImportExport)),
+      appBar: AppBar(
+        title: Text(l.navImportExport),
+        actions: const [AccountMenuButton()],
+      ),
       drawer: const AppDrawer(current: AppDestination.importExport),
+      endDrawer: const AccountDrawer(),
       body: ListView(
         padding: const EdgeInsets.only(bottom: SpacingTokens.xxl),
         children: [

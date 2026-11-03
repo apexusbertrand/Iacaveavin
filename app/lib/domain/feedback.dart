@@ -74,7 +74,7 @@ class FeedbackRequest {
   final String? appVersion;
 
   Map<String, Object?> toJson() => {
-    'version_contrat': '2.0',
+    'version_contrat': '2.1',
     'request_id': requestId,
     'titre': title.trim(),
     'commentaire': comment.trim(),

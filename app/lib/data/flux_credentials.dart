@@ -178,12 +178,25 @@ class AccountController extends AsyncNotifier<AccountSession?> {
     return r;
   }
 
-  /// CPT-04 : déconnexion. La clé est révoquée côté flux si le réseau le
-  /// permet, et toujours effacée du téléphone.
+  /// CPT-04 : déconnexion. La session est effacée du téléphone tout de
+  /// suite, puis la clé est révoquée côté flux si le réseau le permet.
   Future<void> signOut() async {
     final session = state.value;
-    if (session != null) await _call((g) => g.signOut(), session);
     await _clear();
+    if (session != null) await _call((g) => g.signOut(), session);
+  }
+
+  /// CPT-05 : suppression du compte à la demande. La session locale n'est
+  /// effacée que si le flux confirme : hors ligne, rien ne change.
+  Future<AccountOutcome> deleteAccount() async {
+    final session = state.value;
+    if (session == null) return const AccountInvalid();
+    final r = await _call((g) => g.deleteAccount(), session);
+    if (r case AccountAnswered(:final reply)
+        when reply.status == 'supprime' || reply.sessionRejected) {
+      await _clear();
+    }
+    return r;
   }
 
   Future<void> _save(AccountSession s) async {

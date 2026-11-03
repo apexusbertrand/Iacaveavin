@@ -6,7 +6,8 @@ import '../../core/theme/design_tokens.g.dart';
 import 'account_section.dart';
 
 /// CPT-01 : écran de connexion ouvert depuis l'identification ou la remontée
-/// quand aucun compte n'est connecté. Il se referme dès la connexion.
+/// quand aucun compte n'est connecté. Il se referme dès la connexion. Même
+/// contenu que le menu de compte (CPT-07).
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
 

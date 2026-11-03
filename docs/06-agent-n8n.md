@@ -18,11 +18,12 @@ Décision D4 : un nouveau flux dans l'instance n8n actuelle, isolé des flux exi
 | /webhook/iacave/enrichissement | POST | requete-enrichissement.schema.json | reponse-job.schema.json, statut en_attente (202) ou termine si cache |
 | /webhook/iacave/prix | POST | requete-prix.schema.json | idem |
 | /webhook/iacave/jobs?job_id=… | GET | aucun (signature sur le chemin avec la requête) | reponse-job.schema.json, 404 si job inconnu |
-| /webhook/iacave/sante | GET | aucun | `{"version_flux": "0.5.0", "version_contrat": "2.0", "ok": true}` |
+| /webhook/iacave/sante | GET | aucun | `{"version_flux": "0.5.0", "version_contrat": "2.1", "ok": true}` |
 | /webhook/iacave/compte/code | POST, non signé | requete-compte-code.schema.json | reponse-compte.schema.json, code_envoye (200), refus (400, 429), mail non parti (502) |
 | /webhook/iacave/compte/session | POST, non signé | requete-compte-session.schema.json | reponse-compte.schema.json, connecte avec la clé de session (200), code faux ou expiré (401) |
 | /webhook/iacave/compte | GET | aucun (signé) | reponse-compte.schema.json, ok : statut et quotas du mois |
 | /webhook/iacave/compte/deconnexion | POST | `{}` (signé) | reponse-compte.schema.json, deconnecte : clé révoquée |
+| /webhook/iacave/compte/suppression | POST | `{}` (signé, contrat 2.1) | reponse-compte.schema.json, supprime : compte anonymisé (CPT-05) |
 | /webhook/iacave/remontee | POST | requete-remontee.schema.json | reponse-remontee.schema.json : envoye (200), refus (400, 401, 429), mail non parti (502) |
 
 POST /enrichissement et POST /prix partagent les nœuds de contrôle d'entrée ; le type vient du webhook qui reçoit la requête (T65). Le webhook répond immédiatement avec le job_id (nœud Respond to Webhook), puis le traitement continue. L'app interroge /jobs toutes les 3 secondes pendant 30 secondes, puis toutes les 10 secondes, jusqu'à 3 minutes.
@@ -43,7 +44,7 @@ Tables n8n (Data Tables) si la version de l'instance les propose, sinon une base
 | iacave_quotas | mois, enrichissements, prix, crédits de recherche consommés, toutes installations (suivi du coût) | 24 mois |
 | iacave_signalements | job, champ, valeur signalée comme fausse, date | 24 mois |
 | iacave_remontees | request_id, installation, compte, jour, titre, adresse de contact, nom de la pièce jointe (ni le commentaire ni le fichier) | 30 jours (sert au plafond du jour) |
-| iacave_comptes | compte_id pseudonyme, adresse mail, statut (gratuit, abonne, bloque), clé de session et son expiration, dates de création et de dernière connexion, installation | tant que le compte existe ; suppression sur demande à apexus.claude@gmail.com |
+| iacave_comptes | compte_id pseudonyme, adresse mail, statut (gratuit, abonne, bloque), clé de session et son expiration, dates de création et de dernière connexion, installation | tant que le compte existe ; « Supprimer mon compte » (CPT-05) l'anonymise : adresse et clé effacées, statut supprime |
 | iacave_codes | adresse, empreinte SHA-256 du code (jamais le code), expiration, essais, envois de l'heure | 24 heures |
 | iacave_usages | compte, mois, enrichissements et prix consommés | 24 mois |
 | iacave_vins_traites | job, compte pseudonyme (pas l'adresse), type, statut, jour, résultat renvoyé à l'app (fiche, notes, prix, sources ; jamais de photo), version du flux | sans limite : base des vins traités (T128) |

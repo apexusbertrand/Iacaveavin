@@ -728,6 +728,26 @@ class CellarRepository {
     return id;
   }
 
+  /// CMP-10 : correction d'une dégustation (date, note, plat, commentaire).
+  /// Le mouvement d'ouverture lié ne change pas : le stock non plus.
+  Future<void> updateTasting({
+    required String id,
+    required String date,
+    double? score,
+    String? comment,
+    String? dish,
+  }) async {
+    await (_db.update(_db.tastings)..where((t) => t.id.equals(id))).write(
+      TastingsCompanion(
+        dateDegustation: Value(date),
+        notePerso: Value(score),
+        commentaire: Value(_blank(comment)),
+        plat: Value(_blank(dish)),
+        updatedAt: Value(_now),
+      ),
+    );
+  }
+
   /// Nouveau lot sur une fiche existante (réapprovisionnement, STK-06).
   Future<String> addLot(String wineId, LotDraft lot) async {
     final f = await (_db.select(

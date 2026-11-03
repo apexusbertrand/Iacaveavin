@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/app_info.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
@@ -18,8 +19,12 @@ class AboutScreen extends StatelessWidget {
       color: context.palette.textSecondary,
     );
     return Scaffold(
-      appBar: AppBar(title: Text(l.navAbout)),
+      appBar: AppBar(
+        title: Text(l.navAbout),
+        actions: const [AccountMenuButton()],
+      ),
       drawer: const AppDrawer(current: AppDestination.about),
+      endDrawer: const AccountDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(SpacingTokens.l),
         children: [

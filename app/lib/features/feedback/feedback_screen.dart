@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/app_info.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
@@ -172,8 +173,12 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
       if (email != null && _email.text.trim().isEmpty) _email.text = email;
     });
     return Scaffold(
-      appBar: AppBar(title: Text(l.navFeedback)),
+      appBar: AppBar(
+        title: Text(l.navFeedback),
+        actions: const [AccountMenuButton()],
+      ),
       drawer: const AppDrawer(current: AppDestination.feedback),
+      endDrawer: const AccountDrawer(),
       body: Form(
         key: _form,
         child: ListView(

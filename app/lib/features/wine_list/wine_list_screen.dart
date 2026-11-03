@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
@@ -122,6 +123,7 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         drawer: selecting
             ? null
             : const AppDrawer(current: AppDestination.myWines),
+        endDrawer: selecting ? null : const AccountDrawer(),
         floatingActionButton: selecting ? null : _fabs(l),
         body: Column(
           children: [
@@ -353,6 +355,7 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
               .read(settingsProvider.notifier)
               .update((s) => s.copyWith(compactView: !s.compactView)),
         ),
+        const AccountMenuButton(),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
@@ -33,9 +34,11 @@ class LocationsScreen extends ConsumerWidget {
             icon: const Icon(Icons.fact_check_outlined),
             onPressed: () => context.push('/inventaire'),
           ),
+          const AccountMenuButton(),
         ],
       ),
       drawer: const AppDrawer(current: AppDestination.locations),
+      endDrawer: const AccountDrawer(),
       floatingActionButton: FloatingActionButton(
         tooltip: l.addLocation,
         onPressed: () => editLocation(context, ref),

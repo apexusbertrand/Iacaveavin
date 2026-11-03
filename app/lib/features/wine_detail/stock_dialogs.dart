@@ -163,7 +163,7 @@ Future<bool> openBottles(
       await tastingDialog(
         context,
         ref,
-        wine,
+        wine.id,
         movementId: action.movementIds.single,
       );
     }
@@ -653,75 +653,117 @@ class _LotFormState extends ConsumerState<LotForm> {
 Future<void> tastingDialog(
   BuildContext context,
   WidgetRef ref,
-  WineDetail wine, {
+  String wineId, {
   String? movementId,
+  TastingView? existing,
 }) async {
   final l = AppLocalizations.of(context);
   final scale = ref.read(settingsProvider).personalScale;
-  final score = TextEditingController();
-  final dish = TextEditingController();
-  final comment = TextEditingController();
+  String fmt(double v) =>
+      v == v.roundToDouble() ? v.toInt().toString() : '$v'.replaceAll('.', ',');
+  final score = TextEditingController(
+    text: existing?.score == null ? '' : fmt(existing!.score!),
+  );
+  final dish = TextEditingController(text: existing?.dish ?? '');
+  final comment = TextEditingController(text: existing?.comment ?? '');
   final photos = <ProcessedPhoto>[];
+  // CMP-10 : la date se corrige ; une nouvelle dégustation est du jour.
+  var day = DateTime.tryParse(existing?.date ?? '') ?? DateTime.now();
   final ok = await showDialog<bool>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text(l.tastingTitle),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              key: const ValueKey('tasting-score'),
-              controller: score,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+    builder: (context) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
+        title: Text(existing == null ? l.tastingTitle : l.tastingEditTitle),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                key: const ValueKey('tasting-date'),
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.event_outlined),
+                title: Text(
+                  MaterialLocalizations.of(context).formatMediumDate(day),
+                ),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: day,
+                    firstDate: DateTime(1950),
+                    lastDate: DateTime.now(),
+                  );
+                  if (picked != null) setState(() => day = picked);
+                },
               ),
-              decoration: InputDecoration(labelText: l.tastingScore(scale)),
-            ),
-            TextField(
-              controller: dish,
-              decoration: InputDecoration(labelText: l.tastingDish),
-            ),
-            TextField(
-              controller: comment,
-              maxLines: 3,
-              decoration: InputDecoration(labelText: l.tastingComment),
-            ),
-            TastingPhotoPicker(photos: photos),
-          ],
+              TextField(
+                key: const ValueKey('tasting-score'),
+                controller: score,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: InputDecoration(labelText: l.tastingScore(scale)),
+              ),
+              TextField(
+                key: const ValueKey('tasting-dish'),
+                controller: dish,
+                decoration: InputDecoration(labelText: l.tastingDish),
+              ),
+              TextField(
+                key: const ValueKey('tasting-comment'),
+                controller: comment,
+                maxLines: 3,
+                decoration: InputDecoration(labelText: l.tastingComment),
+              ),
+              TastingPhotoPicker(photos: photos),
+            ],
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(existing == null ? l.later : l.cancel),
+          ),
+          TextButton(
+            key: const ValueKey('tasting-save'),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l.save),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(l.later),
-        ),
-        TextButton(
-          key: const ValueKey('tasting-save'),
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(l.save),
-        ),
-      ],
     ),
   );
   if (ok == true) {
     final value = double.tryParse(score.text.trim().replaceAll(',', '.'));
+    final repo = ref.read(cellarRepositoryProvider);
+    final date =
+        '${day.year.toString().padLeft(4, '0')}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
     final cellarId = await ref.read(bootstrapProvider.future);
-    final tastingId = await ref
-        .read(cellarRepositoryProvider)
-        .addTasting(
-          wineId: wine.id,
-          cellarId: cellarId,
-          score: value?.clamp(0, scale).toDouble(),
-          dish: dish.text,
-          comment: comment.text,
-          movementId: movementId,
-        );
+    final String tastingId;
+    if (existing == null) {
+      tastingId = await repo.addTasting(
+        wineId: wineId,
+        cellarId: cellarId,
+        score: value?.clamp(0, scale).toDouble(),
+        dish: dish.text,
+        comment: comment.text,
+        movementId: movementId,
+        date: date,
+      );
+    } else {
+      tastingId = existing.id;
+      await repo.updateTasting(
+        id: existing.id,
+        date: date,
+        score: value?.clamp(0, scale).toDouble(),
+        dish: dish.text,
+        comment: comment.text,
+      );
+    }
     if (photos.isNotEmpty) {
       final service = ref.read(photoServiceProvider);
       for (final photo in photos) {
         await service.save(
-          wineId: wine.id,
+          wineId: wineId,
           cellarId: cellarId,
           photo: photo,
           type: 'degustation',
@@ -729,11 +771,14 @@ Future<void> tastingDialog(
         );
       }
       ref.invalidate(tastingPhotosProvider(tastingId));
-      ref.invalidate(libraryPhotosProvider(wine.id));
+      ref.invalidate(libraryPhotosProvider(wineId));
     }
     if (context.mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l.tastingSaved)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(existing == null ? l.tastingSaved : l.tastingUpdated),
+        ),
+      );
     }
   }
 }

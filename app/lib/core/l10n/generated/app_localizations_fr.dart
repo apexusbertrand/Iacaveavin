@@ -3006,7 +3006,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get feedbackAuth =>
-      'Votre session a expiré : reconnectez-vous dans les Paramètres, puis renvoyez le message.';
+      'Votre session a expiré : reconnectez-vous dans le menu Compte (icône en haut à droite), puis renvoyez le message.';
 
   @override
   String get feedbackPrivacy =>
@@ -3117,4 +3117,72 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get feedbackSignInNeeded =>
       'Connectez-vous à votre compte pour envoyer une remontée.';
+
+  @override
+  String get accountMenu => 'Compte : se connecter';
+
+  @override
+  String get accountMenuSignedIn => 'Mon compte';
+
+  @override
+  String get subscriptionTitle => 'Abonnement';
+
+  @override
+  String get subscriptionOffer =>
+      'Formule gratuite. L\'abonnement porte les quotas à 500 identifications et 500 relevés de prix par mois.';
+
+  @override
+  String get subscriptionMonthly => 'Abonnement mensuel';
+
+  @override
+  String get subscriptionYearly => 'Abonnement annuel';
+
+  @override
+  String get subscriptionActive =>
+      'Abonnement en cours. Le désabonnement se fait dans Google Play, l\'abonnement reste actif jusqu\'à la fin de la période payée.';
+
+  @override
+  String get subscriptionManage => 'Gérer ou résilier dans Google Play';
+
+  @override
+  String get subscriptionStarted =>
+      'Abonnement demandé à Google Play : il s\'active dès la confirmation du paiement.';
+
+  @override
+  String get subscriptionUnavailable =>
+      'L\'abonnement ouvrira avec la publication de l\'application sur Google Play. En attendant, la formule gratuite reste active.';
+
+  @override
+  String get subscriptionFailed =>
+      'L\'abonnement n\'a pas pu démarrer : réessayez plus tard.';
+
+  @override
+  String get subscriptionManageFailed =>
+      'Impossible d\'ouvrir Google Play sur ce téléphone.';
+
+  @override
+  String get accountDelete => 'Supprimer mon compte';
+
+  @override
+  String get accountDeleteTitle => 'Supprimer le compte ?';
+
+  @override
+  String get accountDeleteBody =>
+      'Votre adresse et votre clé de connexion sont effacées du service. La cave reste sur le téléphone. Un abonnement en cours se résilie dans Google Play. Cette suppression est définitive.';
+
+  @override
+  String get accountDeleteConfirm => 'Supprimer';
+
+  @override
+  String get accountDeleted =>
+      'Compte supprimé. Vous pouvez en recréer un avec la même adresse.';
+
+  @override
+  String get tastingEdit => 'Modifier la dégustation';
+
+  @override
+  String get tastingEditTitle => 'Modifier la dégustation';
+
+  @override
+  String get tastingUpdated => 'Dégustation modifiée.';
 }

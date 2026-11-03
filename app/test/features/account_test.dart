@@ -8,7 +8,36 @@ import '../fakes.dart';
 String sessionJson({String expires = '2099-01-01T00:00:00Z'}) =>
     testSessionJson(expires: expires);
 
+/// CPT-07 : le compte s'ouvre par l'icône en haut à droite, dans un menu
+/// à droite.
 Future<void> toAccount(WidgetTester tester, Key key) async {
+  await tester.tap(find.byKey(const ValueKey('account-menu')));
+  await tester.pumpAndSettle();
+  await tester.scrollUntilVisible(
+    find.byKey(key),
+    200,
+    scrollable: find
+        .descendant(
+          of: find.byKey(const ValueKey('account-drawer')),
+          matching: find.byType(Scrollable),
+        )
+        .first,
+  );
+  await tester.pumpAndSettle();
+}
+
+/// Laisse le temps réel aux appels réseau refusés (adresse locale fermée).
+Future<void> waitFor(WidgetTester tester, bool Function() done) async {
+  for (var i = 0; i < 50 && !done(); i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 200)),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  await tester.pumpAndSettle();
+}
+
+Future<void> scrollTo(WidgetTester tester, Key key) async {
   await tester.scrollUntilVisible(
     find.byKey(key),
     300,
@@ -21,9 +50,8 @@ void main() {
   testWidgets(
     'CPT-01 sans compte : les Paramètres proposent la connexion par code',
     (tester) async {
-      await pumpApp(tester, location: '/parametres');
+      await pumpApp(tester, location: '/');
       await toAccount(tester, const ValueKey('account-request-code'));
-      expect(find.text('Compte'), findsOneWidget);
       expect(find.byKey(const ValueKey('account-email-field')), findsOneWidget);
       // Plus d'adresse ni de clé à saisir (T126).
       expect(find.byKey(const ValueKey('flux-url')), findsNothing);
@@ -47,7 +75,7 @@ void main() {
     'CPT-04 compte connecté : adresse, formule et quotas ; la déconnexion efface la session',
     (tester) async {
       final store = MemorySecretStore(sessionJson());
-      await pumpApp(tester, location: '/parametres', secrets: store);
+      await pumpApp(tester, location: '/', secrets: store);
       await toAccount(tester, const ValueKey('account-signout'));
       expect(find.text('Connecté : prenom.nom@exemple.fr'), findsOneWidget);
       expect(find.text('Formule : gratuite'), findsOneWidget);
@@ -65,7 +93,7 @@ void main() {
       }
 
       await tester.tap(find.byKey(const ValueKey('account-signout')));
-      await pumpUntil(
+      await waitFor(
         tester,
         () => find
             .byKey(const ValueKey('account-request-code'))
@@ -82,7 +110,7 @@ void main() {
   ) async {
     await pumpApp(
       tester,
-      location: '/parametres',
+      location: '/',
       secrets: MemorySecretStore(sessionJson(expires: '2020-01-01T00:00:00Z')),
     );
     await toAccount(tester, const ValueKey('account-request-code'));
@@ -93,7 +121,7 @@ void main() {
     tester,
   ) async {
     await pumpApp(tester, location: '/remontee');
-    await toAccount(tester, const ValueKey('feedback-signin'));
+    await scrollTo(tester, const ValueKey('feedback-signin'));
     expect(
       find.text('Connectez-vous à votre compte pour envoyer une remontée.'),
       findsOneWidget,
@@ -117,4 +145,68 @@ void main() {
     );
     expect(field.controller.text, 'prenom.nom@exemple.fr');
   });
+
+  testWidgets(
+    'CPT-07 le compte a son menu à droite, plus dans les Paramètres',
+    (tester) async {
+      await pumpApp(tester, location: '/parametres');
+      expect(find.byKey(const ValueKey('account-email-field')), findsNothing);
+      expect(find.byKey(const ValueKey('account-menu')), findsOneWidget);
+      await toAccount(tester, const ValueKey('account-email-field'));
+      expect(find.byKey(const ValueKey('account-drawer')), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'CPT-06 formule gratuite : abonnement mensuel ou annuel proposé, indisponible avant Google Play',
+    (tester) async {
+      await pumpApp(tester, secrets: MemorySecretStore(sessionJson()));
+      await toAccount(tester, const ValueKey('subscribe-yearly'));
+      expect(find.byKey(const ValueKey('subscribe-monthly')), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('subscribe-monthly')));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining("L'abonnement ouvrira avec la publication"),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('subscription-manage')), findsNothing);
+    },
+  );
+
+  testWidgets('CPT-06 abonné : désabonnement par Google Play', (tester) async {
+    await pumpApp(
+      tester,
+      secrets: MemorySecretStore(testSessionJson(status: 'abonne')),
+    );
+    await toAccount(tester, const ValueKey('subscription-manage'));
+    expect(find.text('Formule : abonnement'), findsOneWidget);
+    expect(find.byKey(const ValueKey('subscribe-monthly')), findsNothing);
+  });
+
+  testWidgets(
+    'CPT-05 suppression confirmée avant l\'envoi ; sans réponse du flux, la session reste',
+    (tester) async {
+      final store = MemorySecretStore(sessionJson());
+      await pumpApp(tester, secrets: store);
+      await toAccount(tester, const ValueKey('account-delete'));
+      await tester.tap(find.byKey(const ValueKey('account-delete')));
+      await tester.pumpAndSettle();
+      expect(find.text('Supprimer le compte ?'), findsOneWidget);
+      await tester.tap(find.text('Annuler'));
+      await tester.pumpAndSettle();
+      expect(await store.read(), isNotNull);
+
+      await tester.tap(find.byKey(const ValueKey('account-delete')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('confirm')));
+      await waitFor(
+        tester,
+        () =>
+            find.byKey(const ValueKey('account-message')).evaluate().isNotEmpty,
+      );
+      // Flux injoignable en test : rien n'est effacé sur le téléphone.
+      expect(await store.read(), isNotNull);
+      expect(find.byKey(const ValueKey('account-signout')), findsOneWidget);
+    },
+  );
 }

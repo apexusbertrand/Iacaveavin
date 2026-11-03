@@ -241,14 +241,16 @@ final noFileSystem = [
 
 /// Session de compte valable jusqu'en 2099, pour les écrans qui demandent un
 /// compte connecté (CPT-03).
-String testSessionJson({String expires = '2099-01-01T00:00:00Z'}) =>
-    jsonEncode({
-      'compte': {
-        'compte_id': '3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c',
-        'email': 'prenom.nom@exemple.fr',
-        'statut_compte': 'gratuit',
-        'quota': {'enrichissements_restants_mois': 7, 'prix_restants_mois': 1},
-      },
-      'cle_session': 'ab' * 32,
-      'cle_expire_le': expires,
-    });
+String testSessionJson({
+  String expires = '2099-01-01T00:00:00Z',
+  String status = 'gratuit',
+}) => jsonEncode({
+  'compte': {
+    'compte_id': '3c9e1f4a-2b7d-4e8f-a1c3-5d6e7f8a9b0c',
+    'email': 'prenom.nom@exemple.fr',
+    'statut_compte': status,
+    'quota': {'enrichissements_restants_mois': 7, 'prix_restants_mois': 1},
+  },
+  'cle_session': 'ab' * 32,
+  'cle_expire_le': expires,
+});

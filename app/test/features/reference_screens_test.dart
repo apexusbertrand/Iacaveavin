@@ -67,11 +67,12 @@ void main() {
     expect(find.text('Caviste du coin'), findsOneWidget);
   });
 
-  testWidgets('PAR-06 règles de garde en lecture, « à valider »', (
+  testWidgets('PAR-06 règles de garde en lecture, validées (V2)', (
     tester,
   ) async {
     await pumpRealApp(tester, location: '/parametres/garde', seed: seed);
-    expect(find.byKey(const ValueKey('garde-pending')), findsOneWidget);
+    // Validées par Bertrand le 2026-11-01 : plus de mention « à valider ».
+    expect(find.byKey(const ValueKey('garde-pending')), findsNothing);
     expect(find.text('Début +0 · apogée +1 · fin +2'), findsWidgets);
   });
 

@@ -12,6 +12,10 @@ on:
       version:
         description: "Tag de la release, égal à la version de pubspec.yaml (ex. v1.0.0)"
         required: true
+      aab:
+        description: "Construire aussi l'AAB pour Google Play"
+        type: boolean
+        default: true
 
 concurrency:
   group: app-${{ github.ref }}
@@ -129,6 +133,7 @@ jobs:
           flutter build apk --release --obfuscate --split-debug-info=build/symbols
           cp build/app/outputs/flutter-apk/app-release.apk "build/iacaveavin-${TAG}.apk"
       - name: Build AAB release pour Google Play (obfusqué, même clé d'envoi)
+        if: github.event_name != 'workflow_dispatch' || inputs.aab
         working-directory: app
         run: |
           flutter build appbundle --release --obfuscate --split-debug-info=build/symbols-aab

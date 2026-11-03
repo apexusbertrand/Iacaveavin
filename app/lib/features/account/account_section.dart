@@ -5,7 +5,9 @@ import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
 import '../../data/flux_credentials.dart';
+import '../../data/subscription_store.dart';
 import '../../domain/account.dart';
+import '../wine_detail/stock_dialogs.dart' show confirm;
 
 /// CPT-01 à CPT-04 : connexion par code reçu par mail, puis état du compte
 /// (adresse, statut, quotas du mois) et déconnexion. Sert dans les
@@ -200,7 +202,97 @@ class _AccountSectionState extends ConsumerState<AccountSection> {
           ),
         ],
       ),
+      const Divider(height: SpacingTokens.xxl),
+      // CPT-06 : abonnement mensuel ou annuel, désabonnement par le store.
+      Text(l.subscriptionTitle, style: theme.textTheme.titleSmall),
+      const SizedBox(height: SpacingTokens.xs),
+      if (a.status == AccountStatus.subscriber) ...[
+        Text(l.subscriptionActive, style: theme.textTheme.bodyMedium),
+        const SizedBox(height: SpacingTokens.s),
+        OutlinedButton.icon(
+          key: const ValueKey('subscription-manage'),
+          onPressed: _busy ? null : _manageSubscription,
+          icon: const Icon(Icons.open_in_new),
+          label: Text(l.subscriptionManage),
+        ),
+      ] else ...[
+        Text(l.subscriptionOffer, style: theme.textTheme.bodyMedium),
+        const SizedBox(height: SpacingTokens.s),
+        Wrap(
+          spacing: SpacingTokens.s,
+          runSpacing: SpacingTokens.s,
+          children: [
+            FilledButton.tonal(
+              key: const ValueKey('subscribe-monthly'),
+              onPressed: _busy
+                  ? null
+                  : () => _subscribe(SubscriptionPlan.monthly),
+              child: Text(l.subscriptionMonthly),
+            ),
+            FilledButton.tonal(
+              key: const ValueKey('subscribe-yearly'),
+              onPressed: _busy
+                  ? null
+                  : () => _subscribe(SubscriptionPlan.yearly),
+              child: Text(l.subscriptionYearly),
+            ),
+          ],
+        ),
+      ],
+      const Divider(height: SpacingTokens.xxl),
+      // CPT-05 : suppression du compte, confirmée avant l'envoi.
+      Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: TextButton.icon(
+          key: const ValueKey('account-delete'),
+          style: TextButton.styleFrom(foregroundColor: theme.colorScheme.error),
+          onPressed: _busy ? null : _delete,
+          icon: const Icon(Icons.delete_forever_outlined),
+          label: Text(l.accountDelete),
+        ),
+      ),
     ];
+  }
+
+  Future<void> _subscribe(SubscriptionPlan plan) async {
+    final l = AppLocalizations.of(context);
+    final r = await ref.read(subscriptionStoreProvider).subscribe(plan);
+    if (!mounted) return;
+    switch (r) {
+      case SubscriptionOutcome.started:
+        _show(l.subscriptionStarted, error: false);
+      case SubscriptionOutcome.unavailable:
+        _show(l.subscriptionUnavailable, error: false);
+      case SubscriptionOutcome.failed:
+        _show(l.subscriptionFailed);
+    }
+  }
+
+  Future<void> _manageSubscription() async {
+    final l = AppLocalizations.of(context);
+    final ok = await ref.read(subscriptionStoreProvider).openManagement();
+    if (!ok && mounted) _show(l.subscriptionManageFailed);
+  }
+
+  Future<void> _delete() async {
+    final l = AppLocalizations.of(context);
+    final yes = await confirm(
+      context,
+      title: l.accountDeleteTitle,
+      body: l.accountDeleteBody,
+      action: l.accountDeleteConfirm,
+    );
+    if (!yes || !mounted) return;
+    await _run(() async {
+      final o = await ref.read(accountProvider.notifier).deleteAccount();
+      if (!mounted) return;
+      if (o case AccountAnswered(:final reply)
+          when reply.status == 'supprime') {
+        _show(l.accountDeleted, error: false);
+      } else {
+        _show(_outcomeText(l, o));
+      }
+    });
   }
 
   List<Widget> _signedOut(AppLocalizations l, ThemeData theme) => [

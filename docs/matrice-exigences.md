@@ -104,12 +104,16 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | CMP-06 | docs/05 | Favoris et partage d'une fiche en image ou en PDF. | 1 |
 | CMP-07 | docs/05 | [lot 0] Jeu de démonstration de 200 fiches fictives (domaines inventés | 19 |
 | CMP-08 | docs/05 | Photos de dégustation : en notant une dégustation, ajout de 6 photos a | 4 |
+| CMP-10 | docs/05 | Modifier une dégustation : date, note, plat et commentaire se corrigen | 1 |
 | CMP-09 | docs/05 | Vins passés : sur l'écran À boire, un onglet Passés liste à part les v | 2 |
 | RET-01 | docs/05 | Formulaire « Remontée d'information » du menu : titre (120 caractères) | 14 |
 | CPT-01 | docs/05 | Connexion par code reçu par mail : l'utilisateur saisit son adresse (f | 2 |
 | CPT-02 | docs/05 | Le bon code ouvre une session : le flux crée le compte au premier pass | 1 |
 | CPT-03 | docs/05 | L'identification par photo, les prix et la remontée exigent un compte  | 4 |
 | CPT-04 | docs/05 | Formules : gratuite (10 identifications et 10 relevés de prix par mois | 2 |
+| CPT-05 | docs/05 | Supprimer mon compte : bouton du menu Compte, confirmé avant l'envoi.  | 2 |
+| CPT-06 | docs/05 | Abonnement : en formule gratuite, boutons « Abonnement mensuel » et «  | 2 |
+| CPT-07 | docs/05 | Le compte a son propre menu, à droite, ouvert par l'icône de compte en | 1 |
 | NFR-01 | docs/07 | Performance : démarrage à froid sous 2 s, liste fluide à 60 images/s, | - |
 | NFR-02 | docs/07 | Performance : PDF, Excel, compression d'images et calculs statistique | - |
 | NFR-03 | docs/07 | Hors ligne : tout fonctionne sans réseau sauf l'enrichissement et le | 2 |
@@ -145,4 +149,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-131 exigences couvertes sur 140.
+135 exigences couvertes sur 144.

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -125,8 +126,12 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.navBackup)),
+      appBar: AppBar(
+        title: Text(l.navBackup),
+        actions: const [AccountMenuButton()],
+      ),
       drawer: const AppDrawer(current: AppDestination.backup),
+      endDrawer: const AccountDrawer(),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: SpacingTokens.m),
         children: [

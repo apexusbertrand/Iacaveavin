@@ -8,11 +8,11 @@
 # Les décalages sont en années après le millésime : debut, apogee, fin.
 # Pour un non millésimé (NM), les décalages partent de l'année d'achat du premier lot.
 #
-# STATUT : valeurs par défaut prudentes, à valider par Bertrand avant le lot 1.
+# STATUT : valeurs par défaut validées par Bertrand le 2026-11-01 (V2, docs/decisions.md).
 # Chaque règle validée passe a_valider à false. Une règle se modifie ici, pas dans le code.
 
 version: 1
-a_valider: true
+a_valider: false
 
 regles:
   - id: rose

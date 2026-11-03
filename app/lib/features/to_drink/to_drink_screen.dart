@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -13,7 +14,9 @@ import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
 import '../../domain/comfort.dart';
+import '../../domain/wine_detail.dart' show TastingView;
 import '../photos/tasting_photos.dart';
+import '../wine_detail/stock_dialogs.dart' show tastingDialog;
 import '../wine_list/wine_card.dart';
 import 'comfort_providers.dart';
 import 'monthly_alert_banner.dart';
@@ -31,6 +34,7 @@ class ToDrinkScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.navToDrink),
+          actions: const [AccountMenuButton()],
           bottom: TabBar(
             labelColor: context.palette.onAppBar,
             unselectedLabelColor: context.palette.onAppBar,
@@ -43,6 +47,7 @@ class ToDrinkScreen extends StatelessWidget {
           ),
         ),
         drawer: const AppDrawer(current: AppDestination.toDrink),
+        endDrawer: const AccountDrawer(),
         body: const TabBarView(
           children: [_ToDrinkTab(), _PastTab(), _TastingsTab()],
         ),
@@ -281,6 +286,24 @@ class _TastingsTab extends ConsumerWidget {
                           ),
                           TastingPhotoStrip(tastingId: t.id),
                         ],
+                      ),
+                      // CMP-10 : corriger une dégustation depuis l'historique.
+                      trailing: IconButton(
+                        key: ValueKey('tasting-edit-$i'),
+                        tooltip: l.tastingEdit,
+                        icon: const Icon(Icons.edit_outlined),
+                        onPressed: () => tastingDialog(
+                          context,
+                          ref,
+                          t.wineId,
+                          existing: TastingView(
+                            id: t.id,
+                            date: t.date,
+                            score: t.score,
+                            dish: t.dish,
+                            comment: t.comment,
+                          ),
+                        ),
                       ),
                       onTap: () => context.push('/fiche/${t.wineId}'),
                     );

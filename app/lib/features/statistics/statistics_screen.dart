@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -73,6 +74,7 @@ class StatisticsScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.navStatistics),
+          actions: const [AccountMenuButton()],
           bottom: TabBar(
             isScrollable: true,
             labelColor: context.palette.onAppBar,
@@ -82,6 +84,7 @@ class StatisticsScreen extends ConsumerWidget {
           ),
         ),
         drawer: const AppDrawer(current: AppDestination.statistics),
+        endDrawer: const AccountDrawer(),
         body: facts.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => MessageStateView(

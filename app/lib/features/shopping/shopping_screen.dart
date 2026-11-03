@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -81,8 +82,12 @@ class ShoppingScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final repo = ref.read(comfortRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l.navShoppingList)),
+      appBar: AppBar(
+        title: Text(l.navShoppingList),
+        actions: const [AccountMenuButton()],
+      ),
       drawer: const AppDrawer(current: AppDestination.shoppingList),
+      endDrawer: const AccountDrawer(),
       floatingActionButton: FloatingActionButton.extended(
         key: const ValueKey('shopping-add'),
         onPressed: () => _add(context, ref),

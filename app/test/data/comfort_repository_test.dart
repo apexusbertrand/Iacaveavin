@@ -83,6 +83,31 @@ void main() {
     expect(list.last.dish, 'Pigeon');
   });
 
+  test('CMP-10 dégustation modifiée : date, note, plat, commentaire ; '
+      'stock inchangé', () async {
+    final id = await f.repo.addTasting(
+      wineId: f.wine,
+      cellarId: f.cellar,
+      score: 14,
+      dish: 'Pigeon',
+      date: '2026-01-10',
+    );
+    final before = (await f.repo.wine(f.wine))!.bottles;
+    await f.repo.updateTasting(
+      id: id,
+      date: '2026-01-12',
+      score: 17,
+      dish: '',
+      comment: 'Plus ouvert le lendemain',
+    );
+    final t = (await comfort.watchTastings().first).single;
+    expect(t.date, '2026-01-12');
+    expect(t.score, 17);
+    expect(t.dish, isNull);
+    expect(t.comment, 'Plus ouvert le lendemain');
+    expect((await f.repo.wine(f.wine))!.bottles, before);
+  });
+
   test('EMP-03 ranger : positions sans mouvement, transfert d\'une '
       'bouteille vers une case', () async {
     await f.repo.setLotPositions(f.lot, 'A1');

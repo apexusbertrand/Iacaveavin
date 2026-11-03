@@ -153,7 +153,7 @@ void main() {
       clientDate: '2026-10-28',
     );
     final json = req.toJson();
-    expect(json['version_contrat'], '2.0');
+    expect(json['version_contrat'], '2.1');
     expect(v.requestErrors(json), isEmpty);
     expect(json['signalements'], [
       {'champ': 'cepages', 'valeur': 'Pinot noir 100 %'},

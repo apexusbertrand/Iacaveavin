@@ -4993,7 +4993,7 @@ abstract class AppLocalizations {
   /// No description provided for @feedbackAuth.
   ///
   /// In fr, this message translates to:
-  /// **'Votre session a expiré : reconnectez-vous dans les Paramètres, puis renvoyez le message.'**
+  /// **'Votre session a expiré : reconnectez-vous dans le menu Compte (icône en haut à droite), puis renvoyez le message.'**
   String get feedbackAuth;
 
   /// No description provided for @feedbackPrivacy.
@@ -5157,6 +5157,126 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Connectez-vous à votre compte pour envoyer une remontée.'**
   String get feedbackSignInNeeded;
+
+  /// No description provided for @accountMenu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte : se connecter'**
+  String get accountMenu;
+
+  /// No description provided for @accountMenuSignedIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon compte'**
+  String get accountMenuSignedIn;
+
+  /// No description provided for @subscriptionTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement'**
+  String get subscriptionTitle;
+
+  /// No description provided for @subscriptionOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Formule gratuite. L\'abonnement porte les quotas à 500 identifications et 500 relevés de prix par mois.'**
+  String get subscriptionOffer;
+
+  /// No description provided for @subscriptionMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement mensuel'**
+  String get subscriptionMonthly;
+
+  /// No description provided for @subscriptionYearly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement annuel'**
+  String get subscriptionYearly;
+
+  /// No description provided for @subscriptionActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement en cours. Le désabonnement se fait dans Google Play, l\'abonnement reste actif jusqu\'à la fin de la période payée.'**
+  String get subscriptionActive;
+
+  /// No description provided for @subscriptionManage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gérer ou résilier dans Google Play'**
+  String get subscriptionManage;
+
+  /// No description provided for @subscriptionStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement demandé à Google Play : il s\'active dès la confirmation du paiement.'**
+  String get subscriptionStarted;
+
+  /// No description provided for @subscriptionUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'abonnement ouvrira avec la publication de l\'application sur Google Play. En attendant, la formule gratuite reste active.'**
+  String get subscriptionUnavailable;
+
+  /// No description provided for @subscriptionFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'abonnement n\'a pas pu démarrer : réessayez plus tard.'**
+  String get subscriptionFailed;
+
+  /// No description provided for @subscriptionManageFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'ouvrir Google Play sur ce téléphone.'**
+  String get subscriptionManageFailed;
+
+  /// No description provided for @accountDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer mon compte'**
+  String get accountDelete;
+
+  /// No description provided for @accountDeleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le compte ?'**
+  String get accountDeleteTitle;
+
+  /// No description provided for @accountDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre adresse et votre clé de connexion sont effacées du service. La cave reste sur le téléphone. Un abonnement en cours se résilie dans Google Play. Cette suppression est définitive.'**
+  String get accountDeleteBody;
+
+  /// No description provided for @accountDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get accountDeleteConfirm;
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé. Vous pouvez en recréer un avec la même adresse.'**
+  String get accountDeleted;
+
+  /// No description provided for @tastingEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la dégustation'**
+  String get tastingEdit;
+
+  /// No description provided for @tastingEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la dégustation'**
+  String get tastingEditTitle;
+
+  /// No description provided for @tastingUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dégustation modifiée.'**
+  String get tastingUpdated;
 }
 
 class _AppLocalizationsDelegate

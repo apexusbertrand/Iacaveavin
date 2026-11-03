@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../account/account_drawer.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -12,7 +13,6 @@ import '../../data/providers.dart';
 import '../../data/settings_store.dart';
 import '../../domain/app_settings.dart';
 import '../wine_detail/price_actions.dart';
-import '../account/account_section.dart';
 
 const _currencies = ['EUR', 'CHF', 'USD', 'GBP', 'CAD'];
 
@@ -62,8 +62,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.navSettings)),
+      appBar: AppBar(
+        title: Text(l.navSettings),
+        actions: const [AccountMenuButton()],
+      ),
       drawer: const AppDrawer(current: AppDestination.settings),
+      endDrawer: const AccountDrawer(),
       body: ListView(
         padding: const EdgeInsets.only(bottom: SpacingTokens.xxl),
         children: [
@@ -219,8 +223,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: Text(l.pricesAllHint),
             onTap: () => refreshAllPrices(context, ref),
           ),
-          header(l.settingsAccount),
-          const AccountSection(),
           ListTile(
             title: Text(l.settingsPhotoSpace),
             leading: const Icon(Icons.photo_outlined),

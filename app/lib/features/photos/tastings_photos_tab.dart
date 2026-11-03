@@ -117,7 +117,7 @@ class _TastingsPhotosTabState extends ConsumerState<TastingsPhotosTab> {
         children: [
           OutlinedButton.icon(
             key: const ValueKey('tasting-add'),
-            onPressed: () => tastingDialog(context, ref, wine),
+            onPressed: () => tastingDialog(context, ref, wine.id),
             icon: const Icon(Icons.rate_review_outlined),
             label: Text(l.addTasting),
           ),
@@ -165,6 +165,14 @@ class _TastingsPhotosTabState extends ConsumerState<TastingsPhotosTab> {
                     Text([t.dish, t.comment].whereType<String>().join('\n')),
                     TastingPhotoStrip(tastingId: t.id, onDelete: _delete),
                   ],
+                ),
+                // CMP-10 : corriger une dégustation.
+                trailing: IconButton(
+                  key: ValueKey('tasting-edit-$i'),
+                  tooltip: l.tastingEdit,
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () =>
+                      tastingDialog(context, ref, wine.id, existing: t),
                 ),
               );
             },

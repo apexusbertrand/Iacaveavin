@@ -95,7 +95,7 @@ L'identification par photo et le relevé des prix demandent un compte gratuit : 
 
 ~~Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé.~~ Réglé par les comptes (T126) : l'examinateur se connecte avec sa propre adresse.
 
-Suppression du compte : choix de Bertrand du 2026-11-01, bouton « Supprimer mon compte » dans l'app, à faire (Q7). Google demande aussi un lien web dans la rubrique « Suppression des données » ; la page de la politique de confidentialité, une fois publiée (Q8), peut servir de lien si elle explique la démarche.
+Suppression du compte : bouton « Supprimer mon compte » dans le menu Compte de l'app (CPT-05, fait le 2026-11-03). Google demande aussi un lien web dans la rubrique « Suppression des données » ; la page de la politique de confidentialité, une fois publiée (Q8), peut servir de lien si elle explique la démarche.
 
 ## Annonces
 
@@ -131,7 +131,7 @@ Réponses générales :
 | --- | --- |
 | L'application collecte ou partage-t-elle des données ? | Oui |
 | Données chiffrées en transit | Oui (HTTPS uniquement) |
-| Les utilisateurs peuvent demander la suppression | Oui, par mail à apexus.claude@gmail.com (compte, adresse, historique des vins traités) ; la cave elle-même est sur le téléphone et s'efface en désinstallant l'application |
+| Les utilisateurs peuvent demander la suppression | Oui, dans l'app (menu Compte, « Supprimer mon compte ») ou par mail à apexus.claude@gmail.com ; la cave elle-même est sur le téléphone et s'efface en désinstallant l'application |
 | Partage avec des tiers | Non. Les prestataires qui traitent pour le compte d'Apexus (hébergeur n8n, modèle d'IA Anthropic, Gmail pour l'envoi des codes et des remontées) ne comptent pas comme partage au sens de Google |
 | Création de compte | Oui : adresse mail et code reçu par mail, sans mot de passe |
 

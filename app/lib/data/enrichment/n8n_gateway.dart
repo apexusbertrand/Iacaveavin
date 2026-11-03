@@ -219,5 +219,10 @@ class N8nGateway implements EnrichmentGateway {
   Future<AccountReply> signOut() async =>
       _account(await _send('POST', '$_prefix/compte/deconnexion', const {}));
 
+  /// CPT-05 : POST /compte/suppression, signé : le flux anonymise le compte
+  /// (adresse et clé effacées, contrat 2.1).
+  Future<AccountReply> deleteAccount() async =>
+      _account(await _send('POST', '$_prefix/compte/suppression', const {}));
+
   void close() => _client.close(force: true);
 }
