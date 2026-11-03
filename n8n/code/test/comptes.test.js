@@ -175,6 +175,23 @@ test('CPT-02 état du compte et déconnexion signés ; la déconnexion révoque 
   assert.equal(etat('etat', 'd'.repeat(64)).reponse.erreur.code, 'auth_invalide');
 });
 
+test('CPT-05 suppression signée : compte anonymisé, adresse et clé effacées', () => {
+  const e = require('../lib/compte_etat.js');
+  const empreinte = toHex(sha256(utf8('{}')));
+  const ts = String(MAINTENANT / 1000);
+  const signe = (cle) => ({ 'x-iacav-installation': INSTALLATION, 'x-iacav-compte': compteActif.compte_id, 'x-iacav-horodatage': ts, 'x-iacav-signature': signatureAttendue(cle, ts, 'POST', e.CHEMINS_COMPTE_21.suppression, empreinte) });
+  const d = e.decisionCompteSigne({ action: 'suppression', entetes: signe(compteActif.cle_session), empreinte, config, compte: compteActif, ligneUsage: null, maintenant: MAINTENANT, schemaReponse: S.reponse });
+  assert.equal(d.decision, 'suppression');
+  assert.equal(d.reponse.statut, 'supprime');
+  assert.ok(!('compte' in d.reponse));
+  assert.deepEqual({ email: d.compte.email, statut: d.compte.statut, cle: d.compte.cle_session }, { email: '', statut: 'supprime', cle: '' });
+  assert.equal(d.compte.compte_id, compteActif.compte_id);
+  // Une autre clé ne supprime rien.
+  const refus = e.decisionCompteSigne({ action: 'suppression', entetes: signe('d'.repeat(64)), empreinte, config, compte: compteActif, ligneUsage: null, maintenant: MAINTENANT, schemaReponse: S.reponse });
+  assert.equal(refus.reponse.erreur.code, 'auth_invalide');
+  assert.ok(!refus.compte);
+});
+
 test('CPT-01 codes tirés au hasard sûr : 6 chiffres', () => {
   for (let i = 0; i < 50; i++) assert.match(c.codeAleatoire(), /^\d{6}$/);
 });

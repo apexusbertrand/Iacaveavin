@@ -1,11 +1,13 @@
 // Comptes (CPT-01 à CPT-03) : une décision pour les trois chemins du flux.
 // POST /compte/code : code par mail. POST /compte/session : code vérifié,
-// compte et clé. GET /compte et POST /compte/deconnexion : signés avec la clé
+// compte et clé. GET /compte, POST /compte/deconnexion et /compte/suppression :
+// signés avec la clé
 // du compte.
 // @inclure securite.js
 // @inclure schema.js
 // @inclure enveloppes.js
 // @inclure comptes.js
+// @inclure compte_etat.js
 const execute = (n) => {
   try {
     return $(n).isExecuted;
@@ -35,8 +37,9 @@ if (execute('Webhook code')) {
   d.action = 'session';
 } else {
   const e = $('Empreinte compte').first().json;
-  d = decisionEtatCompte({
-    action: execute('Webhook déconnexion') ? 'deconnexion' : 'etat', entetes: e.entetes, empreinte: e.empreinte,
+  d = decisionCompteSigne({
+    action: execute('Webhook suppression') ? 'suppression' : execute('Webhook déconnexion') ? 'deconnexion' : 'etat',
+    entetes: e.entetes, empreinte: e.empreinte,
     config: lireConfig(lignes('Config compte')), compte: lignes('Compte signé').find((r) => r.compte_id) || null,
     ligneUsage: lignes('Usage du compte').find((r) => r.compte_id) || null, maintenant, schemaReponse,
   });

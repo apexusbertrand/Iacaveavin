@@ -23,6 +23,7 @@ cas = {
  "reponse-compte-code.json": ("reponse-compte.schema.json", True),
  "reponse-compte-session.json": ("reponse-compte.schema.json", True),
  "reponse-compte.json": ("reponse-compte.schema.json", True),
+ "reponse-compte-suppression.json": ("reponse-compte.schema.json", True),
 }
 ok = True
 for f,(s,attendu) in cas.items():
@@ -97,6 +98,7 @@ m = copy.deepcopy(con); m["compte"].pop("cle_session"); mcpt[("reponse", "sessio
 m = copy.deepcopy(etat); m["compte"]["cle_session"] = "5f" * 32; mcpt[("reponse", "clé renvoyée hors connexion")] = m
 m = copy.deepcopy(etat); m["compte"]["statut_compte"] = "premium"; mcpt[("reponse", "statut de compte inconnu")] = m
 m = copy.deepcopy(con); m["compte"]["cle_session"] = "court"; mcpt[("reponse", "clé de session mal formée")] = m
+m = copy.deepcopy(con); m["statut"] = "supprime"; mcpt[("reponse", "clé renvoyée à la suppression")] = m
 for (cible, k), doc in mcpt.items():
     rejete = any(True for _ in (vs if cible == "session" else vc).iter_errors(doc))
     print(("OK " if rejete else "KO ") + "rejet attendu : " + k)

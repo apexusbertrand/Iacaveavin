@@ -299,6 +299,6 @@ if (typeof module !== 'undefined') {
   module.exports = {
     VERSION_CONTRAT_COMPTE, CODE_VALABLE_S, ESSAIS_CODE_MAX, CHEMINS_COMPTE, codeAleatoire, normaliserEmail, empreinteCode,
     moisCompte, limitesCompte, compteActif, configPourCompte, compteDepuisEntetes, decisionCode, decisionSession,
-    decisionEtatCompte, entreeAvecCompte,
+    decisionEtatCompte, entreeAvecCompte, comptePublic, erreurCompte,
   };
 }

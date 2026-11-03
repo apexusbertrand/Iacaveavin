@@ -22,6 +22,7 @@ ${o.si('siEnvoiCode', 'Code à envoyer ?', "{{ $json.decision === 'envoi' }}")}
 ${o.si('siConnecte', 'Session ouverte ?', "{{ $json.decision === 'connecte' }}")}
 ${o.si('siEchec', 'Mauvais code ?', "{{ $json.decision === 'echec' }}")}
 ${o.si('siDeconnexion', 'Déconnexion ?', "{{ $json.decision === 'deconnexion' }}")}
+${o.si('siSuppression', 'Suppression ?', "{{ $json.decision === 'suppression' }}")}
 const mailCode = node({
   type: 'n8n-nodes-base.gmail', version: 2.2,
   config: { name: 'Mail du code', executeOnce: true, onError: 'continueRegularOutput',
@@ -63,6 +64,7 @@ ${o.ecrire('compterEssai', 'Essai compté', 'codes', 'update',
 
 ${o.webhook('webhookEtat', 'Webhook compte', 'GET', 'iacave/compte', true)}
 ${o.webhook('webhookDeconnexion', 'Webhook déconnexion', 'POST', 'iacave/compte/deconnexion', true)}
+${o.webhook('webhookSuppression', 'Webhook suppression', 'POST', 'iacave/compte/suppression', true)}
 ${o.code('empreinte', 'Empreinte compte', 'empreinte', "{ empreinte: 'x', texteCorps: '{}', requestId: 'x', entetes: {} }")}
 ${o.lire('configEtat', 'Config compte', 'config', [], { tout: true })}
 ${o.lire('compteSigne', 'Compte signé', 'comptes', [['compte_id', o.ex(COMPTE_ENTETE)]])}
@@ -70,8 +72,11 @@ ${o.lire('usageCompte', 'Usage du compte', 'usages', [['compte_id', o.ex(COMPTE_
 ${o.ecrire('revoquer', 'Révoquer la clé', 'comptes', 'update',
     { cle_session: "''", cle_expire_le: o.ex(`{{ ${ETAT}.compte.cle_expire_le }}`) },
   [['compte_id', o.ex(`{{ ${ETAT}.compte.compte_id }}`)]])}
+${o.ecrire('anonymiser', 'Anonymiser le compte', 'comptes', 'update',
+    { email: "''", statut: "'supprime'", cle_session: "''", cle_expire_le: o.ex(`{{ ${ETAT}.compte.cle_expire_le }}`) },
+  [['compte_id', o.ex(`{{ ${ETAT}.compte.compte_id }}`)]])}
 
-const note = sticky('## IA_CAVE_Comptes\\nComptes de l\\'app IA cave à vin (CPT-01 à CPT-03, docs/06) : code par mail, session, état, déconnexion. Source : n8n/workflow/src/ et n8n/code/ du dépôt iacaveavin. Ne pas modifier à la main.', [configCode, codeEnCours, decision], { color: 5 });
+const note = sticky('## IA_CAVE_Comptes\\nComptes de l\\'app IA cave à vin (CPT-01 à CPT-05, docs/06) : code par mail, session, état, déconnexion, suppression. Source : n8n/workflow/src/ et n8n/code/ du dépôt iacaveavin. Ne pas modifier à la main.', [configCode, codeEnCours, decision], { color: 5 });
 
 export default workflow('ia-cave-comptes', 'IA_CAVE_Comptes')
   .add(webhookCode)
@@ -92,6 +97,8 @@ export default workflow('ia-cave-comptes', 'IA_CAVE_Comptes')
   .to(decision)
   .add(webhookDeconnexion)
   .to(empreinte)
+  .add(webhookSuppression)
+  .to(empreinte)
   .add(decision)
   .to(siEnvoiCode
     .onTrue(mailCode.to(siMailParti
@@ -103,7 +110,9 @@ export default workflow('ia-cave-comptes', 'IA_CAVE_Comptes')
         .onTrue(compterEssai.to(repondreDecision))
         .onFalse(siDeconnexion
           .onTrue(revoquer.to(repondreDecision))
-          .onFalse(repondreDecision)))))
+          .onFalse(siSuppression
+            .onTrue(anonymiser.to(repondreDecision))
+            .onFalse(repondreDecision))))))
   .add(note);
 `;
 };
