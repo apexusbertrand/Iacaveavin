@@ -393,7 +393,7 @@ class LocationDetailScreen extends ConsumerWidget {
               selectedTileColor: theme.colorScheme.primary.withValues(
                 alpha: 0.15,
               ),
-              leading: BottleIcon(fill: wineColor(lot.colorCode).fill),
+              leading: WineColorBadge(colorCode: lot.colorCode),
               title: Text('${lot.wineName} · ${lot.vintage}'),
               subtitle: Text(
                 [

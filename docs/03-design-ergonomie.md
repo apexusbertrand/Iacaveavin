@@ -31,7 +31,7 @@ Badge de note : couleur selon la note sur 100 (95 et plus or, 90 à 94 vert, 85 
 - Bandeau : pastille « 3 filtres actifs » avec réinitialisation, bascule vue cartes / vue compacte.
 - Chips des critères actifs, chacune supprimable (« Tri 1 : Millésime (Z-A) », « En stock »), repli « Afficher plus (+1) ».
 - Groupes : quand le tri principal est groupable (millésime, couleur, pays, région, propriétaire, emplacement, année d'apogée), en-tête repliable avec nombre de vins, valeur du groupe, nombre de bouteilles.
-- Carte : vignette d'étiquette à gauche (un quart de la largeur), nom en gras sur une ligne, région en `primaryTexte` et sous-région, appellation en `secondary`, drapeau, millésime en grand, badge de note, prix, icône bouteille teintée de la couleur du vin et quantité.
+- Carte : vignette d'étiquette à gauche (un quart de la largeur), nom en gras sur une ligne, région en `primaryTexte` et sous-région, appellation en `secondary`, drapeau, millésime en grand, badge de note, prix, pastille ronde de 40 points pleine de la couleur du vin, contour foncé, verre ou bulles en contraste (LST-12, T134), et quantité.
 - Sur la carte, en plus de la capture : pastille de statut de garde et marqueur « à valider » tant que l'enrichissement n'est pas validé.
 - Bouton flottant « Haut de la page » après deux écrans de défilement, FAB « + » pour l'ajout.
 - Gestes : glisser vers la gauche ouvre une bouteille (annulable 5 s), appui long lance la sélection multiple.

@@ -17,6 +17,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | LST-09 | docs/05 | Tri, filtres et vue mémorisés d'une session à l'autre. | 3 |
 | LST-10 | docs/05 | Compteur en sous-titre : vins affichés et bouteilles correspondantes. | 1 |
 | LST-11 | docs/05 | Sur la tuile d'un vin, le statut de garde est suivi des années avant l | 3 |
+| LST-12 | docs/05 | La couleur du vin se lit d'un coup d'œil : pastille ronde de 40 points | 1 |
 | FIC-01 | docs/05 | Lecture comme décrit dans docs/03-design-ergonomie.md, mode édition su | 10 |
 | FIC-02 | docs/05 | Listes hiérarchiques : choisir l'appellation renseigne la sous-région, | 2 |
 | FIC-03 | docs/05 | Onglet Opérations : mouvements du plus récent au plus ancien (type, qu | 2 |
@@ -150,4 +151,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-136 exigences couvertes sur 145.
+137 exigences couvertes sur 146.

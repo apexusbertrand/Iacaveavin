@@ -178,7 +178,7 @@ class _PlaceSheet extends StatelessWidget {
     final theme = Theme.of(context);
     Widget tile(LocationLot lot) => ListTile(
       key: ValueKey('place-${lot.lotId}'),
-      leading: BottleIcon(fill: wineColor(lot.colorCode).fill),
+      leading: WineColorBadge(colorCode: lot.colorCode),
       title: Text('${lot.wineName} · ${lot.vintage}'),
       subtitle: Text(
         [lot.ownerName, ?lot.positions].where((s) => s.isNotEmpty).join(' · '),

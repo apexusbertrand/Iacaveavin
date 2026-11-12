@@ -263,7 +263,7 @@ class _TastingsTab extends ConsumerWidget {
                     final t = list[i];
                     final day = DateTime.tryParse(t.date);
                     return ListTile(
-                      leading: BottleIcon(fill: wineColor(t.colorCode).fill),
+                      leading: WineColorBadge(colorCode: t.colorCode),
                       title: Text(
                         [
                           t.wineName,

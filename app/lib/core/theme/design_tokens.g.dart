@@ -46,13 +46,13 @@ abstract final class DarkTokens {
 
 abstract final class WineColorTokens {
   static const Color rouge = Color(0xFF8E1B2C);
-  static const Color blanc = Color(0xFFE9D98B);
-  static const Color rose = Color(0xFFF1A7B5);
-  static const Color champagne = Color(0xFFC9B26B);
-  static const Color effervescent = Color(0xFF7FA7D9);
-  static const Color liquoreux = Color(0xFFB8862B);
-  static const Color orange = Color(0xFFA3501C);
-  static const Color autre = Color(0xFF8C8C8C);
+  static const Color blanc = Color(0xFFF5D547);
+  static const Color rose = Color(0xFFE8487F);
+  static const Color champagne = Color(0xFFC99A2E);
+  static const Color effervescent = Color(0xFF2F6FD0);
+  static const Color liquoreux = Color(0xFFB35F12);
+  static const Color orange = Color(0xFFE4761B);
+  static const Color autre = Color(0xFF6B6B6B);
 }
 
 abstract final class OnWineColorTokens {
@@ -60,10 +60,10 @@ abstract final class OnWineColorTokens {
   static const Color blanc = Color(0xFF1C1C1E);
   static const Color rose = Color(0xFF1C1C1E);
   static const Color champagne = Color(0xFF1C1C1E);
-  static const Color effervescent = Color(0xFF1C1C1E);
-  static const Color liquoreux = Color(0xFF1C1C1E);
-  static const Color orange = Color(0xFFFFFFFF);
-  static const Color autre = Color(0xFF1C1C1E);
+  static const Color effervescent = Color(0xFFFFFFFF);
+  static const Color liquoreux = Color(0xFFFFFFFF);
+  static const Color orange = Color(0xFF1C1C1E);
+  static const Color autre = Color(0xFFFFFFFF);
 }
 
 abstract final class CellarStatusTokens {

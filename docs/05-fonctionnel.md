@@ -22,6 +22,7 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 - LST-09. Tri, filtres et vue mémorisés d'une session à l'autre.
 - LST-10. Compteur en sous-titre : vins affichés et bouteilles correspondantes.
 - LST-11. Sur la tuile d'un vin, le statut de garde est suivi des années avant l'apogée (« apogée dans 5 ans »), de « apogée cette année » ou du temps écoulé depuis (« apogée passée depuis 3 ans »). Nouveau tri « Priorité de garde » : vins passés d'abord (les plus en retard en tête), puis à boire vite, à l'apogée, à boire, puis à garder, du moins au plus longtemps ; vins sans fenêtre en fin de liste (2026-11-12, T133).
+- LST-12. La couleur du vin se lit d'un coup d'œil : pastille ronde de 40 points (au lieu d'un verre de 20), pleine de la couleur du vin, contour foncé, verre ou bulles (effervescent, champagne) dessinés en contraste. Couleurs tranchées : rouge grenat, blanc jaune d'or, rosé framboise, champagne doré, effervescent bleu, liquoreux ambre, orange, autre gris. Même pastille dans la liste, l'historique des dégustations, les emplacements et la vue casier (2026-11-12, T134).
 
 ## FIC. Fiche vin [lot 1]
 

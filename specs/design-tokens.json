@@ -53,26 +53,26 @@
     "INTERDIT primary comme texte sur surface claire": 2.22
   },
   "couleursVin": {
-    "$comment": "Palette sémantique distincte de la marque. Utilisée pour l'icône bouteille, les chips couleur et les graphiques. Le texte posé sur une chip suit texteSurCouleurVin. Les icônes bouteille portent un contour texteSecondaire : le blanc et le rosé seuls n'atteignent pas 3:1 sur une carte blanche.",
+    "$comment": "Palette sémantique distincte de la marque, tranchée pour se reconnaître d'un coup d'œil (2026-11-12, LST-12, T134). Utilisée pour la pastille couleur des tuiles, les chips couleur et les graphiques. La pastille porte un contour anthracite : le blanc, le rosé, le champagne et l'orange seuls n'atteignent pas 3:1 sur une carte blanche.",
     "rouge": "#8E1B2C",
-    "blanc": "#E9D98B",
-    "rose": "#F1A7B5",
-    "champagne": "#C9B26B",
-    "effervescent": "#7FA7D9",
-    "liquoreux": "#B8862B",
-    "orange": "#A3501C",
-    "autre": "#8C8C8C"
+    "blanc": "#F5D547",
+    "rose": "#E8487F",
+    "champagne": "#C99A2E",
+    "effervescent": "#2F6FD0",
+    "liquoreux": "#B35F12",
+    "orange": "#E4761B",
+    "autre": "#6B6B6B"
   },
   "texteSurCouleurVin": {
-    "$comment": "Ratios mesurés : rouge + blanc 8,96 ; orange + blanc 5,6 ; les autres + anthracite entre 5,06 et 11,96.",
+    "$comment": "Ratios mesurés : rouge + blanc 8,96 ; effervescent + blanc 4,88 ; liquoreux + blanc 4,60 ; autre + blanc 5,33 ; blanc + anthracite 11,74 ; rosé + anthracite 4,59 ; champagne + anthracite 6,60 ; orange + anthracite 5,60.",
     "rouge": "#FFFFFF",
     "blanc": "#1C1C1E",
     "rose": "#1C1C1E",
     "champagne": "#1C1C1E",
-    "effervescent": "#1C1C1E",
-    "liquoreux": "#1C1C1E",
-    "orange": "#FFFFFF",
-    "autre": "#1C1C1E"
+    "effervescent": "#FFFFFF",
+    "liquoreux": "#FFFFFF",
+    "orange": "#1C1C1E",
+    "autre": "#FFFFFF"
   },
   "badgeNote": {
     "$comment": "Seuils sur une échelle de 100. Une note sur 20 est convertie (x5) pour le choix de couleur uniquement, jamais pour l'affichage.",

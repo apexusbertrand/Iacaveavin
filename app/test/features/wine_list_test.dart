@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iacaveavin/core/theme/app_theme.dart';
 import 'package:iacaveavin/domain/wine_list_item.dart';
 import 'package:iacaveavin/features/wine_list/wine_card.dart';
 
@@ -156,5 +157,16 @@ void main() {
     await pumpApp(tester, wines: Stream.value(const [wine, young]));
     expect(find.text('Passé · apogée passée depuis 10 ans'), findsOneWidget);
     expect(find.text('Trop jeune · apogée dans 5 ans'), findsOneWidget);
+  });
+
+  testWidgets('LST-12 pastille de couleur grande et tranchée sur la tuile', (
+    tester,
+  ) async {
+    await pumpApp(tester);
+    final badge = find.byKey(const ValueKey('wine-color-rouge')).first;
+    expect(tester.getSize(badge).width, greaterThanOrEqualTo(40));
+    final box = (tester.widget<Container>(badge).decoration! as BoxDecoration);
+    expect(box.color, wineColor('rouge').fill);
+    expect(box.shape, BoxShape.circle);
   });
 }

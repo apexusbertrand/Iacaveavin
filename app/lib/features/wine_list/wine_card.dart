@@ -205,7 +205,7 @@ class WineCard extends ConsumerWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                BottleIcon(fill: wine.fill),
+                                WineColorBadge(colorCode: item.colorCode),
                                 const SizedBox(width: SpacingTokens.xs),
                                 Text(
                                   '${item.bottles}',
@@ -259,7 +259,7 @@ class CompactWineRow extends StatelessWidget {
           onLongPress: onLongPress,
           leading: selected
               ? Icon(Icons.check_circle, color: theme.colorScheme.primary)
-              : BottleIcon(fill: wineColor(item.colorCode).fill),
+              : WineColorBadge(colorCode: item.colorCode),
           title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
           trailing: Text(
             '$vintage   ${item.bottles}',
@@ -366,25 +366,39 @@ class _ScaleDown extends StatelessWidget {
   );
 }
 
-/// Bouteille teintée de la couleur du vin, avec contour : le blanc et le rosé
-/// seuls n'atteignent pas 3:1 sur une carte blanche (design-tokens.json).
-class BottleIcon extends StatelessWidget {
-  const BottleIcon({super.key, required this.fill});
+/// LST-12 : pastille de la couleur du vin, grande et tranchée. Disque plein
+/// de la couleur (design-tokens.json), contour anthracite pour les couleurs
+/// claires sur carte blanche, verre ou bulles dessinés en contraste
+/// (texteSurCouleurVin). Les effervescents et le champagne portent des
+/// bulles, les autres un verre.
+class WineColorBadge extends StatelessWidget {
+  const WineColorBadge({
+    super.key,
+    required this.colorCode,
+    this.size = SpacingTokens.xxl + SpacingTokens.s,
+  });
 
-  final Color fill;
+  final String colorCode;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    const size = SpacingTokens.l + SpacingTokens.xs;
-    return Stack(
-      children: [
-        Icon(Icons.wine_bar, color: fill, size: size),
-        Icon(
-          Icons.wine_bar_outlined,
-          color: context.palette.textSecondary,
-          size: size,
-        ),
-      ],
+    final c = wineColor(colorCode);
+    final sparkling = colorCode == 'effervescent' || colorCode == 'champagne';
+    return Container(
+      key: ValueKey('wine-color-$colorCode'),
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: c.fill,
+        shape: BoxShape.circle,
+        border: Border.all(color: context.palette.text, width: 2),
+      ),
+      child: Icon(
+        sparkling ? Icons.bubble_chart : Icons.wine_bar,
+        color: c.onFill,
+        size: size * 0.6,
+      ),
     );
   }
 }
