@@ -1861,5 +1861,23 @@
   "accountDeleted": "Compte supprimé. Vous pouvez en recréer un avec la même adresse.",
   "tastingEdit": "Modifier la dégustation",
   "tastingEditTitle": "Modifier la dégustation",
-  "tastingUpdated": "Dégustation modifiée."
+  "tastingUpdated": "Dégustation modifiée.",
+  "sortDrinkPriority": "Priorité de garde (passés, à boire, à garder)",
+  "peakThisYear": "apogée cette année",
+  "peakInYears": "{count, plural, =1{apogée dans 1 an} other{apogée dans {count} ans}}",
+  "@peakInYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "peakPassedYears": "{count, plural, =1{apogée passée depuis 1 an} other{apogée passée depuis {count} ans}}",
+  "@peakPassedYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

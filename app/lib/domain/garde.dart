@@ -41,3 +41,25 @@ int? idealYear({int? start, int? peak, int? end}) {
   if (start == null || end == null) return null;
   return (start + end) ~/ 2;
 }
+
+/// LST-11 : années jusqu'à l'apogée (année de consommation idéale) ; 0 cette
+/// année, négatif quand elle est dépassée. Null sans fenêtre de garde.
+int? yearsToPeak({required int year, int? start, int? peak, int? end}) {
+  final ideal = idealYear(start: start, peak: peak, end: end);
+  return ideal == null ? null : ideal - year;
+}
+
+/// LST-11 : priorité de garde, croissante. Les vins passés d'abord (les plus
+/// en retard en tête), puis à boire vite, à l'apogée, à boire, puis les vins
+/// à garder, du moins au plus longtemps. Null (en fin de liste) sans fenêtre.
+int? drinkPriority({required int year, int? start, int? peak, int? end}) {
+  final s = cellarStatus(year: year, start: start, peak: peak, end: end);
+  return switch (s) {
+    CellarStatus.unknown => null,
+    CellarStatus.past => end! - year,
+    CellarStatus.drinkSoon => 0,
+    CellarStatus.peak => 1,
+    CellarStatus.toDrink => 2,
+    CellarStatus.tooYoung => 2 + (start! - year),
+  };
+}

@@ -220,4 +220,45 @@ void main() {
     expect(sansDomaine.displayName, 'Hortense');
     expect(w('x', producer: '').isUnidentified, isTrue);
   });
+
+  test(
+    'LST-11 priorité de garde : passés, à boire, à garder un peu puis beaucoup',
+    () {
+      final items = [
+        w('garder_beaucoup', start: 2034, end: 2045),
+        w('inconnu'),
+        w('a_boire', start: 2020, end: 2035),
+        w('passe_recent', start: 2010, end: 2025),
+        w('garder_un_peu', start: 2028, end: 2040),
+        w('passe_ancien', start: 2005, end: 2015),
+        w('a_boire_vite', start: 2015, end: 2027),
+        w('apogee', start: 2020, peak: 2026, end: 2035),
+      ];
+      const q = WineQuery(
+        sort1: SortSpec(SortCriterion.drinkPriority),
+        filters: all,
+      );
+      expect(ids(q.apply(items, year: 2026)), [
+        'passe_ancien',
+        'passe_recent',
+        'a_boire_vite',
+        'apogee',
+        'a_boire',
+        'garder_un_peu',
+        'garder_beaucoup',
+        'inconnu',
+      ]);
+    },
+  );
+
+  test('LST-11 années avant l\'apogée (garde 2026, apogée 2029, fin 2032)', () {
+    int? n(int year, {int? peak = 2029}) =>
+        yearsToPeak(year: year, start: 2026, peak: peak, end: 2032);
+    expect(n(2025), 4);
+    expect(n(2029), 0);
+    expect(n(2033), -4);
+    // Sans apogée : milieu de la fenêtre, 2029.
+    expect(n(2027, peak: null), 2);
+    expect(yearsToPeak(year: 2026), isNull);
+  });
 }

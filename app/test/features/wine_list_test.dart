@@ -128,4 +128,33 @@ void main() {
     );
     handle.dispose();
   });
+
+  testWidgets('LST-11 tuile : statut de garde et années avant l\'apogée', (
+    tester,
+  ) async {
+    const wine = WineListItem(
+      id: 'g1',
+      producer: 'Château Haut la Gravière',
+      vintage: '2009',
+      colorCode: 'rouge',
+      countryCode: 'FR',
+      bottles: 1,
+      gardeStart: 2012,
+      gardeEnd: 2020,
+    );
+    const young = WineListItem(
+      id: 'g2',
+      producer: 'Domaine Jeune',
+      vintage: '2023',
+      colorCode: 'rouge',
+      countryCode: 'FR',
+      bottles: 1,
+      gardeStart: 2028,
+      gardePeak: 2031,
+      gardeEnd: 2038,
+    );
+    await pumpApp(tester, wines: Stream.value(const [wine, young]));
+    expect(find.text('Passé · apogée passée depuis 10 ans'), findsOneWidget);
+    expect(find.text('Trop jeune · apogée dans 5 ans'), findsOneWidget);
+  });
 }

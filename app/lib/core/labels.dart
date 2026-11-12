@@ -26,6 +26,7 @@ extension DomainLabels on AppLocalizations {
     SortCriterion.gardeEnd => sortGardeEnd,
     SortCriterion.gardePeak => sortGardePeak,
     SortCriterion.cellarStatus => sortCellarStatus,
+    SortCriterion.drinkPriority => sortDrinkPriority,
   };
 
   String sortChipLabel(int rank, SortSpec s) => sortChip(

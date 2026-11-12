@@ -3185,4 +3185,33 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tastingUpdated => 'Dégustation modifiée.';
+
+  @override
+  String get sortDrinkPriority =>
+      'Priorité de garde (passés, à boire, à garder)';
+
+  @override
+  String get peakThisYear => 'apogée cette année';
+
+  @override
+  String peakInYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'apogée dans $count ans',
+      one: 'apogée dans 1 an',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String peakPassedYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'apogée passée depuis $count ans',
+      one: 'apogée passée depuis 1 an',
+    );
+    return '$_temp0';
+  }
 }

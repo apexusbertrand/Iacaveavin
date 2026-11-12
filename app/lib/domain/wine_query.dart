@@ -38,7 +38,10 @@ enum SortCriterion {
   gardeStart,
   gardeEnd,
   gardePeak(groupable: true),
-  cellarStatus;
+  cellarStatus,
+
+  /// LST-11 : passés, puis à boire, puis à garder un peu, puis beaucoup.
+  drinkPriority;
 
   const SortCriterion({this.groupable = false});
 
@@ -329,6 +332,12 @@ Comparable<Object>? sortKey(WineListItem w, SortCriterion c, int year) {
     SortCriterion.gardePeak => w.gardePeak,
     SortCriterion.cellarStatus =>
       w.statusIn(year).let((s) => s == CellarStatus.unknown ? null : s.index),
+    SortCriterion.drinkPriority => drinkPriority(
+      year: year,
+      start: w.gardeStart,
+      peak: w.gardePeak,
+      end: w.gardeEnd,
+    ),
   } as Comparable<Object>?;
 }
 

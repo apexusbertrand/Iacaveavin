@@ -5277,6 +5277,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Dégustation modifiée.'**
   String get tastingUpdated;
+
+  /// No description provided for @sortDrinkPriority.
+  ///
+  /// In fr, this message translates to:
+  /// **'Priorité de garde (passés, à boire, à garder)'**
+  String get sortDrinkPriority;
+
+  /// No description provided for @peakThisYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'apogée cette année'**
+  String get peakThisYear;
+
+  /// No description provided for @peakInYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{apogée dans 1 an} other{apogée dans {count} ans}}'**
+  String peakInYears(int count);
+
+  /// No description provided for @peakPassedYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{apogée passée depuis 1 an} other{apogée passée depuis {count} ans}}'**
+  String peakPassedYears(int count);
 }
 
 class _AppLocalizationsDelegate

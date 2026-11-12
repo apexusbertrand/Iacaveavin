@@ -156,7 +156,10 @@ class WineCard extends ConsumerWidget {
                               if (status != CellarStatus.unknown)
                                 _StatusDot(
                                   status: status,
-                                  label: l.statusLabel(status),
+                                  label: [
+                                    l.statusLabel(status),
+                                    ?_peakText(l, item, year),
+                                  ].join(' · '),
                                 ),
                               if (item.parkerScore != null)
                                 ScoreBadge(
@@ -305,6 +308,19 @@ class ScoreBadge extends StatelessWidget {
       ),
     );
   }
+}
+
+/// LST-11 : années avant l'apogée, ou depuis quand elle est passée.
+String? _peakText(AppLocalizations l, WineListItem item, int year) {
+  final n = yearsToPeak(
+    year: year,
+    start: item.gardeStart,
+    peak: item.gardePeak,
+    end: item.gardeEnd,
+  );
+  if (n == null) return null;
+  if (n == 0) return l.peakThisYear;
+  return n > 0 ? l.peakInYears(n) : l.peakPassedYears(-n);
 }
 
 class _StatusDot extends StatelessWidget {
