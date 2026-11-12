@@ -134,6 +134,10 @@ class EnrichmentRunner extends Notifier<QueueReport?> {
       state = await queue.process(
         currency: ref.read(settingsProvider).currency,
       );
+      if (state?.sessionRejected == true) {
+        // CPT-03 : clé refusée, l'utilisateur doit se reconnecter.
+        await ref.read(accountProvider.notifier).forgetRejectedSession();
+      }
       final pending = (await queue.pendingJobs()).length;
       if (pending == 0) {
         _startedAt = null;

@@ -199,6 +199,10 @@ class AccountController extends AsyncNotifier<AccountSession?> {
     return r;
   }
 
+  /// CPT-03 : le flux a refusé la clé (session ouverte sur un autre
+  /// appareil, révoquée ou expirée) : la session locale est effacée.
+  Future<void> forgetRejectedSession() => _clear();
+
   Future<void> _save(AccountSession s) async {
     await ref.read(secretStoreProvider).write(jsonEncode(s.toJson()));
     state = AsyncData(s);

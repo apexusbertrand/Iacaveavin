@@ -150,6 +150,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
     } on OfflineException {
       _snack(l.feedbackOffline);
     } on AuthException {
+      await ref.read(accountProvider.notifier).forgetRejectedSession();
       _snack(l.feedbackAuth);
     } on ContractException {
       _snack(l.feedbackRefused(l.errorInvalid));

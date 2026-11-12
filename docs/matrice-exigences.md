@@ -109,7 +109,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | RET-01 | docs/05 | Formulaire « Remontée d'information » du menu : titre (120 caractères) | 14 |
 | CPT-01 | docs/05 | Connexion par code reçu par mail : l'utilisateur saisit son adresse (f | 2 |
 | CPT-02 | docs/05 | Le bon code ouvre une session : le flux crée le compte au premier pass | 1 |
-| CPT-03 | docs/05 | L'identification par photo, les prix et la remontée exigent un compte  | 4 |
+| CPT-03 | docs/05 | L'identification par photo, les prix et la remontée exigent un compte  | 5 |
 | CPT-04 | docs/05 | Formules : gratuite (10 identifications et 10 relevés de prix par mois | 2 |
 | CPT-05 | docs/05 | Supprimer mon compte : bouton du menu Compte, confirmé avant l'envoi.  | 2 |
 | CPT-06 | docs/05 | Abonnement : en formule gratuite, boutons « Abonnement mensuel » et «  | 2 |

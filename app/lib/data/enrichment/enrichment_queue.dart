@@ -8,6 +8,7 @@ import '../db/app_database.dart';
 import '../files/photo_service.dart';
 import 'contract_validator.dart';
 import 'enrichment_gateway.dart';
+import 'n8n_gateway.dart' show AuthException;
 
 /// Délai maximal d'un job (docs/02 : 3 min au plus).
 const jobTimeout = Duration(minutes: 3);
@@ -66,6 +67,7 @@ class QueueReport {
     required this.failed,
     required this.offline,
     this.notConnected = false,
+    this.sessionRejected = false,
     this.enrichmentsLeft,
     this.pricesLeft,
   });
@@ -80,6 +82,11 @@ class QueueReport {
   /// Aucune connexion au flux enregistrée (T122) : cas particulier de
   /// [offline], expliqué autrement à l'écran.
   final bool notConnected;
+
+  /// CPT-03 : le flux refuse la clé du compte (session ouverte ailleurs,
+  /// révoquée ou expirée). La session locale doit être effacée : l'écran
+  /// invite alors à se reconnecter au lieu de rester « en attente ».
+  final bool sessionRejected;
   final int? enrichmentsLeft;
 
   /// Quota de relevés de prix restant ce mois, d'après la dernière réponse.
@@ -457,6 +464,18 @@ class EnrichmentQueue {
           failed: failed,
           offline: true,
           notConnected: e is NotConnectedException,
+          enrichmentsLeft: left,
+          pricesLeft: pricesLeft,
+        );
+      } on AuthException {
+        // CPT-03 : clé refusée ; le job attend la reconnexion, rien n'est perdu.
+        return QueueReport(
+          sent: sent,
+          finished: finished,
+          failed: failed,
+          offline: true,
+          notConnected: true,
+          sessionRejected: true,
           enrichmentsLeft: left,
           pricesLeft: pricesLeft,
         );

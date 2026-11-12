@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_queue.dart';
+import 'package:iacaveavin/data/enrichment/n8n_gateway.dart' show AuthException;
+import 'package:iacaveavin/domain/enrichment.dart'
+    show EnrichmentRequest, JobResponse;
 import 'package:iacaveavin/data/enrichment/validation_service.dart';
 import 'package:iacaveavin/data/files/photo_service.dart';
 import 'package:iacaveavin/data/reference_repository.dart';
@@ -13,6 +16,15 @@ import 'package:yaml/yaml.dart';
 import '../fixture.dart';
 import 'contract_test.dart' show readExample, validator;
 import 'photo_test.dart' show sharpLabel;
+
+/// Flux qui refuse la clé du compte (session ouverte sur un autre appareil).
+class RejectingGateway extends FakeGateway {
+  RejectingGateway() : super(validator: validator(), readExample: readExample);
+
+  @override
+  Future<JobResponse> requestEnrichment(EnrichmentRequest request) =>
+      Future.error(const AuthException('Signature invalide.'));
+}
 
 class Flow {
   final f = Fixture();
@@ -96,6 +108,21 @@ void main() {
       expect(await w.queue.pendingJobs(), hasLength(1));
     },
   );
+
+  test('CPT-03 clé refusée : le job attend, la session est à refaire, rien ne reste muet', () async {
+    final wine = await w.photographed();
+    final q = EnrichmentQueue(
+      w.f.db,
+      gateway: RejectingGateway(),
+      photos: w.photos,
+      clock: () => w.now,
+    );
+    final r = await q.process();
+    expect(r.sessionRejected, isTrue);
+    expect(r.notConnected, isTrue);
+    expect((await w.f.repo.wine(wine))!.enrichmentStatus, 'a_enrichir');
+    expect(await w.queue.pendingJobs(), hasLength(1));
+  });
 
   test(
     'AJO-09 hors ligne : le job attend, puis part au retour du réseau',
