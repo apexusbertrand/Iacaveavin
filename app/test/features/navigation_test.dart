@@ -11,7 +11,7 @@ Future<void> openDrawer(WidgetTester tester) async {
 
 void main() {
   testWidgets(
-    'NAV-01 le tiroir liste les 9 entrées dans l\'ordre des captures',
+    'NAV-01 PAR-07 le tiroir liste ses entrées dans l\'ordre des captures',
     (tester) async {
       await pumpApp(tester);
       await openDrawer(tester);
@@ -20,6 +20,7 @@ void main() {
         'À boire',
         'Emplacements',
         'Statistiques',
+        'Règles de garde',
         "Liste d'achats",
         'Import et export',
         'Sauvegarde',
@@ -37,7 +38,7 @@ void main() {
           .map((t) => (t.title! as Text).data)
           .toList();
       expect(tiles, attendues);
-      expect(AppDestination.values, hasLength(10));
+      expect(AppDestination.values, hasLength(11));
     },
   );
 

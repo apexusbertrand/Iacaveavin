@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
-import 'package:yaml/yaml.dart';
 
 import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
@@ -421,103 +419,5 @@ class ListValuesScreen extends ConsumerWidget {
         SnackBar(content: Text(l.importDone(r.created, r.updated))),
       );
     });
-  }
-}
-
-/// Règles de garde embarquées (copie de specs/regles-garde.yaml).
-final gardeRulesProvider = FutureProvider<YamlMap>((ref) async {
-  final text = await rootBundle.loadString('assets/regles/regles-garde.yaml');
-  return loadYaml(text) as YamlMap;
-});
-
-/// PAR-06 : règles de garde en lecture, « valeurs par défaut à valider »
-/// tant que `a_valider` est vrai.
-class GardeRulesScreen extends ConsumerWidget {
-  const GardeRulesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final labels = ref.watch(labelsProvider).value ?? const {};
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsGardeRules)),
-      body: ref
-          .watch(gardeRulesProvider)
-          .when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => MessageStateView(
-              icon: Icons.error_outline,
-              isError: true,
-              title: l.operationFailed('$e'),
-            ),
-            data: (rules) => ListView(
-              padding: const EdgeInsets.all(SpacingTokens.l),
-              children: [
-                if (rules['a_valider'] == true)
-                  Card(
-                    color: theme.colorScheme.primary,
-                    child: Padding(
-                      padding: const EdgeInsets.all(SpacingTokens.l),
-                      child: Text(
-                        l.gardeRulesPending,
-                        key: const ValueKey('garde-pending'),
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: theme.colorScheme.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: SpacingTokens.m,
-                  ),
-                  child: Text(
-                    l.gardeRulesIntro,
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ),
-                for (final r in (rules['regles'] as YamlList).cast<YamlMap>())
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(_condition(l, r['si'] as YamlMap?, labels)),
-                    subtitle: Text(
-                      l.gardeRuleLine(
-                        (r['decalage'] as YamlMap)['debut'] as int,
-                        (r['decalage'] as YamlMap)['apogee'] as int,
-                        (r['decalage'] as YamlMap)['fin'] as int,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-    );
-  }
-
-  /// Condition lisible : valeurs de listes traduites par le référentiel.
-  static String _condition(
-    AppLocalizations l,
-    YamlMap? si,
-    Map<String, String> labels,
-  ) {
-    if (si == null || si.isEmpty) return l.gardeRuleDefault;
-    final parts = <String>[];
-    si.forEach((key, value) {
-      final values = value is YamlList ? value.toList() : [value];
-      final list = switch (key) {
-        'couleur' => 'couleur',
-        'region' => 'region',
-        'appellation' => 'appellation',
-        'type' || 'type_vin' => 'type_vin',
-        _ => null,
-      };
-      parts.add(
-        values
-            .map((v) => list == null ? '$v' : labels['$list:$v'] ?? '$v')
-            .join(', '),
-      );
-    });
-    return parts.join(' · ');
   }
 }

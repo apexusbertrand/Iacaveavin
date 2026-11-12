@@ -124,6 +124,12 @@ abstract class AppLocalizations {
   /// **'Statistiques'**
   String get navStatistics;
 
+  /// No description provided for @navGardeRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règles de garde'**
+  String get navGardeRules;
+
   /// No description provided for @navShoppingList.
   ///
   /// In fr, this message translates to:
@@ -2299,7 +2305,7 @@ abstract class AppLocalizations {
   /// No description provided for @gardeRulesIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Règles appliquées sur le téléphone quand aucune fenêtre n\'est fournie par un critique ou le domaine. Décalages en années après le millésime.'**
+  /// **'Règles appliquées sur le téléphone quand aucune fenêtre n\'est fournie par un critique ou le domaine. Décalages en années après le millésime. La première règle qui correspond au vin s\'applique. Touchez une règle pour la modifier.'**
   String get gardeRulesIntro;
 
   /// No description provided for @gardeRuleLine.
@@ -2313,6 +2319,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Règle par défaut'**
   String get gardeRuleDefault;
+
+  /// No description provided for @gardeRulesCustomized.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règles modifiées sur ce téléphone'**
+  String get gardeRulesCustomized;
+
+  /// No description provided for @gardeRuleAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une règle'**
+  String get gardeRuleAdd;
+
+  /// No description provided for @gardeRuleEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la règle'**
+  String get gardeRuleEdit;
+
+  /// No description provided for @gardeRuleNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle règle'**
+  String get gardeRuleNew;
+
+  /// No description provided for @gardeRulesReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rétablir les valeurs par défaut'**
+  String get gardeRulesReset;
+
+  /// No description provided for @gardeRulesResetTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rétablir les règles livrées ?'**
+  String get gardeRulesResetTitle;
+
+  /// No description provided for @gardeRulesResetBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos modifications sont perdues. Les fiches dont la garde est estimée sont recalculées.'**
+  String get gardeRulesResetBody;
+
+  /// No description provided for @gardeRuleDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la règle'**
+  String get gardeRuleDelete;
+
+  /// No description provided for @gardeRuleColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur'**
+  String get gardeRuleColor;
+
+  /// No description provided for @gardeRuleRegions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Régions'**
+  String get gardeRuleRegions;
+
+  /// No description provided for @gardeRuleClassifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classements'**
+  String get gardeRuleClassifications;
+
+  /// No description provided for @gardeRuleAny.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get gardeRuleAny;
+
+  /// No description provided for @gardeRuleOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres conditions conservées : {conditions}'**
+  String gardeRuleOther(String conditions);
+
+  /// No description provided for @gardeRuleStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début (années)'**
+  String get gardeRuleStart;
+
+  /// No description provided for @gardeRulePeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apogée (années)'**
+  String get gardeRulePeak;
+
+  /// No description provided for @gardeRuleEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin (années)'**
+  String get gardeRuleEnd;
+
+  /// No description provided for @gardeRuleOffsetsInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 0 et 100, avec début ≤ apogée ≤ fin.'**
+  String get gardeRuleOffsetsInvalid;
+
+  /// No description provided for @gardeRuleNeedsCondition.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez au moins une couleur, une région ou un classement.'**
+  String get gardeRuleNeedsCondition;
+
+  /// No description provided for @gardeRuleVintaged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Millésimé'**
+  String get gardeRuleVintaged;
+
+  /// No description provided for @gardeRuleNonVintage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non millésimé'**
+  String get gardeRuleNonVintage;
+
+  /// No description provided for @gardeRuleSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher'**
+  String get gardeRuleSearch;
+
+  /// No description provided for @gardeRulesSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Règles enregistrées, aucune fiche à recalculer} =1{Règles enregistrées, 1 fiche recalculée} other{Règles enregistrées, {count} fiches recalculées}}'**
+  String gardeRulesSaved(int count);
 
   /// No description provided for @backupIntro.
   ///

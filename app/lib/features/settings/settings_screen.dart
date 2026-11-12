@@ -16,7 +16,8 @@ import '../wine_detail/price_actions.dart';
 
 const _currencies = ['EUR', 'CHF', 'USD', 'GBP', 'CAD'];
 
-/// Paramètres : réglages (PAR-05) et paramétrage (PRO-01, PAR-01, PAR-06).
+/// Paramètres : réglages (PAR-05) et paramétrage (PRO-01, PAR-01, PAR-06,
+/// PAR-07).
 /// Ni flux ni jeu de démonstration dans l'app publiée (T122).
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -247,7 +248,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             leading: const Icon(Icons.hourglass_bottom),
             title: Text(l.settingsGardeRules),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => context.push('/parametres/garde'),
+            onTap: () => context.go(AppDestination.gardeRules.path),
           ),
         ],
       ),

@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yaml/yaml.dart';
 
 import '../../domain/app_settings.dart';
 import '../../domain/garde_rules.dart';
 import '../backup_providers.dart';
 import '../files/photo_service.dart';
+import '../garde_rules_store.dart';
 import '../flux_credentials.dart';
 import '../providers.dart';
 import '../settings_store.dart';
@@ -81,15 +81,11 @@ final enrichmentQueueProvider = FutureProvider<EnrichmentQueue>((ref) async {
   );
 });
 
-final gardeRulesListProvider = FutureProvider<List<GardeRule>>((ref) async {
-  final yaml = loadYaml(
-    await rootBundle.loadString('assets/regles/regles-garde.yaml'),
-  ) as YamlMap;
-  return [
-    for (final r in (yaml['regles'] as YamlList).cast<YamlMap>())
-      GardeRule.fromJson(r),
-  ];
-});
+/// Règles de garde appliquées à la validation : livrées ou modifiées
+/// (PAR-07).
+final gardeRulesListProvider = FutureProvider<List<GardeRule>>(
+  (ref) => ref.watch(gardeRulesStoreProvider.future),
+);
 
 final validationServiceProvider = FutureProvider<ValidationService>((
   ref,

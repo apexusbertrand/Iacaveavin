@@ -95,6 +95,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PAR-04 | docs/05 | Import et export de chaque liste en CSV. | 1 |
 | PAR-05 | docs/05 | Réglages : ~~adresse du flux n8n et clé secrète (saisie ou QR code, st | 2 |
 | PAR-06 | docs/05 | Écran « Règles de garde » en lecture : règles appliquées, avec l'indic | 1 |
+| PAR-07 | docs/05 | « Règles de garde » est une entrée du menu principal et l'écran devien | 6 |
 | SAV-01 | docs/05 | Export d'une archive zip (base, photos, manifeste avec version de sché | 2 |
 | SAV-02 | docs/05 | Variante « sans photos », quelques Mo, proposée par défaut pour les sa | 1 |
 | SAV-03 | docs/05 | Sauvegarde locale automatique hebdomadaire, 3 dernières conservées. Ra | 2 |
@@ -153,4 +154,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-139 exigences couvertes sur 148.
+140 exigences couvertes sur 149.

@@ -6,7 +6,7 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 
 ## NAV. Navigation [lot 1]
 
-- NAV-01. Tiroir latéral comme sur les captures : Mes vins (accueil), À boire, Emplacements, Statistiques, Liste d'achats, Import et export, Sauvegarde, Paramètres, À propos.
+- NAV-01. Tiroir latéral comme sur les captures : Mes vins (accueil), À boire, Emplacements, Statistiques, Règles de garde (PAR-07), Liste d'achats, Import et export, Sauvegarde, Paramètres, À propos.
 - NAV-02. Lien profond `iacaveavin://fiche/<id>` qui ouvre une fiche (utilisé par le QR code des PDF).
 
 ## LST. Liste des vins [lot 1]
@@ -144,6 +144,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - PAR-04. Import et export de chaque liste en CSV.
 - PAR-05. Réglages : ~~adresse du flux n8n et clé secrète (saisie ou QR code, stockage sécurisé, jamais affichée en clair), test de connexion (`/sante`)~~ compte (CPT-01 à CPT-04, l'adresse du flux est fixée dans l'app depuis le 2026-10-31, T126), devise, langue, thème, propriétaire et emplacement par défaut, tri par défaut, échelle de note perso (/20 ou /100), prix affiché sur les cartes (achat ou marché), notifications, rafraîchissement automatique des prix, espace occupé par les photos.
 - PAR-06. Écran « Règles de garde » en lecture : règles appliquées, avec l'indication « valeurs par défaut à valider » tant que `a_valider` est vrai.
+- PAR-07. « Règles de garde » est une entrée du menu principal et l'écran devient modifiable : pour chaque règle, couleur, régions, classements et décalages (début, apogée, fin, de 0 à 100 ans, début ≤ apogée ≤ fin). On ajoute une règle (placée avant les règles moins précises), on en supprime une (sauf la règle par défaut), on rétablit les règles livrées. À chaque enregistrement, les fiches dont la garde est estimée sont recalculées ; une garde de critique, du domaine ou saisie à la main ne bouge pas (2026-11-12, T138).
 
 ## SAV. Sauvegarde et restauration [lot 1]
 

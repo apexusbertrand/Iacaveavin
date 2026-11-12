@@ -39,7 +39,7 @@ Toutes les tables portent id (UUID v4), cave_id, created_at, updated_at, deleted
 
 Champs : garde_debut, garde_apogee (facultatif), garde_fin, en années.
 
-Origine de la fenêtre, par priorité : note critique avec fenêtre, puis domaine, puis marchand qui cite un critique, puis estimation locale par specs/regles-garde.yaml. L'agent n'estime jamais une garde : sans source, il renvoie une valeur nulle et l'app applique ses règles, de façon déterministe et hors ligne.
+Origine de la fenêtre, par priorité : note critique avec fenêtre, puis domaine, puis marchand qui cite un critique, puis estimation locale par specs/regles-garde.yaml, ou par les règles modifiées dans l'app (PAR-07). L'agent n'estime jamais une garde : sans source, il renvoie une valeur nulle et l'app applique ses règles, de façon déterministe et hors ligne.
 
 Statut, évalué dans cet ordre pour l'année en cours A (premier cas vrai) :
 

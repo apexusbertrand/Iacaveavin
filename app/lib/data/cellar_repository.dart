@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
+import '../domain/garde_rules.dart';
 import '../domain/scores.dart';
 import '../domain/stock_rules.dart';
 import '../domain/wine_detail.dart';
@@ -534,6 +535,68 @@ class CellarRepository {
 
   /// Met à jour une fiche (FIC-01). Changer le domaine rattache la cuvée au
   /// domaine de ce nom, créé au besoin.
+  /// PAR-07 : après une modification des règles de garde, recalcule les
+  /// fiches dont la garde vient de l'estimation. Une garde publiée par un
+  /// critique ou le domaine, ou saisie à la main, n'est jamais touchée
+  /// (règle 3). [labels] : référentiel `liste:code` vers libellé. Renvoie
+  /// le nombre de fiches modifiées.
+  Future<int> reestimateGarde(
+    List<GardeRule> rules,
+    Map<String, String> labels,
+  ) {
+    return _db.transaction(() async {
+      final query =
+          _db.select(_db.wines).join([
+            innerJoin(_db.cuvees, _db.cuvees.id.equalsExp(_db.wines.cuveeId)),
+          ])..where(
+            _db.wines.gardeSource.equals('estimation') &
+                _db.wines.deletedAt.isNull(),
+          );
+      var changed = 0;
+      for (final row in await query.get()) {
+        final f = row.readTable(_db.wines);
+        final c = row.readTable(_db.cuvees);
+        final lots = await (_db.select(
+          _db.stockLots,
+        )..where((l) => l.ficheId.equals(f.id) & l.deletedAt.isNull())).get();
+        final purchase =
+            [
+                  for (final l in lots)
+                    int.tryParse((l.dateAchat ?? '').split('-').first),
+                ]
+                .whereType<int>()
+                .fold<int?>(null, (a, b) => a == null || b < a ? b : a);
+        final e = estimateGarde(
+          rules,
+          GardeInput(
+            color: c.couleur,
+            vintage: f.millesime,
+            classification: labels['classement:${c.classement}'],
+            region: labels['region:${c.region}'],
+            appellation: labels['appellation:${c.appellation}'],
+            purchaseYear: purchase ?? _clock().year,
+          ),
+        );
+        if (e == null ||
+            (e.start == f.gardeDebut &&
+                e.peak == f.gardeApogee &&
+                e.end == f.gardeFin)) {
+          continue;
+        }
+        await (_db.update(_db.wines)..where((w) => w.id.equals(f.id))).write(
+          WinesCompanion(
+            updatedAt: Value(_now),
+            gardeDebut: Value(e.start),
+            gardeApogee: Value(e.peak),
+            gardeFin: Value(e.end),
+          ),
+        );
+        changed++;
+      }
+      return changed;
+    });
+  }
+
   Future<void> updateWine(String id, WineDraft d) {
     return _db.transaction(() async {
       final f = await (_db.select(

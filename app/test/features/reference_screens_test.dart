@@ -67,14 +67,93 @@ void main() {
     expect(find.text('Caviste du coin'), findsOneWidget);
   });
 
-  testWidgets('PAR-06 règles de garde en lecture, validées (V2)', (
+  testWidgets('PAR-06 PAR-07 règles de garde dans le menu, validées (V2)', (
     tester,
   ) async {
-    await pumpRealApp(tester, location: '/parametres/garde', seed: seed);
+    await pumpRealApp(tester, seed: seed);
+    await tester.tap(find.byIcon(Icons.menu));
+    await settle(tester);
+    await tester.tap(find.byKey(const ValueKey('drawer-gardeRules')));
+    await settle(tester);
     // Validées par Bertrand le 2026-11-01 : plus de mention « à valider ».
     expect(find.byKey(const ValueKey('garde-pending')), findsNothing);
+    expect(find.byKey(const ValueKey('garde-customized')), findsNothing);
     expect(find.text('Début +0 · apogée +1 · fin +2'), findsWidgets);
   });
+
+  testWidgets(
+    'PAR-07 modifier, ajouter une règle par couleur et région, rétablir',
+    (tester) async {
+      await pumpRealApp(tester, location: '/regles-garde', seed: seed);
+      // Modifier : la règle du rosé passe à fin +5.
+      await tester.tap(find.byKey(const ValueKey('garde-rule-rose')));
+      await settle(tester);
+      await tester.enterText(
+        find.byKey(const ValueKey('garde-rule-start')),
+        '4',
+      );
+      await tester.tap(find.byKey(const ValueKey('garde-rule-save')));
+      await settle(tester);
+      expect(
+        find.text('Entre 0 et 100, avec début ≤ apogée ≤ fin.'),
+        findsOneWidget,
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('garde-rule-start')),
+        '0',
+      );
+      await tester.enterText(find.byKey(const ValueKey('garde-rule-end')), '5');
+      await tester.tap(find.byKey(const ValueKey('garde-rule-save')));
+      await settle(tester);
+      expect(
+        find.text('Règles enregistrées, aucune fiche à recalculer'),
+        findsOneWidget,
+      );
+      expect(find.text('Début +0 · apogée +1 · fin +5'), findsOneWidget);
+      expect(find.byKey(const ValueKey('garde-customized')), findsOneWidget);
+      // Ajouter : blanc d'Alsace.
+      await tester.tap(find.byKey(const ValueKey('garde-add')));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('garde-rule-color')));
+      await settle(tester);
+      await tester.tap(find.text('Blanc').last);
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('garde-rule-regions')));
+      await settle(tester);
+      await tester.enterText(
+        find.byKey(const ValueKey('garde-pick-search')),
+        'alsace',
+      );
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('garde-pick-Alsace')));
+      await tester.tap(find.byKey(const ValueKey('garde-pick-ok')));
+      await settle(tester);
+      expect(find.text('Alsace'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const ValueKey('garde-rule-start')),
+        '1',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('garde-rule-peak')),
+        '4',
+      );
+      await tester.enterText(find.byKey(const ValueKey('garde-rule-end')), '9');
+      await tester.tap(find.byKey(const ValueKey('garde-rule-save')));
+      await settle(tester);
+      expect(find.text('Blanc · Alsace'), findsOneWidget);
+      expect(find.text('Début +1 · apogée +4 · fin +9'), findsOneWidget);
+      // Rétablir les règles livrées.
+      await tester.tap(find.byKey(const ValueKey('garde-menu')));
+      await settle(tester);
+      await tester.tap(find.text('Rétablir les valeurs par défaut'));
+      await settle(tester);
+      await tester.tap(find.text('Rétablir les valeurs par défaut').last);
+      await settle(tester);
+      expect(find.text('Blanc · Alsace'), findsNothing);
+      expect(find.text('Début +0 · apogée +1 · fin +5'), findsNothing);
+      expect(find.byKey(const ValueKey('garde-customized')), findsNothing);
+    },
+  );
 
   testWidgets('PAR-05 réglages : thème sombre appliqué et mémorisé', (
     tester,

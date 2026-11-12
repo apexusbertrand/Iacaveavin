@@ -25,6 +25,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navStatistics => 'Statistiques';
 
   @override
+  String get navGardeRules => 'Règles de garde';
+
+  @override
   String get navShoppingList => 'Liste d\'achats';
 
   @override
@@ -1340,7 +1343,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gardeRulesIntro =>
-      'Règles appliquées sur le téléphone quand aucune fenêtre n\'est fournie par un critique ou le domaine. Décalages en années après le millésime.';
+      'Règles appliquées sur le téléphone quand aucune fenêtre n\'est fournie par un critique ou le domaine. Décalages en années après le millésime. La première règle qui correspond au vin s\'applique. Touchez une règle pour la modifier.';
 
   @override
   String gardeRuleLine(int start, int peak, int end) {
@@ -1349,6 +1352,86 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gardeRuleDefault => 'Règle par défaut';
+
+  @override
+  String get gardeRulesCustomized => 'Règles modifiées sur ce téléphone';
+
+  @override
+  String get gardeRuleAdd => 'Ajouter une règle';
+
+  @override
+  String get gardeRuleEdit => 'Modifier la règle';
+
+  @override
+  String get gardeRuleNew => 'Nouvelle règle';
+
+  @override
+  String get gardeRulesReset => 'Rétablir les valeurs par défaut';
+
+  @override
+  String get gardeRulesResetTitle => 'Rétablir les règles livrées ?';
+
+  @override
+  String get gardeRulesResetBody =>
+      'Vos modifications sont perdues. Les fiches dont la garde est estimée sont recalculées.';
+
+  @override
+  String get gardeRuleDelete => 'Supprimer la règle';
+
+  @override
+  String get gardeRuleColor => 'Couleur';
+
+  @override
+  String get gardeRuleRegions => 'Régions';
+
+  @override
+  String get gardeRuleClassifications => 'Classements';
+
+  @override
+  String get gardeRuleAny => 'Toutes';
+
+  @override
+  String gardeRuleOther(String conditions) {
+    return 'Autres conditions conservées : $conditions';
+  }
+
+  @override
+  String get gardeRuleStart => 'Début (années)';
+
+  @override
+  String get gardeRulePeak => 'Apogée (années)';
+
+  @override
+  String get gardeRuleEnd => 'Fin (années)';
+
+  @override
+  String get gardeRuleOffsetsInvalid =>
+      'Entre 0 et 100, avec début ≤ apogée ≤ fin.';
+
+  @override
+  String get gardeRuleNeedsCondition =>
+      'Choisissez au moins une couleur, une région ou un classement.';
+
+  @override
+  String get gardeRuleVintaged => 'Millésimé';
+
+  @override
+  String get gardeRuleNonVintage => 'Non millésimé';
+
+  @override
+  String get gardeRuleSearch => 'Rechercher';
+
+  @override
+  String gardeRulesSaved(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Règles enregistrées, $count fiches recalculées',
+      one: 'Règles enregistrées, 1 fiche recalculée',
+      zero: 'Règles enregistrées, aucune fiche à recalculer',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get backupIntro =>

@@ -79,4 +79,44 @@ void main() {
       'defaut',
     );
   });
+
+  test('PAR-07 règle ajoutée avant les règles moins précises', () {
+    const r = GardeRule(
+      id: 'perso',
+      conditions: {
+        'couleur': ['blanc'],
+        'region': ['Alsace'],
+      },
+      start: 1,
+      peak: 4,
+      end: 9,
+    );
+    final next = insertGardeRule(rules, r);
+    final at = next.indexOf(r);
+    expect(next.take(at).every((x) => x.conditions.length >= 2), isTrue);
+    expect(next[at + 1].conditions.length, lessThan(2));
+    expect(next.last.isCatchAll, isTrue);
+    expect(
+      estimateGarde(
+        next,
+        const GardeInput(color: 'blanc', vintage: '2020', region: 'Alsace'),
+      )!.ruleId,
+      'perso',
+    );
+    // Sans condition précise, elle passe juste avant la règle par défaut.
+    const all = GardeRule(id: 'x', conditions: {}, start: 0, peak: 1, end: 2);
+    expect(insertGardeRule(rules, all)[rules.length - 1].id, 'x');
+  });
+
+  test('PAR-07 décalages acceptés et aller-retour JSON', () {
+    expect(validGardeOffsets(0, 1, 2), isTrue);
+    expect(validGardeOffsets(3, 2, 5), isFalse);
+    expect(validGardeOffsets(-1, 0, 1), isFalse);
+    expect(validGardeOffsets(0, 50, 101), isFalse);
+    for (final r in rules) {
+      final back = GardeRule.fromJson(r.toJson());
+      expect(back.conditions, r.conditions);
+      expect((back.start, back.peak, back.end), (r.start, r.peak, r.end));
+    }
+  });
 }

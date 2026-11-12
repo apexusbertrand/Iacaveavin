@@ -10,6 +10,7 @@ import '../../features/add/validation_screen.dart';
 import '../../features/backup/backup_screen.dart';
 import '../../features/import_export/import_export_screen.dart';
 import '../../features/locations/locations_screen.dart';
+import '../../features/garde_rules/garde_rules_screen.dart';
 import '../../features/settings/reference_screens.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/shopping/shopping_screen.dart';
@@ -67,10 +68,6 @@ GoRouter buildRouter({String initialLocation = '/'}) => GoRouter(
           ListValuesScreen(list: state.pathParameters['list']!),
     ),
     GoRoute(
-      path: '/parametres/garde',
-      builder: (context, state) => const GardeRulesScreen(),
-    ),
-    GoRoute(
       path: '/ajout/photo',
       builder: (context, state) =>
           CaptureScreen(focusEan: state.uri.queryParameters['ean'] == '1'),
@@ -114,6 +111,7 @@ Widget _screenFor(AppDestination d) => switch (d) {
   AppDestination.feedback => const FeedbackScreen(),
   AppDestination.importExport => const ImportExportScreen(),
   AppDestination.statistics => const StatisticsScreen(),
+  AppDestination.gardeRules => const GardeRulesScreen(),
   AppDestination.toDrink => const ToDrinkScreen(),
   AppDestination.shoppingList => const ShoppingScreen(),
 };

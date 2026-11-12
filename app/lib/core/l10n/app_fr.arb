@@ -8,6 +8,7 @@
   "navToDrink": "À boire",
   "navLocations": "Emplacements",
   "navStatistics": "Statistiques",
+  "navGardeRules": "Règles de garde",
   "navShoppingList": "Liste d'achats",
   "navImportExport": "Import et export",
   "navBackup": "Sauvegarde",
@@ -752,7 +753,7 @@
     }
   },
   "gardeRulesPending": "Valeurs par défaut à valider",
-  "gardeRulesIntro": "Règles appliquées sur le téléphone quand aucune fenêtre n'est fournie par un critique ou le domaine. Décalages en années après le millésime.",
+  "gardeRulesIntro": "Règles appliquées sur le téléphone quand aucune fenêtre n'est fournie par un critique ou le domaine. Décalages en années après le millésime. La première règle qui correspond au vin s'applique. Touchez une règle pour la modifier.",
   "gardeRuleLine": "Début +{start} · apogée +{peak} · fin +{end}",
   "@gardeRuleLine": {
     "placeholders": {
@@ -768,6 +769,42 @@
     }
   },
   "gardeRuleDefault": "Règle par défaut",
+  "gardeRulesCustomized": "Règles modifiées sur ce téléphone",
+  "gardeRuleAdd": "Ajouter une règle",
+  "gardeRuleEdit": "Modifier la règle",
+  "gardeRuleNew": "Nouvelle règle",
+  "gardeRulesReset": "Rétablir les valeurs par défaut",
+  "gardeRulesResetTitle": "Rétablir les règles livrées ?",
+  "gardeRulesResetBody": "Vos modifications sont perdues. Les fiches dont la garde est estimée sont recalculées.",
+  "gardeRuleDelete": "Supprimer la règle",
+  "gardeRuleColor": "Couleur",
+  "gardeRuleRegions": "Régions",
+  "gardeRuleClassifications": "Classements",
+  "gardeRuleAny": "Toutes",
+  "gardeRuleOther": "Autres conditions conservées : {conditions}",
+  "@gardeRuleOther": {
+    "placeholders": {
+      "conditions": {
+        "type": "String"
+      }
+    }
+  },
+  "gardeRuleStart": "Début (années)",
+  "gardeRulePeak": "Apogée (années)",
+  "gardeRuleEnd": "Fin (années)",
+  "gardeRuleOffsetsInvalid": "Entre 0 et 100, avec début ≤ apogée ≤ fin.",
+  "gardeRuleNeedsCondition": "Choisissez au moins une couleur, une région ou un classement.",
+  "gardeRuleVintaged": "Millésimé",
+  "gardeRuleNonVintage": "Non millésimé",
+  "gardeRuleSearch": "Rechercher",
+  "gardeRulesSaved": "{count, plural, =0{Règles enregistrées, aucune fiche à recalculer} =1{Règles enregistrées, 1 fiche recalculée} other{Règles enregistrées, {count} fiches recalculées}}",
+  "@gardeRulesSaved": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "backupIntro": "La sauvegarde automatique d'Android ne suffit pas pour les photos : exportez régulièrement une archive vers Drive, un mail ou un PC.",
   "backupExport": "Exporter une archive sans photos",
   "backupExportHint": "Quelques Mo, à faire souvent.",

@@ -43,6 +43,48 @@ class GardeRule {
   final int start;
   final int peak;
   final int end;
+
+  /// Règle sans condition : la dernière, qui s'applique à tout vin.
+  bool get isCatchAll => conditions.isEmpty;
+
+  /// Même forme que le fichier YAML, pour les règles modifiées (PAR-07).
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'si': {
+      for (final c in conditions.entries)
+        c.key: c.value.length == 1 ? c.value.single : c.value,
+    },
+    'decalage': {'debut': start, 'apogee': peak, 'fin': end},
+  };
+
+  GardeRule copyWith({
+    Map<String, List<String>>? conditions,
+    int? start,
+    int? peak,
+    int? end,
+  }) => GardeRule(
+    id: id,
+    conditions: conditions ?? this.conditions,
+    start: start ?? this.start,
+    peak: peak ?? this.peak,
+    end: end ?? this.end,
+  );
+}
+
+/// PAR-07 : décalages acceptés, en années après le millésime.
+bool validGardeOffsets(int start, int peak, int end) =>
+    start >= 0 && start <= peak && peak <= end && end <= maxGardeOffset;
+
+const maxGardeOffset = 100;
+
+/// PAR-07 : une règle ajoutée passe avant la première règle moins précise
+/// (moins de conditions), pour ne pas être masquée par une règle plus
+/// générale. La règle sans condition reste la dernière.
+List<GardeRule> insertGardeRule(List<GardeRule> rules, GardeRule rule) {
+  final at = rules.indexWhere(
+    (r) => r.conditions.length < rule.conditions.length || r.isCatchAll,
+  );
+  return [...rules]..insert(at < 0 ? rules.length : at, rule);
 }
 
 /// Caractéristiques d'un vin utiles aux règles. Région, appellation et
