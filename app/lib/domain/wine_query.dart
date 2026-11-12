@@ -250,8 +250,10 @@ class WineFilters {
 
   bool matches(WineListItem w, int year) {
     switch (stock) {
-      case StockFilter.inStock when w.bottles <= 0 && !w.neverStocked:
-      case StockFilter.empty when w.bottles > 0 || w.neverStocked:
+      // T137 : « en stock » strict ; une fiche jamais approvisionnée est
+      // à 0 bouteille, donc « épuisé » (STK-06).
+      case StockFilter.inStock when w.bottles <= 0:
+      case StockFilter.empty when w.bottles > 0:
         return false;
       default:
     }

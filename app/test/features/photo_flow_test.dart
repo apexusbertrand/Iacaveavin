@@ -98,7 +98,7 @@ void main() {
   });
 
   testWidgets(
-    'AJO-01 AJO-02 AJO-04 AJO-05 AJO-06 AJO-08 AJO-13 NFR-08 FIC-06 FIC-07 parcours photo complet',
+    'AJO-01 AJO-02 AJO-04 AJO-05 AJO-06 AJO-08 AJO-13 AJO-16 NFR-08 FIC-06 FIC-07 parcours photo complet',
     (tester) async {
       final db = await start(tester);
       await tester.tap(find.byTooltip('Ajouter une bouteille'));
@@ -192,7 +192,8 @@ void main() {
         () => CellarRepository(db).wineItems(),
       );
       expect(items!.single.enrichmentStatus, 'valide');
-      expect(items.single.bottles, 1);
+      // AJO-16 : le lot enregistré sans saisir de quantité reste à 0.
+      expect(items.single.bottles, 0);
       expect(items.single.thumbPath, isNotNull);
     },
   );

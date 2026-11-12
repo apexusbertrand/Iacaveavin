@@ -175,36 +175,36 @@ void main() {
     expect(rows.single.deletedAt, isNotNull);
   });
 
-  test(
-    'STK-06 fiche enregistrée à 0 bouteille visible dans « Mes vins »',
-    () async {
-      final sansLot = await f.repo.createWine(
-        const WineDraft(
-          producer: 'Cuvée Hortense',
-          country: 'FR',
-          color: 'blanc',
-          vintage: '2020',
-        ),
-        cellarId: f.cellar,
-      );
-      final zero = await f.repo.createWine(
-        const WineDraft(
-          producer: 'Domaine Zéro',
-          country: 'FR',
-          color: 'rouge',
-          vintage: '2021',
-        ),
-        cellarId: f.cellar,
-        lot: const LotDraft(ownerId: 'o1', quantity: 0),
-      );
-      await f.stock.open(f.lot, 6);
-      final items = await f.repo.wineItems();
-      List<String> shown(WineFilters filters) => [
-        for (final i in WineQuery(filters: filters).apply(items, year: 2026))
-          i.id,
-      ];
-      expect(shown(const WineFilters()), unorderedEquals([sansLot, zero]));
-      expect(shown(const WineFilters(stock: StockFilter.empty)), [f.wine]);
-    },
-  );
+  test('STK-06 LST-05 fiche enregistrée à 0 bouteille : sous « épuisé », pas « en stock »', () async {
+    final sansLot = await f.repo.createWine(
+      const WineDraft(
+        producer: 'Cuvée Hortense',
+        country: 'FR',
+        color: 'blanc',
+        vintage: '2020',
+      ),
+      cellarId: f.cellar,
+    );
+    final zero = await f.repo.createWine(
+      const WineDraft(
+        producer: 'Domaine Zéro',
+        country: 'FR',
+        color: 'rouge',
+        vintage: '2021',
+      ),
+      cellarId: f.cellar,
+      lot: const LotDraft(ownerId: 'o1', quantity: 0),
+    );
+    await f.stock.open(f.lot, 6);
+    final items = await f.repo.wineItems();
+    List<String> shown(WineFilters filters) => [
+      for (final i in WineQuery(filters: filters).apply(items, year: 2026))
+        i.id,
+    ];
+    expect(shown(const WineFilters()), isEmpty);
+    expect(
+      shown(const WineFilters(stock: StockFilter.empty)),
+      unorderedEquals([f.wine, sansLot, zero]),
+    );
+  });
 }

@@ -15,7 +15,7 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 - LST-02. Tri par couleur dans l'ordre de la liste « couleur » du dictionnaire (rouge, blanc, rosé, champagne, effervescent, liquoreux, orange, autre), pas dans l'ordre alphabétique.
 - LST-03. Groupes repliables quand le tri 1 est groupable (millésime, couleur, pays, région, propriétaire, emplacement, année d'apogée), avec nombre de vins et de bouteilles.
 - LST-04. Tri par note Parker : les vins sans note Parker passent en fin de liste, quel que soit le sens (NOT-R4).
-- LST-05. Filtres combinables : stock (en stock, épuisé, tous), couleur, type, pays, région, appellation, plage de millésimes, propriétaire, emplacement avec ses sous-emplacements, statut de garde, année de consommation idéale, note minimale, plage de prix, cépage, statut d'enrichissement, favoris.
+- LST-05. Filtres combinables : stock (en stock : au moins une bouteille ; épuisé : 0 bouteille, fiche jamais approvisionnée comprise, T137 ; tous), couleur, type, pays, région, appellation, plage de millésimes, propriétaire, emplacement avec ses sous-emplacements, statut de garde, année de consommation idéale, note minimale, plage de prix, cépage, statut d'enrichissement, favoris.
 - LST-06. Recherche instantanée insensible aux accents et à la casse sur nom, domaine, appellation, lieu-dit, cépage et commentaires.
 - LST-07. Vue cartes et vue compacte (une ligne : pastille couleur, nom, millésime, quantité).
 - LST-08. Sélection multiple : PDF, export Excel, déplacer, changer de propriétaire, ré-enrichir, rafraîchir les prix.
@@ -57,6 +57,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - AJO-13. Recadrage sur l'étiquette : la lecture du flux renvoie le cadre de l'étiquette de chaque photo (contrat 1.1) ; l'app rogne la photo à la réception, garde la photo entière quand aucune étiquette n'est identifiable, et permet de retoucher le cadre ou de revenir à la photo entière à l'écran de validation. La photo d'origine est conservée jusqu'à la validation de la fiche, puis supprimée (2026-10-26, évolution 1, T86, T87).
 - AJO-14. Millésime lu par l'appareil photo, comme le code-barres : lecture à la volée dans un viseur (la même année lue seule sur deux images de suite) ou sur une photo de la galerie. Lecture sur le téléphone, sans réseau. Les dates de fondation (« depuis 1919 ») sont écartées. Le champ reste modifiable (2026-10-28, T116).
 - AJO-15. Validation progressive : dès que l'étiquette est lue, l'écran Identification passe seul à l'écran de validation, rempli avec la lecture ; les champs trouvés par le serveur s'y ajoutent à chaque retour du flux. On peut corriger ou rejeter un champ pendant l'attente ; l'enregistrement s'ouvre à la fin de la recherche. Le lot se saisit sur le même écran tant qu'il n'existe pas. En cas d'échec, la lecture reste affichée avec une relance (2026-10-28, T117).
+- AJO-16. À la création d'une fiche (photo ou saisie manuelle), la quantité du lot vaut 0 par défaut. Le stock se crédite à la main : quantité saisie dans le lot, ou bouton « Ajouter » de la fiche. Un lot à 0 ne crée aucun mouvement (2026-11-12, T136).
 
 ## STK. Stock et corrections [lot 1]
 

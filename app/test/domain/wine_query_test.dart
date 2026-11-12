@@ -152,13 +152,16 @@ void main() {
       expect(run(all), hasLength(5));
     });
     test(
-      'STK-06 fiche identifiée sans bouteille : visible en stock, pas épuisée',
+      'STK-06 LST-05 fiche jamais approvisionnée : épuisée, pas en stock',
       () {
         final l = [...items, w('nouveau', bottles: 0, neverStocked: true)];
         List<String> r(WineFilters f) =>
-            ids(WineQuery(filters: f).apply(l, year: 2026));
-        expect(r(const WineFilters()), contains('nouveau'));
-        expect(r(const WineFilters(stock: StockFilter.empty)), ['vide']);
+            ids(WineQuery(filters: f).apply(l, year: 2026))..sort();
+        expect(r(const WineFilters()), isNot(contains('nouveau')));
+        expect(r(const WineFilters(stock: StockFilter.empty)), [
+          'nouveau',
+          'vide',
+        ]);
       },
     );
     test('LST-05 couleur, propriétaire, emplacement avec ses parents', () {

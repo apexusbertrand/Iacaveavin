@@ -10,7 +10,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | LST-02 | docs/05 | Tri par couleur dans l'ordre de la liste « couleur » du dictionnaire ( | 1 |
 | LST-03 | docs/05 | Groupes repliables quand le tri 1 est groupable (millésime, couleur, p | 1 |
 | LST-04 | docs/05 | Tri par note Parker : les vins sans note Parker passent en fin de list | 1 |
-| LST-05 | docs/05 | Filtres combinables : stock (en stock, épuisé, tous), couleur, type, p | 6 |
+| LST-05 | docs/05 | Filtres combinables : stock (en stock : au moins une bouteille ; épuis | 8 |
 | LST-06 | docs/05 | Recherche instantanée insensible aux accents et à la casse sur nom, do | 2 |
 | LST-07 | docs/05 | Vue cartes et vue compacte (une ligne : pastille couleur, nom, millési | 1 |
 | LST-08 | docs/05 | Sélection multiple : PDF, export Excel, déplacer, changer de propriéta | 1 |
@@ -44,6 +44,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | AJO-13 | docs/05 | Recadrage sur l'étiquette : la lecture du flux renvoie le cadre de l'é | 7 |
 | AJO-14 | docs/05 | Millésime lu par l'appareil photo, comme le code-barres : lecture à la | 5 |
 | AJO-15 | docs/05 | Validation progressive : dès que l'étiquette est lue, l'écran Identifi | 1 |
+| AJO-16 | docs/05 | À la création d'une fiche (photo ou saisie manuelle), la quantité du l | 2 |
 | STK-01 | docs/05 | Ajouter ou ouvrir une ou plusieurs bouteilles depuis la fiche. Avec pl | 2 |
 | STK-02 | docs/05 | Ouvrir crée un mouvement `ouverture` et propose une note de dégustatio | 2 |
 | STK-03 | docs/05 | Correction de stock : l'utilisateur saisit la quantité réelle du lot,  | 2 |
@@ -152,4 +153,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-138 exigences couvertes sur 147.
+139 exigences couvertes sur 148.

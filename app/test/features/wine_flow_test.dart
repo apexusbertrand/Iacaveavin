@@ -84,6 +84,38 @@ void main() {
     },
   );
 
+  testWidgets(
+    'AJO-16 nouvelle fiche : lot à 0 par défaut, stock crédité à la main',
+    (tester) async {
+      await pumpRealApp(tester, location: '/fiche/nouvelle', seed: seedTwo);
+      await tester.enterText(
+        find.byKey(const ValueKey('field-producer')),
+        'Clos Vardelle',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('field-vintage')),
+        '2020',
+      );
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('lot-quantity')),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      final qty = tester.widget<TextField>(
+        find.byKey(const ValueKey('lot-quantity')),
+      );
+      expect(qty.controller!.text, '0');
+      await tester.tap(find.byKey(const ValueKey('save-wine')));
+      await settle(tester);
+      expect(find.text('CLOS VARDELLE'), findsOneWidget);
+      // Aucun mouvement d'entrée : la fiche reste à 0 bouteille.
+      expect(find.text('0 restante · 0 consommée'), findsOneWidget);
+      await tester.tap(find.text('Ajouter 1 bouteille'));
+      await settle(tester);
+      expect(find.text('1 restante · 0 consommée'), findsOneWidget);
+    },
+  );
+
   testWidgets('FIC-01 contrôle de saisie : millésime invalide refusé', (
     tester,
   ) async {

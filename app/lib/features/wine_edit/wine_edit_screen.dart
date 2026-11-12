@@ -529,7 +529,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
               LotForm(
                 initial: LotDraft(
                   ownerId: _defaultOwner!,
-                  quantity: 1,
+                  quantity: 0,
                   locationId: ref.read(settingsProvider).defaultLocationId,
                 ),
                 onChanged: (d) => _lot = d,

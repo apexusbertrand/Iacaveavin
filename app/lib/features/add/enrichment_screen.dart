@@ -361,7 +361,7 @@ class _LotEditorState extends ConsumerState<LotEditor> {
     return LotForm(
       initial: LotDraft(
         ownerId: _owner!,
-        quantity: 1,
+        quantity: 0,
         locationId: ref.read(settingsProvider).defaultLocationId,
       ),
       onSubmit: (d) async {
