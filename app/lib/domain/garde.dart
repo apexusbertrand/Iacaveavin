@@ -63,3 +63,36 @@ int? drinkPriority({required int year, int? start, int? peak, int? end}) {
     CellarStatus.tooYoung => 2 + (start! - year),
   };
 }
+
+/// STA-07 : au-delà de ce nombre d'années avant le début de garde, un vin est
+/// « à garder beaucoup » ; jusque-là, « à garder un peu ».
+const keepLittleMaxYears = 3;
+
+/// STA-07 : groupes de priorité de garde, dans l'ordre de LST-11.
+enum DrinkPriorityGroup {
+  past('1_passe'),
+  toDrink('2_a_boire'),
+  keepLittle('3_garder_peu'),
+  keepLong('4_garder_beaucoup');
+
+  const DrinkPriorityGroup(this.code);
+
+  /// Code ordonné : son tri alphabétique suit la priorité.
+  final String code;
+}
+
+/// STA-07 : groupe de priorité d'un vin (null sans fenêtre de garde).
+DrinkPriorityGroup? drinkPriorityGroup({
+  required int year,
+  int? start,
+  int? peak,
+  int? end,
+}) => switch (cellarStatus(year: year, start: start, peak: peak, end: end)) {
+  CellarStatus.unknown => null,
+  CellarStatus.past => DrinkPriorityGroup.past,
+  CellarStatus.tooYoung =>
+    start! - year <= keepLittleMaxYears
+        ? DrinkPriorityGroup.keepLittle
+        : DrinkPriorityGroup.keepLong,
+  _ => DrinkPriorityGroup.toDrink,
+};

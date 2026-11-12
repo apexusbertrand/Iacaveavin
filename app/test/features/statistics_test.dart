@@ -117,4 +117,31 @@ void main() {
       expect(shared['statistique.png']!.take(4), [0x89, 0x50, 0x4E, 0x47]);
     },
   );
+
+  testWidgets('STA-07 onglet Garde : priorité de garde sous le statut', (
+    tester,
+  ) async {
+    await pumpRealApp(tester, location: '/statistiques', seed: seedTwo);
+    await settle(tester);
+    await tester.ensureVisible(find.widgetWithText(Tab, 'Garde'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(Tab, 'Garde'));
+    await tester.pumpAndSettle();
+    await settle(tester);
+    expect(find.byKey(const ValueKey('stats-garde')), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('stats-priority')),
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('stats-garde')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    expect(find.text('Priorité de garde'), findsWidgets);
+    final status = tester.getTopLeft(find.text('Statut de garde').last);
+    final priority = tester.getTopLeft(find.text('Priorité de garde').last);
+    expect(priority.dy, greaterThan(status.dy));
+  });
 }

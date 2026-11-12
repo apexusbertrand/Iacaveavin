@@ -72,6 +72,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | STA-04 | docs/05 | Un tap sur une part ou une barre ouvre la liste filtrée correspondante | 2 |
 | STA-05 | docs/05 | Vues enregistrables en favoris, export PNG, PDF et CSV. | 2 |
 | STA-06 | docs/05 | Calcul local en moins d'une seconde pour 5 000 fiches. Aucun libellé t | 3 |
+| STA-07 | docs/05 | Onglet Garde des statistiques : sous le statut de garde, la priorité d | 2 |
 | PDF-01 | docs/05 | Fiche unitaire depuis la fiche vin, A4 portrait. Le fichier partagé po | 2 |
 | PDF-02 | docs/05 | Catalogue : 2 fiches par page A4 (moitié haute, moitié basse). Filtres | 2 |
 | PDF-03 | docs/05 | Page de garde optionnelle (date, filtres appliqués, nombre de fiches), | 1 |
@@ -151,4 +152,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-137 exigences couvertes sur 146.
+138 exigences couvertes sur 147.

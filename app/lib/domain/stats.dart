@@ -53,6 +53,9 @@ enum StatDimension {
   owner('proprietaire'),
   location('emplacement'),
   gardeStatus('statut_garde'),
+
+  /// STA-07 : passés, à boire, à garder un peu, à garder beaucoup.
+  drinkPriority('priorite_garde', ordered: true),
   gardeStart('annee_debut_garde', ordered: true),
   peakYear('annee_apogee', ordered: true),
   scoreBand('tranche_note', ordered: true),
@@ -256,6 +259,14 @@ String keyOf(StatFact f, StatDimension d, int year) => switch (d) {
     peak: f.gardePeak,
     end: f.gardeEnd,
   ).code,
+  StatDimension.drinkPriority =>
+    drinkPriorityGroup(
+          year: year,
+          start: f.gardeStart,
+          peak: f.gardePeak,
+          end: f.gardeEnd,
+        )?.code ??
+        noneKey,
   StatDimension.gardeStart => f.gardeStart?.toString() ?? noneKey,
   StatDimension.peakYear => f.gardePeak?.toString() ?? noneKey,
   StatDimension.scoreBand =>

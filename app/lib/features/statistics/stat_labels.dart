@@ -90,6 +90,7 @@ class StatLabels {
     StatDimension.owner => l.statDimOwner,
     StatDimension.location => l.statDimLocation,
     StatDimension.gardeStatus => l.statDimGardeStatus,
+    StatDimension.drinkPriority => l.statDimDrinkPriority,
     StatDimension.gardeStart => l.statDimGardeStart,
     StatDimension.peakYear => l.statDimPeak,
     StatDimension.scoreBand => l.statDimScoreBand,
@@ -142,6 +143,13 @@ class StatLabels {
           orElse: () => CellarStatus.unknown,
         ),
       ),
+      StatDimension.drinkPriority => switch (k) {
+        '1_passe' => l.priorityPast,
+        '2_a_boire' => l.priorityToDrink,
+        '3_garder_peu' => l.priorityKeepLittle(keepLittleMaxYears),
+        '4_garder_beaucoup' => l.priorityKeepLong(keepLittleMaxYears),
+        _ => k,
+      },
       StatDimension.purchaseMonth ||
       StatDimension.openingMonth => _month.format(
         DateTime(int.parse(k.substring(0, 4)), int.parse(k.substring(5, 7))),
@@ -176,6 +184,15 @@ Color seriesColor(BuildContext context, StatDimension? d, String key, int i) {
       'apogee' => CellarStatusTokens.apogee,
       'a_boire_vite' => CellarStatusTokens.a_boire_vite,
       'passe' => CellarStatusTokens.passe,
+      _ => CellarStatusTokens.inconnu,
+    };
+  }
+  if (d == StatDimension.drinkPriority) {
+    return switch (key) {
+      '1_passe' => CellarStatusTokens.passe,
+      '2_a_boire' => CellarStatusTokens.a_boire,
+      '3_garder_peu' => CellarStatusTokens.apogee,
+      '4_garder_beaucoup' => CellarStatusTokens.trop_jeune,
       _ => CellarStatusTokens.inconnu,
     };
   }

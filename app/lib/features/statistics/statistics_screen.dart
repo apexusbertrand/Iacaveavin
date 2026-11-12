@@ -410,6 +410,10 @@ class _GardeTab extends StatelessWidget {
       measure: StatMeasure.bottles,
       dim1: StatDimension.gardeStatus,
     );
+    const byPriority = StatQuery(
+      measure: StatMeasure.bottles,
+      dim1: StatDimension.drinkPriority,
+    );
     void open(String t, Set<String> ids) => openStatWines(context, t, ids);
     return ListView(
       key: const ValueKey('stats-garde'),
@@ -439,6 +443,18 @@ class _GardeTab extends StatelessWidget {
             result: status,
             query: byStatus,
             chart: StatChart.donut,
+            labels: c.labels,
+            onOpen: open,
+          ),
+        ),
+        // STA-07 : sous le statut, la priorité de garde (LST-11).
+        StatSection(
+          l.statDimDrinkPriority,
+          StatView(
+            key: const ValueKey('stats-priority'),
+            result: c.run(byPriority.measure, byPriority.dim1),
+            query: byPriority,
+            chart: StatChart.barsHorizontal,
             labels: c.labels,
             onOpen: open,
           ),

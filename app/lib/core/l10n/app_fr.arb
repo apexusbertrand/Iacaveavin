@@ -1879,5 +1879,24 @@
         "type": "int"
       }
     }
+  },
+  "statDimDrinkPriority": "Priorité de garde",
+  "priorityPast": "Passés",
+  "priorityToDrink": "À boire",
+  "priorityKeepLittle": "À garder un peu ({years} ans au plus)",
+  "@priorityKeepLittle": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "priorityKeepLong": "À garder beaucoup (plus de {years} ans)",
+  "@priorityKeepLong": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
   }
 }

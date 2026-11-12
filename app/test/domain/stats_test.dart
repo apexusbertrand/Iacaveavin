@@ -220,4 +220,29 @@ void main() {
     watch.stop();
     expect(watch.elapsed, lessThan(const Duration(seconds: 1)));
   });
+
+  test(
+    'STA-07 priorité de garde : passés, à boire, à garder un peu, beaucoup',
+    () {
+      final facts = [
+        fact('passe', 2, start: 2005, end: 2015),
+        fact('boire', 3, start: 2020, end: 2035),
+        fact('peu', 1, start: 2029, end: 2040),
+        fact('beaucoup', 4, start: 2032, end: 2045),
+        fact('inconnu', 5),
+      ];
+      final r = run(facts, StatMeasure.bottles, StatDimension.drinkPriority);
+      expect(r.keys1, [
+        '1_passe',
+        '2_a_boire',
+        '3_garder_peu',
+        '4_garder_beaucoup',
+        noneKey,
+      ]);
+      expect(r.valueOf('1_passe'), 2);
+      expect(r.valueOf('2_a_boire'), 3);
+      expect(r.valueOf('3_garder_peu'), 1);
+      expect(r.valueOf('4_garder_beaucoup'), 4);
+    },
+  );
 }

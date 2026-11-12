@@ -3214,4 +3214,23 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get statDimDrinkPriority => 'Priorité de garde';
+
+  @override
+  String get priorityPast => 'Passés';
+
+  @override
+  String get priorityToDrink => 'À boire';
+
+  @override
+  String priorityKeepLittle(int years) {
+    return 'À garder un peu ($years ans au plus)';
+  }
+
+  @override
+  String priorityKeepLong(int years) {
+    return 'À garder beaucoup (plus de $years ans)';
+  }
 }

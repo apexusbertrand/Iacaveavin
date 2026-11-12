@@ -112,6 +112,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - STA-04. Un tap sur une part ou une barre ouvre la liste filtrée correspondante.
 - STA-05. Vues enregistrables en favoris, export PNG, PDF et CSV.
 - STA-06. Calcul local en moins d'une seconde pour 5 000 fiches. Aucun libellé technique affiché.
+- STA-07. Onglet Garde des statistiques : sous le statut de garde, la priorité de garde (LST-11) en barres : passés, à boire, à garder un peu (début de garde dans 3 ans au plus), à garder beaucoup (au-delà) ; vins sans fenêtre à part. Un tap ouvre la liste des vins du groupe. Dimension aussi proposée dans l'explorateur (2026-11-12, T135).
 
 ## PDF [lot 3]
 

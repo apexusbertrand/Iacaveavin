@@ -67,7 +67,7 @@ Sans apogée (garde 2026, fin 2032) : 2029 donne a_boire. Fenêtre d'un an (2026
 
 Années avant de boire = max(0, garde_debut − A). Année de consommation idéale = garde_apogee, sinon le milieu de la fenêtre arrondi à l'année inférieure.
 
-Années avant l'apogée (LST-11) = année de consommation idéale − A : positive avant, 0 l'année même, négative quand l'apogée est passée. Priorité de garde (LST-11), croissante : `passe` vaut garde_fin − A (négatif, le plus en retard d'abord), `a_boire_vite` 0, `apogee` 1, `a_boire` 2, `trop_jeune` 2 + (garde_debut − A), `inconnu` en fin. Valeurs calculées à l'affichage, jamais stockées.
+Années avant l'apogée (LST-11) = année de consommation idéale − A : positive avant, 0 l'année même, négative quand l'apogée est passée. Priorité de garde (LST-11), croissante : `passe` vaut garde_fin − A (négatif, le plus en retard d'abord), `a_boire_vite` 0, `apogee` 1, `a_boire` 2, `trop_jeune` 2 + (garde_debut − A), `inconnu` en fin. Valeurs calculées à l'affichage, jamais stockées. Groupes de priorité pour les statistiques (STA-07) : passé ; à boire (a_boire_vite, apogee, a_boire) ; à garder un peu (trop_jeune et garde_debut − A ≤ 3) ; à garder beaucoup (garde_debut − A > 3).
 
 ## Notes
 

@@ -5301,6 +5301,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count, plural, =1{apogée passée depuis 1 an} other{apogée passée depuis {count} ans}}'**
   String peakPassedYears(int count);
+
+  /// No description provided for @statDimDrinkPriority.
+  ///
+  /// In fr, this message translates to:
+  /// **'Priorité de garde'**
+  String get statDimDrinkPriority;
+
+  /// No description provided for @priorityPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passés'**
+  String get priorityPast;
+
+  /// No description provided for @priorityToDrink.
+  ///
+  /// In fr, this message translates to:
+  /// **'À boire'**
+  String get priorityToDrink;
+
+  /// No description provided for @priorityKeepLittle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À garder un peu ({years} ans au plus)'**
+  String priorityKeepLittle(int years);
+
+  /// No description provided for @priorityKeepLong.
+  ///
+  /// In fr, this message translates to:
+  /// **'À garder beaucoup (plus de {years} ans)'**
+  String priorityKeepLong(int years);
 }
 
 class _AppLocalizationsDelegate
