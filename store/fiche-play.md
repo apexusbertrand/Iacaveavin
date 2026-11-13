@@ -1,6 +1,6 @@
 # Fiche Google Play : IA cave à vin
 
-Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T123 et T124, comptes T126 à T129 (docs/decisions.md). Mis à jour le 2026-10-31 pour la version avec comptes, pas encore compilée. Captures, icône et bannière : dossier store/ à côté de ce fichier.
+Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T123 et T124, comptes T126 à T129 (docs/decisions.md). Mis à jour le 2026-11-13 pour la version 1.3 (menu Compte à droite, règles de garde modifiables, prix à date). Captures, icône et bannière : dossier store/ à côté de ce fichier.
 
 ## Identité
 
@@ -22,7 +22,7 @@ Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T1
 Votre cave à vin dans la poche : étiquette photographiée, fiche remplie.
 ```
 
-## Description longue (4 000 caractères max, ici environ 2 600)
+## Description longue (4 000 caractères max, ici environ 2 850)
 
 ```
 IA cave à vin tient l'inventaire de votre cave, bouteille par bouteille, et vous dit quoi ouvrir et quand.
@@ -39,6 +39,8 @@ GÉREZ VOTRE STOCK
 
 SACHEZ QUOI BOIRE
 - Écran « À boire » : vins dans leur fenêtre de garde, ceux à boire vite en tête.
+- Tri « Priorité de garde » et années avant l'apogée sur chaque vin.
+- Règles de garde modifiables par couleur, région et classement.
 - Onglet « Passés » : les bouteilles qui ont dépassé leur fenêtre, à part.
 - Alerte du mois : vins qui entrent en apogée ou arrivent en fin de fenêtre.
 - Accords inversés : choisissez un plat, l'application propose les vins de votre cave.
@@ -49,7 +51,8 @@ DÉGUSTEZ ET PARTAGEZ
 - Liste d'achats pour racheter un vin ou noter un vin repéré ailleurs.
 
 ANALYSEZ
-- Statistiques : bouteilles par couleur, région, millésime et garde, valeur d'achat de la cave.
+- Statistiques : bouteilles par couleur, région, millésime, garde et priorité de garde, valeur d'achat de la cave.
+- Historique des prix : prix marché relevé ou prix à date saisi à la main.
 - Catalogue PDF de toute la cave.
 - Export et import Excel avec simulation avant import.
 
@@ -90,7 +93,7 @@ Choisir « Toutes les fonctionnalités ou certaines d'entre elles sont soumises 
 
 ```
 La gestion de cave (liste, fiches, stock, emplacements, statistiques, PDF, Excel, sauvegarde) est accessible sans aucun identifiant.
-L'identification par photo et le relevé des prix demandent un compte gratuit : Paramètres > Compte, saisir une adresse mail, « Recevoir un code », puis saisir le code à six chiffres reçu par mail. N'importe quelle adresse convient, le compte est créé à la première connexion.
+L'identification par photo et le relevé des prix demandent un compte gratuit : toucher l'icône de compte en haut à droite de l'écran « Mes vins », saisir une adresse mail, « Recevoir un code », puis saisir le code à six chiffres reçu par mail. N'importe quelle adresse convient, le compte est créé à la première connexion.
 ```
 
 ~~Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé.~~ Réglé par les comptes (T126) : l'examinateur se connecte avec sa propre adresse.
@@ -120,7 +123,7 @@ Catégorie : « Toutes les autres catégories d'applications » (ni jeu, ni rés
 | Jeux d'argent, simulés ou réels | Non |
 | Contenu généré par les utilisateurs partagé avec d'autres | Non (rien n'est publié ni partagé entre utilisateurs) |
 | Partage de la position | Non |
-| Achats numériques | Non |
+| Achats numériques | Non (à passer à Oui quand l'abonnement payant sera branché, Q11) |
 | Navigateur web ou moteur de recherche non restreint | Non |
 
 ## Sécurité des données (Data safety)
