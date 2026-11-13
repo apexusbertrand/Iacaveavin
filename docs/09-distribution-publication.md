@@ -28,6 +28,8 @@ Avant toute publication, vérifier que le nom n'est pas déjà une marque dépos
 
 ## Phase 2 : Google Play, décidée le 2026-10-28 (T123)
 
+État au 2026-11-13 (T140) : compte organisation APEXUS, fiche et déclarations remplies, politique de confidentialité publiée sur https://sites.google.com/view/iacaveavin-confidentialite, AAB v1.3.1 prêt dans la release. Reste l'accès de l'examinateur (Q13) et l'envoi en examen.
+
 - Compte personnel ou compte organisation Apexus-BMT. Un compte personnel créé après le 13 novembre 2023 doit faire tourner un test fermé d'au moins 12 testeurs inscrits sans interruption pendant 14 jours avant d'accéder à la production ([aide Play Console](https://support.google.com/googleplay/android-developer/answer/14151465?hl=en-GB)). Un compte organisation passe par une vérification d'entreprise.
 - Le lot 5 sert de répétition : les testeurs de la recette élargie peuvent devenir les testeurs du test fermé. En recruter 15 à 20 pour absorber les départs.
 - Livrable : Android App Bundle signé avec la clé d'envoi du lot 0, Play App Signing, niveau d'API cible exigé par Google au jour de la soumission. La CI le construit au tag `v*` (`iacaveavin-v1.0.0.aab`, avec l'APK signé et le zip des symboles de désobfuscation à déposer dans la Play Console). Sans tag poussé, l'onglet Actions, workflow « Application », « Run workflow » sur `main` avec la version (ex. `v1.0.0`) crée le tag et la release ; la version doit être celle de pubspec.yaml.

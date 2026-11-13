@@ -14,7 +14,7 @@ Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T1
 | Catégorie | Alimentation et boissons |
 | Adresse e-mail de contact | apexus.claude@gmail.com (confirmé le 2026-11-01, V8) |
 | Site web | aucun (choix de Bertrand du 2026-11-01, V8) |
-| Politique de confidentialité | URL publique obligatoire : page publiée à partir de politique-confidentialite.html, hébergement à choisir (Q8) |
+| Politique de confidentialité | https://sites.google.com/view/iacaveavin-confidentialite (Google Sites, publiée le 2026-11-13, T140) |
 
 ## Description courte (80 caractères max, ici 72)
 
@@ -98,7 +98,7 @@ L'identification par photo et le relevé des prix demandent un compte gratuit : 
 
 ~~Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé.~~ Réglé par les comptes (T126) : l'examinateur se connecte avec sa propre adresse.
 
-Suppression du compte : bouton « Supprimer mon compte » dans le menu Compte de l'app (CPT-05, fait le 2026-11-03). Google demande aussi un lien web dans la rubrique « Suppression des données » ; la page de la politique de confidentialité, une fois publiée (Q8), peut servir de lien si elle explique la démarche.
+Suppression du compte : bouton « Supprimer mon compte » dans le menu Compte de l'app (CPT-05, fait le 2026-11-03). Google demande aussi un lien web dans la rubrique « Suppression des données » ; la page de la politique de confidentialité (https://sites.google.com/view/iacaveavin-confidentialite) sert de lien : elle explique la démarche.
 
 ## Annonces
 
@@ -162,6 +162,6 @@ Non collectés : position, contacts, nom, données financières, santé, histori
 | Contenu généré par IA | Oui : les textes de la fiche proposés par le service d'identification sont générés par IA, marqués comme tels dans l'application et signalables (FIC-07, PRV-R4) |
 | Autorisations sensibles | Appareil photo, pour photographier l'étiquette et lire le code-barres et le millésime |
 
-## Test fermé (compte personnel)
+## Test fermé
 
-Avant la production : test fermé avec au moins 12 testeurs inscrits sans interruption pendant 14 jours. Prévoir 15 à 20 adresses Gmail pour absorber les départs (docs/09).
+Le compte Play Console est un compte organisation (APEXUS, T140) : la règle des 12 testeurs pendant 14 jours, propre aux comptes personnels, ne s'applique pas. Le test fermé « Alpha » reste utile pour une recette avant la production.

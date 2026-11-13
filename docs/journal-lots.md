@@ -175,7 +175,8 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - 2026-11-03 fait : CMP-10 (modifier une dégustation), CPT-05 (supprimer mon compte, contrat 2.1, testé en réel), CPT-06 (boutons d'abonnement, achat réel en Q11), CPT-07 (menu Compte à droite), règles de garde validées (V2), liste des points ouverts épurée (T131). APK de test 1.2.0, sans AAB.
   - 2026-11-12 : correctif 1.2.1, clé refusée signalée au lieu d'un « En attente d'envoi » sans fin (T132). APK de test, sans AAB.
   - 2026-11-12 fait, livré dans l'APK 1.3.0 : LST-11, années avant l'apogée sur la tuile et tri « Priorité de garde » (T133) ; LST-12, pastille couleur de 40 points et palette tranchée (T134) ; STA-07, priorité de garde dans les statistiques (T135) ; AJO-16, quantité du premier lot à 0 par défaut, stock crédité à la main (T136) ; filtre « en stock » strict, les fiches à 0 passent sous « épuisé » (T137) ; PAR-07, règles de garde dans le menu et modifiables, fiches estimées recalculées (T138).
-  - 2026-11-13 fait, sans APK (en attente du go de Bertrand) : PRX-07, prix à date saisi à la main dans l'onglet Prix (T139).
+  - 2026-11-13 fait, livré dans la version 1.3.1+8 (APK, AAB et symboles, release v1.3.1) : PRX-07, prix à date saisi à la main dans l'onglet Prix (T139).
+  - 2026-11-13 : préparation Google Play par Bertrand avec Claude in Chrome (T140) : politique de confidentialité publiée, fiche, contenu de l'application, classification, test fermé et test interne préparés. Reste : importer l'AAB v1.3.1, accès de l'examinateur (Q13), envoi en examen.
 - Mesures : aucune cible chiffrée propre au lot ; listes paresseuses (ListView.builder), calculs en fonctions pures sur la liste déjà chargée.
 - Recette Bertrand :
 
