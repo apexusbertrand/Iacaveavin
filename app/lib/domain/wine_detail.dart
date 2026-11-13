@@ -175,6 +175,7 @@ class MarketPriceView {
     this.offers,
     this.site,
     this.url,
+    this.manual = false,
   });
 
   final String date;
@@ -184,7 +185,13 @@ class MarketPriceView {
   final int? offers;
   final String? site;
   final String? url;
+
+  /// PRX-07 : prix saisi à la main (nature `saisie`), pas relevé par l'agent.
+  final bool manual;
 }
+
+/// PRX-07 : nature d'un prix saisi à la main (dictionnaire, nature_prix).
+const manualPriceNature = 'saisie';
 
 /// Provenance d'une valeur enrichie (FIC-06, PRV-R1 à PRV-R4).
 class ProvenanceView {

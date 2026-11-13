@@ -1384,6 +1384,60 @@ abstract class AppLocalizations {
   /// **'Relever le prix'**
   String get refreshPrice;
 
+  /// No description provided for @manualPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisir un prix'**
+  String get manualPrice;
+
+  /// No description provided for @manualPriceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix à date'**
+  String get manualPriceTitle;
+
+  /// No description provided for @manualPriceValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix unitaire TTC ({currency})'**
+  String manualPriceValue(String currency);
+
+  /// No description provided for @manualPriceDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date du prix'**
+  String get manualPriceDate;
+
+  /// No description provided for @manualPriceWhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où (caviste, site, salon…), facultatif'**
+  String get manualPriceWhere;
+
+  /// No description provided for @manualPriceInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un prix supérieur à 0.'**
+  String get manualPriceInvalid;
+
+  /// No description provided for @manualPriceSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix enregistré'**
+  String get manualPriceSaved;
+
+  /// No description provided for @priceManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisi à la main'**
+  String get priceManual;
+
+  /// No description provided for @priceManualRow.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} · saisi à la main'**
+  String priceManualRow(String date);
+
   /// No description provided for @lots.
   ///
   /// In fr, this message translates to:

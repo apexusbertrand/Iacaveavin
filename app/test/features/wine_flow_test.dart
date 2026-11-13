@@ -336,53 +336,78 @@ void main() {
     expect(values!.map((v) => v.label), contains('Coteaux de Test'));
   });
 
-  testWidgets('FIC-05 onglet Prix : achat par lot, dernier prix marché daté', (
-    tester,
-  ) async {
-    await pumpRealApp(
-      tester,
-      seed: (db, cellar) async {
-        await seedTwo(db, cellar);
-        final wine = (await CellarRepository(
-          db,
-        ).wineItems()).firstWhere((w) => w.producer == 'Château Bralmac');
-        final now = DateTime.utc(2026, 10, 1);
-        for (final (date, prix) in [
-          ('2026-03-01', 52.0),
-          ('2026-09-15', 55.0),
-        ]) {
-          await db
-              .into(db.marketPrices)
-              .insert(
-                MarketPricesCompanion.insert(
-                  id: 'p$date',
-                  caveId: cellar,
-                  createdAt: now,
-                  updatedAt: now,
-                  ficheId: wine.id,
-                  formatCl: 75,
-                  dateReleve: date,
-                  devise: 'EUR',
-                  trouve: true,
-                ).copyWith(prix: Value(prix)),
-              );
-        }
-      },
-    );
-    await tester.tap(find.text('Château Bralmac'));
-    await settle(tester);
-    await tester.ensureVisible(find.text('Prix'));
-    await tester.tap(find.text('Prix'));
-    await settle(tester);
-    expect(find.textContaining('Dernier prix : 55,00'), findsOneWidget);
-    expect(find.textContaining('2026-09-15'), findsOneWidget);
-    expect(find.textContaining('52,00'), findsOneWidget);
-    expect(find.text('Relever le prix'), findsOneWidget);
-    // PRX-05 : tendance et courbe à partir de deux relevés trouvés.
-    expect(find.byKey(const ValueKey('price-trend')), findsOneWidget);
-    expect(find.textContaining('En hausse de 6'), findsOneWidget);
-    expect(find.byKey(const ValueKey('price-chart')), findsOneWidget);
-  });
+  testWidgets(
+    'FIC-05 PRX-07 onglet Prix : achat, prix marché daté, saisie à date',
+    (tester) async {
+      await pumpRealApp(
+        tester,
+        seed: (db, cellar) async {
+          await seedTwo(db, cellar);
+          final wine = (await CellarRepository(
+            db,
+          ).wineItems()).firstWhere((w) => w.producer == 'Château Bralmac');
+          final now = DateTime.utc(2026, 10, 1);
+          for (final (date, prix) in [
+            ('2026-03-01', 52.0),
+            ('2026-09-15', 55.0),
+          ]) {
+            await db
+                .into(db.marketPrices)
+                .insert(
+                  MarketPricesCompanion.insert(
+                    id: 'p$date',
+                    caveId: cellar,
+                    createdAt: now,
+                    updatedAt: now,
+                    ficheId: wine.id,
+                    formatCl: 75,
+                    dateReleve: date,
+                    devise: 'EUR',
+                    trouve: true,
+                  ).copyWith(prix: Value(prix)),
+                );
+          }
+        },
+      );
+      await tester.tap(find.text('Château Bralmac'));
+      await settle(tester);
+      await tester.ensureVisible(find.text('Prix'));
+      await tester.tap(find.text('Prix'));
+      await settle(tester);
+      expect(find.textContaining('Dernier prix : 55,00'), findsOneWidget);
+      expect(find.textContaining('2026-09-15'), findsOneWidget);
+      expect(find.textContaining('52,00'), findsOneWidget);
+      expect(find.text('Relever le prix'), findsOneWidget);
+      // PRX-05 : tendance et courbe à partir de deux relevés trouvés.
+      expect(find.byKey(const ValueKey('price-trend')), findsOneWidget);
+      expect(find.textContaining('En hausse de 6'), findsOneWidget);
+      expect(find.byKey(const ValueKey('price-chart')), findsOneWidget);
+      // PRX-07 : prix à date saisi à la main.
+      await tester.dragUntilVisible(
+        find.byKey(const ValueKey('manual-price')),
+        find.byType(TabBarView),
+        const Offset(0, -200),
+      );
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('manual-price')));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('manual-price-save')));
+      await settle(tester);
+      expect(find.text('Saisissez un prix supérieur à 0.'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const ValueKey('manual-price-value')),
+        '61,50',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('manual-price-where')),
+        'Caviste du coin',
+      );
+      await tester.tap(find.byKey(const ValueKey('manual-price-save')));
+      await settle(tester);
+      expect(find.textContaining('Dernier prix : 61,50'), findsOneWidget);
+      expect(find.text('Saisi à la main · Caviste du coin'), findsOneWidget);
+    },
+  );
 
   testWidgets('PRO-03 filtre et valeur par propriétaire', (tester) async {
     await pumpRealApp(

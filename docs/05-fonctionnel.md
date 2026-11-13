@@ -92,6 +92,7 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - PRX-04. Un prix introuvable est enregistré « non trouvé » avec la date. Jamais d'estimation présentée comme un prix.
 - PRX-05. Affichage : dernier prix, date, nombre d'offres, lien vers chaque offre, tendance par rapport au relevé précédent, courbe.
 - PRX-06. Rafraîchissement automatique mensuel en option, désactivé par défaut.
+- PRX-07. Prix à date saisi à la main depuis l'onglet Prix de la fiche (« Saisir un prix ») : prix unitaire TTC, date (aujourd'hui par défaut, jamais dans le futur), format, et où il a été vu (facultatif). Il s'ajoute à l'historique à sa date, avec la nature `saisie`, et s'affiche « saisi à la main ». Il compte dans la valeur de la cave comme dernier prix s'il est le plus récent. Il ne bloque pas le relevé automatique (PRX-03) (2026-11-13, T139).
 
 ## STA. Statistiques façon BI [lot 3]
 

@@ -440,6 +440,29 @@
     }
   },
   "refreshPrice": "Relever le prix",
+  "manualPrice": "Saisir un prix",
+  "manualPriceTitle": "Prix à date",
+  "manualPriceValue": "Prix unitaire TTC ({currency})",
+  "@manualPriceValue": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "manualPriceDate": "Date du prix",
+  "manualPriceWhere": "Où (caviste, site, salon…), facultatif",
+  "manualPriceInvalid": "Saisissez un prix supérieur à 0.",
+  "manualPriceSaved": "Prix enregistré",
+  "priceManual": "Saisi à la main",
+  "priceManualRow": "{date} · saisi à la main",
+  "@priceManualRow": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "lots": "Lots",
   "lotLine": "{owner} · {format} cl · {count}",
   "@lotLine": {

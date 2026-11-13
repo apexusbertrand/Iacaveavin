@@ -198,4 +198,33 @@ void main() {
       );
     },
   );
+
+  test('PRX-07 prix à date saisi à la main : historique daté, sans bloquer le relevé', () async {
+    await f.repo.addManualPrice(
+      f.wine,
+      date: '2026-06-01',
+      price: 41.5,
+      formatCl: 75,
+      where: ' Caviste du coin ',
+    );
+    final row = (await prices()).single;
+    expect(row.nature, manualPriceNature);
+    expect((row.prix, row.trouve, row.devise), (41.5, true, 'EUR'));
+    expect(row.site, 'Caviste du coin');
+    // Un prix saisi ne compte pas dans la limite de 24 heures (PRX-03).
+    expect(await queue.enqueuePrice(f.wine), PriceEnqueue.queued);
+    await runUntilDone();
+    // Un prix saisi à une date passée se range à sa date.
+    await f.repo.addManualPrice(
+      f.wine,
+      date: '2025-01-10',
+      price: 30,
+      formatCl: 75,
+    );
+    final view = (await f.repo.wine(f.wine))!.marketPrices;
+    expect(view.first.date, '2025-01-10');
+    expect(view.first.manual, isTrue);
+    expect(view.where((p) => p.manual), hasLength(2));
+    expect(view.where((p) => !p.manual), isNotEmpty);
+  });
 }

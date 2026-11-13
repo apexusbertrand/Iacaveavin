@@ -882,7 +882,15 @@ class _PricesTab extends ConsumerWidget {
                     key: const ValueKey('last-market-price'),
                     style: theme.textTheme.bodyLarge,
                   ),
-                  if (last != null && last.found)
+                  if (last != null && last.manual)
+                    Text(
+                      last.site == null
+                          ? l.priceManual
+                          : '${l.priceManual} · ${last.site}',
+                      key: const ValueKey('last-price-manual'),
+                      style: theme.textTheme.bodyMedium,
+                    )
+                  else if (last != null && last.found)
                     Text(
                       l.priceOffers(last.offers ?? 0),
                       style: theme.textTheme.bodyMedium,
@@ -897,7 +905,10 @@ class _PricesTab extends ConsumerWidget {
                       key: const ValueKey('price-trend'),
                       style: theme.textTheme.bodyMedium,
                     ),
-                  if (last != null && last.found && last.url != null)
+                  if (last != null &&
+                      last.found &&
+                      !last.manual &&
+                      last.url != null)
                     TextButton.icon(
                       onPressed: () => openLink(last.url!),
                       icon: const Icon(Icons.open_in_new),
@@ -933,18 +944,31 @@ class _PricesTab extends ConsumerWidget {
               ),
             for (final p in wine.marketPrices.reversed.skip(1))
               _Row(
-                p.date,
+                p.manual ? l.priceManualRow(p.date) : p.date,
                 p.found && p.price != null
                     ? currency.format(p.price)
                     : l.priceNotFound(p.date),
               ),
             Padding(
               padding: const EdgeInsets.all(SpacingTokens.l),
-              child: OutlinedButton.icon(
-                key: const ValueKey('refresh-price'),
-                onPressed: () => refreshWinePrice(context, ref, wine.id),
-                icon: const Icon(Icons.refresh),
-                label: Text(l.refreshPrice),
+              child: Wrap(
+                spacing: SpacingTokens.s,
+                runSpacing: SpacingTokens.s,
+                children: [
+                  OutlinedButton.icon(
+                    key: const ValueKey('refresh-price'),
+                    onPressed: () => refreshWinePrice(context, ref, wine.id),
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l.refreshPrice),
+                  ),
+                  // PRX-07 : prix à date saisi à la main.
+                  OutlinedButton.icon(
+                    key: const ValueKey('manual-price'),
+                    onPressed: () => manualPriceDialog(context, ref, wine),
+                    icon: const Icon(Icons.edit_outlined),
+                    label: Text(l.manualPrice),
+                  ),
+                ],
               ),
             ),
           ],

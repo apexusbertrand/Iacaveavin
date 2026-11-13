@@ -110,7 +110,10 @@ class CellarRepository {
     for (final p
         in await (_db.select(_db.marketPrices)
               ..where((p) => p.deletedAt.isNull() & p.trouve.equals(true))
-              ..orderBy([(p) => OrderingTerm.asc(p.dateReleve)]))
+              ..orderBy([
+                (p) => OrderingTerm.asc(p.dateReleve),
+                (p) => OrderingTerm.asc(p.createdAt),
+              ]))
             .get()) {
       if (p.prix != null) market[(p.ficheId, p.formatCl)] = p.prix!;
     }
@@ -301,7 +304,10 @@ class CellarRepository {
     final prices =
         await (_db.select(_db.marketPrices)
               ..where((s) => s.ficheId.equals(id) & s.deletedAt.isNull())
-              ..orderBy([(s) => OrderingTerm.asc(s.dateReleve)]))
+              ..orderBy([
+                (s) => OrderingTerm.asc(s.dateReleve),
+                (s) => OrderingTerm.asc(s.createdAt),
+              ]))
             .get();
     final provenances = <String, ProvenanceView>{};
     for (final p
@@ -419,6 +425,7 @@ class CellarRepository {
             offers: m.nbOffres,
             site: m.site,
             url: m.url,
+            manual: m.nature == manualPriceNature,
           ),
       ],
     );
@@ -535,6 +542,44 @@ class CellarRepository {
 
   /// Met à jour une fiche (FIC-01). Changer le domaine rattache la cuvée au
   /// domaine de ce nom, créé au besoin.
+  /// PRX-07 : prix saisi à la main, à une date choisie. Il s'ajoute à
+  /// l'historique comme un relevé (rien n'est écrasé, PRX-03), avec la
+  /// nature `saisie` et la devise de la cave. [where] : où le prix a été vu
+  /// (caviste, site, salon), facultatif.
+  Future<void> addManualPrice(
+    String wineId, {
+    required String date,
+    required double price,
+    required double formatCl,
+    String? where,
+  }) async {
+    final f = await (_db.select(
+      _db.wines,
+    )..where((w) => w.id.equals(wineId))).getSingle();
+    final cave = await (_db.select(
+      _db.cellars,
+    )..where((c) => c.id.equals(f.caveId))).getSingle();
+    await _db
+        .into(_db.marketPrices)
+        .insert(
+          MarketPricesCompanion.insert(
+            id: _uuid.v4(),
+            caveId: f.caveId,
+            createdAt: _now,
+            updatedAt: _now,
+            ficheId: wineId,
+            formatCl: formatCl,
+            dateReleve: date,
+            devise: cave.devise,
+            trouve: true,
+          ).copyWith(
+            prix: Value(price),
+            nature: const Value(manualPriceNature),
+            site: Value(_blank(where)),
+          ),
+        );
+  }
+
   /// PAR-07 : après une modification des règles de garde, recalcule les
   /// fiches dont la garde vient de l'estimation. Une garde publiée par un
   /// critique ou le domaine, ou saisie à la main, n'est jamais touchée

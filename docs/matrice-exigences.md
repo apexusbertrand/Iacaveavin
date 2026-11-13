@@ -67,6 +67,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRX-04 | docs/05 | Un prix introuvable est enregistré « non trouvé » avec la date. Jamais | 1 |
 | PRX-05 | docs/05 | Affichage : dernier prix, date, nombre d'offres, lien vers chaque offr | 1 |
 | PRX-06 | docs/05 | Rafraîchissement automatique mensuel en option, désactivé par défaut. | 1 |
+| PRX-07 | docs/05 | Prix à date saisi à la main depuis l'onglet Prix de la fiche (« Saisir | 2 |
 | STA-01 | docs/05 | Tableaux prêts à l'emploi : | 2 |
 | STA-02 | docs/05 | Explorateur : l'utilisateur choisit une mesure, une dimension, une sec | 4 |
 | STA-03 | docs/05 | Seuls les graphiques compatibles sont proposés : donut sur une dimensi | 2 |
@@ -154,4 +155,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-140 exigences couvertes sur 149.
+141 exigences couvertes sur 150.

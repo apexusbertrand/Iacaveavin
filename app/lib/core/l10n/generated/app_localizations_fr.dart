@@ -793,6 +793,37 @@ class AppLocalizationsFr extends AppLocalizations {
   String get refreshPrice => 'Relever le prix';
 
   @override
+  String get manualPrice => 'Saisir un prix';
+
+  @override
+  String get manualPriceTitle => 'Prix à date';
+
+  @override
+  String manualPriceValue(String currency) {
+    return 'Prix unitaire TTC ($currency)';
+  }
+
+  @override
+  String get manualPriceDate => 'Date du prix';
+
+  @override
+  String get manualPriceWhere => 'Où (caviste, site, salon…), facultatif';
+
+  @override
+  String get manualPriceInvalid => 'Saisissez un prix supérieur à 0.';
+
+  @override
+  String get manualPriceSaved => 'Prix enregistré';
+
+  @override
+  String get priceManual => 'Saisi à la main';
+
+  @override
+  String priceManualRow(String date) {
+    return '$date · saisi à la main';
+  }
+
+  @override
   String get lots => 'Lots';
 
   @override

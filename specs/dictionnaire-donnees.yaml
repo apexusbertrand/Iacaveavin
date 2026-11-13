@@ -93,7 +93,7 @@ enums:
   type_mouvement: [entree, ouverture, sortie_autre, ajustement, transfert_sortant, transfert_entrant]
   type_photo: [etiquette, contre_etiquette, capsule, collerette, autre, degustation, repas, evenement]
   type_emplacement: [cave, meuble, casier, clayette, autre]
-  nature_prix: [offre, mediane, minimum, cote]
+  nature_prix: [offre, mediane, minimum, cote, saisie]   # saisie : prix à date saisi à la main (PRX-07), jamais envoyé par le flux
   statut_job: [en_attente, en_cours, termine, partiel, erreur]
 
 entites:

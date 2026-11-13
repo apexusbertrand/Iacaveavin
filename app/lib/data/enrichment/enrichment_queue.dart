@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/enrichment.dart';
+import '../../domain/wine_detail.dart' show manualPriceNature;
 import '../db/app_database.dart';
 import '../files/photo_service.dart';
 import 'contract_validator.dart';
@@ -176,11 +177,18 @@ class EnrichmentQueue {
     return PriceEnqueue.queued;
   }
 
-  /// Vrai si la fiche a un relevé de moins de 24 heures (PRX-03).
+  /// Vrai si la fiche a un relevé de moins de 24 heures (PRX-03). Un prix
+  /// saisi à la main (PRX-07) ne compte pas : il ne bloque pas le relevé.
   Future<bool> priceIsRecent(String wineId) async {
     final last =
         await (_db.select(_db.marketPrices)
-              ..where((p) => p.ficheId.equals(wineId) & p.deletedAt.isNull())
+              ..where(
+                (p) =>
+                    p.ficheId.equals(wineId) &
+                    p.deletedAt.isNull() &
+                    (p.nature.isNull() |
+                        p.nature.equals(manualPriceNature).not()),
+              )
               ..orderBy([(p) => OrderingTerm.desc(p.createdAt)])
               ..limit(1))
             .getSingleOrNull();
