@@ -202,42 +202,47 @@ class _AccountSectionState extends ConsumerState<AccountSection> {
           ),
         ],
       ),
-      const Divider(height: SpacingTokens.xxl),
       // CPT-06 : abonnement mensuel ou annuel, désabonnement par le store.
-      Text(l.subscriptionTitle, style: theme.textTheme.titleSmall),
-      const SizedBox(height: SpacingTokens.xs),
-      if (a.status == AccountStatus.subscriber) ...[
-        Text(l.subscriptionActive, style: theme.textTheme.bodyMedium),
-        const SizedBox(height: SpacingTokens.s),
-        OutlinedButton.icon(
-          key: const ValueKey('subscription-manage'),
-          onPressed: _busy ? null : _manageSubscription,
-          icon: const Icon(Icons.open_in_new),
-          label: Text(l.subscriptionManage),
-        ),
-      ] else ...[
-        Text(l.subscriptionOffer, style: theme.textTheme.bodyMedium),
-        const SizedBox(height: SpacingTokens.s),
-        Wrap(
-          spacing: SpacingTokens.s,
-          runSpacing: SpacingTokens.s,
-          children: [
-            FilledButton.tonal(
-              key: const ValueKey('subscribe-monthly'),
-              onPressed: _busy
-                  ? null
-                  : () => _subscribe(SubscriptionPlan.monthly),
-              child: Text(l.subscriptionMonthly),
-            ),
-            FilledButton.tonal(
-              key: const ValueKey('subscribe-yearly'),
-              onPressed: _busy
-                  ? null
-                  : () => _subscribe(SubscriptionPlan.yearly),
-              child: Text(l.subscriptionYearly),
-            ),
-          ],
-        ),
+      // CPT-08 : masqué tant que l'achat n'est pas branché, sauf pour gérer
+      // un abonnement existant.
+      if (ref.watch(subscriptionStoreProvider).available ||
+          a.status == AccountStatus.subscriber) ...[
+        const Divider(height: SpacingTokens.xxl),
+        Text(l.subscriptionTitle, style: theme.textTheme.titleSmall),
+        const SizedBox(height: SpacingTokens.xs),
+        if (a.status == AccountStatus.subscriber) ...[
+          Text(l.subscriptionActive, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: SpacingTokens.s),
+          OutlinedButton.icon(
+            key: const ValueKey('subscription-manage'),
+            onPressed: _busy ? null : _manageSubscription,
+            icon: const Icon(Icons.open_in_new),
+            label: Text(l.subscriptionManage),
+          ),
+        ] else ...[
+          Text(l.subscriptionOffer, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: SpacingTokens.s),
+          Wrap(
+            spacing: SpacingTokens.s,
+            runSpacing: SpacingTokens.s,
+            children: [
+              FilledButton.tonal(
+                key: const ValueKey('subscribe-monthly'),
+                onPressed: _busy
+                    ? null
+                    : () => _subscribe(SubscriptionPlan.monthly),
+                child: Text(l.subscriptionMonthly),
+              ),
+              FilledButton.tonal(
+                key: const ValueKey('subscribe-yearly'),
+                onPressed: _busy
+                    ? null
+                    : () => _subscribe(SubscriptionPlan.yearly),
+                child: Text(l.subscriptionYearly),
+              ),
+            ],
+          ),
+        ],
       ],
       const Divider(height: SpacingTokens.xxl),
       // CPT-05 : suppression du compte, confirmée avant l'envoi.

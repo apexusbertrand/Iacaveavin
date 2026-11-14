@@ -120,6 +120,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | CPT-05 | docs/05 | Supprimer mon compte : bouton du menu Compte, confirmé avant l'envoi.  | 2 |
 | CPT-06 | docs/05 | Abonnement : en formule gratuite, boutons « Abonnement mensuel » et «  | 2 |
 | CPT-07 | docs/05 | Le compte a son propre menu, à droite, ouvert par l'icône de compte en | 1 |
+| CPT-08 | docs/05 | Tant que l'achat intégré n'est pas branché (Q11), la section Abonnemen | 1 |
 | NFR-01 | docs/07 | Performance : démarrage à froid sous 2 s, liste fluide à 60 images/s, | - |
 | NFR-02 | docs/07 | Performance : PDF, Excel, compression d'images et calculs statistique | - |
 | NFR-03 | docs/07 | Hors ligne : tout fonctionne sans réseau sauf l'enrichissement et le | 2 |
@@ -155,4 +156,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-141 exigences couvertes sur 150.
+142 exigences couvertes sur 151.

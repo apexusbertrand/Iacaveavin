@@ -177,6 +177,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - 2026-11-12 fait, livré dans l'APK 1.3.0 : LST-11, années avant l'apogée sur la tuile et tri « Priorité de garde » (T133) ; LST-12, pastille couleur de 40 points et palette tranchée (T134) ; STA-07, priorité de garde dans les statistiques (T135) ; AJO-16, quantité du premier lot à 0 par défaut, stock crédité à la main (T136) ; filtre « en stock » strict, les fiches à 0 passent sous « épuisé » (T137) ; PAR-07, règles de garde dans le menu et modifiables, fiches estimées recalculées (T138).
   - 2026-11-13 fait, livré dans la version 1.3.1+8 (APK, AAB et symboles, release v1.3.1) : PRX-07, prix à date saisi à la main dans l'onglet Prix (T139).
   - 2026-11-13 : préparation Google Play par Bertrand avec Claude in Chrome (T140) : politique de confidentialité publiée, fiche, contenu de l'application, classification, test fermé et test interne préparés. Reste : importer l'AAB v1.3.1, accès de l'examinateur (Q13), envoi en examen.
+  - 2026-11-14 fait, sans APK ni AAB (en attente du go de Bertrand) : compte de revue Google Play à code fixe dans le flux Comptes (Q13, T141) ; CPT-08, boutons d'abonnement masqués tant que l'achat n'est pas branché (T142).
 - Mesures : aucune cible chiffrée propre au lot ; listes paresseuses (ListView.builder), calculs en fonctions pures sur la liste déjà chargée.
 - Recette Bertrand :
 

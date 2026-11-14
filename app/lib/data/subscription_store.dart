@@ -11,6 +11,11 @@ enum SubscriptionOutcome { started, unavailable, failed }
 /// Play Console et la vérification du reçu branchée côté flux (T131) ; d'ici
 /// là, [StoreUnavailableSubscriptions] répond « indisponible ».
 abstract interface class SubscriptionStore {
+  /// CPT-08 : vrai quand l'achat intégré est branché. Sinon les boutons
+  /// d'abonnement sont masqués (exigence Google Play : pas de fonction
+  /// inopérante à l'écran).
+  bool get available;
+
   Future<SubscriptionOutcome> subscribe(SubscriptionPlan plan);
 
   /// Désabonnement : géré par le store, qui seul peut l'arrêter.
@@ -24,6 +29,9 @@ final subscriptionsPage = Uri.parse(
 
 class StoreUnavailableSubscriptions implements SubscriptionStore {
   const StoreUnavailableSubscriptions();
+
+  @override
+  bool get available => false;
 
   @override
   Future<SubscriptionOutcome> subscribe(SubscriptionPlan plan) async =>

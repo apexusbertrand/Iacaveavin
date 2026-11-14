@@ -14,6 +14,7 @@ import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/referentiels/referentiel_loader.dart';
 import 'package:iacaveavin/data/providers.dart';
 import 'package:iacaveavin/data/settings_store.dart';
+import 'package:iacaveavin/data/subscription_store.dart';
 import 'package:iacaveavin/domain/demo_data_repository.dart';
 import 'package:iacaveavin/domain/wine_list_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,6 +95,7 @@ Future<FakeDemoRepository> pumpApp(
   Brightness? brightness,
   Map<String, Object> prefs = const {},
   SecretStore? secrets,
+  SubscriptionStore? subscriptions,
 }) async {
   // Téléphone de 360 x 780 dp.
   tester.view.physicalSize = const Size(1080, 2340);
@@ -128,6 +130,8 @@ Future<FakeDemoRepository> pumpApp(
           (ref) => wines ?? Stream.value(sampleWines),
         ),
         demoRepositoryProvider.overrideWithValue(repo),
+        if (subscriptions != null)
+          subscriptionStoreProvider.overrideWithValue(subscriptions),
       ],
       child: IaCaveAVinApp(initialLocation: location),
     ),

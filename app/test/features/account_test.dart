@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/data/flux_credentials.dart';
+import 'package:iacaveavin/data/subscription_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../fakes.dart';
@@ -158,20 +159,30 @@ void main() {
   );
 
   testWidgets(
-    'CPT-06 formule gratuite : abonnement mensuel ou annuel proposé, indisponible avant Google Play',
+    'CPT-08 formule gratuite : aucun bouton d\'abonnement tant que l\'achat n\'est pas branché',
     (tester) async {
       await pumpApp(tester, secrets: MemorySecretStore(sessionJson()));
-      await toAccount(tester, const ValueKey('subscribe-yearly'));
-      expect(find.byKey(const ValueKey('subscribe-monthly')), findsOneWidget);
-      await tester.tap(find.byKey(const ValueKey('subscribe-monthly')));
-      await tester.pumpAndSettle();
-      expect(
-        find.textContaining("L'abonnement ouvrira avec la publication"),
-        findsOneWidget,
-      );
-      expect(find.byKey(const ValueKey('subscription-manage')), findsNothing);
+      await toAccount(tester, const ValueKey('account-delete'));
+      expect(find.byKey(const ValueKey('subscribe-monthly')), findsNothing);
+      expect(find.byKey(const ValueKey('subscribe-yearly')), findsNothing);
+      expect(find.text('Abonnement'), findsNothing);
     },
   );
+
+  testWidgets('CPT-06 achat branché : abonnement mensuel ou annuel proposé', (
+    tester,
+  ) async {
+    await pumpApp(
+      tester,
+      secrets: MemorySecretStore(sessionJson()),
+      subscriptions: const _StoreReady(),
+    );
+    await toAccount(tester, const ValueKey('subscribe-yearly'));
+    expect(find.byKey(const ValueKey('subscribe-monthly')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('subscribe-monthly')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('subscription-manage')), findsNothing);
+  });
 
   testWidgets('CPT-06 abonné : désabonnement par Google Play', (tester) async {
     await pumpApp(
@@ -209,4 +220,19 @@ void main() {
       expect(find.byKey(const ValueKey('account-signout')), findsOneWidget);
     },
   );
+}
+
+/// Achat intégré branché : la section abonnement s'affiche (CPT-06).
+class _StoreReady implements SubscriptionStore {
+  const _StoreReady();
+
+  @override
+  bool get available => true;
+
+  @override
+  Future<SubscriptionOutcome> subscribe(SubscriptionPlan plan) async =>
+      SubscriptionOutcome.started;
+
+  @override
+  Future<bool> openManagement() async => true;
 }
