@@ -80,6 +80,22 @@ void main() {
     root.deleteSync(recursive: true);
   });
 
+  test(
+    'LNG-04 app en anglais : onglets et colonnes Excel restent en français',
+    () async {
+      final en = lookupAppLocalizations(const Locale('en'));
+      final book = readXlsx(await excel.export(en));
+      expect(book.keys.take(3).toList(), [
+        sheetWines,
+        sheetLots,
+        sheetMovements,
+      ]);
+      expect(sheetWines, 'Vins');
+      expect(book[sheetWines]!.first, [for (final c in wineColumns) c.header]);
+      expect(book[sheetWines]!.first, contains('Domaine'));
+    },
+  );
+
   test('XLS-01 export à 5 onglets, colonnes du dictionnaire', () async {
     final book = readXlsx(await excel.export(l));
     expect(book.keys.toList(), [

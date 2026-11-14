@@ -183,11 +183,17 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 5b Anglais
 
-- Statut : en cours, branche lot-5b-anglais (partie de lot-4-confort)
+- Statut : réalisé, en attente de recette, branche lot-5b-anglais (partie de lot-4-confort). Sans APK ni AAB (en attente du go de Bertrand)
 - Exigences : LNG-01 à LNG-05 (T143)
+  - [x] LNG-01 : 907 textes en anglais (app_en.arb), app à la langue du téléphone, anglais sinon français
+  - [x] LNG-02 : Paramètres > Langue (téléphone, Français, English), mémorisé
+  - [x] LNG-03 : 173 valeurs livrées traduites à l'affichage (assets/referentiels/en.json), valeurs renommées intactes, base inchangée
+  - [x] LNG-04 : PDF et messages en anglais, formats de la langue ; Excel garde ses en-têtes français
+  - [x] LNG-05 : fiche Play anglaise (store/fiche-play-en.md) et 5 captures anglaises (store/captures-en/)
 - Points d'étape :
   - 2026-11-14 : périmètre posé (docs/05, docs/08, T143).
-- Mesures :
+  - 2026-11-14 : LNG-01 à LNG-05 faits. Défauts trouvés par les tests et corrigés : liste déroulante de langue qui débordait ; estimation de garde qui lisait des libellés traduits (elle lit désormais les libellés en base). Reste hors périmètre : textes du service d'identification en français (T143).
+- Mesures : 11 écrans du menu parcourus en anglais sans débordement ni clé technique ; parité des 907 clés et de leurs paramètres vérifiée par test.
 - Recette Bertrand :
 
 ## Lot 5 Recette élargie

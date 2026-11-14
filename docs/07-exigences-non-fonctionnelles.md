@@ -14,7 +14,7 @@ Seuils mesurés sur un téléphone Android milieu de gamme avec le jeu de démon
 | NFR-08 | Vie privée | consentement explicite avant le premier envoi de photos ; aucune donnée personnelle envoyée hormis les photos d'étiquettes ; photos effacées côté n8n après le job |
 | NFR-09 | Vie privée | aucune mesure d'audience, aucun SDK publicitaire ; rapports de plantage seulement si l'utilisateur les active, sans aucune donnée de cave |
 | NFR-10 | Accessibilité | contraste WCAG AA sur toutes les paires du thème (test automatique), TalkBack, tailles de police jusqu'à 200 %, cibles de 48 dp |
-| NFR-11 | Langues | français par défaut, textes dans des fichiers ARB, anglais ajoutable sans toucher au code, formats de date et de nombre locaux |
+| NFR-11 | Langues | français par défaut, textes dans des fichiers ARB, anglais ajoutable sans toucher au code, formats de date et de nombre locaux. Anglais livré au lot 5b (LNG-01 à LNG-05) |
 | NFR-12 | Portabilité | aucune dépendance propre à Android sans équivalent iOS ; build iOS vérifié à la compilation dès qu'un Mac ou une CI macOS est disponible |
 | NFR-13 | Tests | tests unitaires sur stock, garde, notes, valeurs, import Excel et statistiques ; tests widgets sur chaque écran et chaque état (docs/03-design-ergonomie.md) ; test d'intégration du parcours photo contre `FakeGateway` ; couverture d'au moins 80 % sur app/lib/domain |
 | NFR-14 | Traçabilité | chaque exigence de docs/05-fonctionnel.md est couverte par au moins un test qui porte son identifiant ; la matrice est générée par `scripts/matrice_exigences.py` (à écrire au lot 0) |

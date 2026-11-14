@@ -1,6 +1,6 @@
 # Fiche Google Play : IA cave à vin
 
-Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T123 et T124, comptes T126 à T129 (docs/decisions.md). Mis à jour le 2026-11-13 pour la version 1.3 (menu Compte à droite, règles de garde modifiables, prix à date). Captures, icône et bannière : dossier store/ à côté de ce fichier.
+Textes à coller dans la Play Console, dans l'ordre des rubriques. Décisions T123 et T124, comptes T126 à T129 (docs/decisions.md). Mis à jour le 2026-11-13 pour la version 1.3 (menu Compte à droite, règles de garde modifiables, prix à date). Captures, icône et bannière : dossier store/ à côté de ce fichier. Version anglaise : store/fiche-play-en.md et store/captures-en/ (LNG-05).
 
 ## Identité
 

@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iacaveavin/core/l10n/generated/app_localizations.dart';
+import 'package:iacaveavin/data/cellar_repository.dart';
 import 'package:iacaveavin/data/demo/drift_demo_repository.dart';
 import 'package:iacaveavin/data/files/photo_service.dart';
 import 'package:iacaveavin/data/pdf/pdf_service.dart';
+import 'package:iacaveavin/domain/label_translator.dart';
 import 'package:iacaveavin/domain/pdf_content.dart';
 import 'package:iacaveavin/domain/wine_detail.dart';
 import 'package:iacaveavin/domain/wine_query.dart';
@@ -169,4 +172,38 @@ void main() {
       expect(progress[i], greaterThanOrEqualTo(progress[i - 1]));
     }
   });
+
+  test(
+    'LNG-04 fiche PDF en anglais : libellés, valeurs de listes, stock',
+    () async {
+      final en = lookupAppLocalizations(const Locale('en'));
+      final json = jsonDecode(
+        File('assets/referentiels/en.json').readAsStringSync(),
+      ) as Map<String, dynamic>;
+      final tr = LabelTranslator.fromJson(
+        json['valeurs'] as Map<String, dynamic>,
+      );
+      final pdfEn = PdfService(
+        cellar: CellarRepository(f.db, clock: () => f.now, translator: tr),
+        photos: photos,
+        readAsset: (path) => File(path).readAsBytes(),
+        year: 2026,
+        accent: 0xFFB5520F,
+        muted: 0xFF5A5A60,
+      );
+      final content = (await pdfEn.content(f.wine, en, money: money))!;
+      final fields = {for (final (k, v) in content.fields) k: v};
+      expect(fields['Colour'], 'Red');
+      expect(fields['Region'], 'Burgundy');
+      expect(fields['Country'], 'France');
+      expect(fields['In stock'], '6 bottles');
+      final bytes = await pdfEn.wineSheet(
+        f.wine,
+        en,
+        date: 'October 27, 2026',
+        money: money,
+      );
+      expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+    },
+  );
 }

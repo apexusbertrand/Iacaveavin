@@ -1,7 +1,8 @@
 // Captures d'écran de la fiche Google Play (docs/09, T124), faites sur les
 // vrais écrans avec le jeu de démonstration (domaines inventés).
 //   flutter test --update-goldens tool/store/captures_test.dart
-// Sortie : store/captures/ à la racine du dépôt, 1080 × 1920 px.
+// Sortie : store/captures/ (français) et store/captures-en/ (anglais,
+// LNG-05) à la racine du dépôt, 1080 × 1920 px.
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -19,8 +20,6 @@ Future<void> _font(String family, List<String> files) async {
   }
   await loader.load();
 }
-
-const _sortie = '../../../store/captures';
 
 void main() {
   setUpAll(() async {
@@ -41,7 +40,11 @@ void main() {
         FocusHighlightStrategy.alwaysTouch;
   });
 
-  Future<String> demo(WidgetTester tester, String location) async {
+  Future<String> demo(
+    WidgetTester tester,
+    String location,
+    Locale device,
+  ) async {
     // Vraies ombres : le moteur de test les remplace par un trait noir.
     // Remis à vrai après la capture (contrôle de fin de test).
     debugDisableShadows = false;
@@ -49,6 +52,7 @@ void main() {
     await pumpRealApp(
       tester,
       location: location,
+      device: device,
       prefs: {'reglages_v1': '{"photoConsent":true}'},
       seed: (db, cellar) async {
         await DriftDemoRepository(db).load();
@@ -67,42 +71,49 @@ void main() {
     return vin;
   }
 
-  Future<void> capture(WidgetTester tester, String nom) async {
+  Future<void> capture(WidgetTester tester, String sortie, String nom) async {
     await settle(tester);
     await expectLater(
       find.byType(MaterialApp),
-      matchesGoldenFile('$_sortie/$nom.png'),
+      matchesGoldenFile('../../../store/$sortie/$nom.png'),
     );
     debugDisableShadows = true;
   }
 
-  testWidgets('captures store : liste', (tester) async {
-    await demo(tester, '/');
-    await capture(tester, '01-mes-vins');
-  });
+  for (final (device, sortie, garde) in [
+    (const Locale('fr'), 'captures', 'Garde'),
+    (const Locale('en'), 'captures-en', 'Ageing'),
+  ]) {
+    final lang = device.languageCode;
 
-  testWidgets('captures store : fiche', (tester) async {
-    final vin = await demo(tester, '/');
-    GoRouter.of(tester.element(find.byType(Scaffold).first))
-        .push('/fiche/$vin');
-    await capture(tester, '02-fiche-vin');
-  });
+    testWidgets('captures store $lang : liste', (tester) async {
+      await demo(tester, '/', device);
+      await capture(tester, sortie, '01-mes-vins');
+    });
 
-  testWidgets('captures store : à boire', (tester) async {
-    await demo(tester, '/a-boire');
-    await capture(tester, '03-a-boire');
-  });
+    testWidgets('captures store $lang : fiche', (tester) async {
+      final vin = await demo(tester, '/', device);
+      GoRouter.of(tester.element(find.byType(Scaffold).first))
+          .push('/fiche/$vin');
+      await capture(tester, sortie, '02-fiche-vin');
+    });
 
-  testWidgets('captures store : statistiques', (tester) async {
-    await demo(tester, '/statistiques');
-    await capture(tester, '04-statistiques');
-  });
+    testWidgets('captures store $lang : à boire', (tester) async {
+      await demo(tester, '/a-boire', device);
+      await capture(tester, sortie, '03-a-boire');
+    });
 
-  // Onglet Régions écarté : libellés de l'axe coupés à cette largeur.
-  testWidgets('captures store : statistiques Garde', (tester) async {
-    await demo(tester, '/statistiques');
-    await tester.tap(find.text('Garde'));
-    await settle(tester);
-    await capture(tester, '05-statistiques-garde');
-  });
+    testWidgets('captures store $lang : statistiques', (tester) async {
+      await demo(tester, '/statistiques', device);
+      await capture(tester, sortie, '04-statistiques');
+    });
+
+    // Onglet Régions écarté : libellés de l'axe coupés à cette largeur.
+    testWidgets('captures store $lang : statistiques Garde', (tester) async {
+      await demo(tester, '/statistiques', device);
+      await tester.tap(find.text(garde));
+      await settle(tester);
+      await capture(tester, sortie, '05-statistiques-garde');
+    });
+  }
 }
