@@ -229,7 +229,7 @@ class ListsScreen extends ConsumerWidget {
               title: Text(l.listName(list)),
               subtitle: Text(
                 l.listCount(
-                  ref.watch(listValuesProvider(list)).value?.length ?? 0,
+                  ref.watch(rawListValuesProvider(list)).value?.length ?? 0,
                 ),
               ),
               trailing: const Icon(Icons.chevron_right),
@@ -252,7 +252,7 @@ class ListValuesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final values = ref.watch(listValuesProvider(list));
+    final values = ref.watch(rawListValuesProvider(list));
     final repo = ref.read(referenceRepositoryProvider);
     return Scaffold(
       appBar: AppBar(

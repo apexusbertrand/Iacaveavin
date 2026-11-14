@@ -11,6 +11,7 @@ import '../../core/widgets/state_views.dart';
 import '../../data/garde_rules_store.dart';
 import '../../data/providers.dart';
 import '../../domain/garde_rules.dart';
+import '../../domain/label_translator.dart';
 import '../account/account_drawer.dart';
 import '../wine_detail/stock_dialogs.dart' show confirm;
 
@@ -88,7 +89,14 @@ class GardeRulesScreen extends ConsumerWidget {
               ListTile(
                 key: ValueKey('garde-rule-${r.id}'),
                 contentPadding: EdgeInsets.zero,
-                title: Text(gardeConditionText(l, r, labels)),
+                title: Text(
+                  gardeConditionText(
+                    l,
+                    r,
+                    labels,
+                    ref.watch(labelTranslatorProvider),
+                  ),
+                ),
                 subtitle: Text(l.gardeRuleLine(r.start, r.peak, r.end)),
                 trailing: const Icon(Icons.edit_outlined),
                 onTap: () => _edit(context, ref, rules, i),
@@ -142,27 +150,32 @@ class GardeRulesScreen extends ConsumerWidget {
   }
 }
 
-/// Condition lisible : couleur traduite par le référentiel, régions,
-/// appellations et classements tels quels (ce sont des libellés).
+/// Condition lisible : couleur traduite par le référentiel. Régions,
+/// appellations et classements sont des libellés livrés en français, gardés
+/// tels quels dans la règle et traduits à l'affichage (LNG-03).
 String gardeConditionText(
   AppLocalizations l,
   GardeRule r,
-  Map<String, String> labels,
-) {
+  Map<String, String> labels, [
+  LabelTranslator tr = LabelTranslator.identity,
+]) {
   if (r.isCatchAll) return l.gardeRuleDefault;
-  return [for (final c in r.conditions.entries) _conditionValues(l, c, labels)]
-      .join(' · ');
+  return [
+    for (final c in r.conditions.entries) _conditionValues(l, c, labels, tr),
+  ].join(' · ');
 }
 
 String _conditionValues(
   AppLocalizations l,
   MapEntry<String, List<String>> c,
-  Map<String, String> labels,
-) => c.value
+  Map<String, String> labels, [
+  LabelTranslator tr = LabelTranslator.identity,
+]) => c.value
     .map(
       (v) => switch (c.key) {
         'couleur' => labels['couleur:$v'] ?? v,
         'millesime' => v == 'NM' ? l.gardeRuleNonVintage : l.gardeRuleVintaged,
+        'region' => tr.byFrench('region', v),
         _ => v,
       },
     )
@@ -252,8 +265,10 @@ class _GardeRuleEditorState extends ConsumerState<GardeRuleEditor> {
     List<String> current,
     void Function(List<String>) apply,
   ) async {
-    // Listes chargées dès l'ouverture de l'éditeur (voir build).
-    final values = ref.read(listValuesProvider(list)).value ?? const [];
+    // Listes chargées dès l'ouverture de l'éditeur (voir build). Les règles
+    // portent les libellés en base ; l'affichage est traduit (LNG-03).
+    final values = ref.read(rawListValuesProvider(list)).value ?? const [];
+    final tr = ref.read(labelTranslatorProvider);
     final options = {
       for (final v in values)
         if (v.active) v.label,
@@ -262,8 +277,12 @@ class _GardeRuleEditorState extends ConsumerState<GardeRuleEditor> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) =>
-          _MultiPick(title: title, options: options, selected: current),
+      builder: (_) => _MultiPick(
+        title: title,
+        options: options,
+        selected: current,
+        display: (v) => tr.byFrench(list, v),
+      ),
     );
     if (picked != null) setState(() => apply(picked));
   }
@@ -275,8 +294,9 @@ class _GardeRuleEditorState extends ConsumerState<GardeRuleEditor> {
     final colors = ref.watch(listValuesProvider('couleur')).value ?? const [];
     final labels = ref.watch(labelsProvider).value ?? const {};
     ref
-      ..watch(listValuesProvider('region'))
-      ..watch(listValuesProvider('classement'));
+      ..watch(rawListValuesProvider('region'))
+      ..watch(rawListValuesProvider('classement'));
+    final tr = ref.watch(labelTranslatorProvider);
     final others = _others;
     Widget offset(TextEditingController c, String label, String key) =>
         Expanded(
@@ -333,7 +353,9 @@ class _GardeRuleEditorState extends ConsumerState<GardeRuleEditor> {
               contentPadding: EdgeInsets.zero,
               title: Text(l.gardeRuleRegions),
               subtitle: Text(
-                _regions.isEmpty ? l.gardeRuleAny : _regions.join(', '),
+                _regions.isEmpty
+                    ? l.gardeRuleAny
+                    : _regions.map((r) => tr.byFrench('region', r)).join(', '),
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _pick(
@@ -412,11 +434,15 @@ class _MultiPick extends StatefulWidget {
     required this.title,
     required this.options,
     required this.selected,
+    required this.display,
   });
 
   final String title;
   final List<String> options;
   final List<String> selected;
+
+  /// Libellé affiché d'une valeur (traduction, LNG-03).
+  final String Function(String) display;
 
   @override
   State<_MultiPick> createState() => _MultiPickState();
@@ -434,7 +460,10 @@ class _MultiPickState extends State<_MultiPick> {
     final all = {...widget.selected, ...widget.options}.toList();
     final shown = [
       for (final o in all)
-        if (q.isEmpty || o.toLowerCase().contains(q)) o,
+        if (q.isEmpty ||
+            o.toLowerCase().contains(q) ||
+            widget.display(o).toLowerCase().contains(q))
+          o,
     ];
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.8,
@@ -458,7 +487,7 @@ class _MultiPickState extends State<_MultiPick> {
               itemBuilder: (context, i) => CheckboxListTile(
                 key: ValueKey('garde-pick-${shown[i]}'),
                 value: _sel.contains(shown[i]),
-                title: Text(shown[i]),
+                title: Text(widget.display(shown[i])),
                 onChanged: (v) => setState(
                   () => v == true ? _sel.add(shown[i]) : _sel.remove(shown[i]),
                 ),

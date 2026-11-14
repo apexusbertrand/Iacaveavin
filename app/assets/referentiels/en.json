@@ -1,0 +1,697 @@
+{
+ "source": "Traduction anglaise des valeurs livrées (LNG-03, T143). fr : libellé livré ; une valeur renommée par l'utilisateur n'est pas traduite.",
+ "valeurs": {
+  "couleur:rouge": {
+   "fr": "Rouge",
+   "en": "Red"
+  },
+  "couleur:blanc": {
+   "fr": "Blanc",
+   "en": "White"
+  },
+  "couleur:rose": {
+   "fr": "Rosé",
+   "en": "Rosé"
+  },
+  "couleur:champagne": {
+   "fr": "Champagne",
+   "en": "Champagne"
+  },
+  "couleur:effervescent": {
+   "fr": "Effervescent",
+   "en": "Sparkling"
+  },
+  "couleur:liquoreux": {
+   "fr": "Liquoreux",
+   "en": "Sweet"
+  },
+  "couleur:orange": {
+   "fr": "Orange",
+   "en": "Orange"
+  },
+  "couleur:autre": {
+   "fr": "Autre",
+   "en": "Other"
+  },
+  "type_vin:tranquille": {
+   "fr": "Tranquille",
+   "en": "Still"
+  },
+  "type_vin:effervescent": {
+   "fr": "Effervescent",
+   "en": "Sparkling"
+  },
+  "type_vin:liquoreux": {
+   "fr": "Liquoreux",
+   "en": "Sweet (liquoreux)"
+  },
+  "type_vin:moelleux": {
+   "fr": "Moelleux",
+   "en": "Medium sweet"
+  },
+  "type_vin:mute": {
+   "fr": "Muté",
+   "en": "Fortified"
+  },
+  "type_vin:autre": {
+   "fr": "Autre",
+   "en": "Other"
+  },
+  "certification:aucune": {
+   "fr": "Aucune",
+   "en": "None"
+  },
+  "certification:bio": {
+   "fr": "Bio",
+   "en": "Organic"
+  },
+  "certification:biodynamie": {
+   "fr": "Biodynamie",
+   "en": "Biodynamic"
+  },
+  "certification:HVE": {
+   "fr": "HVE",
+   "en": "HVE"
+  },
+  "certification:nature (non certifié)": {
+   "fr": "Nature (non certifié)",
+   "en": "Natural (not certified)"
+  },
+  "motif_mouvement:achat": {
+   "fr": "Achat",
+   "en": "Purchase"
+  },
+  "motif_mouvement:cadeau reçu": {
+   "fr": "Cadeau reçu",
+   "en": "Gift received"
+  },
+  "motif_mouvement:ouverture": {
+   "fr": "Ouverture",
+   "en": "Opened"
+  },
+  "motif_mouvement:offert": {
+   "fr": "Offert",
+   "en": "Given away"
+  },
+  "motif_mouvement:casse": {
+   "fr": "Casse",
+   "en": "Breakage"
+  },
+  "motif_mouvement:inventaire": {
+   "fr": "Inventaire",
+   "en": "Inventory"
+  },
+  "motif_mouvement:erreur de saisie": {
+   "fr": "Erreur de saisie",
+   "en": "Entry error"
+  },
+  "motif_mouvement:import Excel": {
+   "fr": "Import Excel",
+   "en": "Excel import"
+  },
+  "motif_mouvement:transfert": {
+   "fr": "Transfert",
+   "en": "Transfer"
+  },
+  "motif_mouvement:autre": {
+   "fr": "Autre",
+   "en": "Other"
+  },
+  "format:18.75": {
+   "fr": "18,75 cl",
+   "en": "18.75 cl"
+  },
+  "format:37.5": {
+   "fr": "37,5 cl",
+   "en": "37.5 cl"
+  },
+  "accord_mets:viande-rouge-grillee": {
+   "fr": "Viande rouge grillée",
+   "en": "Grilled red meat"
+  },
+  "accord_mets:viande-rouge-en-sauce": {
+   "fr": "Viande rouge en sauce",
+   "en": "Red meat in sauce"
+  },
+  "accord_mets:gibier-a-poil": {
+   "fr": "Gibier à poil",
+   "en": "Furred game"
+  },
+  "accord_mets:gibier-a-plume": {
+   "fr": "Gibier à plume",
+   "en": "Game birds"
+  },
+  "accord_mets:agneau": {
+   "fr": "Agneau",
+   "en": "Lamb"
+  },
+  "accord_mets:porc": {
+   "fr": "Porc",
+   "en": "Pork"
+  },
+  "accord_mets:veau": {
+   "fr": "Veau",
+   "en": "Veal"
+  },
+  "accord_mets:volaille": {
+   "fr": "Volaille",
+   "en": "Poultry"
+  },
+  "accord_mets:volaille-a-la-creme": {
+   "fr": "Volaille à la crème",
+   "en": "Poultry in cream sauce"
+  },
+  "accord_mets:canard": {
+   "fr": "Canard",
+   "en": "Duck"
+  },
+  "accord_mets:charcuterie": {
+   "fr": "Charcuterie",
+   "en": "Charcuterie"
+  },
+  "accord_mets:foie-gras": {
+   "fr": "Foie gras",
+   "en": "Foie gras"
+  },
+  "accord_mets:poisson-grille": {
+   "fr": "Poisson grillé",
+   "en": "Grilled fish"
+  },
+  "accord_mets:poisson-en-sauce": {
+   "fr": "Poisson en sauce",
+   "en": "Fish in sauce"
+  },
+  "accord_mets:poisson-fume": {
+   "fr": "Poisson fumé",
+   "en": "Smoked fish"
+  },
+  "accord_mets:fruits-de-mer": {
+   "fr": "Fruits de mer",
+   "en": "Seafood"
+  },
+  "accord_mets:huitres": {
+   "fr": "Huîtres",
+   "en": "Oysters"
+  },
+  "accord_mets:crustaces": {
+   "fr": "Crustacés",
+   "en": "Shellfish"
+  },
+  "accord_mets:sushis": {
+   "fr": "Sushis",
+   "en": "Sushi"
+  },
+  "accord_mets:cuisine-asiatique": {
+   "fr": "Cuisine asiatique",
+   "en": "Asian food"
+  },
+  "accord_mets:cuisine-epicee": {
+   "fr": "Cuisine épicée",
+   "en": "Spicy food"
+  },
+  "accord_mets:cuisine-mediterraneenne": {
+   "fr": "Cuisine méditerranéenne",
+   "en": "Mediterranean food"
+  },
+  "accord_mets:barbecue": {
+   "fr": "Barbecue",
+   "en": "Barbecue"
+  },
+  "accord_mets:pates-et-risotto": {
+   "fr": "Pâtes et risotto",
+   "en": "Pasta and risotto"
+  },
+  "accord_mets:pizza": {
+   "fr": "Pizza",
+   "en": "Pizza"
+  },
+  "accord_mets:champignons": {
+   "fr": "Champignons",
+   "en": "Mushrooms"
+  },
+  "accord_mets:legumes": {
+   "fr": "Légumes",
+   "en": "Vegetables"
+  },
+  "accord_mets:salade": {
+   "fr": "Salade",
+   "en": "Salad"
+  },
+  "accord_mets:aperitif": {
+   "fr": "Apéritif",
+   "en": "Aperitif"
+  },
+  "accord_mets:fromage-a-pate-dure": {
+   "fr": "Fromage à pâte dure",
+   "en": "Hard cheese"
+  },
+  "accord_mets:fromage-a-pate-molle": {
+   "fr": "Fromage à pâte molle",
+   "en": "Soft cheese"
+  },
+  "accord_mets:fromage-de-chevre": {
+   "fr": "Fromage de chèvre",
+   "en": "Goat cheese"
+  },
+  "accord_mets:fromage-a-pate-persillee": {
+   "fr": "Fromage à pâte persillée",
+   "en": "Blue cheese"
+  },
+  "accord_mets:fromage-a-pate-lavee": {
+   "fr": "Fromage à pâte lavée",
+   "en": "Washed-rind cheese"
+  },
+  "accord_mets:dessert-aux-fruits": {
+   "fr": "Dessert aux fruits",
+   "en": "Fruit dessert"
+  },
+  "accord_mets:dessert-au-chocolat": {
+   "fr": "Dessert au chocolat",
+   "en": "Chocolate dessert"
+  },
+  "accord_mets:tarte-aux-fruits": {
+   "fr": "Tarte aux fruits",
+   "en": "Fruit tart"
+  },
+  "accord_mets:patisserie": {
+   "fr": "Pâtisserie",
+   "en": "Pastry"
+  },
+  "accord_mets:fruits-secs": {
+   "fr": "Fruits secs",
+   "en": "Nuts and dried fruit"
+  },
+  "accord_mets:cuisine-du-terroir": {
+   "fr": "Cuisine du terroir",
+   "en": "Regional cooking"
+  },
+  "pays:FR": {
+   "fr": "France",
+   "en": "France"
+  },
+  "pays:IT": {
+   "fr": "Italie",
+   "en": "Italy"
+  },
+  "pays:ES": {
+   "fr": "Espagne",
+   "en": "Spain"
+  },
+  "pays:PT": {
+   "fr": "Portugal",
+   "en": "Portugal"
+  },
+  "pays:DE": {
+   "fr": "Allemagne",
+   "en": "Germany"
+  },
+  "pays:AT": {
+   "fr": "Autriche",
+   "en": "Austria"
+  },
+  "pays:CH": {
+   "fr": "Suisse",
+   "en": "Switzerland"
+  },
+  "pays:LU": {
+   "fr": "Luxembourg",
+   "en": "Luxembourg"
+  },
+  "pays:BE": {
+   "fr": "Belgique",
+   "en": "Belgium"
+  },
+  "pays:GB": {
+   "fr": "Royaume-Uni",
+   "en": "United Kingdom"
+  },
+  "pays:HU": {
+   "fr": "Hongrie",
+   "en": "Hungary"
+  },
+  "pays:SI": {
+   "fr": "Slovénie",
+   "en": "Slovenia"
+  },
+  "pays:HR": {
+   "fr": "Croatie",
+   "en": "Croatia"
+  },
+  "pays:RS": {
+   "fr": "Serbie",
+   "en": "Serbia"
+  },
+  "pays:RO": {
+   "fr": "Roumanie",
+   "en": "Romania"
+  },
+  "pays:BG": {
+   "fr": "Bulgarie",
+   "en": "Bulgaria"
+  },
+  "pays:GR": {
+   "fr": "Grèce",
+   "en": "Greece"
+  },
+  "pays:CY": {
+   "fr": "Chypre",
+   "en": "Cyprus"
+  },
+  "pays:CZ": {
+   "fr": "Tchéquie",
+   "en": "Czechia"
+  },
+  "pays:SK": {
+   "fr": "Slovaquie",
+   "en": "Slovakia"
+  },
+  "pays:MK": {
+   "fr": "Macédoine du Nord",
+   "en": "North Macedonia"
+  },
+  "pays:ME": {
+   "fr": "Monténégro",
+   "en": "Montenegro"
+  },
+  "pays:MD": {
+   "fr": "Moldavie",
+   "en": "Moldova"
+  },
+  "pays:UA": {
+   "fr": "Ukraine",
+   "en": "Ukraine"
+  },
+  "pays:GE": {
+   "fr": "Géorgie",
+   "en": "Georgia"
+  },
+  "pays:AM": {
+   "fr": "Arménie",
+   "en": "Armenia"
+  },
+  "pays:TR": {
+   "fr": "Turquie",
+   "en": "Türkiye"
+  },
+  "pays:LB": {
+   "fr": "Liban",
+   "en": "Lebanon"
+  },
+  "pays:IL": {
+   "fr": "Israël",
+   "en": "Israel"
+  },
+  "pays:MA": {
+   "fr": "Maroc",
+   "en": "Morocco"
+  },
+  "pays:TN": {
+   "fr": "Tunisie",
+   "en": "Tunisia"
+  },
+  "pays:DZ": {
+   "fr": "Algérie",
+   "en": "Algeria"
+  },
+  "pays:ZA": {
+   "fr": "Afrique du Sud",
+   "en": "South Africa"
+  },
+  "pays:US": {
+   "fr": "États-Unis",
+   "en": "United States"
+  },
+  "pays:CA": {
+   "fr": "Canada",
+   "en": "Canada"
+  },
+  "pays:MX": {
+   "fr": "Mexique",
+   "en": "Mexico"
+  },
+  "pays:BR": {
+   "fr": "Brésil",
+   "en": "Brazil"
+  },
+  "pays:UY": {
+   "fr": "Uruguay",
+   "en": "Uruguay"
+  },
+  "pays:AR": {
+   "fr": "Argentine",
+   "en": "Argentina"
+  },
+  "pays:CL": {
+   "fr": "Chili",
+   "en": "Chile"
+  },
+  "pays:PE": {
+   "fr": "Pérou",
+   "en": "Peru"
+  },
+  "pays:BO": {
+   "fr": "Bolivie",
+   "en": "Bolivia"
+  },
+  "pays:AU": {
+   "fr": "Australie",
+   "en": "Australia"
+  },
+  "pays:NZ": {
+   "fr": "Nouvelle-Zélande",
+   "en": "New Zealand"
+  },
+  "pays:CN": {
+   "fr": "Chine",
+   "en": "China"
+  },
+  "pays:JP": {
+   "fr": "Japon",
+   "en": "Japan"
+  },
+  "pays:IN": {
+   "fr": "Inde",
+   "en": "India"
+  },
+  "region:fr-bourgogne": {
+   "fr": "Bourgogne",
+   "en": "Burgundy"
+  },
+  "region:fr-corse": {
+   "fr": "Corse",
+   "en": "Corsica"
+  },
+  "region:fr-savoie": {
+   "fr": "Savoie",
+   "en": "Savoy"
+  },
+  "region:fr-sud-ouest": {
+   "fr": "Sud-Ouest",
+   "en": "South West France"
+  },
+  "region:fr-vallee-de-la-loire": {
+   "fr": "Vallée de la Loire",
+   "en": "Loire Valley"
+  },
+  "region:fr-vallee-du-rhone": {
+   "fr": "Vallée du Rhône",
+   "en": "Rhône Valley"
+  },
+  "region:it-abruzzes": {
+   "fr": "Abruzzes",
+   "en": "Abruzzo"
+  },
+  "region:it-campanie": {
+   "fr": "Campanie",
+   "en": "Campania"
+  },
+  "region:it-frioul-venetie-julienne": {
+   "fr": "Frioul-Vénétie Julienne",
+   "en": "Friuli-Venezia Giulia"
+  },
+  "region:it-lombardie": {
+   "fr": "Lombardie",
+   "en": "Lombardy"
+  },
+  "region:it-marches": {
+   "fr": "Marches",
+   "en": "Marche"
+  },
+  "region:it-ombrie": {
+   "fr": "Ombrie",
+   "en": "Umbria"
+  },
+  "region:it-piemont": {
+   "fr": "Piémont",
+   "en": "Piedmont"
+  },
+  "region:it-pouilles": {
+   "fr": "Pouilles",
+   "en": "Puglia"
+  },
+  "region:it-sardaigne": {
+   "fr": "Sardaigne",
+   "en": "Sardinia"
+  },
+  "region:it-sicile": {
+   "fr": "Sicile",
+   "en": "Sicily"
+  },
+  "region:it-toscane": {
+   "fr": "Toscane",
+   "en": "Tuscany"
+  },
+  "region:it-trentin-haut-adige": {
+   "fr": "Trentin-Haut-Adige",
+   "en": "Trentino-Alto Adige"
+  },
+  "region:it-venetie": {
+   "fr": "Vénétie",
+   "en": "Veneto"
+  },
+  "region:es-andalousie": {
+   "fr": "Andalousie",
+   "en": "Andalusia"
+  },
+  "region:es-castille-et-leon": {
+   "fr": "Castille-et-León",
+   "en": "Castilla y León"
+  },
+  "region:es-catalogne": {
+   "fr": "Catalogne",
+   "en": "Catalonia"
+  },
+  "region:es-galice": {
+   "fr": "Galice",
+   "en": "Galicia"
+  },
+  "region:es-navarre": {
+   "fr": "Navarre",
+   "en": "Navarra"
+  },
+  "region:es-valence": {
+   "fr": "Valence",
+   "en": "Valencia"
+  },
+  "region:pt-lisbonne": {
+   "fr": "Lisbonne",
+   "en": "Lisbon"
+  },
+  "region:pt-madere": {
+   "fr": "Madère",
+   "en": "Madeira"
+  },
+  "region:de-bade": {
+   "fr": "Bade",
+   "en": "Baden"
+  },
+  "region:de-franconie": {
+   "fr": "Franconie",
+   "en": "Franconia"
+  },
+  "region:de-moselle": {
+   "fr": "Moselle",
+   "en": "Mosel"
+  },
+  "region:de-palatinat": {
+   "fr": "Palatinat",
+   "en": "Pfalz"
+  },
+  "region:de-hesse-rhenane": {
+   "fr": "Hesse rhénane",
+   "en": "Rheinhessen"
+  },
+  "region:at-basse-autriche": {
+   "fr": "Basse-Autriche",
+   "en": "Lower Austria"
+  },
+  "region:at-styrie": {
+   "fr": "Styrie",
+   "en": "Styria"
+  },
+  "region:at-vienne": {
+   "fr": "Vienne",
+   "en": "Vienna"
+  },
+  "region:ch-geneve": {
+   "fr": "Genève",
+   "en": "Geneva"
+  },
+  "region:ch-tessin": {
+   "fr": "Tessin",
+   "en": "Ticino"
+  },
+  "region:gr-macedoine-grecque": {
+   "fr": "Macédoine grecque",
+   "en": "Macedonia (Greece)"
+  },
+  "region:gr-peloponnese": {
+   "fr": "Péloponnèse",
+   "en": "Peloponnese"
+  },
+  "region:gr-santorin": {
+   "fr": "Santorin",
+   "en": "Santorini"
+  },
+  "region:lb-bekaa": {
+   "fr": "Bekaa",
+   "en": "Bekaa Valley"
+  },
+  "region:za-cap-occidental": {
+   "fr": "Cap-Occidental",
+   "en": "Western Cape"
+  },
+  "region:us-californie": {
+   "fr": "Californie",
+   "en": "California"
+  },
+  "region:ar-patagonie": {
+   "fr": "Patagonie",
+   "en": "Patagonia"
+  },
+  "region:cl-vallee-centrale": {
+   "fr": "Vallée centrale",
+   "en": "Central Valley"
+  },
+  "region:au-australie-meridionale": {
+   "fr": "Australie-Méridionale",
+   "en": "South Australia"
+  },
+  "region:au-australie-occidentale": {
+   "fr": "Australie-Occidentale",
+   "en": "Western Australia"
+  },
+  "region:au-nouvelle-galles-du-sud": {
+   "fr": "Nouvelle-Galles du Sud",
+   "en": "New South Wales"
+  },
+  "region:au-tasmanie": {
+   "fr": "Tasmanie",
+   "en": "Tasmania"
+  },
+  "sous_region:fr-bourgogne--chablis-et-grand-auxerrois": {
+   "fr": "Chablis et Grand Auxerrois",
+   "en": "Chablis and Grand Auxerrois"
+  },
+  "sous_region:fr-bourgogne--cote-chalonnaise": {
+   "fr": "Côte chalonnaise",
+   "en": "Côte Chalonnaise"
+  },
+  "sous_region:fr-vallee-du-rhone--rhone-septentrional": {
+   "fr": "Rhône septentrional",
+   "en": "Northern Rhône"
+  },
+  "sous_region:fr-vallee-du-rhone--rhone-meridional": {
+   "fr": "Rhône méridional",
+   "en": "Southern Rhône"
+  },
+  "sous_region:fr-vallee-de-la-loire--pays-nantais": {
+   "fr": "Pays nantais",
+   "en": "Pays Nantais"
+  },
+  "sous_region:fr-champagne--vallee-de-la-marne": {
+   "fr": "Vallée de la Marne",
+   "en": "Marne Valley"
+  }
+ }
+}

@@ -67,7 +67,11 @@ class GardeRulesController extends AsyncNotifier<List<GardeRule>> {
 
   Future<int> _reestimate(List<GardeRule> rules) async {
     await ref.read(bootstrapProvider.future);
-    final labels = await ref.read(labelsProvider.future);
+    // Libellés tels qu'en base : les règles portent les libellés livrés.
+    final labels = await ref
+        .read(referenceRepositoryProvider)
+        .watchLabels()
+        .first;
     return ref.read(cellarRepositoryProvider).reestimateGarde(rules, labels);
   }
 }

@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../domain/garde_rules.dart';
+import '../domain/label_translator.dart';
 import '../domain/scores.dart';
 import '../domain/stock_rules.dart';
 import '../domain/wine_detail.dart';
@@ -16,11 +17,17 @@ import 'db/app_database.dart';
 /// Le stock n'existe que par les mouvements (STK-R1) : aucune écriture ne
 /// modifie une quantité directement.
 class CellarRepository {
-  CellarRepository(this._db, {DateTime Function()? clock})
-    : _clock = clock ?? DateTime.now;
+  CellarRepository(
+    this._db, {
+    DateTime Function()? clock,
+    this.translator = LabelTranslator.identity,
+  }) : _clock = clock ?? DateTime.now;
 
   final AppDatabase _db;
   final DateTime Function() _clock;
+
+  /// LNG-03 : libellés des listes affichés dans la langue de l'app.
+  final LabelTranslator translator;
   static const _uuid = Uuid();
 
   DateTime get _now => _clock().toUtc();
@@ -54,7 +61,10 @@ class CellarRepository {
     for (final v in await (_db.select(
       _db.listValues,
     )..where((v) => v.deletedAt.isNull())).get()) {
-      labels.putIfAbsent('${v.liste}:${v.code}', () => v.libelle);
+      labels.putIfAbsent(
+        '${v.liste}:${v.code}',
+        () => translator.label('${v.liste}:${v.code}', v.libelle),
+      );
     }
     final owners = {
       for (final o in await (_db.select(
