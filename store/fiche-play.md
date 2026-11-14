@@ -96,7 +96,7 @@ La gestion de cave (liste, fiches, stock, emplacements, statistiques, PDF, Excel
 L'identification par photo et le relevé des prix demandent un compte gratuit : toucher l'icône de compte en haut à droite de l'écran « Mes vins », saisir une adresse mail, « Recevoir un code », puis saisir le code à six chiffres reçu par mail. N'importe quelle adresse convient, le compte est créé à la première connexion.
 ```
 
-~~Point à trancher par Bertrand : donner la clé partagée à Google expose cette clé.~~ Réglé par les comptes (T126) : l'examinateur se connecte avec sa propre adresse.
+Identifiants à donner dans la Console (T141) : nom d'utilisateur apexus.claude+revue@gmail.com ; mot de passe : le code fixe à 6 chiffres donné à Bertrand, jamais écrit dans le dépôt. Instructions en anglais : « Tap the account icon at the top right of "Mes vins", enter the e-mail address, tap "Recevoir un code", then type the 6-digit code above within 10 minutes. No e-mail access is needed. »
 
 Suppression du compte : bouton « Supprimer mon compte » dans le menu Compte de l'app (CPT-05, fait le 2026-11-03). Google demande aussi un lien web dans la rubrique « Suppression des données » ; la page de la politique de confidentialité (https://sites.google.com/view/iacaveavin-confidentialite) sert de lien : elle explique la démarche.
 
