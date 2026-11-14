@@ -2,6 +2,10 @@ import 'wine_query.dart';
 
 enum AppThemeMode { system, light, dark }
 
+/// LNG-02 : langue de l'app. system : celle du téléphone (anglais si le
+/// téléphone est en anglais, français sinon).
+enum AppLanguage { system, fr, en }
+
 enum CardPrice { purchase, market }
 
 /// Réglages de l'application (PAR-05) et état mémorisé de la liste (LST-09).
@@ -11,6 +15,7 @@ class AppSettings {
   const AppSettings({
     this.currency = 'EUR',
     this.themeMode = AppThemeMode.system,
+    this.language = AppLanguage.system,
     this.defaultOwnerId,
     this.defaultLocationId,
     this.defaultQuery = const WineQuery(),
@@ -34,6 +39,9 @@ class AppSettings {
   /// Code ISO 4217.
   final String currency;
   final AppThemeMode themeMode;
+
+  /// LNG-02.
+  final AppLanguage language;
   final String? defaultOwnerId;
   final String? defaultLocationId;
 
@@ -79,6 +87,7 @@ class AppSettings {
   AppSettings copyWith({
     String? currency,
     AppThemeMode? themeMode,
+    AppLanguage? language,
     String? Function()? defaultOwnerId,
     String? Function()? defaultLocationId,
     WineQuery? defaultQuery,
@@ -100,6 +109,7 @@ class AppSettings {
   }) => AppSettings(
     currency: currency ?? this.currency,
     themeMode: themeMode ?? this.themeMode,
+    language: language ?? this.language,
     defaultOwnerId: defaultOwnerId != null
         ? defaultOwnerId()
         : this.defaultOwnerId,
@@ -142,6 +152,7 @@ class AppSettings {
   Map<String, Object?> toJson() => {
     'currency': currency,
     'themeMode': themeMode.name,
+    'language': language.name,
     'defaultOwnerId': defaultOwnerId,
     'defaultLocationId': defaultLocationId,
     'defaultQuery': _query(defaultQuery),
@@ -167,6 +178,10 @@ class AppSettings {
     themeMode: AppThemeMode.values.firstWhere(
       (m) => m.name == json['themeMode'],
       orElse: () => AppThemeMode.system,
+    ),
+    language: AppLanguage.values.firstWhere(
+      (m) => m.name == json['language'],
+      orElse: () => AppLanguage.system,
     ),
     defaultOwnerId: json['defaultOwnerId'] as String?,
     defaultLocationId: json['defaultLocationId'] as String?,

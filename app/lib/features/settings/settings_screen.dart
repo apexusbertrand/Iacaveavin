@@ -84,10 +84,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onChanged: (v) => _set((x) => x.copyWith(currency: v)),
             ),
           ),
+          // LNG-02 : langue du téléphone, français ou anglais.
           padded(
-            InputDecorator(
+            DropdownButtonFormField<AppLanguage>(
+              key: const ValueKey('settings-language'),
+              initialValue: s.language,
+              isExpanded: true,
               decoration: InputDecoration(labelText: l.settingsLanguage),
-              child: Text(l.languageFrench),
+              items: [
+                DropdownMenuItem(
+                  value: AppLanguage.system,
+                  child: Text(l.languageSystem),
+                ),
+                DropdownMenuItem(
+                  value: AppLanguage.fr,
+                  child: Text(l.languageFrench),
+                ),
+                DropdownMenuItem(
+                  value: AppLanguage.en,
+                  child: Text(l.languageEnglish),
+                ),
+              ],
+              onChanged: (v) => _set((x) => x.copyWith(language: v)),
             ),
           ),
           padded(

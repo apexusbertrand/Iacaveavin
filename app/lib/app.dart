@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/app_language.dart';
 import 'core/l10n/generated/app_localizations.dart';
 import 'core/navigation/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -42,6 +43,8 @@ class _IaCaveAVinAppState extends ConsumerState<IaCaveAVinApp> {
         AppThemeMode.dark => ThemeMode.dark,
         AppThemeMode.system => ThemeMode.system,
       },
+      // LNG-01, LNG-02 : langue choisie, ou celle du téléphone.
+      locale: Locale(ref.watch(appLanguageProvider)),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: _router,

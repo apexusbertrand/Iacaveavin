@@ -681,6 +681,8 @@
   "themeDark": "Sombre",
   "settingsLanguage": "Langue",
   "languageFrench": "Français",
+  "languageEnglish": "English",
+  "languageSystem": "Langue du téléphone",
   "settingsDefaultOwner": "Propriétaire par défaut",
   "settingsDefaultLocation": "Emplacement par défaut",
   "settingsDefaultSort": "Tri par défaut",

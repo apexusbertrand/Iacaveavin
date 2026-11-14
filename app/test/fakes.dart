@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' show Locale;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,7 @@ import 'package:iacaveavin/data/backup_providers.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/referentiels/referentiel_loader.dart';
 import 'package:iacaveavin/data/providers.dart';
+import 'package:iacaveavin/core/app_language.dart';
 import 'package:iacaveavin/data/settings_store.dart';
 import 'package:iacaveavin/data/subscription_store.dart';
 import 'package:iacaveavin/domain/demo_data_repository.dart';
@@ -96,6 +98,7 @@ Future<FakeDemoRepository> pumpApp(
   Map<String, Object> prefs = const {},
   SecretStore? secrets,
   SubscriptionStore? subscriptions,
+  Locale device = const Locale('fr'),
 }) async {
   // Téléphone de 360 x 780 dp.
   tester.view.physicalSize = const Size(1080, 2340);
@@ -124,6 +127,8 @@ Future<FakeDemoRepository> pumpApp(
           (ref) => secrets ?? MemorySecretStore(),
         ),
         fluxBaseUrlProvider.overrideWithValue('http://127.0.0.1:9'),
+        // Téléphone en français, sauf test de langue (LNG-01).
+        deviceLocaleProvider.overrideWithValue(device),
         ...testFlux,
         bootstrapProvider.overrideWith((ref) async => 'cave-test'),
         wineListProvider.overrideWith(
@@ -150,6 +155,7 @@ Future<AppDatabase> pumpRealApp(
   List<Override> extra = const [],
   Directory? appDir,
   SecretStore? secrets,
+  Locale device = const Locale('fr'),
 }) async {
   tester.view.physicalSize = const Size(1080, 2340);
   tester.view.devicePixelRatio = 3;
@@ -183,6 +189,8 @@ Future<AppDatabase> pumpRealApp(
           (ref) => secrets ?? MemorySecretStore(),
         ),
         fluxBaseUrlProvider.overrideWithValue('http://127.0.0.1:9'),
+        // Téléphone en français, sauf test de langue (LNG-01).
+        deviceLocaleProvider.overrideWithValue(device),
         ...testFlux,
         if (appDir != null)
           appDirProvider.overrideWithValue(() async => appDir),
