@@ -203,3 +203,23 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 - Points d'étape :
 - Mesures :
 - Recette Bertrand et décision de publication :
+
+## Lot 6 Google Play
+
+- Statut : en cours, branche lot-6-google-play (partie de lot-5b-anglais). Décision de publier : T123 (2026-10-28), avant la recette élargie du lot 5, écart signalé.
+- Fait :
+  - [x] Compte Play Console organisation APEXUS (T140) : pas de test fermé de 14 jours exigé
+  - [x] Fiche du store en français, captures, icône, bannière (T140)
+  - [x] Politique de confidentialité publique, lien de suppression du compte (Q8, T140)
+  - [x] Contenu de l'application : accès, annonces, public, sécurité des données, classification IARC (T140)
+  - [x] Compte de revue à code fixe pour l'examinateur (Q13, T141)
+  - [x] Boutons d'abonnement masqués tant que l'achat n'est pas branché (CPT-08, T142)
+  - [x] Fiche et captures en anglais prêtes (LNG-05)
+  - [x] Version 1.4.0+9 préparée (PRX-07, CPT-08, lot 5b) ; prompt des dernières actions : store/prompt-claude-chrome-play-publication.md
+- Reste :
+  - [ ] Go de Bertrand pour construire l'APK et l'AAB 1.4.0
+  - [ ] Bertrand : ajouter la fiche anglaise dans la Console
+  - [ ] Bertrand : AAB 1.4.0 en test interne, installation sur son téléphone (désinstaller d'abord la version GitHub, sauvegarde avant), vérification
+  - [ ] Bertrand : pays de distribution, puis passage en production et envoi en examen
+  - [ ] Bertrand : statut de professionnel (Q14), avant février 2027
+- Critère de sortie : app en production sur Google Play.

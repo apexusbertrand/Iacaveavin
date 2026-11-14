@@ -75,6 +75,6 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(find.text('Version 1.3.1'), findsOneWidget);
+    expect(find.text('Version 1.4.0'), findsOneWidget);
   });
 }
