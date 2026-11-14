@@ -12,6 +12,7 @@ flowchart LR
   L2c --> L3["Lot 3<br/>Stats, PDF, Excel"]
   L3 --> L4["Lot 4<br/>Confort"]
   L4 --> L5["Lot 5<br/>Recette élargie"]
+  L4 --> L5b["Lot 5b<br/>Anglais"]
   L5 -. "décision de publier" .-> L6["Lot 6<br/>Google Play"]
   L6 -.-> L7["Lot 7<br/>iOS"]
 ```
@@ -27,6 +28,7 @@ flowchart LR
 | 2c Branchement réel | `N8nGateway`, réglages de connexion (PAR-05), PRX-02 à PRX-06 | 20 bouteilles réelles ajoutées par photo en moins de 30 s de saisie active chacune |
 | 3 Restitution | STA, PDF, XLS | aller-retour Excel de 500 lignes sans écart ; catalogue de 200 fiches en moins de 30 s ; 5 vues de l'explorateur vérifiées à la main contre la liste filtrée |
 | 4 Confort | CMP-01 à CMP-06, CMP-08, CMP-09, EMP-03, RET-01 | usage normal pendant 2 semaines sans blocage |
+| 5b Anglais | LNG-01 à LNG-05 : écrans en anglais selon la langue du téléphone, réglage de langue, listes de référence traduites à l'affichage, PDF et notifications en anglais, fiche Play et captures en anglais (demande du 2026-11-14, T143) | téléphone en anglais : aucun texte français dans les écrans, PDF et notifications, hors données saisies, noms propres (appellations, cépages, domaines) et textes du service d'identification ; retour en français sans perte |
 | 5 Recette élargie | APK distribué à 3 à 5 proches, corrections, NFR mesurées sur 5 000 fiches | 4 semaines d'usage, aucun bug bloquant ouvert, décision écrite de publier ou non |
 | 6 Google Play | après décision : compte développeur, fiche store, Data safety, test fermé, production (docs/09-distribution-publication.md) | app en production |
 | 7 iOS | portage, revue Apple | app sur l'App Store |

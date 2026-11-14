@@ -182,3 +182,12 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - CPT-06. Abonnement : en formule gratuite, boutons « Abonnement mensuel » et « Abonnement annuel » ; abonné, bouton « Gérer ou résilier dans Google Play », qui ouvre la page des abonnements du store (le désabonnement appartient au store). L'achat réel attend les produits de la Play Console et la vérification du reçu (Q11) : d'ici là, le bouton l'annonce sans rien facturer (2026-11-03, T131).
 - CPT-07. Le compte a son propre menu, à droite, ouvert par l'icône de compte en haut à droite des écrans principaux (pleine quand un compte est connecté). Il n'est plus dans les Paramètres (2026-11-03, T131).
 - CPT-08. Tant que l'achat intégré n'est pas branché (Q11), la section Abonnement et ses boutons mensuel et annuel sont masqués dans le menu Compte : Google Play refuse une fonction inopérante. Un compte déjà abonné garde « Gérer l'abonnement » (2026-11-14, T142).
+
+## Langues (lot 5b, 2026-11-14, T143)
+
+- LNG-01. Tous les écrans existent en anglais. L'app suit la langue du téléphone : anglais si le téléphone est en anglais, français sinon. Aucune clé ne manque d'une langue à l'autre, mêmes paramètres dans les deux langues.
+- LNG-02. Paramètres > Langue : « Langue du téléphone », « Français » ou « English ». Le choix est mémorisé et s'applique tout de suite.
+- LNG-03. Les valeurs des listes de référence livrées avec l'app (couleur, type de vin, certification, motif de mouvement, accords mets et vins, pays, régions, sous-régions) s'affichent en anglais quand l'app est en anglais. Les noms propres (appellations, cépages, domaines, critiques, classements, signes de qualité) restent tels quels. Une valeur ajoutée ou renommée par l'utilisateur s'affiche comme il l'a saisie. La base garde les codes et les libellés français : rien ne change pour l'import, l'export ni la sauvegarde.
+- LNG-04. PDF (fiche et catalogue), image de partage, notifications et rapports d'import suivent la langue de l'app ; dates, nombres et devises au format de la langue. Le classeur Excel garde ses noms d'onglets et de colonnes en français, pour qu'un fichier passe d'un téléphone à l'autre quelle que soit la langue.
+- LNG-05. Fiche Google Play en anglais (descriptions, notes de version) et captures d'écran en anglais faites avec le jeu de démonstration.
+

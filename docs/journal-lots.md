@@ -181,6 +181,15 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 - Mesures : aucune cible chiffrée propre au lot ; listes paresseuses (ListView.builder), calculs en fonctions pures sur la liste déjà chargée.
 - Recette Bertrand :
 
+## Lot 5b Anglais
+
+- Statut : en cours, branche lot-5b-anglais (partie de lot-4-confort)
+- Exigences : LNG-01 à LNG-05 (T143)
+- Points d'étape :
+  - 2026-11-14 : périmètre posé (docs/05, docs/08, T143).
+- Mesures :
+- Recette Bertrand :
+
 ## Lot 5 Recette élargie
 
 - Statut : non démarré
