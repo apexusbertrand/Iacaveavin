@@ -126,22 +126,22 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | LNG-03 | docs/05 | Les valeurs des listes de référence livrées avec l'app (couleur, type  | 3 |
 | LNG-04 | docs/05 | PDF (fiche et catalogue), image de partage, notifications et rapports  | 2 |
 | LNG-05 | docs/05 | Fiche Google Play en anglais (descriptions, notes de version) et captu | 2 |
-| NFR-01 | docs/07 | Performance : démarrage à froid sous 2 s, liste fluide à 60 images/s, | - |
-| NFR-02 | docs/07 | Performance : PDF, Excel, compression d'images et calculs statistique | - |
+| NFR-01 | docs/07 | Performance : démarrage à froid sous 2 s, liste fluide à 60 images/s, | 1 |
+| NFR-02 | docs/07 | Performance : PDF, Excel, compression d'images et calculs statistique | 1 |
 | NFR-03 | docs/07 | Hors ligne : tout fonctionne sans réseau sauf l'enrichissement et le | 2 |
 | NFR-04 | docs/07 | Photos : répertoire privé de l'app, compression (docs/02-archite | 1 |
 | NFR-05 | docs/07 | Données : migrations testées sur une base de la version précédent | 6 |
 | NFR-06 | docs/07 | Sécurité : aucun secret dans le code, l'APK ou le dépôt ; clé du f | 2 |
-| NFR-07 | docs/07 | Sécurité : les réponses du flux sont validées contre le schéma ava | - |
+| NFR-07 | docs/07 | Sécurité : les réponses du flux sont validées contre le schéma ava | 1 |
 | NFR-08 | docs/07 | Vie privée : consentement explicite avant le premier envoi de photos | 1 |
-| NFR-09 | docs/07 | Vie privée : aucune mesure d'audience, aucun SDK publicitaire ; rapp | - |
+| NFR-09 | docs/07 | Vie privée : aucune mesure d'audience, aucun SDK publicitaire ; rapp | 1 |
 | NFR-10 | docs/07 | Accessibilité : contraste WCAG AA sur toutes les paires du thème (test  | 10 |
 | NFR-11 | docs/07 | Langues : français par défaut, textes dans des fichiers ARB, angl | 3 |
 | NFR-12 | docs/07 | Portabilité : aucune dépendance propre à Android sans équivalent iOS  | - |
-| NFR-13 | docs/07 | Tests : tests unitaires sur stock, garde, notes, valeurs, impor | - |
+| NFR-13 | docs/07 | Tests : tests unitaires sur stock, garde, notes, valeurs, impor | 1 |
 | NFR-14 | docs/07 | Traçabilité : chaque exigence de docs/05-fonctionnel.md est couverte  | 1 |
 | NFR-15 | docs/07 | Industrialisation : `flutter analyze` sans avertissement, formatage `dart f | 2 |
-| NFR-16 | docs/07 | Contenu IA : tout texte rédigé par l'agent est marqué comme tel (FIC | - |
+| NFR-16 | docs/07 | Contenu IA : tout texte rédigé par l'agent est marqué comme tel (FIC | 1 |
 | NFR-17 | docs/07 | Modération : aucune incitation à boire dans l'app ; mention « L'abus | 1 |
 | NFR-18 | docs/07 | Conformité store : l'app publiée ne montre aucun écran « à venir » ni « ar | 3 |
 | STK-R1 | docs/04 | Quantité d'un lot = somme de ses mouvements. Jamais de champ quantité  | 3 |
@@ -161,4 +161,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-147 exigences couvertes sur 156.
+153 exigences couvertes sur 156.

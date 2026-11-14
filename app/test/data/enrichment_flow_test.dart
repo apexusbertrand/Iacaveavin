@@ -14,6 +14,7 @@ import 'package:iacaveavin/domain/wine_detail.dart';
 import 'package:yaml/yaml.dart';
 
 import '../fixture.dart';
+import '../recette/invariants.dart';
 import 'contract_test.dart' show readExample, validator;
 import 'photo_test.dart' show sharpLabel;
 
@@ -226,6 +227,9 @@ void main() {
       expect(d.bottles, 3, reason: 'le lot saisi pendant l\'attente est gardé');
       final prov = await w.f.db.select(w.f.db.provenances).get();
       expect(prov.every((p) => p.statut == 'valide'), isTrue);
+      // Recette transverse (lot 5) : notes, prix et valeurs du web avec URL,
+      // stock égal aux mouvements.
+      expect(await recetteViolations(w.f.db), isEmpty);
     },
   );
 

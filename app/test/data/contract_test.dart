@@ -54,7 +54,7 @@ void main() {
     expect(v.requestErrors(example('requete-enrichissement.json')), isEmpty);
   });
 
-  group('AJO-12 réponses hors contrat rejetées (mêmes cas que scripts/valider_contrat.py)', () {
+  group('AJO-12 NFR-07 réponses hors contrat rejetées (mêmes cas que scripts/valider_contrat.py)', () {
     final base = example('enrichissement-termine.json');
     final cases = <String, void Function(Map<String, dynamic>)>{
       'valeur nulle sans motif': (m) =>

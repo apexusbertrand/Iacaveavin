@@ -479,7 +479,13 @@ const _cuveesGeneriques = [
 /// mêmes données) : 200 fiches, toutes les couleurs, millésimes 2005 à 2024,
 /// 3 propriétaires, 6 emplacements sur 3 niveaux. Le stock de chaque lot
 /// n'existe que par ses mouvements (STK-R1).
-DemoDataSet buildDemoDataSet({int seed = 2026, DateTime? now}) {
+/// [wineTarget] : nombre de fiches, 200 pour la démo ; la recette du lot 5
+/// mesure l'app sur 5 000 (NFR-01).
+DemoDataSet buildDemoDataSet({
+  int seed = 2026,
+  DateTime? now,
+  int wineTarget = demoWineTarget,
+}) {
   final rnd = Random(seed);
   const uuid = Uuid();
   final stamp = (now ?? DateTime.now()).toUtc();
@@ -596,7 +602,7 @@ DemoDataSet buildDemoDataSet({int seed = 2026, DateTime? now}) {
   final movements = <StockMovementsCompanion>[];
 
   var cuveeIndex = 0;
-  while (wines.length < demoWineTarget) {
+  while (wines.length < wineTarget) {
     final t = _templates[cuveeIndex % _templates.length];
     final producer = producers[cuveeIndex % producers.length];
     final cuveeId = id();
@@ -630,7 +636,7 @@ DemoDataSet buildDemoDataSet({int seed = 2026, DateTime? now}) {
     }
 
     for (final year in years) {
-      if (wines.length >= demoWineTarget) break;
+      if (wines.length >= wineTarget) break;
       final wineId = id();
       final garde = _gardeParCouleur[t.couleur]!;
       wines.add(

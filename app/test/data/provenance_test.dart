@@ -27,12 +27,15 @@ void main() {
     expect(producer.source, 'etiquette');
   });
 
-  test('FIC-07 seul un texte tiré d\'une page web est marqué IA', () async {
-    final wine = await enriched();
-    final d = (await w.f.repo.wine(wine))!;
-    expect(d.provenances['commentaire_millesime']!.aiWritten, isTrue);
-    expect(d.provenances['domaine']!.aiWritten, isFalse);
-  });
+  test(
+    'FIC-07 NFR-16 seul un texte tiré d\'une page web est marqué IA',
+    () async {
+      final wine = await enriched();
+      final d = (await w.f.repo.wine(wine))!;
+      expect(d.provenances['commentaire_millesime']!.aiWritten, isTrue);
+      expect(d.provenances['domaine']!.aiWritten, isFalse);
+    },
+  );
 
   test(
     'PRV-R4 signaler une erreur : la valeur reste, marquée signalée',

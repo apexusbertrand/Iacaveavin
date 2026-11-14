@@ -198,10 +198,13 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
 
 ## Lot 5 Recette élargie
 
-- Statut : non démarré
-- Exigences : NFR-01 à NFR-17 mesurées, recette transverse de docs/08-lots-recette.md
+- Statut : en cours, branche lot-5-recette (partie de lot-6-google-play). Démarré le 2026-11-14 à la demande de Bertrand ; l'app est déjà en test sur Google Play.
+- Exigences : NFR-01 à NFR-18 mesurées, recette transverse de docs/08-lots-recette.md. Suivi détaillé : docs/recette-lot5.md
 - Points d'étape :
-- Mesures :
+  - 2026-11-14 : [x] mesures sur 5 000 fiches (tool/recette/mesures_5000_test.dart) ; [x] revue des NFR, contrôles ajoutés pour NFR-02, NFR-07, NFR-09, NFR-13, NFR-16 ; [x] recette transverse automatisée (test/recette : stock égal aux mouvements, notes, prix et valeurs du web avec URL, aucun libellé technique) sur 5 000 fiches et sur une fiche enrichie ; [x] guide des testeurs et message d'invitation (store/guide-testeurs.md).
+  - Reste : recruter 3 à 5 testeurs et les inscrire au test Google Play (Bertrand) ; vérifications sur téléphone (docs/recette-lot5.md, 7 étapes) ; 4 semaines d'usage ; corrections.
+- Mesures : liste 5 000 fiches chargée en 522 ms, filtre et tri 38 ms (cible 300), fiche 40 ms (cible 500), statistiques 168 ms (cible 1 000), export Excel 1,2 s, archive 131 ms ; machine de développement, à confirmer sur téléphone.
+- Écarts proposés : statistiques calculées sur le fil principal (NFR-02), acceptables à 168 ms sur 5 000 fiches ; portabilité iOS (NFR-12) non vérifiable avant le lot 7.
 - Recette Bertrand et décision de publication :
 
 ## Lot 6 Google Play
