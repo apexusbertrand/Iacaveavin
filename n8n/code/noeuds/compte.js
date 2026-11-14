@@ -27,9 +27,12 @@ if (execute('Webhook code')) {
   });
   d.action = 'code';
 } else if (execute('Webhook session')) {
+  const config = lireConfig(lignes('Config session'));
+  const corps = $('Webhook session').first().json.body;
   d = decisionSession({
-    texteCorps: $('Webhook session').first().json.body, config: lireConfig(lignes('Config session')),
-    ligneCode: lignes('Code de session').find((r) => r.email) || null,
+    texteCorps: corps, config,
+    // Q13 : code fixe du seul compte de revue Google Play.
+    ligneCode: ligneCodeRevue(config, corps, lignes('Code de session').find((r) => r.email) || null),
     compte: lignes('Compte de session').find((r) => r.compte_id) || null,
     ligneUsage: lignes('Usage de session').find((r) => r.compte_id) || null, maintenant,
     schemaRequete: __SCHEMA_COMPTE_SESSION__, schemaReponse,

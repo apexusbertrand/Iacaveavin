@@ -223,3 +223,31 @@ test('CPT-01 CPT-02 nœud assemblé : les trois chemins dans le bac à sable', a
   assert.equal(etat.json.action, 'etat');
   assert.equal(etat.json.reponse.erreur.code, 'auth_invalide');
 });
+
+test('Q13 compte de revue : code fixe accepté pour la seule adresse de revue, mêmes limites', () => {
+  const e = require('../lib/compte_etat.js');
+  const fixe = '482913';
+  const cfg = { ...config, revue_email: ' Prenom.Nom@exemple.fr ', revue_code_empreinte: c.empreinteCode('prenom.nom@exemple.fr', fixe) };
+  const { d, code } = codeEnvoye();
+  const demande = (cd) => ({ version_contrat: '2.0', request_id: '8e2d3b0f-6c4a-4f7b-9d3e-2a1f0b9c8d7e', email: 'prenom.nom@exemple.fr', code: cd, installation: INSTALLATION });
+  const ouvrir = (cd, ligne, conf = cfg) => c.decisionSession({
+    texteCorps: demande(cd), config: conf, ligneCode: e.ligneCodeRevue(conf, demande(cd), ligne), compte: null,
+    ligneUsage: null, maintenant: MAINTENANT + 60000, schemaRequete: S.session, schemaReponse: S.reponse, alea,
+  });
+  // Code fixe accepté, compte ouvert et code consommé.
+  const r = ouvrir(fixe, d.ligne);
+  assert.equal(r.decision, 'connecte');
+  assert.equal(r.ligne_code.code_empreinte, '');
+  // Le code reçu par mail ne vaut plus pour cette adresse.
+  if (code !== fixe) assert.equal(ouvrir(code, d.ligne).decision, 'echec');
+  // Mêmes limites : un code doit avoir été demandé, 5 essais, 10 minutes.
+  assert.equal(ouvrir(fixe, null).reponse.erreur.code, 'code_invalide');
+  assert.equal(ouvrir(fixe, { ...d.ligne, code_empreinte: '' }).reponse.erreur.code, 'code_invalide');
+  assert.equal(ouvrir(fixe, { ...d.ligne, essais: 5 }).reponse.erreur.code, 'code_expire');
+  assert.equal(ouvrir(fixe, { ...d.ligne, expire_le: new Date(MAINTENANT).toISOString() }).reponse.erreur.code, 'code_expire');
+  // Corps texte accepté ; autre adresse ou config absente : rien ne change.
+  assert.equal(e.ligneCodeRevue(cfg, JSON.stringify(demande(fixe)), d.ligne).code_empreinte, cfg.revue_code_empreinte);
+  assert.equal(e.ligneCodeRevue(cfg, { ...demande(fixe), email: 'autre@exemple.fr' }, d.ligne), d.ligne);
+  assert.equal(e.ligneCodeRevue(config, demande(fixe), d.ligne), d.ligne);
+  assert.equal(ouvrir(fixe, d.ligne, config).decision, 'echec');
+});

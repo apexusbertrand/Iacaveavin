@@ -40,4 +40,28 @@ function decisionCompteSigne({ action, entetes, empreinte, config, compte, ligne
   return r;
 }
 
-if (typeof module !== 'undefined') module.exports = { VERSION_CONTRAT_COMPTE_21, CHEMINS_COMPTE_21, decisionCompteSigne };
+/**
+ * Q13 : compte de revue Google Play. Pour l'adresse `revue_email` de la
+ * config, le code fixe dont l'empreinte (empreinteCode) est
+ * `revue_code_empreinte` remplace le code envoyé par mail. Mêmes limites
+ * qu'un code ordinaire : un code doit avoir été demandé juste avant (ligne en
+ * cours), 5 essais, 10 minutes, code consommé après usage. Sans ces deux clés
+ * de config, rien ne change. Ni l'adresse ni le code ne sont dans le dépôt.
+ */
+function ligneCodeRevue(config, texteCorps, ligneCode) {
+  const empreinte = String((config && config.revue_code_empreinte) || '').trim();
+  const revue = normaliserEmail(config && config.revue_email);
+  if (!empreinte || !revue || !ligneCode || !ligneCode.code_empreinte) return ligneCode;
+  let corps = texteCorps;
+  if (typeof corps === 'string') {
+    try {
+      corps = JSON.parse(corps);
+    } catch (e) {
+      return ligneCode;
+    }
+  }
+  if (!corps || normaliserEmail(corps.email) !== revue) return ligneCode;
+  return { ...ligneCode, code_empreinte: empreinte };
+}
+
+if (typeof module !== 'undefined') module.exports = { VERSION_CONTRAT_COMPTE_21, CHEMINS_COMPTE_21, decisionCompteSigne, ligneCodeRevue };
