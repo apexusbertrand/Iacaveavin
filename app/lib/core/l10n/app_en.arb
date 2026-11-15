@@ -912,5 +912,8 @@
   "movementDeleteLast": "Delete the last movement",
   "movementDeleteTitle": "Delete the last movement?",
   "movementDeleteBody": "{movement} on {date}. It leaves the history and the stock goes back to what it was before.",
-  "movementDeleted": "Movement deleted"
+  "movementDeleted": "Movement deleted",
+  "updateTitle": "New version available",
+  "updateBody": "A newer version of IA cave à vin is available on Google Play. Update now?",
+  "updateNow": "Update"
 }

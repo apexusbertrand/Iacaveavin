@@ -3382,4 +3382,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get movementDeleted => 'Mouvement supprimé';
+
+  @override
+  String get updateTitle => 'Nouvelle version disponible';
+
+  @override
+  String get updateBody =>
+      'Une version plus récente d\'IA cave à vin est disponible sur Google Play. La mettre à jour maintenant ?';
+
+  @override
+  String get updateNow => 'Mettre à jour';
 }

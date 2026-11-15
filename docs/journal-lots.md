@@ -204,6 +204,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - 2026-11-14 : [x] mesures sur 5 000 fiches (tool/recette/mesures_5000_test.dart) ; [x] revue des NFR, contrôles ajoutés pour NFR-02, NFR-07, NFR-09, NFR-13, NFR-16 ; [x] recette transverse automatisée (test/recette : stock égal aux mouvements, notes, prix et valeurs du web avec URL, aucun libellé technique) sur 5 000 fiches et sur une fiche enrichie ; [x] guide des testeurs et message d'invitation (store/guide-testeurs.md).
   - 2026-11-15 : correction de recette PRX-08, relevé automatique des prix suspendu (T144).
   - 2026-11-15 : STK-08, supprimer le dernier mouvement ; STK-09, commentaire de réapprovisionnement de 50 caractères (T145).
+  - 2026-11-15 : NAV-03, mise à jour proposée au lancement par Google Play (T146, écart NFR-12 accepté).
   - Reste : recruter 3 à 5 testeurs et les inscrire au test Google Play (Bertrand) ; vérifications sur téléphone (docs/recette-lot5.md, 7 étapes) ; 4 semaines d'usage ; corrections.
 - Mesures : liste 5 000 fiches chargée en 522 ms, filtre et tri 38 ms (cible 300), fiche 40 ms (cible 500), statistiques 168 ms (cible 1 000), export Excel 1,2 s, archive 131 ms ; machine de développement, à confirmer sur téléphone.
 - Écarts proposés : statistiques calculées sur le fil principal (NFR-02), acceptables à 168 ms sur 5 000 fiches ; portabilité iOS (NFR-12) non vérifiable avant le lot 7.

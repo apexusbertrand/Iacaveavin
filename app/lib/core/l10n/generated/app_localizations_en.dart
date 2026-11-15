@@ -3368,4 +3368,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get movementDeleted => 'Movement deleted';
+
+  @override
+  String get updateTitle => 'New version available';
+
+  @override
+  String get updateBody =>
+      'A newer version of IA cave à vin is available on Google Play. Update now?';
+
+  @override
+  String get updateNow => 'Update';
 }

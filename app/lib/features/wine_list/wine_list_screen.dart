@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../app_update/app_update_prompt.dart';
 import '../account/account_drawer.dart';
 import '../../core/features.dart';
 import '../../core/labels.dart';
@@ -61,6 +62,11 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       // PRX-06 : rafraîchissement mensuel des prix, si l'option est active.
       // PRX-08 : suspendu tant que le relevé ne donne pas satisfaction.
       if (mounted && marketPriceLookup) await autoRefreshPricesIfDue(ref);
+    });
+    // NAV-03 : nouvelle version sur le store, proposée une fois par
+    // lancement, sans attendre ni dépendre des tâches ci-dessus.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) offerAppUpdate(context, ref);
     });
   }
 

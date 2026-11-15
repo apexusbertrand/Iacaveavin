@@ -6,6 +6,7 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | --- | --- | --- | --- |
 | NAV-01 | docs/05 | Tiroir latéral comme sur les captures : Mes vins (accueil), À boire, E | 4 |
 | NAV-02 | docs/05 | Lien profond `iacaveavin://fiche/<id>` qui ouvre une fiche (utilisé pa | 1 |
+| NAV-03 | docs/05 | À chaque lancement, l'app demande au store s'il existe une version plu | 3 |
 | LST-01 | docs/05 | Tri à deux niveaux (tri 1 puis tri 2), chacun croissant ou décroissant | 4 |
 | LST-02 | docs/05 | Tri par couleur dans l'ordre de la liste « couleur » du dictionnaire ( | 1 |
 | LST-03 | docs/05 | Groupes repliables quand le tri 1 est groupable (millésime, couleur, p | 1 |
@@ -164,4 +165,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-156 exigences couvertes sur 159.
+157 exigences couvertes sur 160.

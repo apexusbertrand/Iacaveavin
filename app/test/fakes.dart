@@ -10,6 +10,7 @@ import 'package:iacaveavin/data/enrichment/enrichment_gateway.dart';
 import 'package:iacaveavin/data/enrichment/enrichment_providers.dart';
 import 'package:iacaveavin/data/flux_credentials.dart';
 import 'package:iacaveavin/app.dart';
+import 'package:iacaveavin/data/app_update.dart';
 import 'package:iacaveavin/data/backup_providers.dart';
 import 'package:iacaveavin/data/db/app_database.dart';
 import 'package:iacaveavin/data/referentiels/referentiel_loader.dart';
@@ -99,6 +100,7 @@ Future<FakeDemoRepository> pumpApp(
   SecretStore? secrets,
   SubscriptionStore? subscriptions,
   Locale device = const Locale('fr'),
+  AppUpdateChecker? updates,
 }) async {
   // Téléphone de 360 x 780 dp.
   tester.view.physicalSize = const Size(1080, 2340);
@@ -137,6 +139,8 @@ Future<FakeDemoRepository> pumpApp(
         demoRepositoryProvider.overrideWithValue(repo),
         if (subscriptions != null)
           subscriptionStoreProvider.overrideWithValue(subscriptions),
+        if (updates != null)
+          appUpdateCheckerProvider.overrideWithValue(updates),
       ],
       child: IaCaveAVinApp(initialLocation: location),
     ),

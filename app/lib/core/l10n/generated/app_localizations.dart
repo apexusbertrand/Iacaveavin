@@ -5575,6 +5575,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mouvement supprimé'**
   String get movementDeleted;
+
+  /// No description provided for @updateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle version disponible'**
+  String get updateTitle;
+
+  /// No description provided for @updateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une version plus récente d\'IA cave à vin est disponible sur Google Play. La mettre à jour maintenant ?'**
+  String get updateBody;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à jour'**
+  String get updateNow;
 }
 
 class _AppLocalizationsDelegate

@@ -1983,5 +1983,8 @@
       }
     }
   },
-  "movementDeleted": "Mouvement supprimé"
+  "movementDeleted": "Mouvement supprimé",
+  "updateTitle": "Nouvelle version disponible",
+  "updateBody": "Une version plus récente d'IA cave à vin est disponible sur Google Play. La mettre à jour maintenant ?",
+  "updateNow": "Mettre à jour"
 }

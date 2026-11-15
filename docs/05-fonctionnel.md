@@ -8,6 +8,7 @@ Lot de livraison entre crochets. Détail des lots : docs/08-lots-recette.md.
 
 - NAV-01. Tiroir latéral comme sur les captures : Mes vins (accueil), À boire, Emplacements, Statistiques, Règles de garde (PAR-07), Liste d'achats, Import et export, Sauvegarde, Paramètres, À propos.
 - NAV-02. Lien profond `iacaveavin://fiche/<id>` qui ouvre une fiche (utilisé par le QR code des PDF).
+- NAV-03. À chaque lancement, l'app demande au store s'il existe une version plus récente. Si oui, elle le propose : « Plus tard » ferme sans rien changer, « Mettre à jour » ouvre la mise à jour de Google Play. Une seule fois par lancement ; sans réseau ou hors Play Store, rien ne s'affiche (2026-11-15, T146).
 
 ## LST. Liste des vins [lot 1]
 

@@ -36,7 +36,7 @@ Point d'attention : le chargement de la liste est le poste le plus lourd. Sur un
 | NFR-09 Vie privée | conforme | test NFR-09 (aucun SDK d'audience ou de publicité) |
 | NFR-10 Accessibilité | contraste conforme ; TalkBack, police à 200 %, cibles 48 dp à vérifier sur téléphone | tests contrast_test ; étapes 5 et 6 ci-dessous |
 | NFR-11 Langues | conforme, anglais livré | lot 5b, tests LNG-01 à LNG-05 |
-| NFR-12 Portabilité | non vérifiable ici : pas de Mac ni de CI macOS | lot 7 |
+| NFR-12 Portabilité | non vérifiable ici : pas de Mac ni de CI macOS ; écart accepté pour in_app_update (T146) | lot 7 |
 | NFR-13 Tests | conforme, 437 tests au vert | test NFR-13 |
 | NFR-14 Traçabilité | 153 exigences couvertes sur 156 ; restent NFR-12 (lot 7), STK-R4 et NOT-R4, vérifiées sous d'autres identifiants (STK, LST-04) | docs/matrice-exigences.md |
 | NFR-15 Industrialisation | conforme | CI GitHub Actions |

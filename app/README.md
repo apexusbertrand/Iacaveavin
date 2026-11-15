@@ -78,6 +78,7 @@ Chaque dépendance ajoutée est listée ici avec sa raison (règle de CLAUDE.md)
 | crypto 3.0 | SHA-256 et HMAC de la signature des requêtes au flux (docs/02), paquet Dart de l'équipe Dart, sans code natif | oui | oui |
 | flutter_secure_storage 11.2 | clé du flux dans le Keystore Android et le Trousseau iOS, jamais dans les préférences (PAR-05, règle Flutter) | oui | oui |
 | mobile_scanner 7.4 | lecture du code-barres EAN en direct et sur une photo, décodage sur l'appareil sans réseau (AJO-10, T82) | oui | oui |
+| in_app_update 5.0 | NAV-03 : nouvelle version proposée au lancement par la mise à jour Google Play (API officielle Play Core) ; sans effet ailleurs. Écart NFR-12 accepté par Bertrand (T146) : équivalent App Store à prévoir au lot 7 | oui | non |
 | camera 0.12 | images de la caméra en direct pour lire le millésime (AJO-14), plugin officiel de l'équipe Flutter | oui | oui |
 | google_mlkit_text_recognition 0.17 | reconnaissance de texte sur l'appareil, alphabet latin, sans réseau ni envoi d'image (AJO-14, T116). iOS 15.5 au moins ; règles R8 dans android/app/proguard-rules.pro | oui | oui |
 | integration_test (SDK, dev) | parcours complets sur téléphone | - | - |
