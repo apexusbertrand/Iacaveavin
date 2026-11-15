@@ -781,13 +781,13 @@ class _GrapesBar extends StatelessWidget {
   }
 }
 
-class _OperationsTab extends StatelessWidget {
+class _OperationsTab extends ConsumerWidget {
   const _OperationsTab({required this.wine});
 
   final WineDetail wine;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     if (wine.movements.isEmpty) {
       return MessageStateView(icon: Icons.history, title: l.noMovements);
@@ -796,14 +796,31 @@ class _OperationsTab extends StatelessWidget {
     final date = DateFormat.yMMMd(
       Localizations.localeOf(context).toLanguageTag(),
     );
+    String day(String d) {
+      final parsed = DateTime.tryParse(d);
+      return parsed == null ? d : date.format(parsed);
+    }
+
     return ListView.separated(
-      itemCount: wine.movements.length,
+      itemCount: wine.movements.length + 1,
       separatorBuilder: (_, _) => const Divider(height: 1),
-      itemBuilder: (context, i) {
+      itemBuilder: (context, index) {
+        // STK-08 : supprimer le dernier mouvement saisi (fausse manipulation).
+        if (index == 0) {
+          return Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: TextButton.icon(
+              key: const ValueKey('movement-delete-last'),
+              onPressed: () => _deleteLast(context, ref, day),
+              icon: const Icon(Icons.undo),
+              label: Text(l.movementDeleteLast),
+            ),
+          );
+        }
+        final i = index - 1;
         final m = wine.movements[i];
         final lot = lots[m.lotId];
         final qty = m.quantity > 0 ? '+${m.quantity}' : '${m.quantity}';
-        final parsed = DateTime.tryParse(m.date);
         return ListTile(
           leading: Icon(
             m.quantity > 0
@@ -814,7 +831,7 @@ class _OperationsTab extends StatelessWidget {
           subtitle: Text(
             [
               l.movementDetail(
-                parsed == null ? m.date : date.format(parsed),
+                day(m.date),
                 lot == null
                     ? ''
                     : l.lotLine(lot.ownerName, _cl(lot.formatCl), lot.bottles),
@@ -826,6 +843,35 @@ class _OperationsTab extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _deleteLast(
+    BuildContext context,
+    WidgetRef ref,
+    String Function(String) day,
+  ) async {
+    final l = AppLocalizations.of(context);
+    // La fiche se recharge après la suppression : messager pris avant.
+    final messenger = ScaffoldMessenger.of(context);
+    final stock = ref.read(stockServiceProvider);
+    final last = await stock.lastMovement(wine.id);
+    if (last == null || !context.mounted) return;
+    final qty = last.quantite > 0 ? '+${last.quantite}' : '${last.quantite}';
+    final yes = await confirm(
+      context,
+      title: l.movementDeleteTitle,
+      body: l.movementDeleteBody(
+        l.movementLine(l.movementLabel(last.typeMouvement), qty),
+        day(last.dateMouvement),
+      ),
+      action: l.delete,
+    );
+    if (!yes || !context.mounted) return;
+    await stock.deleteLastMovement(wine.id);
+    // Le message « Annuler » d'une action précédente ne vaut plus.
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(l.movementDeleted)));
   }
 }
 

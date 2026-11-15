@@ -3351,4 +3351,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String priorityKeepLong(int years) {
     return 'Keep long (over $years years)';
   }
+
+  @override
+  String get lotComment => 'Comment (50 characters at most)';
+
+  @override
+  String get movementDeleteLast => 'Delete the last movement';
+
+  @override
+  String get movementDeleteTitle => 'Delete the last movement?';
+
+  @override
+  String movementDeleteBody(String movement, String date) {
+    return '$movement on $date. It leaves the history and the stock goes back to what it was before.';
+  }
+
+  @override
+  String get movementDeleted => 'Movement deleted';
 }

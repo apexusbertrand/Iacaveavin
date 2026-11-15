@@ -199,6 +199,78 @@ class StockService {
     return StockAction([out, into], createdLotId: targetId);
   });
 
+  /// STK-08 : dernier mouvement saisi de la fiche (le plus récent en date
+  /// de saisie), ou null.
+  Future<StockMovement?> lastMovement(String wineId) async {
+    final lots = await (_db.select(
+      _db.stockLots,
+    )..where((l) => l.ficheId.equals(wineId) & l.deletedAt.isNull())).get();
+    if (lots.isEmpty) return null;
+    return (_db.select(_db.stockMovements)
+          ..where(
+            (m) =>
+                m.lotId.isIn([for (final l in lots) l.id]) &
+                m.deletedAt.isNull(),
+          )
+          ..orderBy([
+            (m) => OrderingTerm.desc(m.createdAt),
+            (m) => OrderingTerm.desc(m.rowId),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+  }
+
+  /// STK-08 (T145) : supprime le dernier mouvement saisi de la fiche, pour
+  /// réparer une fausse manipulation. Suppression logique (deleted_at),
+  /// jamais physique : le stock revient à l'état d'avant ce mouvement. Un
+  /// transfert part avec son mouvement lié, et son lot cible s'il reste
+  /// vide. Renvoie le mouvement supprimé, ou null s'il n'y en a pas.
+  Future<StockMovement?> deleteLastMovement(
+    String wineId,
+  ) => _db.transaction(() async {
+    final last = await lastMovement(wineId);
+    if (last == null) return null;
+    final ids = {last.id};
+    String? transferTarget;
+    final type = MovementType.fromCode(last.typeMouvement);
+    if (last.lotLieId != null &&
+        (type == MovementType.transferOut || type == MovementType.transferIn)) {
+      final partner =
+          await (_db.select(_db.stockMovements)
+                ..where(
+                  (m) =>
+                      m.lotId.equals(last.lotLieId!) &
+                      m.lotLieId.equals(last.lotId) &
+                      m.deletedAt.isNull(),
+                )
+                ..orderBy([(m) => OrderingTerm.desc(m.createdAt)])
+                ..limit(1))
+              .getSingleOrNull();
+      if (partner != null) ids.add(partner.id);
+      transferTarget = type == MovementType.transferIn
+          ? last.lotId
+          : last.lotLieId;
+    }
+    await (_db.update(_db.stockMovements)..where((m) => m.id.isIn(ids))).write(
+      StockMovementsCompanion(deletedAt: Value(_now), updatedAt: Value(_now)),
+    );
+    if (transferTarget != null) {
+      final left =
+          await (_db.select(_db.stockMovements)..where(
+                (m) => m.lotId.equals(transferTarget!) & m.deletedAt.isNull(),
+              ))
+              .get();
+      if (left.isEmpty) {
+        await (_db.update(
+          _db.stockLots,
+        )..where((l) => l.id.equals(transferTarget!))).write(
+          StockLotsCompanion(deletedAt: Value(_now), updatedAt: Value(_now)),
+        );
+      }
+    }
+    return last;
+  });
+
   /// STK-07, STK-R4 : annulation dans les 5 secondes. Les mouvements non
   /// confirmés sont supprimés, ainsi que le lot cible d'un transfert.
   Future<void> undo(StockAction action) => _db.transaction(() async {

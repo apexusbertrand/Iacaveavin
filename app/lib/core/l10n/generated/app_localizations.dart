@@ -5545,6 +5545,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'À garder beaucoup (plus de {years} ans)'**
   String priorityKeepLong(int years);
+
+  /// No description provided for @lotComment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commentaire (50 caractères au plus)'**
+  String get lotComment;
+
+  /// No description provided for @movementDeleteLast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le dernier mouvement'**
+  String get movementDeleteLast;
+
+  /// No description provided for @movementDeleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le dernier mouvement ?'**
+  String get movementDeleteTitle;
+
+  /// No description provided for @movementDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{movement} du {date}. Il quitte l\'historique et le stock revient à l\'état d\'avant.'**
+  String movementDeleteBody(String movement, String date);
+
+  /// No description provided for @movementDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mouvement supprimé'**
+  String get movementDeleted;
 }
 
 class _AppLocalizationsDelegate

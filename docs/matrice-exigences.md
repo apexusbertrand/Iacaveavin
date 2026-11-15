@@ -52,6 +52,8 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | STK-05 | docs/05 | Transfert d'emplacement ou de propriétaire, quantité partielle possibl | 1 |
 | STK-06 | docs/05 | Une fiche à 0 bouteille reste en base, filtrable « épuisé », réapprovi | 4 |
 | STK-07 | docs/05 | Annulation pendant 5 secondes après toute action de stock. | 2 |
+| STK-08 | docs/05 | Onglet Opérations : « Supprimer le dernier mouvement », après confirma | 4 |
+| STK-09 | docs/05 | Fenêtre de réapprovisionnement (nouveau lot) : commentaire facultatif  | 2 |
 | EMP-01 | docs/05 | Arbre paramétrable sur 4 niveaux : cave, meuble, casier, clayette. | 4 |
 | EMP-02 | docs/05 | Un casier peut porter une grille (lignes A à Z, colonnes 1 à 50). Les  | 2 |
 | EMP-03 | docs/05 | [lot 4] Vue casier : cases occupées teintées de la couleur du vin, cas | 4 |
@@ -162,4 +164,4 @@ Générée par `python3 scripts/matrice_exigences.py`. Ne pas modifier à la mai
 | PRV-R3 | docs/04 | Déverrouiller un champ est une action explicite sur la fiche (appui lo | 1 |
 | PRV-R4 | docs/04 | « Signaler une erreur » sur une valeur enrichie passe `signale` à vrai | 3 |
 
-154 exigences couvertes sur 157.
+156 exigences couvertes sur 159.

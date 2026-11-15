@@ -391,6 +391,7 @@ Future<bool> addLotDialog(
       child: LotForm(
         title: l.newLot,
         scrollable: true,
+        withComment: true,
         initial: LotDraft(
           ownerId: defaultOwner,
           quantity: quantity,
@@ -420,7 +421,11 @@ class LotForm extends ConsumerStatefulWidget {
     this.onChanged,
     this.title,
     this.scrollable = false,
+    this.withComment = false,
   });
+
+  /// STK-09 : champ commentaire (réapprovisionnement).
+  final bool withComment;
 
   final LotDraft initial;
   final String? title;
@@ -448,6 +453,9 @@ class _LotFormState extends ConsumerState<LotForm> {
         : '${widget.initial.unitPrice}'.replaceAll('.', ','),
   );
   late final _positions = TextEditingController(text: widget.initial.positions);
+  late final _comment = TextEditingController(
+    text: widget.initial.comment ?? '',
+  );
   late final _date = TextEditingController(
     text:
         widget.initial.purchaseDate ??
@@ -463,7 +471,7 @@ class _LotFormState extends ConsumerState<LotForm> {
 
   @override
   void dispose() {
-    for (final c in [_qty, _price, _positions, _date]) {
+    for (final c in [_qty, _price, _positions, _date, _comment]) {
       c.dispose();
     }
     super.dispose();
@@ -496,6 +504,7 @@ class _LotFormState extends ConsumerState<LotForm> {
       unitPrice: p,
       purchaseDate: _date.text.trim().isEmpty ? null : _date.text.trim(),
       supplier: widget.initial.supplier,
+      comment: widget.withComment ? _comment.text : null,
     );
   }
 
@@ -613,6 +622,14 @@ class _LotFormState extends ConsumerState<LotForm> {
           decoration: InputDecoration(labelText: l.fieldPurchaseDate),
           onChanged: (_) => _emit(),
         ),
+        if (widget.withComment)
+          TextField(
+            key: const ValueKey('lot-comment'),
+            controller: _comment,
+            maxLength: movementCommentMax,
+            decoration: InputDecoration(labelText: l.lotComment),
+            onChanged: (_) => _emit(),
+          ),
         if (widget.onSubmit != null && !widget.scrollable) ...[
           const SizedBox(height: SpacingTokens.l),
           save,

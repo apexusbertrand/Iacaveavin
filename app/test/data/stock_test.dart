@@ -4,6 +4,7 @@ import 'package:iacaveavin/domain/wine_detail.dart';
 import 'package:iacaveavin/domain/wine_query.dart';
 
 import '../fixture.dart';
+import '../recette/invariants.dart';
 
 void main() {
   final f = Fixture();
@@ -207,4 +208,75 @@ void main() {
       unorderedEquals([f.wine, sansLot, zero]),
     );
   });
+
+  test('STK-08 supprimer le dernier mouvement : stock d\'avant, suppression logique', () async {
+    await f.stock.add(f.lot, 3);
+    expect(await f.stock.lotStock(f.lot), 9);
+    final deleted = await f.stock.deleteLastMovement(f.wine);
+    expect(deleted!.typeMouvement, MovementType.entry.code);
+    expect(deleted.quantite, 3);
+    expect(await f.stock.lotStock(f.lot), 6);
+    // Jamais effacé : la ligne reste, marquée supprimée.
+    final row = await (f.db.select(
+      f.db.stockMovements,
+    )..where((m) => m.id.equals(deleted.id))).getSingle();
+    expect(row.deletedAt, isNotNull);
+    expect(await recetteViolations(f.db), isEmpty);
+    // Le suivant est l'entrée initiale du lot.
+    expect((await f.stock.lastMovement(f.wine))!.quantite, 6);
+  });
+
+  test(
+    'STK-08 un transfert part avec son mouvement lié et son lot cible',
+    () async {
+      await f.stock.transfer(f.lot, 2, toOwnerId: 'o2');
+      expect((await f.repo.wine(f.wine))!.lots, hasLength(2));
+      await f.stock.deleteLastMovement(f.wine);
+      final d = (await f.repo.wine(f.wine))!;
+      expect(d.lots, hasLength(1));
+      expect(d.bottles, 6);
+      expect(await f.stock.lotStock(f.lot), 6);
+      expect(await recetteViolations(f.db), isEmpty);
+    },
+  );
+
+  test('STK-08 aucune action sans mouvement', () async {
+    final empty = await f.repo.createWine(
+      const WineDraft(
+        producer: 'Domaine Vide',
+        country: 'FR',
+        color: 'rouge',
+        vintage: '2020',
+      ),
+      cellarId: f.cellar,
+    );
+    expect(await f.stock.deleteLastMovement(empty), isNull);
+  });
+
+  test(
+    'STK-09 commentaire de réapprovisionnement sur l\'entrée, 50 caractères',
+    () async {
+      await f.repo.addLot(
+        f.wine,
+        LotDraft(
+          ownerId: 'o1',
+          quantity: 2,
+          comment: '  Salon de Reims, carton ${'x' * 60}',
+        ),
+      );
+      final entry = await (f.db.select(
+        f.db.stockMovements,
+      )..where((m) => m.commentaire.isNotNull())).getSingle();
+      expect(entry.commentaire!.length, movementCommentMax);
+      expect(entry.commentaire, startsWith('Salon de Reims, carton'));
+      await f.repo.addLot(
+        f.wine,
+        const LotDraft(ownerId: 'o1', quantity: 1, comment: '   '),
+      );
+      final rows = await (f.db.select(
+        f.db.stockMovements,
+      )..where((m) => m.commentaire.isNotNull())).get();
+      expect(rows, hasLength(1), reason: 'commentaire vide ignoré');
+    },
+  );
 }

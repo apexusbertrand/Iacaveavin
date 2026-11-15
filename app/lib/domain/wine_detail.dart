@@ -75,6 +75,9 @@ class WineDraft {
   final bool favorite;
 }
 
+/// STK-09 : longueur maximale du commentaire d'un réapprovisionnement.
+const movementCommentMax = 50;
+
 /// Lot à créer : stock initial porté par un mouvement `entree`.
 class LotDraft {
   const LotDraft({
@@ -86,10 +89,15 @@ class LotDraft {
     this.unitPrice,
     this.purchaseDate,
     this.supplier,
+    this.comment,
   });
 
   final String ownerId;
   final int quantity;
+
+  /// STK-09 : commentaire de l'entrée (50 caractères au plus), porté par le
+  /// mouvement `entree`.
+  final String? comment;
   final double formatCl;
   final String? locationId;
   final String? positions;

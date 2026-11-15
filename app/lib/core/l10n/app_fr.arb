@@ -1968,5 +1968,20 @@
         "type": "int"
       }
     }
-  }
+  },
+  "lotComment": "Commentaire (50 caractères au plus)",
+  "movementDeleteLast": "Supprimer le dernier mouvement",
+  "movementDeleteTitle": "Supprimer le dernier mouvement ?",
+  "movementDeleteBody": "{movement} du {date}. Il quitte l'historique et le stock revient à l'état d'avant.",
+  "@movementDeleteBody": {
+    "placeholders": {
+      "movement": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "movementDeleted": "Mouvement supprimé"
 }

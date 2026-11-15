@@ -913,6 +913,7 @@ class CellarRepository {
               quantite: lot.quantity,
               dateMouvement: lot.purchaseDate ?? _today,
               motif: const Value('achat'),
+              commentaire: Value(_comment(lot.comment)),
             ),
           );
     }
@@ -1053,6 +1054,13 @@ class CellarRepository {
 
   static String? _pairingsJson(List<String> pairings) =>
       pairings.isEmpty ? null : jsonEncode(pairings);
+}
+
+/// STK-09 : commentaire d'entrée, vide ignoré, 50 caractères au plus.
+String? _comment(String? c) {
+  final t = c?.trim() ?? '';
+  if (t.isEmpty) return null;
+  return t.length > movementCommentMax ? t.substring(0, movementCommentMax) : t;
 }
 
 class _Context {

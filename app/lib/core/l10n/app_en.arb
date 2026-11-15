@@ -907,5 +907,10 @@
   "priorityPast": "Past",
   "priorityToDrink": "To drink",
   "priorityKeepLittle": "Keep a little ({years} years at most)",
-  "priorityKeepLong": "Keep long (over {years} years)"
+  "priorityKeepLong": "Keep long (over {years} years)",
+  "lotComment": "Comment (50 characters at most)",
+  "movementDeleteLast": "Delete the last movement",
+  "movementDeleteTitle": "Delete the last movement?",
+  "movementDeleteBody": "{movement} on {date}. It leaves the history and the stock goes back to what it was before.",
+  "movementDeleted": "Movement deleted"
 }

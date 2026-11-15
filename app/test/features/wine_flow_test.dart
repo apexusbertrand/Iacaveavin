@@ -157,7 +157,7 @@ void main() {
   });
 
   testWidgets(
-    'STK-06 nouveau lot : sans fournisseur, « Enregistrer » visible sur petit écran',
+    'STK-06 STK-09 nouveau lot : sans fournisseur, commentaire, « Enregistrer » visible sur petit écran',
     (tester) async {
       await pumpRealApp(tester, seed: seedTwo);
       // Petit téléphone avec barre de navigation Android de 48 dp.
@@ -172,6 +172,8 @@ void main() {
       await settle(tester);
       expect(find.text('Nouveau lot'), findsOneWidget);
       expect(find.text('Fournisseur'), findsNothing);
+      // STK-09 : commentaire de 50 caractères au plus.
+      expect(find.byKey(const ValueKey('lot-comment')), findsOneWidget);
       final save = tester.getRect(find.byKey(const ValueKey('lot-save')));
       expect(save.bottom, lessThanOrEqualTo(1560 / 3 - 48));
       await tester.tap(find.byKey(const ValueKey('lot-save')));
@@ -179,6 +181,28 @@ void main() {
       expect(find.text('4 restantes · 0 consommée'), findsOneWidget);
     },
   );
+
+  testWidgets('STK-08 onglet Opérations : supprimer le dernier mouvement', (
+    tester,
+  ) async {
+    await pumpRealApp(tester, seed: seedTwo);
+    await tester.tap(find.text('Château Bralmac'));
+    await settle(tester);
+    final before = tester.widget<Text>(find.byKey(const ValueKey('counters')));
+    await tester.tap(find.text('Ajouter 1 bouteille'));
+    await settle(tester);
+    await tester.tap(find.text('Opérations'));
+    await settle(tester);
+    await tester.tap(find.byKey(const ValueKey('movement-delete-last')));
+    await settle(tester);
+    expect(find.text('Supprimer le dernier mouvement ?'), findsOneWidget);
+    expect(find.textContaining('Entrée · +1'), findsWidgets);
+    await tester.tap(find.text('Supprimer').last);
+    await settle(tester);
+    expect(find.text('Mouvement supprimé'), findsOneWidget);
+    final after = tester.widget<Text>(find.byKey(const ValueKey('counters')));
+    expect(after.data, before.data, reason: 'stock revenu à l\'état d\'avant');
+  });
 
   testWidgets('FIC-01 PRO-02 onglet Informations : origine et propriétaires', (
     tester,

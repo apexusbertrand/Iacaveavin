@@ -3365,4 +3365,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String priorityKeepLong(int years) {
     return 'À garder beaucoup (plus de $years ans)';
   }
+
+  @override
+  String get lotComment => 'Commentaire (50 caractères au plus)';
+
+  @override
+  String get movementDeleteLast => 'Supprimer le dernier mouvement';
+
+  @override
+  String get movementDeleteTitle => 'Supprimer le dernier mouvement ?';
+
+  @override
+  String movementDeleteBody(String movement, String date) {
+    return '$movement du $date. Il quitte l\'historique et le stock revient à l\'état d\'avant.';
+  }
+
+  @override
+  String get movementDeleted => 'Mouvement supprimé';
 }

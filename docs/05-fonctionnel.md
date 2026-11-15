@@ -68,6 +68,8 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 - STK-05. Transfert d'emplacement ou de propriétaire, quantité partielle possible (STK-R5).
 - STK-06. Une fiche à 0 bouteille reste en base, filtrable « épuisé », réapprovisionnable en un tap.
 - STK-07. Annulation pendant 5 secondes après toute action de stock.
+- STK-08. Onglet Opérations : « Supprimer le dernier mouvement », après confirmation, pour réparer une fausse manipulation. Seul le dernier mouvement saisi de la fiche est concerné ; il est marqué supprimé (jamais effacé) et le stock revient à l'état d'avant. Un transfert part avec son mouvement lié et son lot cible s'il reste vide (2026-11-15, T145).
+- STK-09. Fenêtre de réapprovisionnement (nouveau lot) : commentaire facultatif de 50 caractères au plus, porté par le mouvement d'entrée et affiché dans l'historique (2026-11-15, T145).
 
 ## EMP. Emplacements [lot 1, vue casier au lot 4]
 

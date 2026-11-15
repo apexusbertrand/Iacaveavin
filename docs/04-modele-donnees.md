@@ -32,7 +32,7 @@ Toutes les tables portent id (UUID v4), cave_id, created_at, updated_at, deleted
 - STK-R1. Quantité d'un lot = somme de ses mouvements. Jamais de champ quantité modifié directement.
 - STK-R2. Une quantité de lot ne devient jamais négative : le mouvement qui la rendrait négative est refusé avec un message.
 - STK-R3. Stock d'une fiche = somme de ses lots. Bouteilles consommées = somme des mouvements « ouverture », en valeur absolue.
-- STK-R4. Un mouvement est immuable. Une erreur se corrige par un mouvement inverse (ou l'annulation de 5 secondes, qui supprime le mouvement tant qu'il n'est pas confirmé).
+- STK-R4. Un mouvement est immuable. Une erreur se corrige par un mouvement inverse, par l'annulation de 5 secondes (qui supprime le mouvement tant qu'il n'est pas confirmé), ou par la suppression du dernier mouvement saisi de la fiche (STK-08), qui le marque supprimé sans l'effacer.
 - STK-R5. Transfert d'une partie d'un lot : création d'un lot cible et de deux mouvements liés (transfert_sortant, transfert_entrant).
 
 ## Garde

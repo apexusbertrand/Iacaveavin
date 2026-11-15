@@ -191,7 +191,7 @@ entites:
       - {cle: quantite, libelle: "Quantité", type: entier, oblig: true, excel: "RO:Mouvements/Quantité", regle: "signée, jamais 0"}
       - {cle: date_mouvement, libelle: "Date", type: date, oblig: true, excel: "RO:Mouvements/Date"}
       - {cle: motif, libelle: "Motif", type: liste, liste: motif_mouvement, excel: "RO:Mouvements/Motif", regle: "obligatoire pour ajustement et sortie_autre"}
-      - {cle: commentaire, libelle: "Commentaire", type: texte, excel: "RO:Mouvements/Commentaire"}
+      - {cle: commentaire, libelle: "Commentaire", type: texte, excel: "RO:Mouvements/Commentaire", regle: "50 caractères au plus sur une entrée de réapprovisionnement (STK-09)"}
       - {cle: lot_lie_id, libelle: "Lot lié", type: reference, regle: "renseigné pour un transfert"}
 
   degustation:
