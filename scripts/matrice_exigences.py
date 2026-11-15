@@ -29,7 +29,9 @@ def exigences():
     """Renvoie {id: (libellé court, source)} dans l'ordre des documents."""
     trouvees = {}
     f05 = (RACINE / "docs" / "05-fonctionnel.md").read_text(encoding="utf-8")
-    for m in re.finditer(rf"^- ({ID})\. (.+)$", f05, re.M):
+    # Une exigence barrée (~~ID. ...~~) reste connue : retirée ou suspendue,
+    # elle garde son identifiant (.claude/rules/specs.md).
+    for m in re.finditer(rf"^- (?:~~)?({ID})\. (.+)$", f05, re.M):
         trouvees.setdefault(m.group(1), (m.group(2)[:70], "05"))
     f07 = (RACINE / "docs" / "07-exigences-non-fonctionnelles.md").read_text(encoding="utf-8")
     for m in re.finditer(rf"^\| ({ID}) \| ([^|]+) \| ([^|]+) \|", f07, re.M):

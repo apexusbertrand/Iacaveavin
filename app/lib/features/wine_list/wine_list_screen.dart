@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../account/account_drawer.dart';
+import '../../core/features.dart';
 import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
@@ -58,7 +59,8 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
       ref.read(enrichmentRunnerProvider.notifier).kick();
       await runAutoBackupIfDue(ref);
       // PRX-06 : rafraîchissement mensuel des prix, si l'option est active.
-      if (mounted) await autoRefreshPricesIfDue(ref);
+      // PRX-08 : suspendu tant que le relevé ne donne pas satisfaction.
+      if (mounted && marketPriceLookup) await autoRefreshPricesIfDue(ref);
     });
   }
 
@@ -405,15 +407,16 @@ class _WineListScreenState extends ConsumerState<WineListScreen> {
         icon: const Icon(Icons.person_outline),
         onPressed: () => _runSelection(SelectionAction.owner),
       ),
-      IconButton(
-        key: const ValueKey('selection-prices'),
-        tooltip: l.refreshPrice,
-        icon: const Icon(Icons.euro),
-        onPressed: () async {
-          await refreshAllPrices(context, ref, wineIds: _selected.toList());
-          if (mounted) setState(_selected.clear);
-        },
-      ),
+      if (marketPriceLookup)
+        IconButton(
+          key: const ValueKey('selection-prices'),
+          tooltip: l.refreshPrice,
+          icon: const Icon(Icons.euro),
+          onPressed: () async {
+            await refreshAllPrices(context, ref, wineIds: _selected.toList());
+            if (mounted) setState(_selected.clear);
+          },
+        ),
     ],
   );
 

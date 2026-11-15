@@ -5324,6 +5324,12 @@ abstract class AppLocalizations {
   /// **'Ce mois-ci : {enrichments, plural, =0{aucune identification} =1{1 identification} other{{enrichments} identifications}} et {prices, plural, =0{aucun relevé de prix} =1{1 relevé de prix} other{{prices} relevés de prix}} restants.'**
   String accountQuotaLine(int enrichments, int prices);
 
+  /// No description provided for @accountQuotaEnrichments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci : {enrichments, plural, =0{aucune identification restante} =1{1 identification restante} other{{enrichments} identifications restantes}}.'**
+  String accountQuotaEnrichments(int enrichments);
+
   /// No description provided for @accountRefresh.
   ///
   /// In fr, this message translates to:
@@ -5387,7 +5393,7 @@ abstract class AppLocalizations {
   /// No description provided for @subscriptionOffer.
   ///
   /// In fr, this message translates to:
-  /// **'Formule gratuite. L\'abonnement porte les quotas à 500 identifications et 500 relevés de prix par mois.'**
+  /// **'Formule gratuite. L\'abonnement porte le quota à 500 identifications par mois.'**
   String get subscriptionOffer;
 
   /// No description provided for @subscriptionMonthly.

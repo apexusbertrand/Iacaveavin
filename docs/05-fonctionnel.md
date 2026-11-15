@@ -87,12 +87,13 @@ Cible : moins de 30 secondes de saisie active pour un vin courant.
 ## PRX. Prix [lot 1 pour l'achat, lot 2 pour le marché]
 
 - PRX-01. Prix d'achat saisi à la main par lot, unitaire TTC, dans la devise de la cave.
-- PRX-02. Prix marché relevé automatiquement à la création (si `inclure_prix`), puis sur demande pour une fiche, une sélection ou toute la cave. Pour la cave entière, l'app affiche le nombre d'appels et le quota restant avant de demander confirmation.
-- PRX-03. Chaque relevé ajoute une ligne d'historique, rien n'est écrasé. Pas plus d'un relevé par fiche et par 24 heures, sauf « forcer ».
-- PRX-04. Un prix introuvable est enregistré « non trouvé » avec la date. Jamais d'estimation présentée comme un prix.
+- ~~PRX-02. Prix marché relevé automatiquement à la création (si `inclure_prix`), puis sur demande pour une fiche, une sélection ou toute la cave. Pour la cave entière, l'app affiche le nombre d'appels et le quota restant avant de demander confirmation.~~ Suspendue le 2026-11-15 (PRX-08, T144).
+- ~~PRX-03. Chaque relevé ajoute une ligne d'historique, rien n'est écrasé. Pas plus d'un relevé par fiche et par 24 heures, sauf « forcer ».~~ Suspendue le 2026-11-15 (PRX-08, T144).
+- ~~PRX-04. Un prix introuvable est enregistré « non trouvé » avec la date. Jamais d'estimation présentée comme un prix.~~ Suspendue le 2026-11-15 (PRX-08, T144).
 - PRX-05. Affichage : dernier prix, date, nombre d'offres, lien vers chaque offre, tendance par rapport au relevé précédent, courbe.
-- PRX-06. Rafraîchissement automatique mensuel en option, désactivé par défaut.
+- ~~PRX-06. Rafraîchissement automatique mensuel en option, désactivé par défaut.~~ Suspendue le 2026-11-15 (PRX-08, T144).
 - PRX-07. Prix à date saisi à la main depuis l'onglet Prix de la fiche (« Saisir un prix ») : prix unitaire TTC, date (aujourd'hui par défaut, jamais dans le futur), format, et où il a été vu (facultatif). Il s'ajoute à l'historique à sa date, avec la nature `saisie`, et s'affiche « saisi à la main ». Il compte dans la valeur de la cave comme dernier prix s'il est le plus récent. Il ne bloque pas le relevé automatique (PRX-03) (2026-11-13, T139).
+- PRX-08. Relevé automatique du prix marché suspendu (2026-11-15, T144) : l'app ne le demande plus au flux, ni à l'identification, ni sur une fiche, ni pour toute la cave ou une sélection, ni chaque mois. Les boutons et réglages correspondants sont masqués, le compte n'affiche plus que le quota d'identifications et l'abonnement n'en parle plus. La saisie d'un prix à la main (PRX-07) et l'historique déjà enregistré restent. Un seul interrupteur dans le code (core/features.dart) le réactive.
 
 ## STA. Statistiques façon BI [lot 3]
 

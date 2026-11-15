@@ -337,7 +337,7 @@ void main() {
   });
 
   testWidgets(
-    'FIC-05 PRX-07 onglet Prix : achat, prix marché daté, saisie à date',
+    'FIC-05 PRX-07 PRX-08 onglet Prix : achat, prix marché daté, saisie à date',
     (tester) async {
       await pumpRealApp(
         tester,
@@ -377,7 +377,8 @@ void main() {
       expect(find.textContaining('Dernier prix : 55,00'), findsOneWidget);
       expect(find.textContaining('2026-09-15'), findsOneWidget);
       expect(find.textContaining('52,00'), findsOneWidget);
-      expect(find.text('Relever le prix'), findsOneWidget);
+      // PRX-08 : relevé automatique suspendu, plus de bouton.
+      expect(find.text('Relever le prix'), findsNothing);
       // PRX-05 : tendance et courbe à partir de deux relevés trouvés.
       expect(find.byKey(const ValueKey('price-trend')), findsOneWidget);
       expect(find.textContaining('En hausse de 6'), findsOneWidget);

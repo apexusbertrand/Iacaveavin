@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../account/account_drawer.dart';
+import '../../core/features.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/navigation/app_drawer.dart';
 import '../../core/navigation/destinations.dart';
@@ -228,20 +229,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             value: s.notifications,
             onChanged: (v) => _set((x) => x.copyWith(notifications: v)),
           ),
-          SwitchListTile(
-            key: const ValueKey('auto-prices'),
-            title: Text(l.settingsAutoPrices),
-            subtitle: Text(l.settingsAutoPricesHint),
-            value: s.autoPriceRefresh,
-            onChanged: (v) => _set((x) => x.copyWith(autoPriceRefresh: v)),
-          ),
-          ListTile(
-            key: const ValueKey('prices-all'),
-            leading: const Icon(Icons.euro),
-            title: Text(l.pricesAllTitle),
-            subtitle: Text(l.pricesAllHint),
-            onTap: () => refreshAllPrices(context, ref),
-          ),
+          // PRX-08 : relevé automatique suspendu.
+          if (marketPriceLookup) ...[
+            SwitchListTile(
+              key: const ValueKey('auto-prices'),
+              title: Text(l.settingsAutoPrices),
+              subtitle: Text(l.settingsAutoPricesHint),
+              value: s.autoPriceRefresh,
+              onChanged: (v) => _set((x) => x.copyWith(autoPriceRefresh: v)),
+            ),
+            ListTile(
+              key: const ValueKey('prices-all'),
+              leading: const Icon(Icons.euro),
+              title: Text(l.pricesAllTitle),
+              subtitle: Text(l.pricesAllHint),
+              onTap: () => refreshAllPrices(context, ref),
+            ),
+          ],
           ListTile(
             title: Text(l.settingsPhotoSpace),
             leading: const Icon(Icons.photo_outlined),

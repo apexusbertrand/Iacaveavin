@@ -10,15 +10,15 @@ Merci de tester l'application pendant 4 semaines. Elle sert à gérer une cave �
 
 Le Play Store affiche « version de test non vérifiée » : c'est normal pendant la phase de test.
 
-## Se connecter (pour la photo et les prix)
+## Se connecter (pour l'identification par photo)
 
-La gestion de cave marche sans compte. L'identification par photo et les prix demandent un compte gratuit :
+La gestion de cave marche sans compte. L'identification par photo demande un compte gratuit :
 
 1. Touchez l'icône ronde en haut à droite de « Mes vins ».
 2. Saisissez votre adresse mail, touchez « Recevoir un code ».
 3. Saisissez le code à six chiffres reçu par mail (pensez aux indésirables).
 
-Vous avez 10 identifications et 10 relevés de prix par mois.
+Vous avez 10 identifications par mois.
 
 ## Quoi essayer (une dizaine de minutes chacun)
 

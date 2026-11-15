@@ -44,7 +44,7 @@ TASTE AND SHARE
 
 ANALYSE
 - Statistics: bottles by colour, region, vintage, ageing status and drinking priority, purchase value of the cellar.
-- Price history: market price found online or a dated price you enter yourself.
+- Price history: dated prices you enter yourself, with chart and trend.
 - PDF catalogue of the whole cellar.
 - Excel export and import, with a dry run before import.
 
@@ -52,7 +52,7 @@ YOUR DATA STAYS WITH YOU
 The cellar lives on your phone and works offline, without an account: list, records, stock, statistics, PDF and Excel. No ads, no audience tracking. Only label photos go to the identification service, after your consent, and they are never stored there. Full backup and restore in one file.
 
 GOOD TO KNOW
-Photo identification and price checks use an online service run by Apexus, with a free account: your email address and a code received by email, no password. 10 identifications and 10 price checks a month. Without an account, all cellar management works and records stay "to enrich" until you sign in.
+Photo identification uses an online service run by Apexus, with a free account: your email address and a code received by email, no password. 10 identifications a month. Without an account, all cellar management works and records stay "to enrich" until you sign in.
 The app is in English and French. Texts written by the identification service (producer notes, pairings) are in French for now.
 
 For adults only. The app does not sell alcohol.
@@ -74,5 +74,5 @@ First published version.
 
 ```
 Cellar management (list, records, stock, locations, statistics, PDF, Excel, backup) works without any sign-in.
-Photo identification and price checks need a free account: tap the account icon at the top right of "My wines", enter the e-mail address given above, tap "Get a code", then type the 6-digit code given above within 10 minutes. No e-mail access is needed.
+Photo identification needs a free account: tap the account icon at the top right of "My wines", enter the e-mail address given above, tap "Get a code", then type the 6-digit code given above within 10 minutes. No e-mail access is needed.
 ```

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/features.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_tokens.g.dart';
@@ -180,7 +181,10 @@ class _AccountSectionState extends ConsumerState<AccountSection> {
         style: theme.textTheme.bodyMedium,
       ),
       Text(
-        l.accountQuotaLine(a.quota.enrichmentsLeft, a.quota.pricesLeft),
+        // PRX-08 : sans relevé de prix, seul le quota d'identifications.
+        marketPriceLookup
+            ? l.accountQuotaLine(a.quota.enrichmentsLeft, a.quota.pricesLeft)
+            : l.accountQuotaEnrichments(a.quota.enrichmentsLeft),
         key: const ValueKey('account-quota'),
         style: theme.textTheme.bodyMedium,
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/features.dart';
 import '../../core/flag.dart';
 import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
@@ -955,12 +956,14 @@ class _PricesTab extends ConsumerWidget {
                 spacing: SpacingTokens.s,
                 runSpacing: SpacingTokens.s,
                 children: [
-                  OutlinedButton.icon(
-                    key: const ValueKey('refresh-price'),
-                    onPressed: () => refreshWinePrice(context, ref, wine.id),
-                    icon: const Icon(Icons.refresh),
-                    label: Text(l.refreshPrice),
-                  ),
+                  // PRX-08 : relevé automatique suspendu.
+                  if (marketPriceLookup)
+                    OutlinedButton.icon(
+                      key: const ValueKey('refresh-price'),
+                      onPressed: () => refreshWinePrice(context, ref, wine.id),
+                      icon: const Icon(Icons.refresh),
+                      label: Text(l.refreshPrice),
+                    ),
                   // PRX-07 : prix à date saisi à la main.
                   OutlinedButton.icon(
                     key: const ValueKey('manual-price'),

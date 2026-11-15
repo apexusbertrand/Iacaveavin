@@ -3202,6 +3202,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String accountQuotaEnrichments(int enrichments) {
+    String _temp0 = intl.Intl.pluralLogic(
+      enrichments,
+      locale: localeName,
+      other: '$enrichments identifications left',
+      one: '1 identification left',
+      zero: 'no identifications left',
+    );
+    return 'This month: $_temp0.';
+  }
+
+  @override
   String get accountRefresh => 'Refresh';
 
   @override
@@ -3236,7 +3248,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subscriptionOffer =>
-      'Free plan. A subscription raises the quotas to 500 identifications and 500 price checks a month.';
+      'Free plan. A subscription raises the quota to 500 identifications a month.';
 
   @override
   String get subscriptionMonthly => 'Monthly subscription';

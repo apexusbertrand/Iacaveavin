@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/features.dart';
 import '../../domain/enrichment.dart';
 import '../../domain/wine_detail.dart' show manualPriceNature;
 import '../db/app_database.dart';
@@ -343,6 +344,8 @@ class EnrichmentQueue {
       lockedFields: await lockedFields(job.ficheId),
       reports: await reports(job.ficheId),
       clientDate: _clock().toIso8601String().substring(0, 10),
+      // PRX-08 : relevé de prix suspendu, le flux ne le lance plus.
+      includePrices: marketPriceLookup,
     );
   }
 

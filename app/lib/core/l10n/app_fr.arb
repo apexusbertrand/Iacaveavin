@@ -1887,6 +1887,14 @@
   "accountStatusSubscriber": "abonnement",
   "accountStatusBlocked": "compte suspendu",
   "accountQuotaLine": "Ce mois-ci : {enrichments, plural, =0{aucune identification} =1{1 identification} other{{enrichments} identifications}} et {prices, plural, =0{aucun relevé de prix} =1{1 relevé de prix} other{{prices} relevés de prix}} restants.",
+  "accountQuotaEnrichments": "Ce mois-ci : {enrichments, plural, =0{aucune identification restante} =1{1 identification restante} other{{enrichments} identifications restantes}}.",
+  "@accountQuotaEnrichments": {
+    "placeholders": {
+      "enrichments": {
+        "type": "int"
+      }
+    }
+  },
   "@accountQuotaLine": {
     "placeholders": {
       "enrichments": {
@@ -1907,7 +1915,7 @@
   "accountMenu": "Compte : se connecter",
   "accountMenuSignedIn": "Mon compte",
   "subscriptionTitle": "Abonnement",
-  "subscriptionOffer": "Formule gratuite. L'abonnement porte les quotas à 500 identifications et 500 relevés de prix par mois.",
+  "subscriptionOffer": "Formule gratuite. L'abonnement porte le quota à 500 identifications par mois.",
   "subscriptionMonthly": "Abonnement mensuel",
   "subscriptionYearly": "Abonnement annuel",
   "subscriptionActive": "Abonnement en cours. Le désabonnement se fait dans Google Play, l'abonnement reste actif jusqu'à la fin de la période payée.",

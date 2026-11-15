@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/features.dart';
 import '../../core/labels.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
@@ -185,7 +186,8 @@ class ValidationScreen extends ConsumerStatefulWidget {
 class _ValidationScreenState extends ConsumerState<ValidationScreen> {
   final _decisions = <String, FieldDecision>{};
   final _rejectedScores = <int>{};
-  bool _includePrices = true;
+  // PRX-08 : prix proposés ignorés tant que le relevé est suspendu.
+  bool _includePrices = marketPriceLookup;
   bool? _merge;
   bool _saving = false;
 
@@ -370,7 +372,7 @@ class _ValidationScreenState extends ConsumerState<ValidationScreen> {
                     ),
                   ),
               ],
-              if (result.prices.isNotEmpty) ...[
+              if (marketPriceLookup && result.prices.isNotEmpty) ...[
                 _Header(l.pricesSection),
                 for (final p in result.prices)
                   ListTile(

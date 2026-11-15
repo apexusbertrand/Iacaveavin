@@ -73,19 +73,19 @@ void main() {
   );
 
   testWidgets(
-    'CPT-04 compte connecté : adresse, formule et quotas ; la déconnexion efface la session',
+    'CPT-04 PRX-08 compte connecté : adresse, formule et quotas ; la déconnexion efface la session',
     (tester) async {
       final store = MemorySecretStore(sessionJson());
       await pumpApp(tester, location: '/', secrets: store);
       await toAccount(tester, const ValueKey('account-signout'));
       expect(find.text('Connecté : prenom.nom@exemple.fr'), findsOneWidget);
       expect(find.text('Formule : gratuite'), findsOneWidget);
+      // PRX-08 : relevé de prix suspendu, seul le quota d'identifications.
       expect(
-        find.text(
-          'Ce mois-ci : 7 identifications et 1 relevé de prix restants.',
-        ),
+        find.text('Ce mois-ci : 7 identifications restantes.'),
         findsOneWidget,
       );
+      expect(find.textContaining('relevé de prix'), findsNothing);
       // CPT-03 : la clé reste dans le stockage sécurisé, jamais dans les
       // préférences.
       final prefs = await SharedPreferences.getInstance();

@@ -52,7 +52,7 @@ DÉGUSTEZ ET PARTAGEZ
 
 ANALYSEZ
 - Statistiques : bouteilles par couleur, région, millésime, garde et priorité de garde, valeur d'achat de la cave.
-- Historique des prix : prix marché relevé ou prix à date saisi à la main.
+- Historique des prix : prix à date saisis à la main, courbe et tendance.
 - Catalogue PDF de toute la cave.
 - Export et import Excel avec simulation avant import.
 
@@ -60,7 +60,7 @@ VOS DONNÉES RESTENT CHEZ VOUS
 La cave vit sur votre téléphone et fonctionne hors ligne, sans compte : liste, fiches, stock, statistiques, PDF et Excel. Ni publicité, ni mesure d'audience. Seules les photos d'étiquettes partent au service d'identification, après votre accord, et elles n'y sont jamais enregistrées. Sauvegarde et restauration complètes en un fichier.
 
 À SAVOIR
-L'identification par photo et le relevé des prix passent par un service en ligne d'Apexus, avec un compte gratuit : votre adresse mail et un code reçu par mail, sans mot de passe. 10 identifications et 10 relevés de prix par mois. Sans compte, toute la gestion de cave fonctionne et les fiches restent « à enrichir » jusqu'à la connexion.
+L'identification par photo passe par un service en ligne d'Apexus, avec un compte gratuit : votre adresse mail et un code reçu par mail, sans mot de passe. 10 identifications par mois. Sans compte, toute la gestion de cave fonctionne et les fiches restent « à enrichir » jusqu'à la connexion.
 
 Application réservée aux personnes majeures. Elle ne vend pas d'alcool.
 L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
@@ -93,7 +93,7 @@ Choisir « Toutes les fonctionnalités ou certaines d'entre elles sont soumises 
 
 ```
 La gestion de cave (liste, fiches, stock, emplacements, statistiques, PDF, Excel, sauvegarde) est accessible sans aucun identifiant.
-L'identification par photo et le relevé des prix demandent un compte gratuit : toucher l'icône de compte en haut à droite de l'écran « Mes vins », saisir une adresse mail, « Recevoir un code », puis saisir le code à six chiffres reçu par mail. N'importe quelle adresse convient, le compte est créé à la première connexion.
+L'identification par photo demande un compte gratuit : toucher l'icône de compte en haut à droite de l'écran « Mes vins », saisir une adresse mail, « Recevoir un code », puis saisir le code à six chiffres reçu par mail. N'importe quelle adresse convient, le compte est créé à la première connexion.
 ```
 
 Identifiants à donner dans la Console (T141) : nom d'utilisateur apexus.claude+revue@gmail.com ; mot de passe : le code fixe à 6 chiffres donné à Bertrand, jamais écrit dans le dépôt. Instructions en anglais : « Tap the account icon at the top right of "Mes vins", enter the e-mail address, tap "Recevoir un code", then type the 6-digit code above within 10 minutes. No e-mail access is needed. »
