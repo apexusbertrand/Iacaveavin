@@ -220,7 +220,7 @@ Tenu par Claude Code (skill `/lot`). Une section par lot. Bertrand note la recet
   - [x] Fiche et captures en anglais prêtes (LNG-05)
   - [x] Version 1.4.0+9 préparée (PRX-07, CPT-08, lot 5b) ; prompt des dernières actions : store/prompt-claude-chrome-play-publication.md
 - Reste :
-  - [ ] Go de Bertrand pour construire l'APK et l'AAB 1.4.0
+  - [x] Go de Bertrand le 2026-11-15 : APK et AAB 1.4.0 (build 9) construits depuis lot-5-recette, release v1.4.0
   - [ ] Bertrand : ajouter la fiche anglaise dans la Console
   - [ ] Bertrand : AAB 1.4.0 en test interne, installation sur son téléphone (désinstaller d'abord la version GitHub, sauvegarde avant), vérification
   - [ ] Bertrand : pays de distribution, puis passage en production et envoi en examen
